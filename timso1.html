@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ứng dụng Lựa chọn Số Ngẫu Nhiên (1-99)</title>
     
-    <!-- Google Fonts for Mulish -->
+    <!-- Google Fonts for Mulish (Font còn lại) -->
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700;800&display=swap" rel="stylesheet">
     
     <!-- Cấu hình Tailwind CSS để sử dụng Dark Mode -->
@@ -25,9 +25,9 @@
         }
     </script>
     <style>
-        /* Thiết lập font chữ Mulish cho toàn bộ ứng dụng */
+        /* Thiết lập font chữ Mulish cho toàn bộ ứng dụng (trừ Hán tự) */
         body {
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Mulish', sans-serif; /* Đã thay đổi từ Inter */
             background-color: #f1f5f9;
             transition: background-color 0.3s;
         }
@@ -93,6 +93,15 @@
             pointer-events: none;
         }
 
+        /* Đảm bảo hình tròn có kích thước phù hợp trên mobile */
+        @media (max-width: 640px) {
+            .number-circle {
+                width: 64px; /* w-16 */
+                height: 64px; /* h-16 */
+                font-size: 1.25rem; /* text-xl */
+            }
+        }
+        
         /* Bổ sung CSS cho pháo giấy */
         #game-over-modal {
             /* Đảm bảo modal là vùng chứa cho canvas */
@@ -123,7 +132,7 @@
             </button>
         </div>
         
-        <!-- Ô chọn số vòng chơi -->
+        <!-- THÊM: Ô chọn số vòng chơi -->
         <div class="mb-4 flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
             <label for="round-selector" class="text-gray-700 dark:text-gray-300 font-semibold">Chọn tổng số vòng chơi:</label>
             <select id="round-selector" class="p-2 rounded-lg border-2 border-primary-blue bg-white dark:bg-gray-700 dark:text-white font-bold transition-colors shadow-sm focus:ring-2 focus:ring-primary-blue">
@@ -133,12 +142,13 @@
                 <option value="20">20 Vòng</option>
             </select>
         </div>
+        <!-- KẾT THÚC THÊM -->
 
         <!-- Khu vực hiển thị Vòng, THỜI GIAN và Điểm số -->
         <div class="flex justify-between items-center text-xl font-bold mb-6 p-3 rounded-lg bg-gray-100 dark:bg-gray-800 shadow-inner">
-            <span id="round-display" class="text-gray-700 dark:text-gray-300 text-base sm:text-xl">Vòng: 0/5</span>
-            <span id="timer-display" class="text-2xl sm:text-3xl tracking-wider text-red-600 dark:text-red-400 font-extrabold">00:25s</span> 
-            <span id="score-display" class="text-green-600 dark:text-green-400 text-base sm:text-xl">Đúng: 0</span>
+            <span id="round-display" class="text-gray-700 dark:text-gray-300">Vòng: 0/5</span>
+            <span id="timer-display" class="text-3xl tracking-wider text-red-600 dark:text-red-400 font-extrabold">00:25s</span> <!-- NEW TIMER DISPLAY -->
+            <span id="score-display" class="text-green-600 dark:text-green-400">Đúng: 0</span>
         </div>
 
         <!-- Khu vực hiển thị SỐ MỤC TIÊU (CHỈ TIẾNG TRUNG) -->
@@ -162,19 +172,19 @@
         </div>
         
         <!-- Khu vực hiển thị số đã chọn/chờ chọn -->
-        <div class="mb-8 p-4 text-center rounded-lg bg-yellow-50 dark:bg-yellow-900/50 border-l-4 border-yellow-500 dark:border-yellow-400 text-yellow-800 dark:text-yellow-200 font-semibold text-base sm:text-xl">
+        <div class="mb-8 p-4 text-center rounded-lg bg-yellow-50 dark:bg-yellow-900/50 border-l-4 border-yellow-500 dark:border-yellow-400 text-yellow-800 dark:text-yellow-200 font-semibold text-xl">
             Hãy chọn số: <span id="selected-number" class="text-blue-600 dark:text-blue-300 font-bold">Chưa có</span>
         </div>
 
-        <!-- Khu vực chứa 10 hình tròn số (Responsive Layout: 4 cột trên mobile, 5 cột trên tablet+) -->
-        <div id="numbers-container" class="w-full mx-auto border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 grid grid-cols-4 md:grid-cols-5 gap-3 sm:gap-4 justify-items-center items-center relative" style="min-height: 250px;">
-            <p id="start-prompt" class="absolute inset-0 flex items-center justify-center text-lg sm:text-xl text-gray-500 dark:text-gray-400 col-span-5">
+        <!-- Khu vực chứa 10 hình tròn số (Layout 2 hàng x 5 cột cố định) -->
+        <div id="numbers-container" class="w-full mx-auto border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 grid grid-cols-5 gap-4 justify-items-center items-center relative" style="min-height: 250px;">
+            <p id="start-prompt" class="absolute inset-0 flex items-center justify-center text-xl text-gray-500 dark:text-gray-400 col-span-5">
                 Nhấn "Bắt đầu Trò chơi" để chơi 5 vòng!
             </p>
             <!-- Các hình tròn số sẽ được tạo bằng JavaScript tại đây -->
         </div>
 
-        <!-- Nút tạo lại số và Nút Trợ giúp (Responsive stacking) -->
+        <!-- Nút tạo lại số và Nút Trợ giúp -->
         <div class="flex flex-col sm:flex-row justify-center mt-10 space-y-4 sm:space-y-0 sm:space-x-4">
             <button id="help-button" class="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-lg hover:bg-red-600 transition-all active:scale-95 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
                 💡 Trợ giúp 50/50
@@ -244,7 +254,7 @@
         let isDarkMode = false;
         
         // NEW: Timer Variables
-        const TIME_PER_ROUND = 8; // 8 giây cho mỗi vòng
+        const TIME_PER_ROUND = 8; // 5 giây cho mỗi vòng
         let remainingTime = 0;
         let timerInterval = null;
         
@@ -341,7 +351,7 @@
                 }
             });
 
-            // CHỈ tạo burst nếu chưa đạt đến giới hạn maxConfettiBursts
+            // ĐIỀU CHỈNH: Chỉ tạo burst nếu chưa đạt đến giới hạn maxConfettiBursts
             if (confettiBurstCount < maxConfettiBursts && Math.random() < 0.1) { 
                 const x = Math.random() * confettiCanvas.width;
                 const y = confettiCanvas.height * 0.1; 
@@ -424,7 +434,7 @@
         function startTimer() {
             stopTimer(); // Đảm bảo dừng timer cũ
             
-            // Tính tổng thời gian: Vòng chơi * 8 giây
+            // Tính tổng thời gian: Vòng chơi * 5 giây
             remainingTime = totalRounds * TIME_PER_ROUND;
             updateTimerDisplay();
 
@@ -550,7 +560,6 @@
             }
 
             if (currentSelected && currentSelected !== circle) {
-                // Đảm bảo loại bỏ các class "selected" và flash trước khi thêm lại
                 currentSelected.classList.remove('selected', 'bg-red-500', 'text-white', 'correct-flash', 'incorrect-flash', 'bg-green-500');
                 currentSelected.classList.add('bg-blue-500', 'dark:bg-blue-600');
                 currentSelected.style.border = 'none';
@@ -708,6 +717,7 @@
             let randomNumbers = generateRandomNumbers(count, min, max);
 
             let newTargetNumber = null;
+            const maxAttempts = max - min + 1; 
 
             const availableGlobalNumbers = [];
             for (let i = min; i <= max; i++) {
@@ -745,8 +755,6 @@
 
             randomNumbers.forEach(number => {
                 const circle = document.createElement('div');
-                // Sử dụng Tailwind: w-16 h-16 (64px) trên mobile, w-20 h-20 (80px) trên sm+
-                // Text: text-xl (20px) trên mobile, text-2xl (24px) trên sm+
                 circle.className = 'number-circle flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-500 dark:bg-blue-600 text-white text-xl sm:text-2xl font-bold cursor-pointer';
                 circle.setAttribute('data-number', number);
                 circle.textContent = number;
