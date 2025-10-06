@@ -1,0 +1,22 @@
+爷爷|yéye|ông nội|我爷爷很好。|Wǒ yéye hěn hǎo.|Ông nội tôi rất tốt.
+奶奶|nǎinai|bà nội|你奶奶爱喝茶吗？|Nǐ nǎinai ài hē chá ma?|Bà nội bạn thích uống trà không?
+爸爸|bàba|bố, ba|我爸爸是司机。|Wǒ bàba shì sījī.|Bố tôi là tài xế.
+妈妈|māma|mẹ, má|你妈妈是医生吗？|Nǐ māma shì yīshēng ma?|Mẹ bạn là bác sĩ phải không?
+哥哥|gēge|anh trai|我哥哥会说中文。|Wǒ gēge huì shuō Zhōngwén.|Anh trai tôi biết nói tiếng Trung.
+姐姐|jiějie|chị gái|你姐姐在北京吗？|Nǐ jiějie zài Běijīng ma?|Chị gái bạn ở Bắc Kinh phải không?
+弟弟|dìdi|em trai|我弟弟是学生。|Wǒ dìdi shì xuésheng.|Em trai tôi là học sinh.
+妹妹|mèimei|em gái|你妹妹几岁了？|Nǐ mèimei jǐ suì le?|Em gái bạn mấy tuổi rồi?
+医生|yīshēng|bác sĩ|我是医生。|Wǒ shì yīshēng.|Tôi là bác sĩ.
+记者|jìzhě|phóng viên, nhà báo|我姐姐不是记者。|Wǒ jiějie bú shì jìzhě.|Chị gái tôi không phải là phóng viên.
+公安|gōng'ān|công an|你哥哥是公安吗？|Nǐ gēge shì gōng'ān ma?|Anh trai bạn là công an phải không?
+警察|jǐngchá|cảnh sát|那是警察。|Nà shì jǐngchá.|Đó là cảnh sát.
+律师|lǜshī|luật sư|我不是律师。|Wǒ bú shì lǜshī.|Tôi không phải là luật sư.
+厨师|chúshī|đầu bếp|你是厨师吗？|Nǐ shì chúshī ma?|Bạn là đầu bếp phải không?
+演员|yǎnyuán|diễn viên|我妹妹是演员。|Wǒ mèimei shì yǎnyuán.|Em gái tôi là diễn viên.
+司机|sījī|tài xế, lái xe|你爸爸是司机吗？|Nǐ bàba shì sījī ma?|Bố bạn là tài xế phải không?
+护士|hùshi|y tá|我妈妈是护士。|Wǒ māma shì hùshi.|Mẹ tôi là y tá.
+部队|bùduì|bộ đội, quân đội|你不是部队。|Nǐ bú shì bùduì .|Bạn không phải là bộ đội.
+消防员|xiāofángyuán|lính cứu hỏa|我是消防员。|Wǒ shì xiāofángyuán.|Tôi là lính cứu hỏa.
+工人|gōngrén|công nhân|你是工人吗？|Nǐ shì gōngrén ma?|Bạn là công nhân phải không?
+农民|nóngmín|nông dân|你不是农民。|Nǐ bú shì nóngmín.|Bạn không phải là nông dân.
+公务员|gōngwùyuán|công chức, công chức nhà nước|我是公务员。|Wǒ shì gōngwùyuán.|Tôi là công chức.
