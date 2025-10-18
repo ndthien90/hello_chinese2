@@ -334,6 +334,7 @@
             <select id="lesson-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                 <!-- Thêm một vài tùy chọn giả định. Bạn có thể thêm số lượng bài học tùy ý ở đây -->
                 <option value="1">Bài 1 老师您好！Em chào thầy ạ!</option> 
+                <option value="2">Bài 2 谢谢你！Cảm ơn bạn!</option> 
 
             </select>
         </div>
@@ -368,7 +369,7 @@
                 <span class="text-lg">🔄</span> Chơi Lại
             </button>
             <button id="hint-btn" class="flex-1 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl transition  uppercase text-sm disabled:opacity-50">
-                <span class="text-lg">💡</span> Gợi Ý (<span id="hint-count">30</span>)
+                <span class="text-lg">💡</span> Gợi Ý (<span id="hint-count">5</span>)
             </button>
             <!-- Nút Next Level đã bị xóa, chỉ còn 2 nút chính -->
         </div>
@@ -693,7 +694,7 @@
             UNSOLVED_WORDS = [...WORD_LIST_WITH_IDS]; 
             selectedTiles = [];
             comboCount = 0;
-            hintCount = 3;
+            hintCount = 5;
             
             calculateAndShufflePool(); 
 
