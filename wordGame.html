@@ -190,7 +190,8 @@
 <body>    <div class="container">
         <h1>Xếp từ thành câu</h1>
         <select id="lessonSelect" onchange="loadLesson()">
-            <option value="lesson1">Bài 1: 老师您好！Em chào thầy ạ!</option>
+            <option value="lesson1">H1 Bài 1: 老师您好！Em chào thầy ạ!</option>
+            <option value="lesson2">H1 Bài 2: 谢谢你！Cảm ơn bạn !</option>
         </select>
 <div class="control-row">
     <select id="modeSelect" onchange="changeMode()">
@@ -214,7 +215,6 @@
         <button onclick="nextQuestion()" id="nextButton" style="display: none;">Câu tiếp theo</button>
         <button onclick="resetGame()" id="resetButton" style="display: none;">Thử lại</button>
     </div>
-
     <script>
         const lessonData = {
   lesson1: [
@@ -232,16 +232,15 @@
     "我/很/好。"
   ],
   lesson2: [
-    "你/叫/什么/名字？",
-    "我/叫/阮文明/，你/呢？",
-    "你/好/吗？",
-    "你/最近/怎么样？",
-    "你/最近/好/吗？",
-    "一/切/都/好",
-    "这/是/我/的/爸爸。",
-    "那/是/我/的/弟弟。",
-    "这/不/是/我/的/老师。",
-    "那/是/你/的/哥哥/吗？"
+    "/谢谢/你！",
+    "不/客/气！",
+    "我/爸爸/不是/医生/。",
+    "你/妈妈/是/记者/吗？",
+    "我/妈妈/很好，/谢谢/你/！",
+    "那/不/是/警察。",
+    "那/不是/书/吗？",
+    "对/不/起/，我/不是/律师。",
+    "那是/你/哥哥/吗？"
   ],
   lesson3: [
     "你/有/弟弟/吗？",

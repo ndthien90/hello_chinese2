@@ -1,0 +1,6 @@
+Nǐ hǎo, nǐ shì yīshēng ma?|你好，你是医生吗？|Xin chào, bạn là bác sĩ phải không?
+Bù shì, wǒ bú shì yīshēng.|不是，我不是医生。|Không phải, tôi không phải là bác sĩ.
+Nà shì yīshēng ma?|那是医生吗？|Kia là bác sĩ phải không?
+Shì, nà shì yīshēng.|是，那是医生。|Phải, kia là bác sĩ.
+Xièxie nǐ!|谢谢你！|Cảm ơn bạn!
+Bú kèqi!|不客气！|Không có gì! 

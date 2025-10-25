@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển đổi Excel sang Text</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            width: 500px;
+            height: 500px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+            display: block;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        .message {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chuyển Excel sang JSON</h1>
+<input type="file" id="fileInput" accept=".xlsx, .xls" />
+<button id="convertButton">Chuyển</button>
+<div class="message" id="message">Đã chuyển xong!</div>
+
+<script>
+document.getElementById('convertButton').addEventListener('click', function() {
+    const fileInput = document.getElementById('fileInput');
+    const message = document.getElementById('message');
+    
+    if (fileInput.files.length === 0) {
+        alert("Vui lòng chọn file Excel.");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+        
+        // Chuyển đổi dữ liệu
+        const dataArray = json.map(row => {
+            return {
+                hanzi: row[0] || '',
+                pinyin: row[1] || '',
+                meaning: row[2] || ''
+            };
+        }).filter(row => row.hanzi);  // Loại bỏ hàng trống
+
+        // Tạo chuỗi kết quả
+        let result = '[\n';
+        dataArray.forEach(item => {
+            result += `    { vocab: "${item.hanzi}", meaning: "${item.meaning}" },\n`;
+        });
+        result += ']';
+
+        // Lưu dữ liệu vào file text
+        const blob = new Blob([result], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'output.txt';
+        link.click();
+
+        // Hiển thị thông báo
+        message.style.display = 'block';
+    };
+
+    reader.readAsArrayBuffer(file);
+});
+</script>
+
+</body>
+</html>

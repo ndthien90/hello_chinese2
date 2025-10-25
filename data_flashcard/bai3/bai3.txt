@@ -1,0 +1,28 @@
+叫|jiào|gọi, tên là|你叫什么名字？|Nǐ jiào shénme míngzi?|Bạn tên là gì?
+请|qǐng|xin, mời|请问，你姓什么？|Qǐng wèn, nǐ xìng shénme?|Xin hỏi, bạn họ gì?
+问|wèn|hỏi|我问老师一个问题。|Wǒ wèn lǎoshī yīgè wèntí.|Tôi hỏi giáo viên một câu hỏi.
+吃|chī|ăn|你想吃米饭吗？|Nǐ xiǎng chī mǐfàn ma?|Bạn muốn ăn cơm không?
+喝|hē|uống|我喜欢喝茶。|Wǒ xǐhuan hē chá.|Tôi thích uống trà.
+说|shuō|nói|你会说汉语吗？|Nǐ huì shuō Hànyǔ ma?|Bạn biết nói tiếng Hán không?
+喜欢|xǐhuan|thích|我喜欢我的学校。|Wǒ xǐhuan wǒ de xuéxiào.|Tôi thích trường học của tôi.
+什么|shénme|cái gì|这是什么？|Zhè shì shénme?|Đây là cái gì?
+名字|míngzi|tên|你的名字是什么？|Nǐ de míngzi shì shénme?|Tên của bạn là gì?
+贵姓|guìxìng|quý danh|请问，您贵姓？|Qǐngwèn, nín guìxìng?|Xin hỏi, quý danh của ngài là gì?
+姓|xìng|họ|我姓王。|Wǒ xìng Wáng.|Tôi họ Vương.
+他|tā|anh ấy, ông ấy|他是我的朋友。|Tā shì wǒ de péngyou.|Anh ấy là bạn của tôi.
+她|tā|cô ấy, bà ấy|她是我老师。|Tā shì wǒ lǎoshī.|Cô ấy là giáo viên của tôi.
+们|men|các (tạo số nhiều cho danh từ chỉ người)|我们都是学生。|Wǒmen dōu shì xuéshēng.|Chúng tôi đều là học sinh.
+人|rén|người|我是中国人。|Wǒ shì Zhōngguó rén.|Tôi là người Trung Quốc.
+也|yě|cũng|我也是学生。|Wǒ yě shì xuéshēng.|Tôi cũng là học sinh.
+都|dōu|đều|我们都不是美国人。|Wǒmen dōu bú shì Měiguó rén.|Chúng tôi đều không phải là người Mỹ.
+中国|Zhōngguó|Trung Quốc|他是中国人吗？|Tā shì Zhōngguó rén ma?|Anh ấy là người Trung Quốc phải không?
+美国|Měiguó|Mỹ, Hoa Kỳ|你喜欢美国吗？|Nǐ xǐhuan Měiguó ma?|Bạn thích nước Mỹ không?
+英国|Yīngguó|Anh, Vương quốc Anh|他们是英国人。|Tāmen shì Yīngguó rén.|Họ là người Anh.
+韩国|Hánguó|Hàn Quốc|她不是韩国人。|Tā bú shì Hánguó rén.|Cô ấy không phải là người Hàn Quốc.
+泰国|Tàiguó|Thái Lan|你是泰国人吗？|Nǐ shì Tàiguó rén ma?|Bạn là người Thái Lan phải không?
+德国|Déguó|Đức|我哥哥在德国。|Wǒ gēge zài Déguó.|Anh trai tôi ở Đức.
+法国|Fǎguó|Pháp|法国很漂亮。|Fǎguó hěn piàoliang.|Nước Pháp rất đẹp.
+日本|Rìběn|Nhật Bản|我喜欢日本。|Wǒ xǐhuan Rìběn.|Tôi thích Nhật Bản.
+越南|Yuènán|Việt Nam|我是越南人。|Wǒ shì Yuènán rén.|Tôi là người Việt Nam.
+汉语|Hànyǔ|tiếng Hán, tiếng Trung|我会说汉语。|Wǒ huì shuō Hànyǔ.|Tôi biết nói tiếng Hán.
+英语|Yīngyǔ|tiếng Anh|你会说英语吗？|Nǐ huì shuō Yīngyǔ ma?|Bạn biết nói tiếng Anh không?
