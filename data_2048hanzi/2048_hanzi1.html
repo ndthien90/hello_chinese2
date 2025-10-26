@@ -282,8 +282,8 @@
                 <div class="dpad-grid">
                     <button id="btn-up" class="control-btn dpad-up">▲</button>
                     <button id="btn-left" class="control-btn dpad-left">◀</button>
-                    <button id="btn-right" class="control-btn dpad-right">▶</button>
                     <button id="btn-down" class="control-btn dpad-down">▼</button>
+                    <button id="btn-right" class="control-btn dpad-right">▶</button>
                 </div>
             </div>
             <!-- --- End Control Buttons --- -->
@@ -332,84 +332,46 @@
         const CONTAINER_PADDING_PX = 8;
         const ANIMATION_DURATION = 150; // ms
         const HIGH_SCORE_KEY = '2048_high_score'; // Key for localStorage
-        const MAX_HANZI_TILES = 11; // Số lượng Hán tự cần thiết cho 2^1 đến 2^11 (2 đến 2048)
         
-        // --- CẤU HÌNH BÀI HỌC HÁN TỰ MỚI (Đã thêm nhiều từ hơn 11) ---
+        // --- CẤU HÌNH BÀI HỌC HÁN TỰ MỚI ---
         const LESSONS = {
             "basic_greetings": {
                 name: "H1 Bài 1: 老师您好",
                 // Danh sách Hán tự theo thứ tự: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048
-                // Tăng số lượng lên > 11
-                hanzi: ['你', '我', '您', '老师', '学生', '好', '很', '吗', '谢谢', '这', '那', '是', '不', '本子', '书', '你好', '再见', '对不起', '没关系', '陈楠', '国安']
+                hanzi: ['你', '我', '您', '你好', '您好', '很好', '学生', '老师', '这是', '那是', '陈楠']
             },
             "family_terms": {
                 name: "H1 Bài 2: 谢谢你",
-                hanzi: ['爷爷', '奶奶', '爸爸', '妈妈', '哥哥', '姐姐', '弟弟', '妹妹', '医生', '记者', '公安', '警察', '律师', '厨师', '演员', '司机', '护士', '部队', '消防员', '工人', '农民', '公务员']
+                hanzi: ['你们', '我们', '弟弟', '妹妹', '哥哥', '姐姐', '爸爸', '妈妈', '奶奶', '爷爷', '记者']
             },
             "common_verbs": {
                 name: "H1 Bài 3: 你叫什么名字？",
-                hanzi: ['叫', '请', '问', '吃', '喝', '说', '喜欢', '什么', '名字', '贵姓', '姓', '他', '她', '们', '人', '也', '都', '中国', '美国', '英国', '韩国', '泰国', '德国', '法国', '日本', '越南', '汉语', '英语']
+                hanzi: ['叫', '请', '问', '名字', '贵姓', '喜欢', '英语', '越南', '美国', '汉语', '韩国']
             },
+
             // Bạn có thể thêm nhiều bài học khác ở đây
         };
 
         let currentLessonId = 'basic_greetings'; // Bài học mặc định
         let HANZI_MAP = {}; // Ánh xạ Hán tự sẽ được tạo động
         
-        /**
-         * Hàm lấy ngẫu nhiên N phần tử từ một mảng (hoán đổi Fisher-Yates)
-         * @param {string[]} fullList Danh sách Hán tự đầy đủ
-         * @param {number} N Số lượng phần tử cần chọn (Mặc định là 11)
-         * @returns {string[]} Mảng con đã được chọn ngẫu nhiên
-         */
-        function getRandomHanziSubset(fullList, N = MAX_HANZI_TILES) {
-            // Nếu danh sách ít hơn N, trả về toàn bộ danh sách
-            if (fullList.length <= N) {
-                return fullList;
-            }
-            
-            // Sao chép mảng để không làm thay đổi mảng gốc
-            const shuffled = fullList.slice();
-            let i = fullList.length;
-            let temp;
-            let randIndex;
-
-            // Thuật toán Fisher-Yates shuffle
-            while (i !== 0) {
-                // Lấy một phần tử ngẫu nhiên
-                randIndex = Math.floor(Math.random() * i);
-                i -= 1;
-
-                // Hoán đổi vị trí
-                temp = shuffled[i];
-                shuffled[i] = shuffled[randIndex];
-                shuffled[randIndex] = temp;
-            }
-
-            // Trả về N phần tử đầu tiên (đã được trộn ngẫu nhiên)
-            return shuffled.slice(0, N);
-        }
-
         // Hàm tạo HANZI_MAP dựa trên bài học đã chọn
         function generateHanziMap(lessonId) {
             const lesson = LESSONS[lessonId];
             if (!lesson) return;
-            
-            // 1. Lấy ngẫu nhiên MAX_HANZI_TILES (11) Hán tự từ danh sách đầy đủ
-            const selectedHanzi = getRandomHanziSubset(lesson.hanzi);
 
             const map = {};
             let value = 2;
             
-            // 2. Lặp qua danh sách Hán tự ĐÃ CHỌN và gán cho 2, 4, 8, 16, ...
-            for (let i = 0; i < selectedHanzi.length; i++) {
-                map[value] = selectedHanzi[i];
+            // Lặp qua danh sách Hán tự và gán cho 2, 4, 8, 16, ...
+            for (let i = 0; i < lesson.hanzi.length; i++) {
+                map[value] = lesson.hanzi[i];
                 // Tăng gấp đôi giá trị cho ô tiếp theo
                 value *= 2; 
             }
             
-            // 3. Gán Hán tự cuối cùng cho các ô lớn hơn (nếu có)
-            const lastHanzi = selectedHanzi[selectedHanzi.length - 1] || '超'; // Dùng '超' (siêu) làm fallback nếu danh sách quá ngắn
+            // Gán Hán tự cuối cùng cho các ô lớn hơn (nếu có)
+            const lastHanzi = lesson.hanzi[lesson.hanzi.length - 1];
             while (value <= 65536) {
                 map[value] = lastHanzi;
                 value *= 2;

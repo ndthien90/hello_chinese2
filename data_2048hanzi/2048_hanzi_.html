@@ -211,26 +211,15 @@
         <div class="container w-full max-w-xl mx-auto p-4">
             <!-- Header -->
             <header class="mb-4">
-                <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-4 space-y-4 md:space-y-0">
+                <div class="flex justify-between items-center mb-4">
                     <h1 class="text-6xl font-black text-[#776e65]">2048</h1>
-                    <!-- Game Mode & Lesson Selector Wrapper -->
-                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-                        <!-- Game Mode Selector -->
-                        <div>
-                            <label for="game-mode" class="text-xs font-semibold uppercase text-[#776e65] block mb-1 text-left sm:text-right">Kiểu chơi</label>
-                            <select id="game-mode" class="bg-white border border-[#bbada0] text-[#776e65] rounded-lg p-1.5 shadow-md text-sm cursor-pointer focus:ring-2 focus:ring-[#8f7a66] transition">
-                                <option value="classic">Cổ điển (Số)</option>
-                                <option value="han">Chữ Hán</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Lesson Selector (NEW) -->
-                        <div id="lesson-selector-wrapper" class="hidden">
-                            <label for="lesson-selector" class="text-xs font-semibold uppercase text-[#776e65] block mb-1 text-left sm:text-right">Bài học Hán tự</label>
-                            <select id="lesson-selector" class="bg-white border border-[#bbada0] text-[#776e65] rounded-lg p-1.5 shadow-md text-sm cursor-pointer focus:ring-2 focus:ring-[#8f7a66] transition">
-                                <!-- Options will be populated by JavaScript -->
-                            </select>
-                        </div>
+                    <!-- Game Mode Selector -->
+                    <div>
+                        <label for="game-mode" class="text-xs font-semibold uppercase text-[#776e65] block mb-1 text-right">Kiểu chơi</label>
+                        <select id="game-mode" class="bg-white border border-[#bbada0] text-[#776e65] rounded-lg p-1.5 shadow-md text-sm cursor-pointer focus:ring-2 focus:ring-[#8f7a66] transition">
+                            <option value="classic">Cổ điển (Số)</option>
+                            <option value="han">Chữ Hán</option>
+                        </select>
                     </div>
                 </div>
                 <div class="flex justify-end space-x-2">
@@ -282,8 +271,8 @@
                 <div class="dpad-grid">
                     <button id="btn-up" class="control-btn dpad-up">▲</button>
                     <button id="btn-left" class="control-btn dpad-left">◀</button>
-                    <button id="btn-right" class="control-btn dpad-right">▶</button>
                     <button id="btn-down" class="control-btn dpad-down">▼</button>
+                    <button id="btn-right" class="control-btn dpad-right">▶</button>
                 </div>
             </div>
             <!-- --- End Control Buttons --- -->
@@ -332,92 +321,28 @@
         const CONTAINER_PADDING_PX = 8;
         const ANIMATION_DURATION = 150; // ms
         const HIGH_SCORE_KEY = '2048_high_score'; // Key for localStorage
-        const MAX_HANZI_TILES = 11; // Số lượng Hán tự cần thiết cho 2^1 đến 2^11 (2 đến 2048)
         
-        // --- CẤU HÌNH BÀI HỌC HÁN TỰ MỚI (Đã thêm nhiều từ hơn 11) ---
-        const LESSONS = {
-            "basic_greetings": {
-                name: "H1 Bài 1: 老师您好",
-                // Danh sách Hán tự theo thứ tự: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048
-                // Tăng số lượng lên > 11
-                hanzi: ['你', '我', '您', '老师', '学生', '好', '很', '吗', '谢谢', '这', '那', '是', '不', '本子', '书', '你好', '再见', '对不起', '没关系', '陈楠', '国安']
-            },
-            "family_terms": {
-                name: "H1 Bài 2: 谢谢你",
-                hanzi: ['爷爷', '奶奶', '爸爸', '妈妈', '哥哥', '姐姐', '弟弟', '妹妹', '医生', '记者', '公安', '警察', '律师', '厨师', '演员', '司机', '护士', '部队', '消防员', '工人', '农民', '公务员']
-            },
-            "common_verbs": {
-                name: "H1 Bài 3: 你叫什么名字？",
-                hanzi: ['叫', '请', '问', '吃', '喝', '说', '喜欢', '什么', '名字', '贵姓', '姓', '他', '她', '们', '人', '也', '都', '中国', '美国', '英国', '韩国', '泰国', '德国', '法国', '日本', '越南', '汉语', '英语']
-            },
-            // Bạn có thể thêm nhiều bài học khác ở đây
+        // Ánh xạ các giá trị số sang ký tự Hán tự
+        const HANZI_MAP = {
+            2: '你好',    
+            4: '很好',    
+            8: '弟弟',    
+            16: '妹妹',  
+            32: '哥哥',  
+            64: '姐姐',   
+            128: '妈妈',  
+            256: '爸爸',  
+            512: '奶奶', 
+            1024: '爷爷', 
+            2048: '医生', 
+            // Tiếp tục cho các cấp độ cao hơn
+            4096: '记者',  
+            8192: '农民', 
+            16384:'工人', 
+            32768: '警察', 
+            65536: '律师'  
         };
-
-        let currentLessonId = 'basic_greetings'; // Bài học mặc định
-        let HANZI_MAP = {}; // Ánh xạ Hán tự sẽ được tạo động
         
-        /**
-         * Hàm lấy ngẫu nhiên N phần tử từ một mảng (hoán đổi Fisher-Yates)
-         * @param {string[]} fullList Danh sách Hán tự đầy đủ
-         * @param {number} N Số lượng phần tử cần chọn (Mặc định là 11)
-         * @returns {string[]} Mảng con đã được chọn ngẫu nhiên
-         */
-        function getRandomHanziSubset(fullList, N = MAX_HANZI_TILES) {
-            // Nếu danh sách ít hơn N, trả về toàn bộ danh sách
-            if (fullList.length <= N) {
-                return fullList;
-            }
-            
-            // Sao chép mảng để không làm thay đổi mảng gốc
-            const shuffled = fullList.slice();
-            let i = fullList.length;
-            let temp;
-            let randIndex;
-
-            // Thuật toán Fisher-Yates shuffle
-            while (i !== 0) {
-                // Lấy một phần tử ngẫu nhiên
-                randIndex = Math.floor(Math.random() * i);
-                i -= 1;
-
-                // Hoán đổi vị trí
-                temp = shuffled[i];
-                shuffled[i] = shuffled[randIndex];
-                shuffled[randIndex] = temp;
-            }
-
-            // Trả về N phần tử đầu tiên (đã được trộn ngẫu nhiên)
-            return shuffled.slice(0, N);
-        }
-
-        // Hàm tạo HANZI_MAP dựa trên bài học đã chọn
-        function generateHanziMap(lessonId) {
-            const lesson = LESSONS[lessonId];
-            if (!lesson) return;
-            
-            // 1. Lấy ngẫu nhiên MAX_HANZI_TILES (11) Hán tự từ danh sách đầy đủ
-            const selectedHanzi = getRandomHanziSubset(lesson.hanzi);
-
-            const map = {};
-            let value = 2;
-            
-            // 2. Lặp qua danh sách Hán tự ĐÃ CHỌN và gán cho 2, 4, 8, 16, ...
-            for (let i = 0; i < selectedHanzi.length; i++) {
-                map[value] = selectedHanzi[i];
-                // Tăng gấp đôi giá trị cho ô tiếp theo
-                value *= 2; 
-            }
-            
-            // 3. Gán Hán tự cuối cùng cho các ô lớn hơn (nếu có)
-            const lastHanzi = selectedHanzi[selectedHanzi.length - 1] || '超'; // Dùng '超' (siêu) làm fallback nếu danh sách quá ngắn
-            while (value <= 65536) {
-                map[value] = lastHanzi;
-                value *= 2;
-            }
-            
-            HANZI_MAP = map;
-        }
-
         let board; // Lưu trữ các đối tượng { value, id } hoặc null
         let score = 0;
         let highScore = 0; // Thêm biến điểm cao nhất
@@ -435,27 +360,12 @@
         const newGameBtn = document.getElementById('new-game-btn');
         const tryAgainBtn = document.getElementById('try-again-btn');
         const gameModeSelector = document.getElementById('game-mode'); // Element mới
-        const lessonSelector = document.getElementById('lesson-selector'); // Element mới
-        const lessonSelectorWrapper = document.getElementById('lesson-selector-wrapper'); // Wrapper mới
         
         // --- Nút điều khiển mới ---
         const btnUp = document.getElementById('btn-up');
         const btnLeft = document.getElementById('btn-left');
         const btnRight = document.getElementById('btn-right');
         const btnDown = document.getElementById('btn-down');
-        
-        // Hàm điền các tùy chọn vào dropdown Bài học
-        function populateLessonSelector() {
-            lessonSelector.innerHTML = ''; // Xóa các tùy chọn cũ
-            for (const id in LESSONS) {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = LESSONS[id].name;
-                lessonSelector.appendChild(option);
-            }
-            // Đặt bài học mặc định
-            lessonSelector.value = currentLessonId; 
-        }
 
         // Hàm tải điểm cao nhất từ localStorage
         function loadHighScore() {
@@ -469,12 +379,13 @@
             updateHighScoreDisplay();
         }
 
-        // Hàm cập nhật hiển thị điểm cao nhất
+        // Hàm cập nhật hiển thị điểm cao nhất (FIX: Đưa lên đây để đảm bảo phạm vi truy cập)
         function updateHighScoreDisplay() {
             highScoreElement.textContent = highScore;
         }
 
-        // Hàm kiểm tra và cập nhật điểm cao nhất
+        // Hàm kiểm tra và cập nhật điểm cao nhất - DỪNG GỌI HÀM NÀY SAU MỖI BƯỚC ĐI.
+        // Nó sẽ được gọi MỘT LẦN trong checkGameState() khi game over.
         function checkAndUpdateHighScoreOnGameOver() {
             if (score > highScore) {
                 // Đây là kỷ lục mới
@@ -527,11 +438,6 @@
 
         // Initial setup function
         function setupGame() {
-            // TẠO HANZI_MAP MỚI DỰA TRÊN BÀI HỌC TRƯỚC KHI KHỞI TẠO BẢNG
-            if (gameMode === 'han') {
-                 generateHanziMap(currentLessonId);
-            }
-            
             board = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null));
             score = 0;
             isGameOver = false;
@@ -544,7 +450,7 @@
             gameContainer.appendChild(overlay);
 
             updateScore(); // Cập nhật hiển thị điểm hiện tại (là 0)
-            updateHighScoreDisplay(); 
+            updateHighScoreDisplay(); // FIX: Gọi hàm cập nhật hiển thị điểm cao nhất
             
             addRandomTile();
             addRandomTile();
@@ -571,6 +477,7 @@
         // Updates the score display
         function updateScore() {
             scoreElement.textContent = score;
+            // Xóa checkAndUpdateHighScore() ở đây
         }
 
         // Finds all empty cells (là null)
@@ -870,21 +777,8 @@
         // Game Mode Change Handler
         gameModeSelector.addEventListener('change', (e) => {
             gameMode = e.target.value;
-            // Hiển thị/Ẩn dropdown bài học
-            if (gameMode === 'han') {
-                lessonSelectorWrapper.classList.remove('hidden');
-            } else {
-                lessonSelectorWrapper.classList.add('hidden');
-            }
             // Bắt đầu trò chơi mới ngay lập tức khi thay đổi kiểu chơi
             setupGame(); 
-        });
-
-        // Lesson Selector Change Handler (NEW)
-        lessonSelector.addEventListener('change', (e) => {
-            currentLessonId = e.target.value;
-            // Bắt đầu trò chơi mới với bài học mới
-            setupGame();
         });
 
 
@@ -983,7 +877,6 @@
         // Initialize the game when the page loads
         window.onload = () => {
              loadHighScore(); // Tải điểm cao nhất lần đầu
-             populateLessonSelector(); // Điền các tùy chọn bài học
              setupGame(); 
         };
 
