@@ -80,9 +80,9 @@
         
         @media (min-width: 640px) { /* sm breakpoint */
             .char-circle {
-                width: 112px; /* sm:w-28 */
+                width: 140px; /* sm:w-28 */
                 height: 80px; /* sm:h-20 */
-                font-size: 2.5rem; /* sm:text-2xl */
+                font-size: 2.2rem; /* sm:text-2xl */
             }
         }
 
@@ -158,8 +158,9 @@
             <label for="lesson-selector" class="text-gray-700 dark:text-gray-300 font-semibold">Chọn Bài học:</label>
             <select id="lesson-selector" class="p-2 rounded-lg border-2 border-primary-blue bg-white dark:bg-gray-700 dark:text-white font-bold transition-colors shadow-sm focus:ring-2 focus:ring-primary-blue mr-4">
                 <!-- Các option này sẽ được tự động cập nhật trong thực tế -->
-                <option value="bai1">Bài 1 老师您好！</option>
-                <option value="bai2">Bài 2 谢谢你！</option>
+                <option value="1">H1 Bài 1 老师您好！</option>
+                <option value="2">H1 Bài 2 谢谢你！</option>
+                <option value="3">H1 Bài 3 你叫什么名字？</option>
             </select>
             
             <!-- Hidden Round Selector (Giữ lại để logic JS không bị lỗi, nhưng bị ẩn) -->
@@ -185,8 +186,7 @@
                 <p id="target-chinese-pinyin" class="text-yellow-100 italic text-base sm:text-xl mt-1"></p>
                 <!-- Nút Nghe lại (Đọc Hán tự) -->
                 <button id="speak-button" class="mt-3 px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-full disabled:opacity-50" disabled>
-                    <svg class="w-4 h-4 inline-block align-text-bottom" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-4l-4 4v-4H9a1 1 0 01-1-1v-5a1 1 0 011-1h2l3-3 3 3h2zM7 7H5a1 1 0 00-1 1v2a1 1 0 001 1h2v-4z" clip-rule="evenodd"></path></svg>
-                    Nghe phát âm
+                    Phát âm 🔊
                 </button>
                 <audio id="audio-player" class="hidden"></audio>
             </div>
@@ -237,98 +237,61 @@
     </div>
 
     <script>
-        // --- DỮ LIỆU GIẢ LẬP ---
-        // Dữ liệu giả lập cho các bài học. Trong môi trường thực tế, dữ liệu này sẽ được tải từ các file .txt.
-        const FAKE_LESSON_DATA = {
-            'bai1': [
-                { char: '你', pinyin: 'nǐ', meaning: 'bạn, cậu' },
-                { char: '我', pinyin: 'wǒ', meaning: 'tôi' },
-                { char: '您', pinyin: 'nín', meaning: 'ngài (lịch sự)' },
-                { char: '老师', pinyin: 'lǎoshī', meaning: 'thầy/cô giáo' },
-                { char: '学生', pinyin: 'xuésheng', meaning: 'học sinh' },
-                { char: '好', pinyin: 'hǎo', meaning: 'tốt, khỏe' },
-                { char: '很', pinyin: 'hěn', meaning: 'rất' },
-                { char: '吗', pinyin: 'ma', meaning: 'không (trợ từ nghi vấn)' },
-                { char: '谢谢', pinyin: 'xièxie', meaning: 'cảm ơn' },
-                { char: '这', pinyin: 'zhè', meaning: 'này, đây' },
-                { char: '那', pinyin: 'nà', meaning: 'kia, đó' },
-                { char: '是', pinyin: 'shì', meaning: 'là' },
-                { char: '不', pinyin: 'bù', meaning: 'không (phủ định)' },
-                { char: '本子', pinyin: 'běnzi', meaning: 'vở' },
-                { char: '书', pinyin: 'shū', meaning: 'sách' },
-                { char: '你好', pinyin: 'nǐ hǎo', meaning: 'xin chào' },
-                { char: '再见', pinyin: 'zàijiàn', meaning: 'tạm biệt' },
-                { char: '陈楠', pinyin: 'Chén Nán', meaning: 'Trần Nam' },
-                { char: '国安', pinyin: 'Guó’ān', meaning: 'Quốc An' },
-            ],
-            'bai2': [
-                { char: '家', pinyin: 'jiā', meaning: 'nhà, gia đình' },
-                { char: '人', pinyin: 'rén', meaning: 'người' },
-                { char: '有', pinyin: 'yǒu', meaning: 'có' },
-                { char: '几', pinyin: 'jǐ', meaning: 'mấy, vài' },
-                { char: '个', pinyin: 'gè', meaning: 'cái, chiếc' },
-                { char: '爸爸', pinyin: 'bàba', meaning: 'bố' },
-                { char: '妈妈', pinyin: 'māma', meaning: 'mẹ' },
-                { char: '哥哥', pinyin: 'gēge', meaning: 'anh trai' },
-                { char: '姐姐', pinyin: 'jiějie', meaning: 'chị gái' },
-                { char: '弟弟', pinyin: 'dìdi', meaning: 'em trai' },
-                { char: '妹妹', pinyin: 'mèimei', meaning: 'em gái' },
-                { char: '和', pinyin: 'hé', meaning: 'và' },
-                { char: '都', pinyin: 'dōu', meaning: 'đều' },
-                { char: '工作', pinyin: 'gōngzuò', meaning: 'công việc, làm việc' },
-                { char: '医生', pinyin: 'yīshēng', meaning: 'bác sĩ' },
-                { char: '爱', pinyin: 'ài', meaning: 'yêu' },
-            ],
-            // Dữ liệu Bai 3 đã được sửa lỗi cú pháp.
-            'bai3': [
-                { char: '吃', pinyin: 'chī', meaning: 'ăn' },
-                { char: '饭', pinyin: 'fàn', meaning: 'cơm' },
-                { char: '菜', pinyin: 'cài', meaning: 'rau, món ăn' },
-                { char: '米饭', pinyin: 'mǐfàn', meaning: 'cơm trắng' },
-                { char: '面条', pinyin: 'miàntiáo', meaning: 'mì sợi' },
-                { char: '喝', pinyin: 'hē', meaning: 'uống' }, // <-- Lỗi cú pháp đã được sửa ở đây
-                { char: 'ủy', pinyin: 'shuǐ', meaning: 'nước' },
-                { char: '茶', pinyin: 'chá', meaning: 'trà' },
-                { char: '咖啡', pinyin: 'kāfēi', meaning: 'cà phê' },
-                { char: '牛奶', pinyin: 'niúnǎi', meaning: 'sữa bò' },
-            ],
-            'bai4': [
-                { char: '去', pinyin: 'qù', meaning: 'đi' },
-                { char: '哪儿', pinyin: 'nǎr', meaning: 'ở đâu' },
-                { char: '学校', pinyin: 'xuéxiào', meaning: 'trường học' },
-                { char: '圖書館', pinyin: 'túshūguǎn', meaning: 'thư viện' },
-                { char: '商店', pinyin: 'shāngdiàn', meaning: 'cửa hàng' },
-                { char: '买', pinyin: 'mǎi', meaning: 'mua' },
-                { char: '东西', pinyin: 'dōngxi', meaning: 'đồ đạc, thứ' },
-                { char: '多少', pinyin: 'duōshao', meaning: 'bao nhiêu' },
-                { char: '钱', pinyin: 'qián', meaning: 'tiền' },
-                { char: '块', pinyin: 'kuài', meaning: 'đồng (đơn vị tiền tệ)' },
-            ]
-        };
-
-        // Hàm giả lập tải dữ liệu từ file baiX.txt
+        // --- CHÚ Ý QUAN TRỌNG VỀ DỮ LIỆU ---
+        // Cấu trúc: data_findword/{lessonId}/{lessonId}.txt
+        // Ký tự phân tách: Dấu gạch đứng (|)
+        // Định dạng file text (mỗi dòng là một từ vựng, các trường cách nhau bằng dấu |):
+        // Hán tự|Pinyin|Ý nghĩa|Ví dụ câu|...
+        
+        /**
+         * Hàm tải dữ liệu từ file text và phân tích cú pháp.
+         * Đã được cập nhật để sử dụng dấu '|' làm ký tự phân tách.
+         * @param {string} lessonId - ID của bài học (ví dụ: 'bai1').
+         * @returns {Promise<Array<{char: string, pinyin: string, meaning: string}>>} Mảng các từ vựng.
+         */
         async function fetchLessonData(lessonId) {
-            // Trong môi trường thực tế, bạn sẽ dùng fetch:
-            // const response = await fetch(`data_findword/${lessonId}/${lessonId}.txt`);
-            // const text = await response.text();
-            // CHUYỂN DỮ LIỆU TEXT THÀNH MẢNG OBJECT VÀ TRẢ VỀ
-
-            // Ở đây, chúng ta dùng dữ liệu giả lập:
-            return new Promise((resolve, reject) => {
-                if (FAKE_LESSON_DATA[lessonId]) {
-                    // Giả lập độ trễ mạng
-                    setTimeout(() => resolve(FAKE_LESSON_DATA[lessonId]), 200); 
-                } else {
-                    reject(new Error(`Không tìm thấy dữ liệu cho ${lessonId}`));
+            const filePath = `data_flashcard/bai${lessonId}/bai${lessonId}.txt`;
+            
+            try {
+                const response = await fetch(filePath);
+                
+                if (!response.ok) {
+                    throw new Error(`Không tìm thấy file dữ liệu: ${filePath} (Status: ${response.status})`);
                 }
-            });
+                
+                const text = await response.text();
+                
+                // Phân tích cú pháp dữ liệu text
+                const lines = text.split('\n').filter(line => line.trim() !== ''); // Chia thành các dòng và loại bỏ dòng trống
+                
+                const vocabulary = lines.map(line => {
+                    // SỬ DỤNG DẤU GẠCH ĐỨNG | ĐỂ PHÂN TÁCH
+                    const parts = line.split('|'); 
+                    
+                    if (parts.length >= 3) {
+                        return { 
+                            char: parts[0].trim(), 
+                            pinyin: parts[1].trim(), 
+                            meaning: parts[2].trim() // Chỉ lấy trường thứ 3 làm ý nghĩa
+                        };
+                    }
+                    console.warn(`Dòng dữ liệu không hợp lệ (cần ít nhất 3 phần): ${line}`);
+                    return null;
+                }).filter(item => item !== null); // Loại bỏ các mục không hợp lệ
+
+                return vocabulary;
+                
+            } catch (error) {
+                console.error("Lỗi trong quá trình fetchLessonData:", error);
+                throw new Error(`Lỗi tải dữ liệu cho Bài ${lessonId}: ${error.message}`);
+            }
         }
         
         // Cấu hình đường dẫn MP3
         function getAudioPath(lessonId, chineseChar) {
             // Đường dẫn thực tế theo cấu trúc bạn cung cấp:
             const baseChar = chineseChar.replace(/\s+/g, ''); // Loại bỏ khoảng trắng trong từ vựng
-            return `data_findword/${lessonId}/mp3/${baseChar}.mp3`;
+            return `data_flashcard/bai${lessonId}/mp3/${baseChar}.mp3`;
         }
         
         // --- CÁC BIẾN TOÀN CỤC ---
@@ -350,7 +313,6 @@
         const speakButton = document.getElementById('speak-button');
         const roundSelector = document.getElementById('round-selector');
         const lessonSelector = document.getElementById('lesson-selector');
-        // const maxRoundsInfo = document.getElementById('max-rounds-info'); // Đã loại bỏ
         const audioPlayer = document.getElementById('audio-player');
         
         // Game State Variables
@@ -559,11 +521,19 @@
             };
 
             audioPlayer.oncanplay = () => {
+                // Tắt sự kiện canplay và play ngay lập tức
+                audioPlayer.oncanplay = null; 
                 audioPlayer.play();
             };
             
             audioPlayer.onended = () => {
                  speakButton.disabled = false;
+            }
+            
+            // Nếu trình duyệt đã tải nhanh, không có oncanplay
+            if (audioPlayer.readyState >= 3) { // READY_STATE_HAVE_FUTURE_DATA
+                 audioPlayer.oncanplay = null;
+                 audioPlayer.play();
             }
         }
         
@@ -820,6 +790,7 @@
             isGameActive = true;
             isHelpUsed = false; 
             helpButton.disabled = false;
+            helpButton.textContent = '💡 Trợ giúp 50/50'; // Reset text
             
             roundDisplay.textContent = `Vòng: ${currentRound}/${totalRounds}`;
             generateButton.textContent = '✨ Bỏ qua/Tạo lại Từ Mới'; 
@@ -861,7 +832,7 @@
         async function restartGame() {
             // Tải dữ liệu bài học mới nhất
             const lessonId = lessonSelector.value;
-            showLoadingState(`Đang tải từ vựng cho ${lessonId}...`);
+            showLoadingState(`Đang tải từ vựng cho ${lessonId} từ file ${lessonId}.txt...`);
 
             try {
                 const data = await fetchLessonData(lessonId);
@@ -878,7 +849,7 @@
 
                 // Kiểm tra đủ từ vựng để chơi (cần ít nhất 10 từ để tạo các distractors)
                 if (MAX_ROUNDS < OPTIONS_COUNT) {
-                    showErrorState(`Lỗi: Bài ${lessonId} chỉ có ${MAX_ROUNDS} từ. Cần tối thiểu ${OPTIONS_COUNT} từ để chơi.`);
+                    showErrorState(`Lỗi: Bài ${lessonId} chỉ có ${MAX_ROUNDS} từ. Cần tối thiểu ${OPTIONS_COUNT} từ để chơi. Vui lòng kiểm tra file dữ liệu!`);
                     return;
                 }
 
@@ -887,7 +858,7 @@
                 
                 // Hiển thị thông báo nếu số vòng chơi bị giới hạn
                 if (totalRounds < DEFAULT_ROUNDS) {
-                    document.getElementById('feedback-message').textContent = `Lưu ý: Chỉ có ${MAX_ROUNDS} từ vựng. Số vòng chơi đã được giới hạn thành ${MAX_ROUNDS}.`;
+                    document.getElementById('feedback-message').textContent = `Lưu ý: Chỉ có ${MAX_ROUNDS} từ vựng trong file. Số vòng chơi đã được giới hạn thành ${MAX_ROUNDS}.`;
                     document.getElementById('feedback-message').className = 'mb-8 p-4 text-center rounded-lg bg-yellow-100 dark:bg-yellow-900 border-l-4 border-yellow-500 text-yellow-800 dark:text-yellow-200 font-semibold text-xl';
                     document.getElementById('feedback-message').classList.remove('hidden');
                 } else {
@@ -915,8 +886,6 @@
         
         // Hàm này không còn cần thiết vì số vòng là cố định
         function updateRoundOptions(maxRounds) {
-            // maxRoundsInfo.textContent = maxRounds; // Đã loại bỏ
-            
             // Cập nhật totalRounds dựa trên số từ vựng (Nếu ít hơn 10)
             totalRounds = Math.min(DEFAULT_ROUNDS, maxRounds);
         }
@@ -924,7 +893,7 @@
         function showLoadingState(message) {
             stopTimer();
             isGameActive = false;
-            generateButton.textContent = 'Đang tải...';
+            generateButton.textContent = '🎯Bắt đầu chơi';
             generateButton.disabled = true;
             helpButton.disabled = true;
             speakButton.disabled = true;
@@ -941,7 +910,7 @@
              generateButton.textContent = '▶️ Bắt đầu Trò chơi';
              generateButton.disabled = false;
              targetChineseMeaningDisplay.textContent = 'LỖI TẢI DỮ LIỆU';
-             targetChinesePinyinDisplay.textContent = 'Vui lòng chọn bài học khác';
+             targetChinesePinyinDisplay.textContent = 'Vui lòng kiểm tra console log';
              startPrompt.textContent = message;
         }
 
@@ -960,8 +929,8 @@
             }
             
             // Khởi tạo hiển thị ban đầu
-            lessonSelector.dispatchEvent(new Event('change'));
-            
+            // Không dispatch Event 'change' ở đây, tránh lỗi load data khi chưa có file
+
             // Cố định totalRounds và thời gian
             totalRounds = DEFAULT_ROUNDS; 
             remainingTime = totalRounds * TIME_PER_ROUND;
@@ -1006,16 +975,16 @@
             // Cập nhật khi chọn Bài học mới
             lessonSelector.addEventListener('change', async (e) => {
                 const lessonId = e.target.value;
-                showLoadingState(`Đang kiểm tra từ vựng cho ${lessonId}...`);
+                showLoadingState(`Đang kiểm tra từ vựng cho ${lessonId} từ file ${lessonId}.txt...`);
                 
                 try {
                     const data = await fetchLessonData(lessonId);
                     const newMaxRounds = data.length;
                     
                     updateRoundOptions(newMaxRounds); // Cập nhật totalRounds dựa trên số từ
+                    CHINESE_CHARACTERS = data; // Cập nhật dữ liệu từ vựng toàn cục
 
                     // Cập nhật hiển thị Vòng và prompt bắt đầu
-                    // totalRounds đã được cập nhật bên trong updateRoundOptions
                     remainingTime = totalRounds * TIME_PER_ROUND;
                     updateTimerDisplay();
                     
@@ -1038,6 +1007,8 @@
                 }
             });
             
+            // Tải dữ liệu mặc định khi khởi động (bài 1)
+            lessonSelector.dispatchEvent(new Event('change'));
         }
 
         // Khởi tạo lần đầu

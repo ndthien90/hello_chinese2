@@ -1,0 +1,64 @@
+你叫什么名字？
+Nǐ jiào shénme míngzì?
+Bạn tên là gì?
+/#
+我叫李月。
+Wǒ jiào Lǐ Yuè.
+Tôi tên là Lý Nguyệt.
+/#
+请问您贵姓？
+Qǐngwèn nín guìxìng?
+Xin hỏi, họ của bạn là gì?
+/#
+你姓什么？
+Nǐ xìng shénme?
+Bạn họ gì?
+/#
+我爸爸姓李。
+Wǒ bàba xìng Lǐ.
+Bố tôi họ Lý.
+/#
+你喜欢喝什么?
+Nǐ xǐhuān hē shénme?
+Bạn thích uống gì?
+/#
+这是什么书?
+Zhè shì shénme shū?
+Đây là sách gì?
+/#
+我很喜欢韩国。
+Wǒ hěn xǐhuān Hánguó.
+Tôi rất thích Hàn Quốc.
+/#
+她不喜欢吃火锅。
+Tā bù xǐhuān chī huǒguō.
+Cô ấy không thích ăn lẩu.
+/#
+你是越南人吗？
+Nǐ shì Yuènán rén ma?
+Bạn có phải là người Việt Nam không?
+/#
+我不是中国人。
+Wǒ bù shì Zhōngguó rén.
+Tôi không phải là người Trung Quốc.
+/#
+他是美国人，他说英语。
+Tā shì Měiguó rén, tā shuō Yīngyǔ.
+Anh ấy là người Mỹ, anh ấy nói tiếng Anh.
+/#
+我是越南人，我说越南语。
+Wǒ shì Yuènán rén, wǒ shuō Yuènán yǔ.
+Tôi là người Việt Nam, tôi nói tiếng Việt.
+/#
+他是法国人，他说法语。
+Tā shì Fàguó rén, tā shuō Fǎyǔ.
+Anh ấy là người Pháp, anh ấy nói tiếng Pháp.
+/#
+他们都是韩国人。
+Tāmen dōu shì Hánguó rén.
+Họ đều là người Hàn Quốc.
+/#
+我爸爸也姓张。
+Wǒ bàba yě xìng Zhāng.
+Bố tôi cũng họ Trương.
+/#

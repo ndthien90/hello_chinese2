@@ -1,0 +1,6 @@
+Guó'ān, nà shì Lǐ Yuè ma?|国安，那是李月吗？|Quốc An, kia là Lý Nguyệt phải không?
+Bú shì, nà shì Chén Nán.|不是，那是陈楠。|Không phải, kia là Trần Nam.
+Chén Nán shì Zhōngguó rén ma?|陈楠是中国人吗？|Trần Nam là người Trung Quốc phải không?
+Bú shì, Chén Nán shì Yuènán rén.|不是，陈楠是越南人。|Không phải, Trần Nam là người Việt Nam.
+Tā shuō Yīngyǔ ma?|他说英语吗？|Anh ấy nói tiếng Anh phải không?
+Bú shì, tā shuō Yuènányǔ.|不是，他说越南语。|Không phải, anh ấy nói tiếng Việt.

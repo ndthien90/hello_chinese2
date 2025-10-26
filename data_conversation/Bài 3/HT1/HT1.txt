@@ -1,0 +1,8 @@
+Nǐ hǎo, nǐ jiào shénme míngzi?|你好，你叫什么名字？|Xin chào, bạn tên là gì?
+Wǒ jiào Chén Nán.|我叫陈楠。|Tôi tên là Trần Nam.
+Nǐ shì yīshēng ma?|你是医生吗？|Bạn là bác sĩ phải không?
+Wǒ bú shì yīshēng, nà shì yīshēng.|我不是医生，那是医生.|Tôi không phải là bác sĩ, kia là bác sĩ .
+Tā xìng shénme?|她姓什么？|Cô ấy họ gì?
+Tā xìng Wáng.|她姓王。|Cô ấy họ Vương.
+Xièxie!|谢谢！|Cảm ơn!
+Bú kèqi!|不客气！|Không có gì!

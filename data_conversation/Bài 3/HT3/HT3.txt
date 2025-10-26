@@ -1,0 +1,7 @@
+Xiǎomíng, nà shì xuésheng ma?|小明，那是学生吗？|Tiểu Minh, kia là học sinh phải không?
+Shì, nà shì xuésheng.|是，那是学生。|Phải, kia là học sinh.
+Tā jiào shénme míngzi?|他叫什么名字？|Cậu ấy tên là gì?
+Tā jiào Liú Guó'ān.|他叫刘国安。|Cậu ấy tên là Lưu Quốc An.
+Tā shì Hánguó rén ma?|他是韩国人吗？|Cậu ấy là người Hàn Quốc phải không?
+Bú shì, tā shì Zhōngguó rén.|不是，他是中国人。|Không phải, cậu ấy là người Trung Quốc.
+
