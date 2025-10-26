@@ -78,40 +78,19 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block; /* Giữ hiển thị để overlay có thể hoạt động */
+            display: none; 
             opacity: 1;
             transition: opacity 0.3s;
+        }
+
+        .show-img img {
+            display: block; 
         }
         
         /* Lớp cho trạng thái không được chọn khi có feedback */
         .dimmed img {
             opacity: 0.4;
         }
-
-        /* CSS MỚI: Overlay hiển thị nghĩa Tiếng Việt */
-        .meaning-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.65); /* Nền tối mờ */
-            color: #ffffff;
-            padding: 0.5rem 1rem;
-            font-size: 1.5rem; /* text-lg */
-            font-weight: 700; /* font-bold */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            transform: translateY(100%); /* Ẩn ban đầu */
-            transition: transform 0.3s ease-out;
-            border-radius: 0 0 0.75rem 0.75rem; /* rounded-xl ở góc dưới */
-            text-align: center;
-            width: 100%;
-        }
-
-        /* Hiển thị meaning-overlay khi thẻ có class 'feedback' và là đáp án đúng */
-        .choice-card.feedback .meaning-overlay.show-meaning {
-            transform: translateY(0); /* Hiện ra */
-        }
-        /* End CSS MỚI */
 
         /* Icon SVG cho nút Dark/Light Mode */
         .mode-toggle svg {
@@ -240,23 +219,19 @@
     </div>
 
     <script>
-        // --- LOGIC PHÁT ÂM CẢI TIẾN (Ưu tiên MP3, dự phòng Web Speech API) ---
+        // --- LOGIC PHÁT ÂM SỬ DỤNG WEB SPEECH API ---
         
         let utterance = null;
-        let audio = new Audio(); // Tạo một đối tượng Audio chung để tái sử dụng
-        audio.preload = 'auto'; // Tải trước âm thanh để phát nhanh hơn
-
+        
         /**
-         * Hàm dự phòng: Phát âm Hanzi bằng Web Speech API.
-         * @param {string} text - Hán tự cần phát âm.
+         * Phát âm Hanzi sử dụng Web Speech API.
          */
-        function speakWithWebSpeechAPI(text) {
+        function speakHanzi(text) {
             if (!('speechSynthesis' in window)) {
                 console.warn("Trình duyệt không hỗ trợ Web Speech API.");
                 return;
             }
 
-            // Hủy bỏ phát âm Web Speech API nếu đang nói
             if (speechSynthesis.speaking) {
                 speechSynthesis.cancel();
             }
@@ -266,7 +241,6 @@
             utterance.rate = 0.9;
             utterance.pitch = 1.0;
 
-            // Lấy và thiết lập giọng nói tiếng Trung
             const voices = speechSynthesis.getVoices().filter(voice => voice.lang.startsWith('zh'));
             if (voices.length > 0) {
                 const cnVoice = voices.find(voice => voice.lang === 'zh-CN') || voices[0];
@@ -276,55 +250,6 @@
             }
 
             speechSynthesis.speak(utterance);
-        }
-
-        /**
-         * Phát âm Hanzi, ưu tiên file MP3.
-         * Nếu không tìm thấy file MP3, sử dụng Web Speech API.
-         * @param {string} text - Hán tự cần phát âm.
-         */
-        function speakHanzi(text) {
-            if (!text || text === 'Đang tải...' || text.includes('!')) {
-                return; // Không phát âm các thông báo hệ thống hoặc loading
-            }
-            
-            // Hủy bỏ phát âm Web Speech API nếu đang nói
-            if (speechSynthesis.speaking) {
-                speechSynthesis.cancel();
-            }
-            
-            // Tạm dừng và đặt lại audio MP3 nếu đang phát
-            if (!audio.paused) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-
-            const trimmedText = text.trim();
-            // Đường dẫn file MP3: BASE_PATH/baiX/mp3/Hanzi.mp3
-            const mp3Path = `${BASE_PATH}/${currentLessonKey}/mp3/${trimmedText}.mp3`;
-
-            // 1. KIỂM TRA TỒN TẠI FILE MP3 VÀ PHÁT
-            fetch(mp3Path, { method: 'HEAD' })
-                .then(response => {
-                    if (response.ok) {
-                        // File tồn tại, tiến hành phát MP3
-                        audio.src = mp3Path;
-                        audio.play().catch(e => {
-                            // Xử lý lỗi phát (ví dụ: bị chặn)
-                            console.warn(`Lỗi khi cố gắng phát MP3 (${mp3Path}):`, e);
-                            speakWithWebSpeechAPI(trimmedText);
-                        });
-                    } else {
-                        // File không tồn tại (status 404, etc.), chuyển sang Web Speech API
-                        console.info(`Không tìm thấy file MP3: ${mp3Path}. Sử dụng Web Speech API.`);
-                        speakWithWebSpeechAPI(trimmedText);
-                    }
-                })
-                .catch(e => {
-                    // Lỗi mạng hoặc lỗi khác, chuyển sang Web Speech API
-                    console.error(`Lỗi kiểm tra file MP3: ${e.message}. Sử dụng Web Speech API.`);
-                    speakWithWebSpeechAPI(trimmedText);
-                });
         }
         
         
@@ -613,7 +538,7 @@
             hanziEl.textContent = currentWord.hanzi;
             pinyinEl.textContent = currentWord.pinyin;
             
-            // Đọc từ Hán tự (sử dụng logic MP3/Web Speech API đã cập nhật)
+            // Đọc từ Hán tự
             speakHanzi(currentWord.hanzi); 
             
             // 2. Chọn 3 đáp án sai (Decoys)
@@ -637,27 +562,27 @@
                 card.id = `choice-${index}`;
                 card.className = 'choice-card relative rounded-xl overflow-hidden bg-white dark:bg-slate-900/50 transition-all duration-300 transform';
                 card.setAttribute('data-hanzi', choice.hanzi);
-                card.setAttribute('data-meaning', choice.meaning); // THÊM nghĩa Tiếng Việt
-
+                
                 // Lấy khóa bài học gốc từ chính đối tượng từ vựng
                 const sourceKey = choice.lessonKeySource;
 
                 // SỬ DỤNG sourceKey ĐÃ ĐẢM BẢO LÀ currentLessonKey
                 const imagePath = getImagePath(choice.hanzi, sourceKey); 
                 
+                // --- DEBUG LOG ---
+                // console.log(`[Q${currentQuestionIndex + 1}] Choice ${index}: Hanzi=${choice.hanzi}, SourceKey=${sourceKey}, Path=${imagePath}`);
+                // ---------------
+
                 const errorPlaceholderHtml = `<div class="image-placeholder absolute inset-0 text-red-500">Lỗi Ảnh</div>`; 
                 
                 const imageEl = `<img 
                     src="${imagePath}" 
                     alt="${choice.meaning}" 
                     class="w-full h-full object-cover transition-opacity duration-300" 
-                    onerror="this.parentElement.innerHTML = \`${errorPlaceholderHtml}\`;"
+                    onerror="this.classList.add('hidden'); this.parentElement.innerHTML = \`${errorPlaceholderHtml}\`;"
                 >`; 
                 
-                // THÊM meaning-overlay
-                const meaningOverlay = `<div class="meaning-overlay">${choice.meaning}</div>`;
-
-                card.innerHTML = imageEl + meaningOverlay;
+                card.innerHTML = imageEl;
                 card.classList.add('show-img'); 
                 
                 card.addEventListener('click', () => handleAnswer(card, choice.hanzi === currentWord.hanzi));
@@ -697,10 +622,6 @@
                 selectedEl.style.outline = '4px solid #10b981'; // Green 500
                 overlay.innerHTML = CheckIcon;
                 
-                // HIỂN THỊ NGHĨA CHO ĐÁP ÁN ĐÚNG
-                const meaningEl = selectedEl.querySelector('.meaning-overlay');
-                if (meaningEl) meaningEl.classList.add('show-meaning');
-
             } else {
                 selectedEl.style.outline = '4px solid #ef4444'; // Red 500
                 overlay.innerHTML = XIcon;
@@ -710,7 +631,6 @@
                 
                 if (correctCard) {
                     correctCard.classList.remove('dimmed'); 
-                    correctCard.classList.add('feedback'); // Đảm bảo thẻ đúng cũng có feedback
                     correctCard.style.outline = '4px solid #10b981'; 
                     correctCard.style.transform = 'scale(1.05)';
                     
@@ -718,10 +638,6 @@
                     correctOverlay.className = 'absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-100';
                     correctOverlay.innerHTML = CheckIcon;
                     correctCard.appendChild(correctOverlay);
-
-                    // HIỂN THỊ NGHĨA CHO ĐÁP ÁN ĐÚNG (KHI CHỌN SAI)
-                    const meaningEl = correctCard.querySelector('.meaning-overlay');
-                    if (meaningEl) meaningEl.classList.add('show-meaning');
                 }
             }
 
@@ -732,7 +648,7 @@
                 currentQuestionIndex++;
                 updateProgressBar(); // Cập nhật tiến độ sau khi trả lời
                 renderQuestion();
-            }, 2500); // TĂNG THỜI GIAN HIỂN THỊ NGHĨA LÊN 2.5 GIÂY
+            }, 1500); 
         }
         
         // --- LOGIC PHÁO GIẤY VÀ THÔNG BÁO KẾT THÚC CẢI TIẾN ---
