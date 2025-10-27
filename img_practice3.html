@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Tập Từ Vựng Tiếng Trung</title>
+    <!-- Tải Google Fonts: Mulish -->
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thêm thư viện Confetti JS cho hiệu ứng pháo giấy -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        /* Thiết lập font Mulish làm mặc định cho mọi thứ trừ Hán tự */
+        body {
+            font-family: 'Mulish', sans-serif;
+            transition: background-color 0.5s, color 0.5s;
+            background-color: #f7f9fb;
+            color: #1f2937;
+        }
+        
+        /* Áp dụng gradient cho body */
+        .body-gradient {
+            background-image: linear-gradient(to bottom right, #f0f9ff, #e0f2fe);
+            color: #1f2937; /* slate-800 equivalent */
+        }
+        .dark .body-gradient {
+            background-image: linear-gradient(to bottom right, #1e293b, #0f172a);
+            color: #f1f5f9; /* slate-200 equivalent */
+        }
+
+        /* Hanzi: Dùng font 楷体 (Kaiti) */
+        .hanzi-text {
+            font-family: 'KaiTi', '楷体', 'Kaiti SC', 'LiSu', serif; /* Kaiti font family */
+            line-height: 1;
+            font-weight: 580;
+        }
+        
+        .pinyin-text {
+            font-weight: 400;
+        }
+
+        /* Định dạng các ô đáp án */
+        .choice-card {
+            aspect-ratio: 1 / 1; 
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            --tw-ring-color: transparent;
+            --tw-ring-offset-shadow: 0 0 0 0 var(--tw-ring-color);
+            --tw-ring-shadow: 0 0 0 0 var(--tw-ring-color);
+            outline: 2px solid transparent; 
+            outline-offset: 2px;
+            
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s, outline 0.2s, background-color 0.2s;
+        }
+        
+        .choice-card:hover:not(.disabled):not(.feedback) {
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            outline: 4px solid #a5b4fc; /* Màu ring khi hover (indigo-300) */
+        }
+        
+        /* Định dạng placeholder (chỉ dùng cho lỗi ảnh) */
+        .image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 1.125rem; /* Base size adjusted for mobile */
+            color: #94a3b8; /* slate-400 */
+            text-align: center;
+            line-height: 1.4;
+            padding: 0.5rem; /* Thêm padding cho nội dung placeholder */
+        }
+        
+        .choice-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block; /* Giữ hiển thị để overlay có thể hoạt động */
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        
+        /* Lớp cho trạng thái không được chọn khi có feedback */
+        .dimmed img {
+            opacity: 0.4;
+        }
+
+        /* CSS MỚI: Overlay hiển thị nghĩa Tiếng Việt */
+        .meaning-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.65); /* Nền tối mờ */
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            font-size: 2rem; /* Base size: text-lg */
+            font-weight: 700; /* font-bold */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            transform: translateY(100%); /* Ẩn ban đầu */
+            transition: transform 0.3s ease-out;
+            border-radius: 0 0 0.75rem 0.75rem; /* rounded-xl ở góc dưới */
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Điều chỉnh cỡ chữ cho mobile (dưới 640px) */
+        @media (max-width: 639px) { 
+            .meaning-overlay {
+                font-size: 1rem; /* Thay đổi từ 1.5rem (text-lg) xuống 1rem */
+                padding: 0.4rem 0.8rem; /* Giảm padding một chút cho gọn */
+            }
+        }
+
+        /* Hiển thị meaning-overlay khi thẻ có class 'feedback' và là đáp án đúng */
+        .choice-card.feedback .meaning-overlay.show-meaning {
+            transform: translateY(0); /* Hiện ra */
+        }
+        /* End CSS MỚI */
+
+        /* Icon SVG cho nút Dark/Light Mode */
+        .mode-toggle svg {
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .mode-toggle:hover svg {
+            transform: rotate(15deg);
+            color: #f59e0b; /* Yellow 500 */
+        }
+        
+        /* PROGRESS BAR STYLES MỚI */
+        .progress-bar-container {
+            height: 12px; /* Tăng độ dày */
+            border-radius: 9999px;
+            background-color: #e5e7eb; /* gray-200 */
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4f46e5; /* indigo-600 */
+            transition: width 0.5s ease-in-out;
+            border-radius: 9999px;
+            box-shadow: 0 0 10px #4f46e5, 0 0 5px #4f46e5; /* Hiệu ứng tỏa sáng nhẹ */
+        }
+        .dark .progress-bar-container {
+            background-color: #334155; /* slate-700 */
+        }
+        .dark .progress-bar {
+            background-color: #4f46e5; /* indigo-400 */
+            box-shadow: 0 0 10px #818cf8, 0 0 5px #818cf8;
+        }
+        
+    </style>
+</head>
+<body class="body-gradient min-h-screen flex flex-col items-center p-4 sm:p-6">
+
+    <!-- Thanh tiêu đề (Dropdown + Dark Mode Toggle) -->
+    <header class="w-full max-w-2xl flex justify-between items-center mb-6 p-2">
+        
+        <div class="flex space-x-3 sm:space-x-4">
+            <!-- Dropdown chọn CHẾ ĐỘ (Học tập/Luyện tập) -->
+            <div class="relative inline-block text-left rounded-xl shadow-lg bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm transition duration-300">
+                <!-- THAY ĐỔI: Thêm dropdown cho chế độ học/luyện tập -->
+                <select id="study-mode-selector" class="block w-full py-3 px-4 pr-10 text-lg sm:text-xl font-semibold border-none rounded-xl appearance-none bg-transparent text-slate-800 dark:text-slate-200" onchange="resetAndLoadLesson()">
+                    <option value="study">Học tập (Không giờ)</option>
+                    <option value="practice">Luyện tập (Có giờ)</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700 dark:text-slate-300">
+                    <!-- Icon dropdown -->
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
+
+            <!-- Dropdown chọn bài học -->
+            <div class="relative inline-block text-left rounded-xl shadow-lg bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm transition duration-300">
+                <select id="lesson-selector" class="block w-full py-3 px-4 pr-10 text-lg sm:text-xl font-semibold border-none rounded-xl appearance-none bg-transparent text-slate-800 dark:text-slate-200" onchange="resetAndLoadLesson()">
+                    <!-- Options sẽ được thêm bằng JS -->
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700 dark:text-slate-300">
+                    <!-- Icon dropdown -->
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
+
+            <!-- Dropdown chọn chế độ (Số lượng câu) -->
+            <div class="relative inline-block text-left rounded-xl shadow-lg bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm transition duration-300">
+                <!-- THAY ĐỔI: Chuyển dropdown này thành chọn số lượng từ -->
+                <select id="word-count-selector" class="block w-full py-3 px-4 pr-10 text-lg sm:text-xl font-semibold border-none rounded-xl appearance-none bg-transparent text-slate-800 dark:text-slate-200" onchange="resetAndLoadLesson()">
+                    <option value="full">Toàn bộ Bài</option>
+                    <option value="random10">Ngẫu nhiên 10 Từ</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700 dark:text-slate-300">
+                    <!-- Icon dropdown -->
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nút chuyển đổi chế độ Sáng/Tối -->
+        <button id="mode-toggle" class="mode-toggle p-2 rounded-full text-slate-500 dark:text-slate-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition duration-300">
+            <!-- Tăng kích thước icon cho dễ chạm trên mobile -->
+            <svg id="sun-icon" class="h-8 w-8 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <svg id="moon-icon" class="h-8 w-8 hidden transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </header>
+    
+    <!-- KHUNG CHÍNH - Tăng max-w lên 4xl cho desktop -->
+    <div class="w-full max-w-4xl mx-auto bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-8 text-center transition-all duration-500">
+        
+        <!-- KHU VỰC TIMER (CHỈ HIỂN THỊ Ở CHẾ ĐỘ LUYỆN TẬP) -->
+        <div id="timer-display" class="hidden w-full max-w-lg mx-auto mb-6 transition-opacity duration-500">
+             <div class="flex justify-center items-center p-3 sm:p-4 bg-red-500/10 dark:bg-red-500/20 border-l-4 border-red-500 rounded-lg shadow-md">
+                <!-- Icon đồng hồ -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 text-red-600 dark:text-red-400 mr-4 animate-pulse">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="timer-text" class="text-3xl sm:text-4xl font-extrabold text-red-600 dark:text-red-400 tabular-nums">00:00</span>
+            </div>
+        </div>
+        
+        <!-- Khu vực chính giữa (Từ vựng) -->
+        <main id="game-container" class="flex-grow flex flex-col items-center justify-center">
+
+            <!-- Hanzi và Pinyin (Tăng cỡ chữ responsive) -->
+            <!-- Thêm id cho container để ẩn/hiện -->
+            <!-- THÊM cursor-pointer VÀ hover:shadow-lg CHO CHỨC NĂNG PHÁT ÂM LẠI -->
+            <div id="word-display-container" class="mb-8 sm:mb-10 p-4 rounded-xl transition-opacity duration-300 bg-white/70 dark:bg-slate-900/70 shadow-inner cursor-pointer hover:shadow-lg">
+                <!-- Hanzi: 6xl (mobile) -> 7xl (sm) -> 8xl (lg) -->
+                <div id="hanzi" class="hanzi-text text-6xl sm:text-7xl lg:text-8xl text-slate-800 dark:text-white transition-colors duration-300">Đang tải...</div>
+                <!-- Pinyin: 2xl (mobile) -> 3xl (sm) -> 4xl (lg) -->
+                <!-- Màu sắc pinyin là red -->
+                <div id="pinyin" class="pinyin-text text-2xl sm:text-3xl lg:text-4xl text-red-600 dark:text-blue-400 transition-colors duration-300">loading...</div>
+            </div>
+            
+        <!-- Progress Bar & Text: Đã được cấu trúc lại -->
+        <div class="w-full max-w-lg mx-auto mb-6 sm:mb-8 transition-opacity duration-500" id="progress-wrapper">
+            <!-- Đã chỉnh lại justify-end để đẩy text sang phải -->
+            <div class="flex justify-end items-center mb-1">
+                <span id="progress-text" class="text-2xl font-bold text-indigo-400 dark:text-white-400">0/0</span>
+            </div>
+            <div id="progress-container" class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+            <!-- 4 ô hình ảnh -->
+            <div id="choices-grid" class="grid grid-cols-2 gap-5 sm:gap-6 w-full max-w-lg mx-auto p-2 sm:p-4">
+                <!-- Các ô sẽ được tạo bằng JS -->
+            </div>
+            
+            <!-- Thông báo kết thúc bài học -->
+            <div id="result-message" class="hidden text-xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mt-8 p-4 bg-white dark:bg-slate-800 rounded-xl shadow-xl">
+                <!-- Nội dung thông báo -->
+            </div>
+            
+            <!-- Loading indicator -->
+            <div id="loading-indicator" class="hidden mt-8 text-indigo-500 dark:text-indigo-400">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 inline-block mr-2"></div>
+                Đang tải dữ liệu...
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // --- LOGIC PHÁT ÂM CẢI TIẾN (Ưu tiên MP3, dự phòng Web Speech API) ---
+        
+        let utterance = null;
+        let audio = new Audio(); // Tạo một đối tượng Audio chung để tái sử dụng
+        audio.preload = 'auto'; // Tải trước âm thanh để phát nhanh hơn
+
+        /**
+         * Hàm dự phòng: Phát âm Hanzi bằng Web Speech API.
+         * @param {string} text - Hán tự cần phát âm.
+         */
+        function speakWithWebSpeechAPI(text) {
+            if (!('speechSynthesis' in window)) {
+                console.warn("Trình duyệt không hỗ trợ Web Speech API.");
+                return;
+            }
+
+            // Hủy bỏ phát âm Web Speech API nếu đang nói
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN'; 
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+
+            // Lấy và thiết lập giọng nói tiếng Trung
+            const voices = speechSynthesis.getVoices().filter(voice => voice.lang.startsWith('zh'));
+            if (voices.length > 0) {
+                const cnVoice = voices.find(voice => voice.lang === 'zh-CN') || voices[0];
+                utterance.voice = cnVoice;
+            } else {
+                 console.warn("Không tìm thấy giọng nói Tiếng Trung (zh-CN) trong hệ thống.");
+            }
+
+            speechSynthesis.speak(utterance);
+        }
+
+        /**
+         * Phát âm Hanzi, ưu tiên file MP3.
+         * Nếu không tìm thấy file MP3, sử dụng Web Speech API.
+         * @param {string} text - Hán tự cần phát âm.
+         */
+        function speakHanzi(text) {
+            if (!text || text === 'Đang tải...' || text.includes('!')) {
+                return; // Không phát âm các thông báo hệ thống hoặc loading
+            }
+            
+            // Hủy bỏ phát âm Web Speech API nếu đang nói
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+            
+            // Tạm dừng và đặt lại audio MP3 nếu đang phát
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+
+            const trimmedText = text.trim();
+            // Đường dẫn file MP3: BASE_PATH/baiX/mp3/Hanzi.mp3
+            const mp3Path = `${BASE_PATH}/${currentLessonKey}/mp3/${trimmedText}.mp3`;
+
+            // 1. KIỂM TRA TỒN TẠI FILE MP3 VÀ PHÁT
+            fetch(mp3Path, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        // File tồn tại, tiến hành phát MP3
+                        audio.src = mp3Path;
+                        audio.play().catch(e => {
+                            // Xử lý lỗi phát (ví dụ: bị chặn)
+                            console.warn(`Lỗi khi cố gắng phát MP3 (${mp3Path}):`, e);
+                            speakWithWebSpeechAPI(trimmedText);
+                        });
+                    } else {
+                        // File không tồn tại (status 404, etc.), chuyển sang Web Speech API
+                        console.info(`Không tìm thấy file MP3: ${mp3Path}. Sử dụng Web Speech API.`);
+                        speakWithWebSpeechAPI(trimmedText);
+                    }
+                })
+                .catch(e => {
+                    // Lỗi mạng hoặc lỗi khác, chuyển sang Web Speech API
+                    console.error(`Lỗi kiểm tra file MP3: ${e.message}. Sử dụng Web Speech API.`);
+                    speakWithWebSpeechAPI(trimmedText);
+                });
+        }
+        
+        
+        // --- CÁC HẰNG VÀ BIẾN TOÀN CỤC ---
+        
+        const LESSON_CONFIG = [
+            { key: "bai1", title: "H1 Bài 1: 老师您好！" },
+            { key: "bai2", title: "H1 Bài 2: 谢谢你！" },
+            { key: "bai3", title: "H1 Bài 3: 你叫什么名字？" },
+        ]; 
+        
+        const LESSON_KEYS = LESSON_CONFIG.map(config => config.key);
+
+        const BASE_PATH = 'data_imgpractice'; 
+        let allLessonsData = {}; 
+        let currentLessonKey = LESSON_KEYS[0];
+        let currentLesson = []; // Mảng các câu hỏi đã xáo trộn (chứa từ vựng của bài hiện tại)
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isQuestionActive = true;
+        let timerInterval = null; // Biến cho setInterval
+        let timeRemaining = 0; // Thời gian còn lại (giây)
+        
+        const RANDOM_WORD_LIMIT = 10; // Giới hạn từ ngẫu nhiên
+        const TIME_PER_WORD_RANDOM = 5; // 5 giây/từ cho chế độ 10 câu
+        const TIME_PER_WORD_FULL = 4;   // 4 giây/từ cho chế độ toàn bộ
+        
+        // Cấu hình pháo giấy
+        const CONFETTI_CONFIG = {
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        };
+
+        // --- CÁC PHẦN TỬ DOM ---
+        const hanziEl = document.getElementById('hanzi');
+        const pinyinEl = document.getElementById('pinyin');
+        const choicesGridEl = document.getElementById('choices-grid');
+        const resultMessageEl = document.getElementById('result-message');
+        const lessonSelectorEl = document.getElementById('lesson-selector');
+        const wordCountSelectorEl = document.getElementById('word-count-selector'); // Đã đổi tên từ modeSelectorEl
+        const studyModeSelectorEl = document.getElementById('study-mode-selector'); // DOM MỚI CHO CHẾ ĐỘ HỌC/LUYỆN TẬP
+        const timerDisplayEl = document.getElementById('timer-display'); // DOM MỚI CHO TIMER
+        const timerTextEl = document.getElementById('timer-text'); // DOM MỚI CHO TEXT TIMER
+        const modeToggleEl = document.getElementById('mode-toggle');
+        const sunIconEl = document.getElementById('sun-icon');
+        const moonIconEl = document.getElementById('moon-icon');
+        const loadingIndicatorEl = document.getElementById('loading-indicator');
+        // Thêm DOM cho Progress Bar
+        const progressBarEl = document.getElementById('progress-bar');
+        const progressTextEl = document.getElementById('progress-text'); 
+        const progressWrapperEl = document.getElementById('progress-wrapper'); 
+        // Thêm DOM cho Word Display Container
+        const wordDisplayContainerEl = document.getElementById('word-display-container'); 
+
+        // --- LOGIC MỚI: NHẤN ĐỂ PHÁT ÂM LẠI ---
+        /**
+         * Xử lý sự kiện nhấp vào khu vực hiển thị từ vựng để phát âm lại.
+         */
+        wordDisplayContainerEl.addEventListener('click', () => {
+            const currentHanzi = hanziEl.textContent.trim();
+            // Chỉ phát âm nếu không ở trạng thái loading hoặc kết thúc bài.
+            const isFinishedMessage = currentHanzi === '🎉 Tuyệt Vời! Xuất Sắc! 🎉' || currentHanzi === '💪 Cố Gắng Lên! 💪';
+            
+            if (currentHanzi && currentHanzi !== 'Đang tải...' && !isFinishedMessage) {
+                speakHanzi(currentHanzi);
+            }
+        });
+
+        // --- SVG ICONS ---
+        const CheckIcon = `<div class="bg-green-500/80 rounded-full p-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg></div>`;
+        const XIcon = `<div class="bg-red-500/80 rounded-full p-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></div>`;
+
+        // --- HÀM TIỆN ÍCH ---
+
+        /**
+         * Hàm xáo trộn mảng Fisher-Yates (để xáo trộn đáp án)
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        /**
+         * Lấy đường dẫn ảnh thực tế.
+         */
+        function getImagePath(hanzi, lessonKey) {
+             const fileName = hanzi.trim() + '.jpg'; 
+             return `${BASE_PATH}/${lessonKey}/img/${fileName}`;
+        }
+        
+        /**
+         * Cập nhật thanh tiến trình (chiều rộng và văn bản X/Y).
+         */
+        function updateProgressBar() {
+            const totalQuestions = currentLesson.length;
+            const questionsCompleted = currentQuestionIndex; 
+
+            if (totalQuestions === 0) {
+                progressBarEl.style.width = '0%';
+                progressTextEl.textContent = '0/0';
+                progressWrapperEl.classList.add('opacity-0', 'pointer-events-none'); 
+                return;
+            }
+
+            const progressPercentage = (questionsCompleted / totalQuestions) * 100;
+            progressBarEl.style.width = `${progressPercentage}%`;
+            progressTextEl.textContent = `${questionsCompleted}/${totalQuestions}`;
+            
+            progressWrapperEl.classList.remove('opacity-0', 'pointer-events-none');
+            
+            if (questionsCompleted >= totalQuestions) {
+                setTimeout(() => {
+                    progressWrapperEl.classList.add('opacity-0', 'pointer-events-none');
+                }, 500); 
+            }
+        }
+        
+        // --- LOGIC TIMER MỚI ---
+        
+        /**
+         * Dừng bộ đếm ngược.
+         */
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        /**
+         * Format thời gian (giây) thành MM:SS.
+         */
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        /**
+         * Bắt đầu bộ đếm ngược dựa trên tổng số câu hỏi.
+         */
+        function startTimer() {
+            stopTimer(); // Đảm bảo dừng timer cũ
+
+            const studyMode = studyModeSelectorEl.value;
+            const totalQuestions = currentLesson.length;
+
+            if (studyMode === 'study' || totalQuestions === 0) {
+                timerDisplayEl.classList.add('hidden');
+                return;
+            }
+            
+            timerDisplayEl.classList.remove('hidden');
+
+            const wordCountMode = wordCountSelectorEl.value;
+            let timePerWord = TIME_PER_WORD_RANDOM;
+            
+            // Nếu chọn toàn bộ và có nhiều hơn 10 từ, sử dụng 4 giây/từ
+            if (wordCountMode === 'full' && totalQuestions > RANDOM_WORD_LIMIT) {
+                timePerWord = TIME_PER_WORD_FULL;
+            }
+            
+            timeRemaining = totalQuestions * timePerWord;
+            timerTextEl.textContent = formatTime(timeRemaining);
+            
+            // Bắt đầu đếm ngược
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                timerTextEl.textContent = formatTime(timeRemaining);
+
+                // Thay đổi màu khi còn 10 giây cuối
+                if (timeRemaining <= 10) {
+                    timerTextEl.classList.add('text-yellow-500', 'dark:text-yellow-300');
+                    timerTextEl.classList.remove('text-red-600', 'dark:text-red-400');
+                } else {
+                    timerTextEl.classList.remove('text-yellow-500', 'dark:text-yellow-300');
+                    timerTextEl.classList.add('text-red-600', 'dark:text-red-400');
+                }
+
+                if (timeRemaining <= 0) {
+                    stopTimer();
+                    handleTimeout(); 
+                }
+            }, 1000);
+        }
+        
+        /**
+         * Xử lý khi hết giờ.
+         */
+        function handleTimeout() {
+            isQuestionActive = false;
+            // Vô hiệu hóa tất cả các lựa chọn
+            Array.from(choicesGridEl.children).forEach(card => {
+                card.classList.add('disabled', 'dimmed'); 
+                card.style.outline = 'none';
+                card.removeEventListener('click', handleAnswer);
+            });
+            
+            showCompletionMessage(true); // Truyền true để thông báo hết giờ
+            
+            // THAY ĐỔI: Tự động làm lại bài sau 3 giây
+            setTimeout(() => {
+                resetAndLoadLesson();
+            }, 3000); 
+        }
+
+        // --- LOGIC TẢI VÀ PHÂN TÍCH DỮ LIỆU THỰC TẾ ---
+
+        /**
+         * Hàm tải dữ liệu từ tệp baiX.txt qua fetch API.
+         */
+        async function fetchLessonData(lessonKey) {
+            const url = `${BASE_PATH}/${lessonKey}/${lessonKey}.txt`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Lỗi tải dữ liệu từ ${url}. Mã lỗi: ${response.status}`);
+                }
+                const text = await response.text();
+
+                // Phân tích dữ liệu: Từ tiếng trung|pinyin|nghĩa
+                const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+                const vocabulary = lines.map(line => {
+                    const parts = line.split('|');
+                    if (parts.length === 3) {
+                        return {
+                            hanzi: parts[0].trim(),
+                            pinyin: parts[1].trim(),
+                            meaning: parts[2].trim(),
+                            lessonKeySource: lessonKey, 
+                        };
+                    }
+                    console.warn(`Lỗi phân tích dòng: ${line}`);
+                    return null;
+                }).filter(item => item !== null);
+
+                return vocabulary;
+
+            } catch (error) {
+                console.error(`Không thể tải hoặc phân tích dữ liệu cho bài ${lessonKey}:`, error);
+                return [];
+            }
+        }
+
+        /**
+         * Tải tất cả dữ liệu bài học khi khởi tạo
+         */
+        async function initializeLessons() {
+            loadingIndicatorEl.classList.remove('hidden');
+            hanziEl.textContent = 'Đang tải...';
+            pinyinEl.textContent = 'Vui lòng chờ...';
+            choicesGridEl.innerHTML = '';
+            lessonSelectorEl.disabled = true;
+            wordCountSelectorEl.disabled = true;
+            studyModeSelectorEl.disabled = true;
+
+            const lessonKeysToProcess = LESSON_KEYS;
+            
+            for (const key of lessonKeysToProcess) {
+                const data = await fetchLessonData(key);
+                allLessonsData[key] = data;
+            }
+            
+            loadingIndicatorEl.classList.add('hidden');
+            lessonSelectorEl.disabled = false;
+            wordCountSelectorEl.disabled = false;
+            studyModeSelectorEl.disabled = false;
+            
+            initLessonSelector();
+            updateProgressBar(); 
+            // KHÔNG gọi loadLesson ở đây nữa, mà gọi thông qua initLessonSelector
+        }
+
+        // --- HÀM TẠO GIAO DIỆN VÀ LOGIC GAME ---
+
+        /**
+         * Khởi tạo Dropdown bài học (Sử dụng LESSON_CONFIG)
+         */
+        function initLessonSelector() {
+            lessonSelectorEl.innerHTML = '';
+            
+            let firstAvailableKey = null; 
+
+            LESSON_CONFIG.forEach(config => {
+                const lessonData = allLessonsData[config.key];
+                const hasData = lessonData && lessonData.length > 0;
+                
+                const option = document.createElement('option');
+                option.value = config.key;
+
+                if (hasData) {
+                    option.textContent = config.title; 
+                    if (!firstAvailableKey) {
+                        firstAvailableKey = config.key; 
+                    }
+                } else {
+                    option.textContent = `${config.title} (Lỗi/Chưa có dữ liệu)`;
+                    option.disabled = true;
+                }
+                
+                lessonSelectorEl.appendChild(option);
+            });
+            
+            if (firstAvailableKey) {
+                currentLessonKey = firstAvailableKey;
+                lessonSelectorEl.value = currentLessonKey; 
+                loadLesson(currentLessonKey); // Tải bài học đầu tiên
+            } else {
+                 hanziEl.textContent = 'Lỗi dữ liệu';
+                 pinyinEl.textContent = 'Không có bài học nào được tải thành công.';
+                 choicesGridEl.innerHTML = '';
+            }
+        }
+        
+        /**
+         * Hàm reset trạng thái và tải lại bài học khi thay đổi dropdown.
+         */
+        function resetAndLoadLesson() {
+            stopTimer(); // Dừng timer ngay lập tức khi thay đổi lựa chọn
+            loadLesson(lessonSelectorEl.value);
+        }
+
+        /**
+         * Tải và chuẩn bị bài học mới
+         * @param {string} lessonKey Khóa bài học cần tải.
+         */
+        function loadLesson(lessonKey) {
+            currentLessonKey = lessonKey;
+            
+            const lessonData = allLessonsData[lessonKey];
+            if (!lessonData || lessonData.length === 0) {
+                 console.error(`Dữ liệu cho bài ${lessonKey} bị lỗi hoặc trống.`);
+                 hanziEl.textContent = 'Lỗi';
+                 pinyinEl.textContent = 'Không có dữ liệu';
+                 choicesGridEl.innerHTML = '';
+                 updateProgressBar();
+                 stopTimer();
+                 return;
+            }
+            
+            // Lấy chế độ luyện tập hiện tại (full/random10)
+            const wordCountMode = wordCountSelectorEl.value;
+            const studyMode = studyModeSelectorEl.value; // Học tập/Luyện tập
+
+            let wordsToPractice = [...lessonData];
+
+            if (wordCountMode === 'random10') {
+                // Xáo trộn toàn bộ từ vựng của bài đó
+                wordsToPractice = shuffleArray(wordsToPractice);
+                // Giới hạn lại thành RANDOM_WORD_LIMIT (10) từ
+                currentLesson = wordsToPractice.slice(0, RANDOM_WORD_LIMIT);
+
+                // Nếu số lượng từ của bài nhỏ hơn 10, chỉ lấy hết số đó
+                if (wordsToPractice.length < RANDOM_WORD_LIMIT) {
+                    currentLesson = wordsToPractice;
+                    console.warn(`Bài ${lessonKey} chỉ có ${wordsToPractice.length} từ. Luyện tập toàn bộ số từ này.`);
+                }
+            } else { // Chế độ "full"
+                currentLesson = shuffleArray(wordsToPractice);
+            }
+
+            currentQuestionIndex = 0;
+            score = 0;
+            resultMessageEl.classList.add('hidden');
+            resultMessageEl.innerHTML = '';
+            
+            // CHỈ GỌI startTimer LẦN ĐẦU TIÊN Ở ĐÂY
+            if (studyMode === 'practice') {
+                startTimer();
+            } else {
+                stopTimer();
+                timerDisplayEl.classList.add('hidden');
+            }
+
+            renderQuestion();
+            updateProgressBar();
+            
+        }
+
+        /**
+         * Hiển thị câu hỏi hiện tại
+         */
+        function renderQuestion() {
+            isQuestionActive = true;
+            choicesGridEl.innerHTML = '';
+            
+            if (currentQuestionIndex >= currentLesson.length) {
+                stopTimer(); // Dừng timer khi hoàn thành bài
+                showCompletionMessage();
+                updateProgressBar(); 
+                return;
+            }
+
+            // Hiện lại phần hiển thị Hanzi/Pinyin lớn cho câu hỏi mới
+            wordDisplayContainerEl.classList.remove('hidden');
+
+            const currentWord = currentLesson[currentQuestionIndex];
+            
+            // 1. Cập nhật Hanzi và Pinyin
+            hanziEl.textContent = currentWord.hanzi;
+            pinyinEl.textContent = currentWord.pinyin;
+            
+            // Đọc từ Hán tự 
+            speakHanzi(currentWord.hanzi); 
+            
+            // 2. Chọn 3 đáp án sai (Decoys)
+            
+            // Đảm bảo chỉ lấy từ bài hiện tại VÀ không phải là từ đang hỏi.
+            const currentLessonWords = allLessonsData[currentLessonKey] || [];
+            
+            // Lọc ra các từ có Hanzi (và do đó là từ vựng) khác với từ đang hỏi
+            const availableDecoys = currentLessonWords.filter(w => w.hanzi !== currentWord.hanzi);
+            
+            // Chọn ngẫu nhiên 3 từ gây nhiễu từ mảng đã lọc
+            const decoys = shuffleArray(availableDecoys).slice(0, Math.min(3, availableDecoys.length)); 
+
+            // 3. Tập hợp 4 đáp án và xáo trộn vị trí
+            // Các từ trong mảng 'choices' đều có lessonKeySource = currentLessonKey 
+            const choices = shuffleArray([currentWord, ...decoys]).slice(0, 4); 
+
+            // 4. Tạo các ô lựa chọn (Choice Cards)
+            choices.forEach((choice, index) => {
+                const card = document.createElement('button');
+                card.id = `choice-${index}`;
+                card.className = 'choice-card relative rounded-xl overflow-hidden bg-white dark:bg-slate-900/50 transition-all duration-300 transform';
+                card.setAttribute('data-hanzi', choice.hanzi);
+                card.setAttribute('data-meaning', choice.meaning); // THÊM nghĩa Tiếng Việt
+
+                // Lấy khóa bài học gốc từ chính đối tượng từ vựng
+                const sourceKey = choice.lessonKeySource;
+
+                // SỬ DỤNG sourceKey ĐÃ ĐẢM BẢO LÀ currentLessonKey
+                const imagePath = getImagePath(choice.hanzi, sourceKey); 
+                
+                const errorPlaceholderHtml = `<div class="image-placeholder absolute inset-0 text-red-500">Lỗi Ảnh</div>`; 
+                
+                const imageEl = `<img 
+                    src="${imagePath}" 
+                    alt="${choice.meaning}" 
+                    class="w-full h-full object-cover transition-opacity duration-300" 
+                    onerror="this.parentElement.innerHTML = \`${errorPlaceholderHtml}\`;"
+                >`; 
+                
+                // THÊM meaning-overlay
+                const meaningOverlay = `<div class="meaning-overlay">${choice.meaning}</div>`;
+
+                card.innerHTML = imageEl + meaningOverlay;
+                card.classList.add('show-img'); 
+                
+                card.addEventListener('click', () => handleAnswer(card, choice.hanzi === currentWord.hanzi));
+                
+                choicesGridEl.appendChild(card);
+            });
+            
+            resultMessageEl.classList.add('hidden');
+        }
+
+        /**
+         * Xử lý khi người chơi chọn đáp án
+         */
+        function handleAnswer(selectedEl, isCorrect) {
+            if (!isQuestionActive) return; 
+            isQuestionActive = false;
+            
+            // KHÔNG DỪNG TIMER Ở ĐÂY NỮA
+            // Timer sẽ tiếp tục đếm xuống cho đến khi hết giờ hoặc chuyển câu hỏi.
+
+            const correctWord = currentLesson[currentQuestionIndex];
+            
+            // 1. Vô hiệu hóa và làm mờ các lựa chọn khác
+            Array.from(choicesGridEl.children).forEach(card => {
+                card.classList.add('disabled', 'dimmed'); 
+                card.classList.remove('hover:scale-1.03', 'hover:ring-indigo-300');
+                card.style.outline = 'none';
+                // Xóa bỏ listener để ngăn nhấp thêm
+                card.removeEventListener('click', handleAnswer);
+            });
+            
+            // 2. Xử lý phản hồi cho thẻ được chọn
+            selectedEl.classList.remove('dimmed');
+            selectedEl.classList.add('feedback');
+            selectedEl.style.transform = 'scale(1.05)';
+
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-100';
+
+            if (isCorrect) {
+                score++;
+                selectedEl.style.outline = '4px solid #10b981'; // Green 500
+                overlay.innerHTML = CheckIcon;
+                
+                // HIỂN THỊ NGHĨA CHO ĐÁP ÁN ĐÚNG
+                const meaningEl = selectedEl.querySelector('.meaning-overlay');
+                if (meaningEl) meaningEl.classList.add('show-meaning');
+
+            } else {
+                selectedEl.style.outline = '4px solid #ef4444'; // Red 500
+                overlay.innerHTML = XIcon;
+                
+                // 3. Tìm và tô màu đáp án đúng
+                const correctCard = Array.from(choicesGridEl.children).find(card => card.getAttribute('data-hanzi') === correctWord.hanzi);
+                
+                if (correctCard) {
+                    correctCard.classList.remove('dimmed'); 
+                    correctCard.classList.add('feedback'); // Đảm bảo thẻ đúng cũng có feedback
+                    correctCard.style.outline = '4px solid #10b981'; 
+                    correctCard.style.transform = 'scale(1.05)';
+                    
+                    const correctOverlay = document.createElement('div');
+                    correctOverlay.className = 'absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-100';
+                    correctOverlay.innerHTML = CheckIcon;
+                    correctCard.appendChild(correctOverlay);
+
+                    // HIỂN THỊ NGHĨA CHO ĐÁP ÁN ĐÚNG (KHI CHỌN SAI)
+                    const meaningEl = correctCard.querySelector('.meaning-overlay');
+                    if (meaningEl) meaningEl.classList.add('show-meaning');
+                }
+            }
+
+            selectedEl.appendChild(overlay);
+
+            // Chuyển câu hỏi sau 2.5 giây
+            setTimeout(() => {
+                currentQuestionIndex++;
+                updateProgressBar(); // Cập nhật tiến độ sau khi trả lời
+                renderQuestion();
+            }, 2500); 
+        }
+        
+        // --- LOGIC PHÁO GIẤY VÀ THÔNG BÁO KẾT THÚC CẢI TIẾN ---
+        
+        /**
+         * Bắn pháo giấy từ một vị trí ngẫu nhiên
+         */
+        function shootConfetti() {
+            const randomX = Math.random() * 0.6 + 0.2; 
+            const randomY = Math.random() * 0.6 + 0.2; 
+            
+            confetti({
+                ...CONFETTI_CONFIG,
+                origin: { x: randomX, y: randomY },
+                colors: ['#4f46e5', '#f59e0b', '#10b981', '#ef4444', '#ffffff'] // Màu sắc tươi sáng
+            });
+        }
+
+        /**
+         * Bắn pháo giấy 3 lần
+         */
+        function burstConfetti(times = 3, interval = 500) {
+            let count = 0;
+            const intervalId = setInterval(() => {
+                if (count < times) {
+                    shootConfetti();
+                    count++;
+                } else {
+                    clearInterval(intervalId);
+                }
+            }, interval);
+        }
+
+        /**
+         * Hiển thị thông báo khi hoàn thành bài học (Cải tiến)
+         * @param {boolean} isTimeout - true nếu kết thúc do hết giờ.
+         */
+        function showCompletionMessage(isTimeout = false) {
+            // Ẩn phần hiển thị Hanzi/Pinyin lớn và Timer
+            wordDisplayContainerEl.classList.add('hidden');
+            timerDisplayEl.classList.add('hidden');
+
+            const totalQuestions = currentLesson.length;
+            const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+            const isExcellent = percentage >= 80; // Ngưỡng 80%
+            
+            const currentLessonTitle = LESSON_CONFIG.find(c => c.key === currentLessonKey)?.title || `Bài ${currentLessonKey.replace('bai', '')}`;
+            
+            // Chọn nội dung thông báo
+            let headerText = '';
+            let message = '';
+            let headerColor = '';
+            
+            if (isTimeout) {
+                headerText = '⏰ Hết Giờ! ⏰';
+                message = `Bạn đã hoàn thành ${currentQuestionIndex}/${totalQuestions} câu hỏi trong thời gian quy định. Đang tự động làm lại...`;
+                headerColor = 'text-red-600 dark:text-red-400';
+            } else if (isExcellent) {
+                headerText = '🎉 Tuyệt Vời! Xuất Sắc! 🎉';
+                message = 'Bạn đã đạt thành tích rất cao! Tiếp tục phát huy nhé!';
+                headerColor = 'text-yellow-600 dark:text-yellow-400';
+                burstConfetti(3); // Bắn pháo giấy 3 lần
+            } else {
+                headerText = '💪 Cố Gắng Lên! 💪';
+                message = 'Bạn cần luyện tập thêm để nắm vững từ vựng. Đừng nản lòng!';
+                headerColor = 'text-indigo-600 dark:text-indigo-400';
+            }
+
+            // Cập nhật giao diện chính
+            hanziEl.textContent = headerText; // Vẫn cập nhật nhưng bị ẩn
+            pinyinEl.textContent = 'Bài luyện tập đã kết thúc.'; // Vẫn cập nhật nhưng bị ẩn
+            choicesGridEl.innerHTML = '';
+            
+            // Cập nhật thông báo kết quả
+            resultMessageEl.classList.remove('hidden');
+            
+            // Nếu là hết giờ, không hiển thị nút "Làm lại bài này" mà chỉ hiển thị thông báo
+            if (isTimeout) {
+                 resultMessageEl.innerHTML = `
+                    <div class="mb-4 ${headerColor} text-3xl sm:text-4xl font-extrabold">${headerText}</div>
+                    <div class="text-xl sm:text-2xl font-semibold mb-3">${currentLessonTitle}</div>
+                    <div class="mb-5 text-lg sm:text-xl">${message}</div>
+                    
+                    <div class="text-2xl sm:text-3xl font-bold mb-6">
+                        Điểm số: <span class="text-blue-600 dark:text-blue-400">${score}/${totalQuestions}</span>
+                        <span class="ml-4 text-green-600 dark:text-green-400">(${percentage.toFixed(0)}%)</span>
+                    </div>
+                `;
+            } else {
+                // Nếu hoàn thành bình thường, vẫn giữ nút làm lại
+                resultMessageEl.innerHTML = `
+                    <div class="mb-4 ${headerColor} text-3xl sm:text-4xl font-extrabold">${headerText}</div>
+                    <div class="text-xl sm:text-2xl font-semibold mb-3">${currentLessonTitle}</div>
+                    <div class="mb-5 text-lg sm:text-xl">${message}</div>
+                    
+                    <div class="text-2xl sm:text-3xl font-bold mb-6">
+                        Điểm số: <span class="text-blue-600 dark:text-blue-400">${score}/${totalQuestions}</span>
+                        <span class="ml-4 text-green-600 dark:text-green-400">(${percentage.toFixed(0)}%)</span>
+                    </div>
+                    
+                    <button onclick="resetAndLoadLesson()" class="mt-4 px-8 py-3 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 transform hover:scale-105 transition-all duration-300">
+                        Làm lại bài này
+                    </button>
+                `;
+            }
+
+        }
+        
+        // --- LOGIC CHUYỂN ĐỔI CHẾ ĐỘ SÁNG/TỐI (DARK MODE) ---
+
+        /**
+         * Áp dụng hoặc gỡ bỏ class 'dark' cho thẻ <html> và lưu trạng thái.
+         */
+        function toggleDarkMode(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                sunIconEl.classList.add('hidden');
+                moonIconEl.classList.remove('hidden');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIconEl.classList.remove('hidden');
+                moonIconEl.classList.add('hidden');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        /**
+         * Xử lý sự kiện nhấp vào nút chuyển đổi
+         */
+        modeToggleEl.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            toggleDarkMode(!isDark);
+        });
+
+        // Tải trạng thái Dark Mode đã lưu hoặc thiết lập mặc định theo hệ thống
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                toggleDarkMode(true);
+            } else {
+                toggleDarkMode(false);
+            }
+        }
+
+        // --- KHỞI TẠO ỨNG DỤNG ---
+        window.onload = function() {
+            initializeTheme();
+            initializeLessons(); 
+        };
+
+    </script>
+</body>
+</html>
