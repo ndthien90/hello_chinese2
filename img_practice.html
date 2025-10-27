@@ -212,7 +212,7 @@
             <!-- THÊM cursor-pointer VÀ hover:shadow-lg CHO CHỨC NĂNG PHÁT ÂM LẠI -->
             <div id="word-display-container" class="mb-8 sm:mb-10 p-4 rounded-xl transition-opacity duration-300 bg-white/70 dark:bg-slate-900/70 shadow-inner cursor-pointer hover:shadow-lg">
                 <!-- Hanzi: 6xl (mobile) -> 7xl (sm) -> 8xl (lg) -->
-                <div id="hanzi" class="hanzi-text text-6xl sm:text-7xl lg:text-8xl text-slate-800 dark:text-white transition-colors duration-300">Đang tải...</div>
+                <div id="hanzi" class="hanzi-text text-6xl sm:text-7xl lg:text-8xl text-slate-800 dark:text-white transition-colors duration-300"></div>
                 <!-- Pinyin: 2xl (mobile) -> 3xl (sm) -> 4xl (lg) -->
                 <!-- Màu sắc pinyin là blue -->
                 <div id="pinyin" class="pinyin-text text-2xl sm:text-3xl lg:text-4xl text-red-600 dark:text-blue-400 transition-colors duration-300">loading...</div>
@@ -491,8 +491,8 @@
          */
         async function initializeLessons() {
             loadingIndicatorEl.classList.remove('hidden');
-            hanziEl.textContent = 'Đang tải...';
-            pinyinEl.textContent = 'Vui lòng chờ...';
+            hanziEl.textContent = '';
+            pinyinEl.textContent = '';
             choicesGridEl.innerHTML = '';
             lessonSelectorEl.disabled = true;
             modeSelectorEl.disabled = true;
