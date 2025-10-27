@@ -166,8 +166,8 @@
             <div class="relative inline-block text-left rounded-xl shadow-lg bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm transition duration-300">
                 <!-- THAY ĐỔI: Thêm dropdown cho chế độ học/luyện tập -->
                 <select id="study-mode-selector" class="block w-full py-3 px-4 pr-10 text-lg sm:text-xl font-semibold border-none rounded-xl appearance-none bg-transparent text-slate-800 dark:text-slate-200" onchange="resetAndLoadLesson()">
-                    <option value="study">Học tập (Không giờ)</option>
-                    <option value="practice">Luyện tập (Có giờ)</option>
+                    <option value="study">Học tập</option>
+                    <option value="practice">Luyện tập</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700 dark:text-slate-300">
                     <!-- Icon dropdown -->
@@ -190,8 +190,8 @@
             <div class="relative inline-block text-left rounded-xl shadow-lg bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm transition duration-300">
                 <!-- THAY ĐỔI: Chuyển dropdown này thành chọn số lượng từ -->
                 <select id="word-count-selector" class="block w-full py-3 px-4 pr-10 text-lg sm:text-xl font-semibold border-none rounded-xl appearance-none bg-transparent text-slate-800 dark:text-slate-200" onchange="resetAndLoadLesson()">
-                    <option value="full">Toàn bộ Bài</option>
-                    <option value="random10">Ngẫu nhiên 10 Từ</option>
+                    <option value="full">Toàn bộ</option>
+                    <option value="random10">Ngẫu nhiên</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-700 dark:text-slate-300">
                     <!-- Icon dropdown -->
@@ -215,16 +215,7 @@
     <!-- KHUNG CHÍNH - Tăng max-w lên 4xl cho desktop -->
     <div class="w-full max-w-4xl mx-auto bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-8 text-center transition-all duration-500">
         
-        <!-- KHU VỰC TIMER (CHỈ HIỂN THỊ Ở CHẾ ĐỘ LUYỆN TẬP) -->
-        <div id="timer-display" class="hidden w-full max-w-lg mx-auto mb-6 transition-opacity duration-500">
-             <div class="flex justify-center items-center p-3 sm:p-4 bg-red-500/10 dark:bg-red-500/20 border-l-4 border-red-500 rounded-lg shadow-md">
-                <!-- Icon đồng hồ -->
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 text-red-600 dark:text-red-400 mr-4 animate-pulse">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span id="timer-text" class="text-3xl sm:text-4xl font-extrabold text-red-600 dark:text-red-400 tabular-nums">00:00</span>
-            </div>
-        </div>
+
         
         <!-- Khu vực chính giữa (Từ vựng) -->
         <main id="game-container" class="flex-grow flex flex-col items-center justify-center">
@@ -234,12 +225,23 @@
             <!-- THÊM cursor-pointer VÀ hover:shadow-lg CHO CHỨC NĂNG PHÁT ÂM LẠI -->
             <div id="word-display-container" class="mb-8 sm:mb-10 p-4 rounded-xl transition-opacity duration-300 bg-white/70 dark:bg-slate-900/70 shadow-inner cursor-pointer hover:shadow-lg">
                 <!-- Hanzi: 6xl (mobile) -> 7xl (sm) -> 8xl (lg) -->
-                <div id="hanzi" class="hanzi-text text-6xl sm:text-7xl lg:text-8xl text-slate-800 dark:text-white transition-colors duration-300">Đang tải...</div>
+                <div id="hanzi" class="hanzi-text text-6xl sm:text-7xl lg:text-8xl text-slate-800 dark:text-white transition-colors duration-300"></div>
                 <!-- Pinyin: 2xl (mobile) -> 3xl (sm) -> 4xl (lg) -->
                 <!-- Màu sắc pinyin là red -->
                 <div id="pinyin" class="pinyin-text text-2xl sm:text-3xl lg:text-4xl text-red-600 dark:text-blue-400 transition-colors duration-300">loading...</div>
             </div>
             
+        <!-- KHU VỰC TIMER (CHỈ HIỂN THỊ Ở CHẾ ĐỘ LUYỆN TẬP) -->
+        <div id="timer-display" class="hidden w-full max-w-lg mx-auto mb-2 transition-opacity duration-500">
+             <div class="flex justify-center items-center p-0 sm:p-0 ">
+                <!-- Icon đồng hồ -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 text-red-600 dark:text-red-400 mr-4 animate-pulse">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="timer-text" class="text-4xl sm:text-4xl font-extrabold text-red-600 dark:text-red-400 tabular-nums">00:00</span>
+            </div>
+        </div>
+
         <!-- Progress Bar & Text: Đã được cấu trúc lại -->
         <div class="w-full max-w-lg mx-auto mb-6 sm:mb-8 transition-opacity duration-500" id="progress-wrapper">
             <!-- Đã chỉnh lại justify-end để đẩy text sang phải -->
@@ -379,8 +381,8 @@
         let timeRemaining = 0; // Thời gian còn lại (giây)
         
         const RANDOM_WORD_LIMIT = 10; // Giới hạn từ ngẫu nhiên
-        const TIME_PER_WORD_RANDOM = 5; // 5 giây/từ cho chế độ 10 câu
-        const TIME_PER_WORD_FULL = 4;   // 4 giây/từ cho chế độ toàn bộ
+        const TIME_PER_WORD_RANDOM = 6; // 5 giây/từ cho chế độ 10 câu
+        const TIME_PER_WORD_FULL = 6;   // 4 giây/từ cho chế độ toàn bộ
         
         // Cấu hình pháo giấy
         const CONFETTI_CONFIG = {
@@ -609,7 +611,7 @@
          */
         async function initializeLessons() {
             loadingIndicatorEl.classList.remove('hidden');
-            hanziEl.textContent = 'Đang tải...';
+            hanziEl.textContent = '';
             pinyinEl.textContent = 'Vui lòng chờ...';
             choicesGridEl.innerHTML = '';
             lessonSelectorEl.disabled = true;
