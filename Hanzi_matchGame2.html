@@ -19,8 +19,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            /* Giảm padding để tận dụng màn hình tối đa */
-            padding: 2px 0; 
+            /* Đảm bảo không có padding thừa trên body */
+            padding: 0; 
             overflow-y: auto; 
         }
 
@@ -31,14 +31,14 @@
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(3, 1fr);
             /* Giảm khoảng cách để thẻ to hơn */
-            gap: 8px; 
-            padding: 5px;
+            gap: 6px; 
+            padding: 10px; /* Giữ padding này cho viền grid */
             background-color: #f9f9e9;
             border-radius: 12px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             /* Chiếm toàn bộ chiều rộng có sẵn */
             width: 100%; 
-            /* ĐIỀU CHỈNH: Đặt aspect-ratio là 4/3 để các ô vuông (4 cột x 3 hàng) */
+            /* Đảm bảo các ô là hình vuông (4 cột / 3 hàng = 4/3) */
             aspect-ratio: 4 / 3; 
         }
 
@@ -50,7 +50,6 @@
             transition: transform 0.6s, box-shadow 0.3s;
             position: relative;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* Đảm bảo thẻ con nằm gọn trong thẻ cha */
             overflow: hidden; 
         }
         
@@ -80,7 +79,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-weight: 580;
+            font-weight: 700;
             user-select: none;
         }
 
@@ -102,12 +101,11 @@
         
         /* Nội dung Hán tự */
         .hanzi {
-            font-family: 'Kaiti','Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', sans-serif;
             /* Kích thước font Hán tự to hơn */
             font-size: 2.2rem;
             color: #ef4444; /* Red color for Hanzi */
             line-height: 1;
-            /* Căn giữa dọc và ngang trong thẻ */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -159,30 +157,27 @@
         /* Mobile adjustments (Tối ưu cho màn hình nhỏ) */
         @media (max-width: 640px) {
             
-            /* Đảm bảo container chính chiếm full width */
+            /* ĐẢM BẢO CONTAINER CHÍNH CHỈ CÓ PADDING HỢP LÝ */
             .max-w-xl {
                 max-width: 100%;
-                padding: 0px;
+                /* Sử dụng padding nhỏ hai bên để chiếm tối đa không gian ngang */
+                padding: 10px 8px; 
             }
             
             .card-grid {
                 /* Giữ nguyên 4/3 để các ô là hình vuông */
                 aspect-ratio: 4 / 3; 
-                /* Giảm gap để thẻ to hơn */
                 gap: 6px;
-                padding: 5px;
+                padding: 10px;
             }
             
             .card-back {
-                /* Font to hơn trên mobile */
                 font-size: 2rem;
             }
             .hanzi {
-                /* Font to hơn trên mobile */
-                font-size: 1.2rem;
+                font-size: 1.8rem;
             }
             .match-text {
-                /* Font to hơn trên mobile */
                 font-size: 0.9rem;
             }
             
@@ -207,14 +202,15 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- Cập nhật class để chiếm toàn bộ chiều rộng -->
-    <div class="max-w-xl w-full p-4">
-        <header class="text-center mb-6">
+    <!-- CẬP NHẬT: Xóa class p-4 khỏi container chính để kiểm soát padding bằng CSS mobile -->
+    <div class="max-w-xl w-full"> 
+        <header class="text-center mb-6 p-4"> <!-- Thêm padding vào header để không dính sát mép -->
             <h1 class="text-4xl font-orange text-gray-700 mb-2">配对游戏</h1>
             <p class="text-gray-500 text-sm"></p>
         </header>
 
-        <div class="flex flex-col sm:flex-row justify-between items-start mb-4 p-4 bg-white rounded-xl shadow space-y-3 sm:space-y-0 sm:space-x-4">
+        <!-- Thêm padding/margin ngang vào khối controls để đồng nhất với padding của max-w-xl -->
+        <div class="flex flex-col sm:flex-row justify-between items-start mb-4 p-4 bg-white rounded-xl shadow space-y-3 sm:space-y-0 sm:space-x-4 mx-2 sm:mx-0">
             
             <!-- Cột 1: Thông tin Game -->
             <div class="flex space-x-4 w-full sm:w-auto justify-center sm:justify-start">
