@@ -38,8 +38,8 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             /* Chiếm toàn bộ chiều rộng có sẵn */
             width: 100%; 
-            /* Tỷ lệ (chiều rộng / chiều cao) để làm thẻ to hơn */
-            aspect-ratio: 4 / 4.5; 
+            /* ĐIỀU CHỈNH: Đặt aspect-ratio là 4/3 để các ô vuông (4 cột x 3 hàng) */
+            aspect-ratio: 4 / 3; 
         }
 
         .card {
@@ -166,11 +166,11 @@
             }
             
             .card-grid {
+                /* Giữ nguyên 4/3 để các ô là hình vuông */
+                aspect-ratio: 4 / 3; 
                 /* Giảm gap để thẻ to hơn */
                 gap: 6px;
                 padding: 10px;
-                /* Tỉ lệ hợp lý hơn cho màn hình di động (thẻ vuông/cao) */
-                aspect-ratio: 4 / 5; 
             }
             
             .card-back {
