@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển đổi từ thành mảng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+        }
+        button {
+            margin-top: 10px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chuyển đổi từ thành mảng</h1>
+    <textarea id="inputWords" placeholder="Nhập mỗi từ trên một dòng..."></textarea>
+    <button onclick="convertToArray()">Chuyển đổi</button>
+    <h2>Kết quả:</h2>
+    <pre id="result"></pre>
+
+    <script>
+        function convertToArray() {
+            const input = document.getElementById('inputWords').value;
+            const words = input.split('\n').map(word => `'${word.trim()}'`).filter(word => word !== "''");
+            const result = `[${words.join(', ')}]`;
+            document.getElementById('result').textContent = result;
+        }
+    </script>
+</body>
+</html>
