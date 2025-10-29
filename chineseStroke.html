@@ -566,10 +566,9 @@
             <div class="lesson-selector">
                 <label for="lessonDropdown"></label>
                 <select id="lessonDropdown" onchange="loadLesson()">
-                    <option value="bai1">Bài 1: Chào hỏi</option>
-                    <option value="bai2">Bài 2: Gia đình</option>
-                    <option value="bai3">Bài 3: Ăn uống</option>
-                    <option value="bai4">Bài 4: Số đếm</option>
+                    <option value="bai1">Bài 1: 老师您好！</option>
+                    <option value="bai2">Bài 2: 谢谢你！</option>
+                    <option value="bai3">Bài 3: 你叫什么名字？</option>
                     <!-- Thêm các bài khác nếu cần -->
                 </select>
             </div>
@@ -962,7 +961,7 @@
                     const writerContainer = writerDiv.parentElement;
                     const containerPadding = parseFloat(getComputedStyle(writerContainer).paddingLeft) + parseFloat(getComputedStyle(writerContainer).paddingRight);
                     let availableWidth = writerContainer.offsetWidth - containerPadding;
-                    writerSize = Math.max(240, Math.min(availableWidth, 350)); // Tối thiểu 240, tối đa 350
+                    writerSize = Math.max(200, Math.min(availableWidth, 250)); // Tối thiểu 240, tối đa 350
                 } else {
                     writerSize = 280; // Desktop
                 }
