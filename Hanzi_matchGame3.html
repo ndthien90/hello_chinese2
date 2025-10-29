@@ -6,6 +6,17 @@
     <title>Trò Chơi Kết Hợp Tiếng Trung Động</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cấu hình Tailwind cho Chế độ Tối (Dark Mode) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Bật dark mode bằng cách thêm class="dark" vào thẻ html
+            theme: {
+                extend: {
+                    colors: {},
+                }
+            }
+        }
+    </script>
     <!-- Sử dụng Font Inter và Custom CSS -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -13,33 +24,41 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7;
+            /* Màu nền mặc định (Light Mode) */
+            background-color: #f7f7f7; 
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            /* Đảm bảo không có padding thừa trên body */
             padding: 0; 
             overflow-y: auto; 
+            transition: background-color 0.3s; /* Thêm transition cho body */
+        }
+        
+        /* CHẾ ĐỘ TỐI: Cập nhật màu nền body */
+        .dark body {
+            background-color: #1a202c; /* Màu nền tối */
         }
 
         /* Thẻ trò chơi */
         .card-grid {
             display: grid;
-            /* Lưới 4 cột, 3 hàng (3x4) */
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            /* Giảm khoảng cách để thẻ to hơn */
             gap: 6px; 
-            padding: 10px; /* Giữ padding này cho viền grid */
-            background-color: #f9f9e9;
+            padding: 10px; 
+            background-color: #f9f9e9; /* Light mode */
             border-radius: 12px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            /* Chiếm toàn bộ chiều rộng có sẵn */
             width: 100%; 
-            /* Đảm bảo các ô là hình vuông (4 cột / 3 hàng = 4/3) */
             aspect-ratio: 4 / 3; 
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        
+        /* CHẾ ĐỘ TỐI: Cập nhật màu nền card grid */
+        .dark .card-grid {
+             background-color: #2d3748; /* Darker background */
         }
 
         .card {
@@ -81,30 +100,35 @@
             align-items: center;
             font-weight: 580;
             user-select: none;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .card-back {
             background-color: #3b82f6;
             color: white;
-            /* Kích thước font to hơn */
             font-size: 2.5rem;
             line-height: 1;
         }
 
         .card-front {
-            background-color: #ffffff;
-            color: #1f2937;
+            background-color: #ffffff; /* Light mode */
+            color: #1f2937; /* Light mode */
             transform: rotateY(180deg);
             padding: 5px;
             box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
         }
         
+        /* CHẾ ĐỘ TỐI: Mặt trước thẻ (card-front) */
+        .dark .card-front {
+            background-color: #4a5568; /* Darker front */
+            color: #edf2f7; /* Lighter text */
+        }
+        
         /* Nội dung Hán tự */
         .hanzi {
             font-family: 'Kaiti','Noto Sans SC', sans-serif;
-            /* Kích thước font Hán tự to hơn */
             font-size: 2.2rem;
-            color: #ef4444; /* Red color for Hanzi */
+            color: #ef4444; /* Red color for Hanzi (Light mode) */
             line-height: 1;
             display: flex;
             align-items: center;
@@ -113,11 +137,16 @@
             width: 100%;
             padding: 5px;
         }
+        
+        /* CHẾ ĐỘ TỐI: Hán tự (chỉ cần màu nhạt hơn nếu muốn) */
+        .dark .hanzi {
+            color: #fca5a5; /* Red nhạt hơn */
+        }
+        
         /* Nội dung Pinyin / Nghĩa */
         .match-text {
-            /* Kích thước font text to hơn */
             font-size: 1.1rem;
-            color: #4b5563;
+            color: #4b5563; /* Gray text (Light mode) */
             text-align: center;
             padding: 5px;
             display: flex;
@@ -126,14 +155,18 @@
             height: 100%;
         }
         
+        /* CHẾ ĐỘ TỐI: Pinyin / Nghĩa */
+        .dark .match-text {
+            color: #cbd5e0; /* Light gray text */
+        }
+        
         /* Nội dung Hình ảnh */
         .match-image {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Đảm bảo hình ảnh vừa vặn */
+            object-fit: contain; 
             padding: 5px;
         }
-
 
         /* Trạng thái đã ghép đôi */
         .card.matched {
@@ -150,22 +183,19 @@
 
         /* Hiệu ứng Gợi ý */
         .card.hinted {
-            box-shadow: 0 0 20px 4px #facc15; /* Màu vàng nổi bật */
+            box-shadow: 0 0 20px 4px #facc15; 
             transition: box-shadow 0.2s;
         }
         
         /* Mobile adjustments (Tối ưu cho màn hình nhỏ) */
         @media (max-width: 640px) {
             
-            /* ĐẢM BẢO CONTAINER CHÍNH CHỈ CÓ PADDING HỢP LÝ */
             .max-w-xl {
                 max-width: 100%;
-                /* Sử dụng padding nhỏ hai bên để chiếm tối đa không gian ngang */
                 padding: 5px 5px; 
             }
             
             .card-grid {
-                /* Giữ nguyên 4/3 để các ô là hình vuông */
                 aspect-ratio: 4 / 3; 
                 gap: 5px;
                 padding: 5px;
@@ -181,7 +211,6 @@
                 font-size: 0.9rem;
             }
             
-            /* Điều chỉnh bố cục các control để gọn gàng hơn trên mobile */
              .flex-col.sm\:flex-row {
                  flex-direction: column !important;
              }
@@ -201,31 +230,45 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 transition-colors duration-300">
     <!-- CẬP NHẬT: Xóa class p-4 khỏi container chính để kiểm soát padding bằng CSS mobile -->
     <div class="max-w-xl w-full"> 
-        <header class="text-center mb-6 p-4"> <!-- Thêm padding vào header để không dính sát mép -->
-            <h1 class="text-4xl font-orange text-gray-700 mb-2">配对游戏</h1>
-            <p class="text-gray-500 text-sm"></p>
+        <header class="text-center mb-6 p-4 relative"> 
+            
+            <!-- Nút chuyển đổi chế độ Sáng/Tối -->
+            <button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition duration-300 shadow-md">
+                <!-- Icon Mặt trời (Light Mode) / Mặt trăng (Dark Mode) - Dùng SVG để tiện cho Tailwind color change -->
+                <svg id="sun-icon" class="w-6 h-6 text-yellow-500 dark:text-gray-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                <svg id="moon-icon" class="w-6 h-6 text-gray-700 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+            
+            <h1 class="text-4xl font-orange text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300">配对游戏</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm transition-colors duration-300"></p>
         </header>
 
         <!-- Thêm padding/margin ngang vào khối controls để đồng nhất với padding của max-w-xl -->
-        <div class="flex flex-col sm:flex-row justify-between items-start mb-4 p-4 bg-white rounded-xl shadow space-y-3 sm:space-y-0 sm:space-x-4 mx-2 sm:mx-0">
+        <!-- Áp dụng dark mode cho container controls -->
+        <div class="flex flex-col sm:flex-row justify-between items-start mb-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg space-y-3 sm:space-y-0 sm:space-x-4 mx-2 sm:mx-0 transition-colors duration-300">
             
             <!-- Cột 1: Thông tin Game -->
             <div class="flex space-x-4 w-full sm:w-auto justify-center sm:justify-start">
-                <div class="text-sm font-semibold text-gray-600">
-                    Lượt đi: <span id="moves" class="text-lg text-blue-600">0</span>
+                <div class="text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                    Lượt đi: <span id="moves" class="text-lg text-blue-600 dark:text-blue-400">0</span>
                 </div>
-                <div class="text-sm font-semibold text-gray-600">
-                    Thời gian: <span id="timer" class="text-lg text-red-600">00:00</span>
+                <div class="text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                    Thời gian: <span id="timer" class="text-lg text-red-600 dark:text-red-400">00:00</span>
                 </div>
             </div>
 
             <!-- Cột 2: Bộ chọn Cấp độ -->
             <div class="flex items-center space-x-2 w-full sm:w-auto">
-                 <label for="lesson-selector" class="text-xs font-semibold uppercase text-gray-500 whitespace-nowrap">Bài học:</label>
-                <select id="lesson-selector" class="bg-gray-100 border border-gray-300 text-gray-700 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full">
+                 <label for="lesson-selector" class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-300">Bài học:</label>
+                <!-- Cập nhật màu nền và text cho selector trong dark mode -->
+                <select id="lesson-selector" class="bg-gray-100 border border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full transition-colors duration-300">
                     <!-- Options will be loaded dynamically -->
                     <option value="loading" disabled selected>Đang tải...</option>
                 </select>
@@ -233,8 +276,9 @@
             
             <!-- Cột 3: Bộ chọn Kiểu Ghép Đôi -->
             <div class="flex items-center space-x-2 w-full sm:w-auto mt-3 sm:mt-0">
-                 <label for="match-type-selector" class="text-xs font-semibold uppercase text-gray-500 whitespace-nowrap">Ghép với:</label>
-                <select id="match-type-selector" class="bg-gray-100 border border-gray-300 text-gray-700 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full">
+                 <label for="match-type-selector" class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-300">Ghép với:</label>
+                 <!-- Cập nhật màu nền và text cho selector trong dark mode -->
+                <select id="match-type-selector" class="bg-gray-100 border border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full transition-colors duration-300">
                     <option value="pinyin">Pinyin</option>
                     <option value="vietnamese">Nghĩa (Tiếng Việt)</option>
                     <option value="image">Hình ảnh</option>
@@ -259,22 +303,23 @@
         </div>
         
         <!-- Loading Message -->
-        <div id="loading-message" class="text-center text-gray-500 mt-4 text-sm hidden">
+        <div id="loading-message" class="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm hidden transition-colors duration-300">
              <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8 mb-4 mx-auto"></div>
              Đang tải dữ liệu bài học...
         </div>
         
         <!-- Error Message -->
-        <div id="error-message" class="text-center text-red-500 mt-4 text-sm hidden">
+        <div id="error-message" class="text-center text-red-500 mt-4 text-sm hidden transition-colors duration-300">
             Lỗi: Không tìm thấy dữ liệu. Hãy đảm bảo thư mục `data_matchGame` và các tệp `.txt` tồn tại.
         </div>
 
 
         <!-- Win/Message Modal (dùng overlay) -->
+        <!-- Cập nhật màu nền modal cho dark mode -->
         <div id="modal-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center hidden transition-opacity duration-300 z-50">
-            <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm w-full">
-                <h2 id="modal-title" class="text-3xl font-bold text-green-600 mb-4">Chúc Mừng!</h2>
-                <p id="modal-message" class="text-gray-700 mb-6">Hoàn thành trong: <span id="final-moves" class="font-bold text-blue-600">0</span> lượt đi và <span id="final-time" class="font-bold text-red-600">00:00</span>.</p>
+            <div class="bg-white dark:bg-gray-700 p-8 rounded-xl shadow-2xl text-center max-w-sm w-full transition-colors duration-300">
+                <h2 id="modal-title" class="text-3xl font-bold text-green-600 dark:text-green-400 mb-4 transition-colors duration-300">Chúc Mừng!</h2>
+                <p id="modal-message" class="text-gray-700 dark:text-gray-200 mb-6 transition-colors duration-300">Hoàn thành trong: <span id="final-moves" class="font-bold text-blue-600 dark:text-blue-400">0</span> lượt đi và <span id="final-time" class="font-bold text-red-600 dark:text-red-400">00:00</span>.</p>
                 <button id="modal-restart-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all">
                     Chơi lại
                 </button>
@@ -291,10 +336,6 @@
         const BASE_DATA_PATH = './data_imgpractice/';
         
         // --- Cấu hình các Bài học (Người dùng có thể tự chỉnh sửa) ---
-        // Thêm/sửa các đối tượng trong mảng này.
-        // - id: Phải khớp với tên thư mục (ví dụ: 'bai1' -> thư mục bai1)
-        // - name: Tên hiển thị trong dropdown
-        // - filePath: Đường dẫn đến tệp .txt chứa từ vựng
         const LESSON_CONFIG = [
             { id: 'bai1', name: 'Bài 1: 老师您好！', filePath: 'bai1/bai1.txt' },
             { id: 'bai2', name: 'Bài 2: 谢谢你！', filePath: 'bai2/bai2.txt' },
@@ -322,7 +363,7 @@
         const movesElement = document.getElementById('moves');
         const timerElement = document.getElementById('timer');
         const lessonSelector = document.getElementById('lesson-selector');
-        const matchTypeSelector = document.getElementById('match-type-selector'); // Mới
+        const matchTypeSelector = document.getElementById('match-type-selector'); 
         const modalOverlay = document.getElementById('modal-overlay');
         const finalMovesElement = document.getElementById('final-moves');
         const finalTimeElement = document.getElementById('final-time');
@@ -332,6 +373,11 @@
         const hintsLeftElement = document.getElementById('hints-left');
         const loadingMessage = document.getElementById('loading-message');
         const errorMessage = document.getElementById('error-message');
+        // MỚI: Thêm nút chuyển đổi chủ đề
+        const themeToggleButton = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
 
 
         // --- Dữ liệu động Logic (Đã sửa đổi) ---
@@ -642,6 +688,7 @@
                     contentHTML = `<div class="hanzi">${cardData.content}</div>`;
                 } else if (cardData.type === 'image') {
                     // Thẻ Hình ảnh
+                    // Thêm class object-contain và bg-white/bg-gray-700 để đảm bảo ảnh hiển thị tốt hơn trong dark mode
                     contentHTML = `<img src="${cardData.content}" class="match-image" alt="${cardData.originalWord}" onerror="this.onerror=null;this.outerHTML='<div class=\\'match-text\\'>Ảnh không tồn tại</div>';" />`;
                 } else {
                     // Thẻ Pinyin hoặc Nghĩa (text)
@@ -837,22 +884,83 @@
             timerElement.textContent = formatTime(0);
         }
 
-        // --- Event Listeners ---
-        // Đã chuyển các gán sự kiện này vào initializeApp() để đảm bảo chúng chỉ được gán một lần
-        // ...
+        // --- MỚI: Logic Chuyển đổi Chế độ Sáng/Tối ---
+        
+        /**
+         * Cập nhật icon dựa trên trạng thái chế độ tối.
+         * @param {boolean} isDark - True nếu đang ở chế độ tối.
+         */
+        function updateThemeIcons(isDark) {
+            if (isDark) {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        /**
+         * Áp dụng chế độ tối (thêm class "dark" vào thẻ <html>)
+         * @param {boolean} isDark - True để bật chế độ tối, False để bật chế độ sáng.
+         */
+        function applyTheme(isDark) {
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+            updateThemeIcons(isDark);
+        }
+
+        /**
+         * Chuyển đổi giữa chế độ tối và sáng.
+         */
+        function toggleTheme() {
+            const isDark = htmlElement.classList.contains('dark');
+            applyTheme(!isDark);
+        }
+
+        /**
+         * Khởi tạo chế độ sáng/tối khi tải trang.
+         */
+        function initializeTheme() {
+            // 1. Kiểm tra localStorage
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // 2. Quyết định chế độ tối: Dựa trên localStorage, hoặc ưu tiên hệ thống
+            let shouldBeDark;
+            if (savedTheme) {
+                shouldBeDark = savedTheme === 'dark';
+            } else {
+                shouldBeDark = prefersDark;
+            }
+            
+            // 3. Áp dụng
+            applyTheme(shouldBeDark);
+        }
 
         // --- Initialization ---
 
         function initializeApp() {
+            // MỚI: Khởi tạo Theme trước khi tải dữ liệu
+            initializeTheme();
+
             // Tải dữ liệu một lần duy nhất khi DOM đã tải xong
             loadLessonData();
             
-            // Gắn các sự kiện Listener chỉ sau khi hàm tải dữ liệu đã được gọi
+            // Gắn các sự kiện Listener 
             restartButton.addEventListener('click', startGame);
             modalRestartButton.addEventListener('click', startGame);
             hintButton.addEventListener('click', useHint);
             lessonSelector.addEventListener('change', startGame); 
             matchTypeSelector.addEventListener('change', startGame);
+            
+            // MỚI: Sự kiện cho nút chuyển đổi theme
+            themeToggleButton.addEventListener('click', toggleTheme);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
