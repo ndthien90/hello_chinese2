@@ -135,7 +135,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             cursor: pointer;
             transition: all 0.3s ease;
-            flex-wrap: wrap; /* SỬA ĐỔI: Cho phép sub-grid bọc xuống */
         }
 
         .vocab-item:hover {
@@ -476,6 +475,10 @@
             }
             
             /* NEW: Styles for in-row character grid */
+            .vocab-item {
+                flex-wrap: wrap; /* Allow sub-grid to wrap underneath */
+            }
+
             .char-sub-grid {
                 display: flex;
                 flex-wrap: wrap;
@@ -570,7 +573,6 @@
                     <option value="bai2">Bài 2: Gia đình</option>
                     <option value="bai3">Bài 3: Ăn uống</option>
                     <option value="bai4">Bài 4: Số đếm</option>
-                    <!-- Thêm các bài khác nếu cần -->
                 </select>
             </div>
 
@@ -618,10 +620,10 @@
                     <div id="quizFeedback" class="quiz-feedback hidden"></div>
                 </div>
                 <div class="controls">
-                    <button class="control-btn" onclick="animateCharacter()">🎬 Xem nét</button>
-                    <button class="control-btn" onclick="showCharacter()">👁️ Hiện chữ</button>
-                    <button class="control-btn" onclick="hideCharacter()">🙈 Ẩn chữ</button>
-                    <button class="control-btn" onclick="startQuiz()">✍️ Bắt đầu viết</button>
+                    <button class="control-btn" onclick="animateCharacter()">🎬</button>
+                    <button class="control-btn" onclick="showCharacter()">👁️</button>
+                    <button class="control-btn" onclick="hideCharacter()">🙈</button>
+                    <button class="control-btn" onclick="startQuiz()">✍️ </button>
                     <button class="control-btn" onclick="cancelQuiz()" id="cancelBtn" class="hidden">❌ Hủy luyện</button>
                 </div>
             </div>
@@ -634,10 +636,33 @@
         // Global state variables
         let currentWriter = null;
         let currentCharacter = '';
-        let characters = []; // Lưu trữ Hán tự của từ đang được chọn
+        let characters = [];
         let isQuizMode = false;
         let isInitialized = false;
-        let allLessonsData = {}; // Cache dữ liệu bài học
+        let allLessonsData = {};
+
+        // --- Data Simulation (Mô phỏng dữ liệu từ baiX.txt) ---
+        // XÓA BỎ mockLessonData
+        /*
+        const mockLessonData = {
+            bai1: [
+                "你好|nǐ hǎo|Xin chào", "您好|nín hǎo|Xin chào (kính trọng)", "谢谢|xièxie|Cảm ơn",
+                "不客气|bú kèqi|Không có gì", "再见|zài jiàn|Tạm biệt", "对不起|duìbùqǐ|Xin lỗi", "没关系|méi guānxi|Không sao"
+            ],
+            bai2: [
+                "家|jiā|Nhà/Gia đình", "爸爸|bàba|Bố", "妈妈|māma|Mẹ", "哥哥|gēge|Anh trai",
+                "姐姐|jiějie|Chị gái", "弟弟|dìdi|Em trai", "妹妹|mèimei|Em gái", "爱|ài|Yêu"
+            ],
+            bai3: [
+                "吃|chī|Ăn", "饭|fàn|Cơm", "水|shuǐ|Nước", "茶|chá|Trà",
+                "喝|hē|Uống", "面条|miàntiáo|Mì", "面包|miànbāo|Bánh mì"
+            ],
+            bai4: [
+                "一|yī|Một", "二|èr|Hai", "三|sān|Ba", "四|sì|Bốn", "五|wǔ|Năm",
+                "六|liù|Sáu", "七|qī|Bảy", "八|bā|Tám", "九|jiǔ|Chín", "十|shí|Mười"
+            ]
+        };
+        */
 
         /**
          * SỬA ĐỔI: Tải dữ liệu bài học từ tệp .txt
@@ -658,7 +683,7 @@
                 // Xử lý dữ liệu text
                 const parsedData = textData.split('\n') // Tách theo dòng
                     .map(line => line.trim()) // Cắt khoảng trắng thừa
-                    .filter(line => line.length > 0 && line.includes('|')) // Bỏ các dòng rỗng hoặc không có |
+                    .filter(line => line.length > 0) // Bỏ các dòng rỗng
                     .map(line => {
                         const parts = line.split('|');
                         // Đảm bảo có đủ 3 phần
@@ -677,7 +702,8 @@
 
             } catch (error) {
                 console.error(`Lỗi khi tải bài học ${lessonKey} từ ${filePath}:`, error);
-                return []; // Trả về một mảng rỗng để tránh lỗi
+                // Trả về một mảng rỗng để tránh lỗi
+                return []; 
             }
         }
         
@@ -698,7 +724,7 @@
         if (synth.onvoiceschanged !== undefined) {
             synth.onvoiceschanged = getChineseVoice;
         }
-        getChineseVoice(); // Lấy giọng lần đầu
+        getChineseVoice();
 
         function speakWord(text) {
             if (!synth) return;
@@ -713,7 +739,7 @@
         // --- Core Functions ---
         window.onload = function() {
             console.log('App initialized');
-            loadLesson(); // Tải bài học mặc định
+            loadLesson();
             document.getElementById('textInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') parseText();
             });
@@ -736,7 +762,6 @@
             }
         }
 
-        // Hiển thị danh sách từ vựng
         function displayVocabulary(vocabList) {
             const vocabListDiv = document.getElementById('vocabularyList');
             vocabListDiv.innerHTML = ''; 
@@ -760,17 +785,15 @@
             });
         }
         
-        // Xử lý cho Desktop (grid chính)
         function processCharacterSelection(word, pinyin) {
             document.getElementById('currentSelectedWord').textContent = word;
             document.getElementById('currentSelectedPinyin').textContent = pinyin ? `(${pinyin})` : '';
 
-            // 'characters' global var đã được cập nhật
             characters = word.split('').filter(char => 
                 /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(char)
             );
             
-            displayCharacters(characters); // Hiển thị Hán tự lên grid chính
+            displayCharacters(characters);
             
             if (characters.length > 0) {
                 const firstChar = characters[0];
@@ -784,80 +807,77 @@
             }
         }
 
-        // --- SỬA ĐỔI: LOGIC CHỌN TỪ (MOBILE) ---
+        /*
+        function selectWord(vocabItem, element) {
+            speakWord(vocabItem.word);
+            processCharacterSelection(vocabItem.word, vocabItem.pinyin);
+
+            // 3. Highlight item đang chọn
+            document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            // 4. Clear manual input
+            document.getElementById('textInput').value = ''; 
+        }
+        */
+
+        // SỬA ĐỔI: Cập nhật logic `selectWord` cho mobile
         function selectWord(vocabItem, element) {
             speakWord(vocabItem.word);
             document.getElementById('textInput').value = ''; 
 
+            // Check if we are clicking the *same* item that is *already* active.
             const isAlreadyActive = element.classList.contains('active');
 
-            // --- Mobile Logic ---
+            // --- Mobile Logic (Injects sub-grid) ---
             if (window.innerWidth <= 768) {
-                // 1. Dọn dẹp tất cả highlights và sub-grids
+                // Always clear all highlights and sub-grids first.
                 document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
                 document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
-                
-                // Dọn dẹp grid chính và ẩn writer (phòng trường hợp đang dùng manual input)
+
+                // Clear the *main* character grid and hide writer
                 document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>';
                 document.getElementById('writerSection').classList.add('hidden');
-
-                // 2. Nếu đang click vào 1 từ *KHÁC* (hoặc click lại để mở)
+                
+                // If it was *not* the active one, or if we are just re-opening it
                 if (!isAlreadyActive) {
-                    element.classList.add('active'); // Highlight từ vựng
-                    
-                    // Tách Hán tự
-                    const chars = vocabItem.word.split('').filter(char => 
-                        /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(char)
-                    );
-                    
-                    // 3. Quyết định dựa trên số Hán tự
-                    if (chars.length === 1) {
-                        // Trường hợp 1 Hán tự: Hiển thị writer ngay
-                        // Không cần sub-grid. 'element' (.vocab-item) sẽ là 'active'
-                        showCharacterWriter(chars[0], element);
-                    
-                    } else if (chars.length > 1) {
-                        // Trường hợp > 1 Hán tự: Hiển thị sub-grid VÀ writer cho từ đầu tiên
-                        displayCharactersInRow(chars, element); // Tạo sub-grid
-                        
-                        // Tìm Hán tự con đầu tiên vừa được tạo
-                        const firstSubCharElement = element.querySelector('.sub-char-item');
-                        if (firstSubCharElement) {
-                            showCharacterWriter(chars[0], firstSubCharElement);
-                        }
-                    }
-                    // Nếu chars.length === 0, không làm gì cả (không hiển thị writer)
+                    element.classList.add('active');
+                    displayCharactersInRow(vocabItem, element); // Call the new function
                 }
-                // Nếu isAlreadyActive là true, logic dọn dẹp ở bước 1 đã xử lý việc "đóng" từ vựng.
+                // If it *was* active, the clear-up logic above already closed it. Toggling is complete.
 
             // --- Desktop Logic (Uses main grid) ---
             } else {
                 document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
                 element.classList.add('active');
+                // Desktop vẫn dùng logic cũ, điền vào grid chính
                 processCharacterSelection(vocabItem.word, vocabItem.pinyin);
             }
         }
 
-        // Cập nhật `parseText` để dọn dẹp sub-grids
+        // SỬA ĐỔI: Cập nhật `parseText` để dọn dẹp sub-grids
         function parseText() {
             const textInput = document.getElementById('textInput');
             const word = textInput.value.trim();
 
-            // Dọn dẹp highlights và sub-grids
+            // Clear active state in lesson list AND any open sub-grids
             document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
             document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
 
+
             if (!word) {
-                showQuizFeedback('Vui lòng nhập chữ Hán hoặc từ để phân tích.', 'mistake');
+                // SỬA LỖI: Sử dụng 'mistake' thay vì 'error'
+                showQuizFeedback('Vui lòng nhập chữ Hán hoặc từ để phân tích.', 'mistake'); 
                 resetWritingArea(false); 
                 return;
             }
             
-            // Luôn dùng grid chính cho manual input
+            // This function populates the *main* grid, which is correct for manual input
             processCharacterSelection(word, 'tự nhập');
             hideQuizFeedback();
         }
 
+        // === START SỬA LỖI: THÊM LẠI HÀM displayCharacters ===
         // Hiển thị Hán tự đơn trong grid (cho desktop hoặc manual input)
         function displayCharacters(charList) {
             const grid = document.getElementById('charactersGrid');
@@ -876,10 +896,13 @@
                 grid.appendChild(charElement);
             });
         }
+        // === END SỬA LỖI ===
 
+        // === START SỬA LỖI: SỬA LẠI HÀM initializeSVG ===
         // Tạo SVG với background grid
         function initializeSVG(containerId, size) {
             const container = document.getElementById(containerId);
+            // Luôn dọn dẹp SVG cũ
             container.innerHTML = '';
             
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -889,9 +912,12 @@
             svg.setAttribute('id', svgId);
             svg.style.border = '1px solid #DDD';
             
+            // Add grid lines
             const lines = [
+                // Diagonal lines
                 { x1: 0, y1: 0, x2: size, y2: size, stroke: '#EEE', opacity: 0.5 },
                 { x1: size, y1: 0, x2: 0, y2: size, stroke: '#EEE', opacity: 0.5 },
+                // Center lines
                 { x1: size/2, y1: 0, x2: size/2, y2: size, stroke: '#DDD', opacity: 1 },
                 { x1: 0, y1: size/2, x2: size, y2: size/2, stroke: '#DDD', opacity: 1 }
             ];
@@ -909,80 +935,75 @@
             });
             
             container.appendChild(svg);
-            return svgId; // Trả về ID của SVG
+            return svgId;
         }
+        // === END SỬA LỖI ===
 
-        // --- SỬA ĐỔI: LOGIC HIGHLIGHT CỦA showCharacterWriter ---
+        // SỬA ĐỔI: Cập nhật `showCharacterWriter` để highlight sub-items
+        // Show character writer
         async function showCharacterWriter(character, element) {
-            // 1. Dọn dẹp *tất cả* các highlight
+            // Update active character styling
+            // SỬA ĐỔI: Dọn dẹp *cả hai* loại item
             document.querySelectorAll('.character-item').forEach(item => {
                 item.classList.remove('active');
             });
             document.querySelectorAll('.sub-char-item').forEach(item => {
                 item.classList.remove('active');
             });
-            // Chỉ bỏ active của .vocab-item nếu element *KHÔNG PHẢI* là .vocab-item
-            if (!element.classList.contains('vocab-item')) {
-                 document.querySelectorAll('.vocab-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-            }
             
-            // 2. Thêm highlight cho element được click
-            element.classList.add('active'); 
+            element.classList.add('active'); // Thêm active cho element được click
 
-            // 3. Hiển thị khu vực writer
             const writerSection = document.getElementById('writerSection');
             writerSection.classList.remove('hidden');
 
-            // 4. Scroll (chỉ trên mobile)
+            // Scroll mượt đến writer section
             if (window.innerWidth <= 768) {
                 setTimeout(() => {
                     writerSection.scrollIntoView({ 
                         behavior: 'smooth',
-                        block: 'nearest'
+                        block: 'nearest' // Cuộn đến vị trí gần nhất
                     });
                 }, 150);
             }
 
-            // 5. Reset trạng thái
             hideQuizFeedback();
             document.getElementById('cancelBtn').classList.add('hidden');
             isQuizMode = false;
-            currentCharacter = character; // Cập nhật ký tự hiện tại
+            currentCharacter = character;
 
             try {
-                // 6. Tính toán kích thước và tạo writer
                 showLoadingMessage();
 
+                // === START SỬA ĐỔI TỐI ƯU MOBILE ===
                 const writerDiv = document.getElementById('writer');
                 let writerSize;
 
                 if (window.innerWidth <= 768) {
-                    const writerContainer = writerDiv.parentElement;
+                    // Trên mobile, tính toán kích thước linh hoạt
+                    const writerContainer = writerDiv.parentElement; // .writer-container
+                    // Lấy 100% chiều rộng của .writer-container trừ đi padding của chính nó
                     const containerPadding = parseFloat(getComputedStyle(writerContainer).paddingLeft) + parseFloat(getComputedStyle(writerContainer).paddingRight);
                     let availableWidth = writerContainer.offsetWidth - containerPadding;
-                    writerSize = Math.max(240, Math.min(availableWidth, 350)); // Tối thiểu 240, tối đa 350
+                    writerSize = Math.min(availableWidth, 350); // Tối đa 350px
+                    if (writerSize < 240) writerSize = 240; // Tối thiểu 240px
                 } else {
-                    writerSize = 280; // Desktop
+                    // Trên desktop, dùng kích thước cố định
+                    writerSize = 280;
                 }
                 
+                // Gán kích thước cho #writer div để nó giữ đúng khung
+                // (initializeSVG sẽ đặt kích thước cho SVG bên trong)
                 writerDiv.style.width = `${writerSize}px`;
                 writerDiv.style.height = `${writerSize}px`;
+                // === END SỬA ĐỔI TỐI ƯU MOBILE ===
 
-                const svgId = initializeSVG('writer', writerSize); // Pass container ID ('writer')
+                const svgId = initializeSVG('writer', writerSize); // Pass container DIV ID ('writer')
 
-                // Hủy writer cũ nếu có
-                if (currentWriter) {
-                    currentWriter = null; 
-                }
-
-                currentWriter = await createWriter(svgId, character, writerSize); // Pass SVG ID
+                currentWriter = await createWriter(svgId, character, writerSize); // Pass SVG ID ('writer-svg')
                 isInitialized = true; 
                 
                 hideLoadingMessage();
                 
-                // 7. Chạy animation
                 setTimeout(() => {
                     if (currentWriter && !isQuizMode) {
                         currentWriter.animateCharacter();
@@ -999,19 +1020,24 @@
         /**
          * NEW: Hiển thị Hán tự đơn bên trong .vocab-item (chỉ cho mobile)
          */
-        function displayCharactersInRow(charList, element) {
-            // charList đã được filter ở selectWord
-            if (charList.length === 0) return;
+        function displayCharactersInRow(vocabItem, element) {
+            const characters = vocabItem.word.split('').filter(char => 
+                /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(char)
+            );
+
+            if (characters.length === 0) return;
 
             const subGrid = document.createElement('div');
             subGrid.className = 'char-sub-grid';
 
-            charList.forEach(char => {
+            characters.forEach(char => {
                 const charBtn = document.createElement('div');
                 charBtn.className = 'sub-char-item';
                 charBtn.textContent = char;
                 charBtn.onclick = (e) => {
                     e.stopPropagation(); // Ngăn .vocab-item's click
+                    
+                    // Gọi showCharacterWriter, truyền 'charBtn' làm element
                     showCharacterWriter(char, charBtn); 
                 };
                 subGrid.appendChild(charBtn);
@@ -1020,7 +1046,7 @@
             element.appendChild(subGrid);
         }
 
-        // Tạo HanziWriter instance
+        // Create HanziWriter instance
         async function createWriter(svgId, character, size) {
             return new Promise((resolve, reject) => {
                 const writer = HanziWriter.create(svgId, character, {
@@ -1032,11 +1058,11 @@
                     delayBetweenStrokes: 500,
                     showOutline: true,
                     showCharacter: true,
-                    onLoadCharDataSuccess: (data) => {
+                    onLoadCharDataSuccess: function(data) {
                         console.log('Character data loaded successfully for:', character);
                         resolve(writer);
                     },
-                    onLoadCharDataError: (reason) => {
+                    onLoadCharDataError: function(reason) {
                         console.error('Failed to load character data:', reason);
                         reject(new Error(`HanziWriter failed to load data for ${character}`));
                     }
@@ -1044,7 +1070,6 @@
             });
         }
         
-        // Dọn dẹp khu vực viết
         function resetWritingArea(clearInput = true) {
              if (clearInput && document.getElementById('textInput')) {
                 document.getElementById('textInput').value = '';
@@ -1053,16 +1078,13 @@
              document.getElementById('currentSelectedPinyin').textContent = '';
              document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>';
              document.getElementById('writerSection').classList.add('hidden');
-             
              isInitialized = false;
              currentCharacter = '';
-             
              document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
-             document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
              
+             // Dọn dẹp SVG
              const writerDiv = document.getElementById('writer');
              if (writerDiv) writerDiv.innerHTML = '';
-             currentWriter = null;
              
              hideQuizFeedback();
         }
@@ -1137,6 +1159,7 @@
             feedback.className = `quiz-feedback ${type}`;
             feedback.classList.remove('hidden');
 
+            // Tự động ẩn thông báo 'correct' sau 1.5s
             if (type === 'correct') {
                 setTimeout(() => {
                     if (feedback.textContent === message) {
@@ -1150,45 +1173,42 @@
             document.getElementById('quizFeedback').classList.add('hidden');
         }
 
-        // --- SỬA ĐỔI: LOGIC RESIZE ---
+        // === START: SỬA ĐỔI TỐI ƯU MOBILE (Resize Handler) ===
+        // Xử lý thay đổi kích thước cửa sổ để vẽ lại writer
         window.addEventListener('resize', function() {
-            // Chỉ chạy nếu writer đã được khởi tạo
             if (currentWriter && currentCharacter && isInitialized) {
                 
                 const writerDiv = document.getElementById('writer');
                 let newSize;
 
-                // 1. Tính toán kích thước mới
                 if (window.innerWidth <= 768) {
                     const writerContainer = writerDiv.parentElement;
                     const containerPadding = parseFloat(getComputedStyle(writerContainer).paddingLeft) + parseFloat(getComputedStyle(writerContainer).paddingRight);
                     let availableWidth = writerContainer.offsetWidth - containerPadding;
-                    newSize = Math.max(240, Math.min(availableWidth, 350));
+                    newSize = Math.min(availableWidth, 350);
+                    if (newSize < 240) newSize = 240;
                 } else {
                     newSize = 280;
                 }
                 
                 const currentSVG = document.querySelector('#writer-svg');
-                
-                // 2. Chỉ vẽ lại nếu kích thước thay đổi
+                // So sánh kích thước mới với kích thước hiện tại của SVG
                 if (currentSVG && currentSVG.getAttribute('width') !== newSize.toString()) {
-                    isInitialized = false; // Đánh dấu là cần vẽ lại
+                    isInitialized = false; 
                     
                     setTimeout(() => {
-                        // 3. SỬA LỖI: Tìm activeElement ở CẢ BA nơi
-                        const activeElement = document.querySelector('.character-item.active') || 
-                                              document.querySelector('.sub-char-item.active') ||
-                                              document.querySelector('.vocab-item.active');
+                        // SỬA LỖI: Tìm activeElement ở cả hai nơi
+                        const activeElement = document.querySelector('.character-item.active') || document.querySelector('.sub-char-item.active');
                         
                         if (activeElement) {
                             // Gọi lại showCharacterWriter để nó tự tính toán lại size
-                            // (currentCharacter vẫn đang giữ đúng Hán tự)
                             showCharacterWriter(currentCharacter, activeElement); 
                         }
                     }, 100);
                 }
             }
         });
+        // === END: SỬA ĐỔI TỐI ƯU MOBILE ===
     </script>
 </body>
 </html>
