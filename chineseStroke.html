@@ -711,7 +711,7 @@
             const dropdown = document.getElementById('lessonDropdown');
             const lessonKey = dropdown.value;
             const vocabListDiv = document.getElementById('vocabularyList');
-            vocabListDiv.innerHTML = '<p style="text-align: center; color: #667eea; margin-top: 30px;">Đang tải...</p>';
+            vocabListDiv.innerHTML = '<p style="text-align: center; color: #667eea; margin-top: 30px;"></p>';
             
             try {
                 const lessonData = await fetchLessonData(lessonKey);
