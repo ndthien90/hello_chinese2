@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Kết Hợp Tiếng Trung Động</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cấu hình Tailwind cho Chế độ Tối (Dark Mode) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Bật dark mode bằng cách thêm class="dark" vào thẻ html
+            theme: {
+                extend: {
+                    colors: {},
+                }
+            }
+        }
+    </script>
+    <!-- Sử dụng Font Inter và Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Màu nền mặc định (Light Mode) */
+            background-color: #f7f7f7; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0; 
+            overflow-y: auto; 
+            transition: background-color 0.3s; /* Thêm transition cho body */
+        }
+        
+        /* CHẾ ĐỘ TỐI: Cập nhật màu nền body */
+        .dark body {
+            background-color: #1a202c; /* Màu nền tối */
+        }
+
+        /* Thẻ trò chơi */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 6px; 
+            padding: 10px; 
+            background-color: #f9f9e9; /* Light mode */
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 100%; 
+            aspect-ratio: 4 / 3; 
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        
+        /* CHẾ ĐỘ TỐI: Cập nhật màu nền card grid */
+        .dark .card-grid {
+             background-color: #2d3748; /* Darker background */
+        }
+
+        .card {
+            background-color: #3b82f6; /* Blue for the back */
+            border-radius: 8px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.6s, box-shadow 0.3s;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden; 
+        }
+        
+        /* Hiệu ứng lật thẻ */
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 8px;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: 580;
+            user-select: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .card-back {
+            background-color: #3b82f6;
+            color: white;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        .card-front {
+            background-color: #ffffff; /* Light mode */
+            color: #1f2937; /* Light mode */
+            transform: rotateY(180deg);
+            /* ĐÃ XÓA PADDING: 5px; */
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* CHẾ ĐỘ TỐI: Mặt trước thẻ (card-front) */
+        .dark .card-front {
+            background-color: #4a5568; /* Darker front */
+            color: #edf2f7; /* Lighter text */
+        }
+        
+        /* Nội dung Hán tự */
+        .hanzi {
+            font-family: 'Kaiti','Noto Sans SC', sans-serif;
+            font-size: 2.2rem;
+            color: #ef4444; /* Red color for Hanzi (Light mode) */
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%; 
+            width: 100%;
+            /* ĐÃ XÓA PADDING: 5px; */
+        }
+        
+        /* CHẾ ĐỘ TỐI: Hán tự (chỉ cần màu nhạt hơn nếu muốn) */
+        .dark .hanzi {
+            color: #fca5a5; /* Red nhạt hơn */
+        }
+        
+        /* Nội dung Pinyin / Nghĩa */
+        .match-text {
+            font-size: 1.1rem;
+            color: #4b5563; /* Gray text (Light mode) */
+            text-align: center;
+            /* ĐÃ XÓA PADDING: 5px; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        /* CHẾ ĐỘ TỐI: Pinyin / Nghĩa */
+        .dark .match-text {
+            color: #cbd5e0; /* Light gray text */
+        }
+        
+        /* Nội dung Hình ảnh */
+        .match-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            /* ĐÃ XÓA PADDING: 5px; */
+        }
+
+        /* Trạng thái đã ghép đôi */
+        .card.matched {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.8);
+            cursor: default;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* Trạng thái không thể tương tác */
+        .card.disabled {
+            pointer-events: none;
+        }
+
+        /* Hiệu ứng Gợi ý */
+        .card.hinted {
+            box-shadow: 0 0 20px 4px #facc15; 
+            transition: box-shadow 0.2s;
+        }
+        
+        /* Mobile adjustments (Tối ưu cho màn hình nhỏ) */
+        @media (max-width: 640px) {
+            
+            .max-w-xl {
+                max-width: 100%;
+                padding: 5px 5px; 
+            }
+            
+            .card-grid {
+                aspect-ratio: 4 / 3; 
+                gap: 5px;
+                padding: 5px;
+            }
+            
+            .card-back {
+                font-size: 2rem;
+            }
+            .hanzi {
+                font-size: 1.4rem;
+            }
+            .match-text {
+                font-size: 0.9rem;
+            }
+            
+             .flex-col.sm\:flex-row {
+                 flex-direction: column !important;
+             }
+             .sm\:space-y-0 > * {
+                 margin-top: 0 !important;
+                 margin-bottom: 0 !important;
+             }
+             .flex.space-x-4 {
+                 justify-content: space-between;
+             }
+             .flex.items-center.space-x-2 {
+                 margin-top: 10px;
+             }
+             .w-full.sm\:w-auto {
+                 width: 100%;
+             }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 transition-colors duration-300">
+    <!-- CẬP NHẬT: Xóa class p-4 khỏi container chính để kiểm soát padding bằng CSS mobile -->
+    <div class="max-w-xl w-full"> 
+        <header class="text-center mb-6 p-4 relative"> 
+            
+            <!-- Nút chuyển đổi chế độ Sáng/Tối -->
+            <button id="theme-toggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition duration-300 shadow-md">
+                <!-- Icon Mặt trời (Light Mode) / Mặt trăng (Dark Mode) - Dùng SVG để tiện cho Tailwind color change -->
+                <svg id="sun-icon" class="w-6 h-6 text-yellow-500 dark:text-gray-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                <svg id="moon-icon" class="w-6 h-6 text-gray-700 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+            
+            <h1 class="text-4xl font-orange text-gray-700 dark:text-gray-200 mb-2 transition-colors duration-300">配对游戏</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm transition-colors duration-300"></p>
+        </header>
+
+        <!-- Thêm padding/margin ngang vào khối controls để đồng nhất với padding của max-w-xl -->
+        <!-- Áp dụng dark mode cho container controls -->
+        <div class="flex flex-col sm:flex-row justify-between items-start mb-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg space-y-3 sm:space-y-0 sm:space-x-4 mx-2 sm:mx-0 transition-colors duration-300">
+            
+            <!-- Cột 1: Thông tin Game -->
+            <div class="flex space-x-4 w-full sm:w-auto justify-center sm:justify-start">
+                <div class="text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                    Lượt đi: <span id="moves" class="text-lg text-blue-600 dark:text-blue-400">0</span>
+                </div>
+                <div class="text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                    Thời gian: <span id="timer" class="text-lg text-red-600 dark:text-red-400">00:00</span>
+                </div>
+            </div>
+
+            <!-- Cột 2: Bộ chọn Cấp độ -->
+            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                 <label for="lesson-selector" class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-300">Bài học:</label>
+                <!-- Cập nhật màu nền và text cho selector trong dark mode -->
+                <select id="lesson-selector" class="bg-gray-100 border border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full transition-colors duration-300">
+                    <!-- Options will be loaded dynamically -->
+                    <option value="loading" disabled selected>Đang tải...</option>
+                </select>
+            </div>
+            
+            <!-- Cột 3: Bộ chọn Kiểu Ghép Đôi -->
+            <div class="flex items-center space-x-2 w-full sm:w-auto mt-3 sm:mt-0">
+                 <label for="match-type-selector" class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors duration-300">Ghép với:</label>
+                 <!-- Cập nhật màu nền và text cho selector trong dark mode -->
+                <select id="match-type-selector" class="bg-gray-100 border border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full transition-colors duration-300">
+                    <option value="pinyin">Pinyin</option>
+                    <option value="vietnamese">Nghĩa (Tiếng Việt)</option>
+                    <option value="image">Hình ảnh</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="flex justify-center mb-4 space-x-3">
+             <!-- Nút Gợi ý mới -->
+            <button id="hint-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-lg shadow transition disabled:opacity-50 disabled:cursor-not-allowed">
+                Gợi ý (<span id="hints-left">3</span>)
+            </button>
+            <!-- Nút Chơi lại -->
+            <button id="restart-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow transition">
+                Chơi lại
+            </button>
+        </div>
+
+        <!-- Game Board -->
+        <div id="game-board" class="card-grid">
+            <!-- Cards will be injected here by JavaScript -->
+        </div>
+        
+        <!-- Loading Message -->
+        <div id="loading-message" class="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm hidden transition-colors duration-300">
+             <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8 mb-4 mx-auto"></div>
+             Đang tải dữ liệu bài học...
+        </div>
+        
+        <!-- Error Message -->
+        <div id="error-message" class="text-center text-red-500 mt-4 text-sm hidden transition-colors duration-300">
+            Lỗi: Không tìm thấy dữ liệu. Hãy đảm bảo thư mục `data_matchGame` và các tệp `.txt` tồn tại.
+        </div>
+
+
+        <!-- Win/Message Modal (dùng overlay) -->
+        <!-- Cập nhật màu nền modal cho dark mode -->
+        <div id="modal-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center hidden transition-opacity duration-300 z-50">
+            <div class="bg-white dark:bg-gray-700 p-8 rounded-xl shadow-2xl text-center max-w-sm w-full transition-colors duration-300">
+                <h2 id="modal-title" class="text-3xl font-bold text-green-600 dark:text-green-400 mb-4 transition-colors duration-300">Chúc Mừng!</h2>
+                <p id="modal-message" class="text-gray-700 dark:text-gray-200 mb-6 transition-colors duration-300">Hoàn thành trong: <span id="final-moves" class="font-bold text-blue-600 dark:text-blue-400">0</span> lượt đi và <span id="final-time" class="font-bold text-red-600 dark:text-red-400">00:00</span>.</p>
+                <button id="modal-restart-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all">
+                    Chơi lại
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Cấu hình Game ---
+        const NUM_PAIRS = 6; // 6 cặp = 12 thẻ (Lưới 3 hàng x 4 cột)
+        const FLIP_DELAY = 1000; // 1 giây
+        const HINT_DURATION = 1000; // 1 giây hiển thị gợi ý
+        const MAX_HINTS = 6; // Số lượt gợi ý tối đa
+        const BASE_DATA_PATH = './data_imgpractice/';
+        
+        // --- Cấu hình các Bài học (Người dùng có thể tự chỉnh sửa) ---
+        const LESSON_CONFIG = [
+            { id: 'bai1', name: 'Bài 1: 老师您好！', filePath: 'bai1/bai1.txt' },
+            { id: 'bai2', name: 'Bài 2: 谢谢你！', filePath: 'bai2/bai2.txt' },
+            { id: 'bai3', name: 'Bài 3: 你叫什么名字？', filePath: 'bai3/bai3.txt' },
+            // THÊM CÁC BÀI HỌC KHÁC CỦA BẠN TẠI ĐÂY
+        ];
+
+        let availableLessons = []; // Danh sách các bài học có sẵn sau khi tải dữ liệu
+        let gameBoard = [];
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard = null;
+        let secondCard = null;
+        let matchesFound = 0;
+        let moves = 0;
+        let hintsLeft = MAX_HINTS;
+        
+        // --- Timer Variables ---
+        let timer = 0;
+        let intervalId = null;
+        let isRunning = false;
+
+        // --- DOM Elements ---
+        const gameBoardElement = document.getElementById('game-board');
+        const movesElement = document.getElementById('moves');
+        const timerElement = document.getElementById('timer');
+        const lessonSelector = document.getElementById('lesson-selector');
+        const matchTypeSelector = document.getElementById('match-type-selector'); 
+        const modalOverlay = document.getElementById('modal-overlay');
+        const finalMovesElement = document.getElementById('final-moves');
+        const finalTimeElement = document.getElementById('final-time');
+        const restartButton = document.getElementById('restart-btn');
+        const modalRestartButton = document.getElementById('modal-restart-btn');
+        const hintButton = document.getElementById('hint-btn');
+        const hintsLeftElement = document.getElementById('hints-left');
+        const loadingMessage = document.getElementById('loading-message');
+        const errorMessage = document.getElementById('error-message');
+        // MỚI: Thêm nút chuyển đổi chủ đề
+        const themeToggleButton = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+
+
+        // --- Dữ liệu động Logic (Đã sửa đổi) ---
+        
+        /**
+         * Tải dữ liệu cho các bài học dựa trên LESSON_CONFIG.
+         */
+        async function loadLessonData() {
+            loadingMessage.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            availableLessons = [];
+            
+            // GIỮ LẠI TÙY CHỌN "Đang tải..." TRƯỚC KHI TẢI
+            lessonSelector.innerHTML = '<option value="loading" disabled selected>Đang tải...</option>';
+            
+            let successfulLoads = 0;
+            
+            // Lặp qua cấu hình cố định
+            for (const config of LESSON_CONFIG) {
+                const dataPath = `${BASE_DATA_PATH}${config.filePath}`;
+                
+                try {
+                    const response = await fetch(dataPath);
+                    
+                    if (response.ok) {
+                        const text = await response.text();
+                        const lines = text.trim().split('\n');
+                        
+                        const vocabulary = lines.map(line => {
+                            const parts = line.split('|');
+                            if (parts.length === 3) {
+                                return {
+                                    hanzi: parts[0].trim(),
+                                    pinyin: parts[1].trim(),
+                                    vietnamese: parts[2].trim(),
+                                    // Đường dẫn hình ảnh được xây dựng dựa trên id bài học
+                                    imagePath: `${BASE_DATA_PATH}${config.id}/img/${parts[0].trim()}.jpg` 
+                                };
+                            }
+                            return null;
+                        }).filter(item => item !== null);
+
+                        if (vocabulary.length > 0) {
+                            // Thêm bài học đã tải thành công vào danh sách
+                            availableLessons.push({
+                                id: config.id,
+                                name: `${config.name}`, // Hiển thị số lượng từ
+                                vocabulary: vocabulary // LƯU DỮ LIỆU TỪ VỰNG TẠY ĐÂY
+                            });
+                            successfulLoads++;
+                        }
+                    } else {
+                        // Ghi log cảnh báo nhưng tiếp tục vòng lặp
+                        console.warn(`Không thể tải tệp dữ liệu cho bài học ${config.name} (${dataPath}). Mã lỗi: ${response.status}`);
+                    }
+                } catch (error) {
+                    // Ghi log lỗi kết nối nhưng tiếp tục vòng lặp
+                    console.error(`Lỗi kết nối khi tải dữ liệu cho bài học ${config.name}:`, error.message);
+                }
+            }
+
+            // Xóa tùy chọn "Đang tải..." sau khi hoàn thành
+            lessonSelector.innerHTML = '';
+
+            if (successfulLoads > 0) {
+                // Thêm các bài học đã tải thành công vào selector
+                availableLessons.forEach(lesson => {
+                    const option = document.createElement('option');
+                    // Sử dụng ID duy nhất của bài học làm giá trị
+                    option.value = lesson.id; 
+                    option.textContent = lesson.name;
+                    lessonSelector.appendChild(option);
+                });
+                
+                // Chọn bài học đầu tiên làm mặc định và bắt đầu game
+                lessonSelector.value = availableLessons[0].id;
+                loadingMessage.classList.add('hidden');
+                // Bắt đầu game sau khi tải dữ liệu thành công
+                startGame(); 
+            } else {
+                 errorMessage.textContent = "Không tìm thấy bất kỳ tệp dữ liệu bài học nào có từ vựng. Vui lòng kiểm tra lại LESSON_CONFIG, đường dẫn, và định dạng tệp .txt.";
+                 errorMessage.classList.remove('hidden');
+                 loadingMessage.classList.add('hidden');
+                 // Hiển thị lỗi trên Game Board
+                 gameBoardElement.innerHTML = `<div class="text-center w-full col-span-4 text-red-500 p-8">Lỗi: Không thể tải từ vựng. Vui lòng xem console để biết chi tiết lỗi tải tệp.</div>`;
+            }
+        }
+        
+        /**
+         * Lấy bộ từ vựng cho bài học đã chọn.
+         * @returns {Array} Bộ từ vựng.
+         */
+        function getCurrentVocabulary() {
+            const selectedId = lessonSelector.value;
+            // Trả về mảng từ vựng rỗng nếu không tìm thấy bài học (để tránh lỗi)
+            const lesson = availableLessons.find(l => l.id === selectedId);
+            return lesson ? lesson.vocabulary : [];
+        }
+
+        /**
+         * Lấy ID bài học hiện tại.
+         * @returns {string} ID của bài học đang chọn.
+         */
+        function getCurrentLessonId() {
+            return lessonSelector.value;
+        }
+
+        // --- Audio Logic (MP3 First, then Web Speech API) ---
+        
+        /**
+         * Phát âm dự phòng bằng Web Speech API.
+         * @param {string} text - Văn bản tiếng Trung cần phát âm (Hán tự).
+         */
+        function speakChineseFallback(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Cố gắng tìm giọng nói tiếng Trung
+                const chineseVoice = window.speechSynthesis.getVoices().find(
+                    voice => voice.lang === 'zh-CN' || voice.lang.startsWith('zh-')
+                );
+                
+                if (chineseVoice) {
+                    utterance.voice = chineseVoice;
+                } else {
+                    utterance.lang = 'zh-CN'; 
+                }
+                utterance.rate = 0.9; 
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.warn('Web Speech API không được hỗ trợ trên trình duyệt này.');
+            }
+        }
+
+        /**
+         * Phát âm từ tiếng Trung, ưu tiên MP3, sau đó fallback sang Web Speech API.
+         * @param {string} text - Văn bản tiếng Trung cần phát âm (Hán tự).
+         */
+        function speakChinese(text) {
+            const lessonId = getCurrentLessonId();
+            // Đường dẫn MP3: ./data_imgpractice/{id_bai_hoc}/mp3/{hanzi}.mp3
+            const audioPath = `${BASE_DATA_PATH}${lessonId}/mp3/${text}.mp3`;
+            
+            // 1. Thử chơi MP3
+            const audio = new Audio(audioPath);
+            
+            let hasTriedFallback = false;
+
+            const tryFallback = () => {
+                if (!hasTriedFallback) {
+                    hasTriedFallback = true;
+                    console.warn(`Không tìm thấy hoặc không thể phát tệp MP3 cho "${text}" (${audioPath}). Sử dụng Web Speech API.`);
+                    speakChineseFallback(text);
+                }
+            };
+
+            // Sự kiện lỗi khi tải/phát MP3
+            audio.onerror = () => {
+                tryFallback();
+            };
+
+            // Sự kiện audio sẵn sàng để phát
+            audio.oncanplaythrough = () => {
+                // Nếu MP3 đã sẵn sàng, phát nó
+                audio.play().catch(e => {
+                    // Lỗi phát (ví dụ: trình duyệt chặn autoplay)
+                    console.error(`Lỗi khi cố gắng phát audio MP3: ${e.message}`);
+                    tryFallback();
+                });
+            };
+
+            // Nếu không có phản hồi trong một khoảng thời gian (có thể là lỗi 404 im lặng), fallback.
+            // Điều này là để đề phòng các lỗi mạng hoặc lỗi trình duyệt không kích hoạt onerror.
+            setTimeout(() => {
+                // Kiểm tra nếu audio chưa bắt đầu tải hoặc đã dừng lại
+                if (audio.readyState === 0 || audio.paused) {
+                    tryFallback();
+                }
+            }, 1500);
+        }
+
+        // --- Timer Logic (Giữ nguyên) ---
+        
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function updateTimer() {
+            timerElement.textContent = formatTime(timer);
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            intervalId = setInterval(() => {
+                timer++;
+                updateTimer();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (!isRunning) return;
+            isRunning = false;
+            clearInterval(intervalId);
+        }
+        
+        // --- Game Logic (Cập nhật để chọn ngẫu nhiên) ---
+        
+        /**
+         * Hàm tiện ích để xáo trộn mảng (Fisher-Yates Shuffle).
+         * @param {Array} array - Mảng cần xáo trộn.
+         * @returns {Array} Mảng đã xáo trộn.
+         */
+        function shuffleArray(array) {
+            // Tạo bản sao để không làm thay đổi mảng gốc
+            const shuffled = [...array]; 
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        /**
+         * Xáo trộn các cặp thẻ và chuẩn bị mảng gameBoard.
+         */
+        function initializeBoard() {
+            // Lấy bộ từ vựng hiện tại
+            const vocab = getCurrentVocabulary(); 
+            
+            if (vocab.length === 0) {
+                 // Nếu không có dữ liệu, KHÔNG tạo thẻ.
+                 console.error("Không có từ vựng để tạo thẻ. Dừng khởi tạo board.");
+                 gameBoard = [];
+                 return;
+            }
+            
+            // 1. Xáo trộn toàn bộ bộ từ vựng
+            const shuffledVocab = shuffleArray(vocab);
+            
+            // 2. Lấy 6 cặp ngẫu nhiên đầu tiên
+            const pairsData = shuffledVocab.slice(0, NUM_PAIRS);
+            
+            const matchType = matchTypeSelector.value;
+
+            // Hàm trả về nội dung ghép đôi tùy thuộc vào matchType
+            const getMatchContent = (item, type) => {
+                switch (type) {
+                    case 'pinyin': return item.pinyin;
+                    case 'vietnamese': return item.vietnamese;
+                    case 'image': return item.imagePath;
+                    default: return '';
+                }
+            };
+            
+            // Tạo các cặp thẻ
+            const pairs = pairsData.flatMap((item, index) => [
+                // Thẻ Hán tự (luôn là thẻ gốc)
+                { id: index, content: item.hanzi, type: 'hanzi', originalWord: item.hanzi },
+                // Thẻ ghép đôi (Pinyin, Nghĩa, hoặc Hình ảnh)
+                { id: index, content: getMatchContent(item, matchType), type: matchType, originalWord: item.hanzi }
+            ]);
+
+            // 3. Xáo trộn lần cuối để trộn thẻ Hán tự và thẻ ghép đôi
+            const finalShuffledBoard = shuffleArray(pairs);
+
+            gameBoard = finalShuffledBoard;
+            matchesFound = 0;
+            moves = 0;
+            timer = 0;
+            hintsLeft = MAX_HINTS;
+        }
+
+        /**
+         * Tạo DOM elements cho các thẻ dựa trên mảng gameBoard.
+         */
+        function renderBoard() {
+            // Nếu gameBoard rỗng, không render gì cả
+            if (gameBoard.length === 0) {
+                 gameBoardElement.innerHTML = '';
+                 return;
+            }
+
+            gameBoardElement.innerHTML = '';
+            movesElement.textContent = moves;
+            hintsLeftElement.textContent = hintsLeft;
+            updateTimer();
+            
+            hintButton.disabled = hintsLeft <= 0; 
+
+            gameBoard.forEach((cardData, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.dataset.id = cardData.id;
+                cardElement.dataset.index = index;
+                // Lưu từ gốc (Hán tự) để phát âm, bất kể thẻ là gì
+                cardElement.dataset.originalWord = cardData.originalWord; 
+                cardElement.dataset.type = cardData.type; 
+
+                let contentHTML = '';
+                
+                // Xác định nội dung hiển thị cho mặt trước của thẻ
+                if (cardData.type === 'hanzi') {
+                    // Thẻ Hán tự
+                    contentHTML = `<div class="hanzi">${cardData.content}</div>`;
+                } else if (cardData.type === 'image') {
+                    // Thẻ Hình ảnh: match-image không còn padding trong CSS nữa
+                    contentHTML = `<img src="${cardData.content}" class="match-image" alt="${cardData.originalWord}" onerror="this.onerror=null;this.outerHTML='<div class=\\'match-text\\'>Ảnh không tồn tại</div>';" />`;
+                } else {
+                    // Thẻ Pinyin hoặc Nghĩa (text): match-text không còn padding trong CSS nữa
+                    contentHTML = `<div class="match-text">${cardData.content}</div>`;
+                }
+
+                cardElement.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-back flex justify-center items-center">?</div>
+                        <div class="card-front">${contentHTML}</div>
+                    </div>
+                `;
+
+                cardElement.addEventListener('click', () => flipCard(cardElement));
+                gameBoardElement.appendChild(cardElement);
+            });
+        }
+        
+        /**
+         * Lật thẻ và xử lý logic kết hợp.
+         * @param {HTMLElement} card - Thẻ được nhấp vào.
+         */
+        function flipCard(card) {
+            // Bắt đầu timer ngay khi lượt đi đầu tiên được thực hiện
+            if (matchesFound === 0 && moves === 0 && !hasFlippedCard) {
+                 startTimer();
+            }
+
+            // Nếu bảng bị khóa hoặc thẻ đã khớp hoặc đã được lật, thoát
+            if (lockBoard) return;
+            if (card === firstCard) return; 
+            if (card.classList.contains('matched') || card.classList.contains('flipped')) return;
+
+            card.classList.add('flipped');
+
+            if (!hasFlippedCard) {
+                // Thẻ đầu tiên
+                hasFlippedCard = true;
+                firstCard = card;
+                return;
+            }
+
+            // Thẻ thứ hai
+            secondCard = card;
+            moves++;
+            movesElement.textContent = moves;
+
+            checkForMatch();
+        }
+
+        /**
+         * Kiểm tra xem hai thẻ đã lật có khớp nhau không.
+         */
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.id === secondCard.dataset.id;
+
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        /**
+         * Hai thẻ khớp nhau: Vô hiệu hóa tương tác và thêm class 'matched'.
+         */
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            
+            matchesFound++;
+            
+            // Phát âm từ Hán tự (lấy từ originalWord)
+            speakChinese(firstCard.dataset.originalWord); // Cả hai thẻ đều có originalWord là Hán tự
+
+            checkWinCondition();
+            
+            resetBoard(); 
+        }
+
+        /**
+         * Hai thẻ không khớp: Lật úp lại sau độ trễ.
+         */
+        function unflipCards() {
+            lockBoard = true; 
+            
+            setTimeout(() => {
+                if (firstCard && secondCard) {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                }
+                lockBoard = false; 
+                
+                resetBoard();
+            }, FLIP_DELAY);
+        }
+
+        /**
+         * Reset các biến trạng thái của lượt đi.
+         */
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+            hintButton.disabled = hintsLeft <= 0 || lockBoard; // Cập nhật trạng thái nút
+        }
+        
+        /**
+         * Kiểm tra điều kiện thắng (tất cả các thẻ đã khớp).
+         */
+        function checkWinCondition() {
+            if (matchesFound === NUM_PAIRS) {
+                stopTimer();
+                showModal(moves, timer);
+            }
+        }
+        
+        /**
+         * Xử lý chức năng Gợi ý (Giữ nguyên logic chính).
+         */
+        function useHint() {
+            if (hintsLeft <= 0 || lockBoard || hasFlippedCard) return;
+
+            stopTimer(); 
+            
+            hintsLeft--;
+            hintsLeftElement.textContent = hintsLeft;
+            hintButton.disabled = true;
+            lockBoard = true;
+
+            const unmatchedCards = Array.from(gameBoardElement.querySelectorAll('.card:not(.matched):not(.flipped)'));
+            
+            if (unmatchedCards.length < 2) {
+                lockBoard = false;
+                hintButton.disabled = hintsLeft <= 0;
+                if (matchesFound < NUM_PAIRS) startTimer();
+                return;
+            }
+            
+            // Chọn ngẫu nhiên một thẻ chưa lật để gợi ý
+            const randomIndex = Math.floor(Math.random() * unmatchedCards.length);
+            const card1 = unmatchedCards[randomIndex];
+            const matchingCardId = card1.dataset.id;
+
+            // Tìm thẻ thứ hai khớp với thẻ đầu tiên
+            const card2 = unmatchedCards.find(card => card !== card1 && card.dataset.id === matchingCardId);
+            
+            if (!card2) {
+                lockBoard = false;
+                hintButton.disabled = hintsLeft <= 0;
+                if (matchesFound < NUM_PAIRS) startTimer();
+                return;
+            }
+
+            // Lật thẻ và áp dụng hiệu ứng gợi ý
+            card1.classList.add('flipped', 'hinted', 'disabled');
+            card2.classList.add('flipped', 'hinted', 'disabled');
+
+            // Lật úp lại sau độ trễ và tiếp tục timer
+            setTimeout(() => {
+                card1.classList.remove('flipped', 'hinted', 'disabled');
+                card2.classList.remove('flipped', 'hinted', 'disabled');
+                lockBoard = false;
+                hintButton.disabled = hintsLeft <= 0;
+                if (matchesFound < NUM_PAIRS) startTimer();
+            }, HINT_DURATION);
+        }
+
+
+        /**
+         * Hiển thị modal chúc mừng chiến thắng. (Giữ nguyên)
+         */
+        function showModal(finalMoves, finalTime) {
+            finalMovesElement.textContent = finalMoves;
+            finalTimeElement.textContent = formatTime(finalTime);
+            modalOverlay.classList.remove('hidden');
+        }
+        
+        /**
+         * Bắt đầu trò chơi mới.
+         */
+        function startGame() {
+            const vocab = getCurrentVocabulary(); 
+            
+            if (vocab.length === 0) {
+                 // Nếu không có dữ liệu, hiển thị thông báo lỗi trên Game Board
+                 gameBoardElement.innerHTML = `<div class="text-center w-full col-span-4 text-red-500 p-8">Bài học này không có từ vựng hoặc dữ liệu bị lỗi. Vui lòng chọn bài học khác.</div>`;
+                 stopTimer();
+                 return;
+            }
+            
+            stopTimer(); 
+            modalOverlay.classList.add('hidden');
+            initializeBoard(); 
+            renderBoard();
+            resetBoard(); 
+            
+            timerElement.textContent = formatTime(0);
+        }
+
+        // --- MỚI: Logic Chuyển đổi Chế độ Sáng/Tối ---
+        
+        /**
+         * Cập nhật icon dựa trên trạng thái chế độ tối.
+         * @param {boolean} isDark - True nếu đang ở chế độ tối.
+         */
+        function updateThemeIcons(isDark) {
+            if (isDark) {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        /**
+         * Áp dụng chế độ tối (thêm class "dark" vào thẻ <html>)
+         * @param {boolean} isDark - True để bật chế độ tối, False để bật chế độ sáng.
+         */
+        function applyTheme(isDark) {
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+            updateThemeIcons(isDark);
+        }
+
+        /**
+         * Chuyển đổi giữa chế độ tối và sáng.
+         */
+        function toggleTheme() {
+            const isDark = htmlElement.classList.contains('dark');
+            applyTheme(!isDark);
+        }
+
+        /**
+         * Khởi tạo chế độ sáng/tối khi tải trang.
+         */
+        function initializeTheme() {
+            // 1. Kiểm tra localStorage
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // 2. Quyết định chế độ tối: Dựa trên localStorage, hoặc ưu tiên hệ thống
+            let shouldBeDark;
+            if (savedTheme) {
+                shouldBeDark = savedTheme === 'dark';
+            } else {
+                shouldBeDark = prefersDark;
+            }
+            
+            // 3. Áp dụng
+            applyTheme(shouldBeDark);
+        }
+
+        // --- Initialization ---
+
+        function initializeApp() {
+            // MỚI: Khởi tạo Theme trước khi tải dữ liệu
+            initializeTheme();
+
+            // Tải dữ liệu một lần duy nhất khi DOM đã tải xong
+            loadLessonData();
+            
+            // Gắn các sự kiện Listener 
+            restartButton.addEventListener('click', startGame);
+            modalRestartButton.addEventListener('click', startGame);
+            hintButton.addEventListener('click', useHint);
+            lessonSelector.addEventListener('change', startGame); 
+            matchTypeSelector.addEventListener('change', startGame);
+            
+            // MỚI: Sự kiện cho nút chuyển đổi theme
+            themeToggleButton.addEventListener('click', toggleTheme);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             // Đảm bảo Web Speech API đã tải xong các giọng nói trước khi gọi initializeApp
+             if ('speechSynthesis' in window && !window.speechSynthesis.getVoices().length) {
+                 // Đặt cờ để chỉ gọi initializeApp sau khi giọng nói được tải
+                 window.speechSynthesis.onvoiceschanged = initializeApp;
+             } else {
+                 // Hoặc gọi ngay lập tức nếu giọng nói đã có sẵn
+                 initializeApp();
+             }
+        });
+
+    </script>
+</body>
+</html>
