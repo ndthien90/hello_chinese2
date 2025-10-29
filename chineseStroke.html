@@ -605,7 +605,7 @@
             <div class="characters-section">
                 <h3></h3>
                 <div id="charactersGrid" class="characters-grid">
-                    <div style="color: #666;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>
+                    <div style="color: #666;"></div>
                 </div>
             </div>
 
@@ -798,7 +798,7 @@
                 document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
                 
                 // Dọn dẹp grid chính và ẩn writer (phòng trường hợp đang dùng manual input)
-                document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>';
+                document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;"></div>';
                 document.getElementById('writerSection').classList.add('hidden');
 
                 // 2. Nếu đang click vào 1 từ *KHÁC* (hoặc click lại để mở)
