@@ -961,7 +961,7 @@
                     const writerContainer = writerDiv.parentElement;
                     const containerPadding = parseFloat(getComputedStyle(writerContainer).paddingLeft) + parseFloat(getComputedStyle(writerContainer).paddingRight);
                     let availableWidth = writerContainer.offsetWidth - containerPadding;
-                    writerSize = Math.max(200, Math.min(availableWidth, 250)); // Tối thiểu 240, tối đa 350
+                    writerSize = Math.max(100, Math.min(availableWidth, 150)); // Tối thiểu 240, tối đa 350
                 } else {
                     writerSize = 280; // Desktop
                 }
