@@ -147,7 +147,7 @@
             font-size: 30px;
             color: #ff6b6b;
             margin-right: 10px;
-            font-family: 'Kaiti','SimSun', '宋体', serif;
+            font-family: 'KaiTi','Arial','宋体', sans-serif;
             white-space: nowrap;
         }
         
@@ -288,7 +288,7 @@
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
             position: relative;
             overflow: hidden;
-            font-family: 'Kaiti','SimSun', '宋体', serif;
+            font-family: 'Kaiti', 'Arial','宋体',sans-serif;
         }
 
         .character-item:hover {
@@ -474,43 +474,6 @@
                 overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
             }
             
-            /* NEW: Styles for in-row character grid */
-            .vocab-item {
-                flex-wrap: wrap; /* Allow sub-grid to wrap underneath */
-            }
-
-            .char-sub-grid {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                width: 100%;
-                padding: 10px 0 5px 0; /* Padding top/bottom */
-                margin-top: 8px;
-                border-top: 1px solid #eee;
-            }
-
-            .sub-char-item {
-                width: 45px; /* Smaller than main grid items */
-                height: 45px;
-                background: #667eea;
-                color: white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 28px;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                font-family: 'Kaiti','SimSun', '宋体', serif;
-            }
-
-            .sub-char-item.active,
-            .sub-char-item:hover {
-                background: #ff6b6b;
-                transform: scale(1.05);
-            }
-            /* END NEW */
-            
             .manual-input-section h3 {
                 font-size: 0.9em;
             }
@@ -567,12 +530,11 @@
             <h2 class="desktop-title">Luyện viết chữ Hán</h2>
             
             <div class="lesson-selector">
-                <label for="lessonDropdown">Chọn Bài Học:</label>
+                <label for="lessonDropdown"></label>
                 <select id="lessonDropdown" onchange="loadLesson()">
-                    <option value="bai1">Bài 1: Chào hỏi</option>
-                    <option value="bai2">Bài 2: Gia đình</option>
-                    <option value="bai3">Bài 3: Ăn uống</option>
-                    <option value="bai4">Bài 4: Số đếm</option>
+                    <option value="bai1">Bài 1: 老师您好！</option>
+                    <option value="bai2">Bài 2: 谢谢你！</option>
+                    <option value="bai3">Bài 3: 你叫什么名字？</option>
                 </select>
             </div>
 
@@ -620,10 +582,10 @@
                     <div id="quizFeedback" class="quiz-feedback hidden"></div>
                 </div>
                 <div class="controls">
-                    <button class="control-btn" onclick="animateCharacter()">🎬 Xem nét</button>
-                    <button class="control-btn" onclick="showCharacter()">👁️ Hiện chữ</button>
-                    <button class="control-btn" onclick="hideCharacter()">🙈 Ẩn chữ</button>
-                    <button class="control-btn" onclick="startQuiz()">✍️ Bắt đầu viết</button>
+                    <button class="control-btn" onclick="animateCharacter()">🎬 </button>
+                    <button class="control-btn" onclick="showCharacter()">👁️ </button>
+                    <button class="control-btn" onclick="hideCharacter()">🙈 </button>
+                    <button class="control-btn" onclick="startQuiz()">✍️ </button>
                     <button class="control-btn" onclick="cancelQuiz()" id="cancelBtn" class="hidden">❌ Hủy luyện</button>
                 </div>
             </div>
@@ -749,7 +711,7 @@
             const dropdown = document.getElementById('lessonDropdown');
             const lessonKey = dropdown.value;
             const vocabListDiv = document.getElementById('vocabularyList');
-            vocabListDiv.innerHTML = '<p style="text-align: center; color: #667eea; margin-top: 30px;">Đang tải...</p>';
+            vocabListDiv.innerHTML = '<p style="text-align: center; color: #667eea; margin-top: 30px;"></p>';
             
             try {
                 const lessonData = await fetchLessonData(lessonKey);
@@ -807,78 +769,30 @@
             }
         }
 
-        /*
         function selectWord(vocabItem, element) {
             speakWord(vocabItem.word);
             processCharacterSelection(vocabItem.word, vocabItem.pinyin);
-
-            // 3. Highlight item đang chọn
             document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
             element.classList.add('active');
-            
-            // 4. Clear manual input
             document.getElementById('textInput').value = ''; 
         }
-        */
 
-        // SỬA ĐỔI: Cập nhật logic `selectWord` cho mobile
-        function selectWord(vocabItem, element) {
-            speakWord(vocabItem.word);
-            document.getElementById('textInput').value = ''; 
-
-            // Check if we are clicking the *same* item that is *already* active.
-            const isAlreadyActive = element.classList.contains('active');
-
-            // --- Mobile Logic (Injects sub-grid) ---
-            if (window.innerWidth <= 768) {
-                // Always clear all highlights and sub-grids first.
-                document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
-                document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
-
-                // Clear the *main* character grid and hide writer
-                document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>';
-                document.getElementById('writerSection').classList.add('hidden');
-                
-                // If it was *not* the active one, or if we are just re-opening it
-                if (!isAlreadyActive) {
-                    element.classList.add('active');
-                    displayCharactersInRow(vocabItem, element); // Call the new function
-                }
-                // If it *was* active, the clear-up logic above already closed it. Toggling is complete.
-
-            // --- Desktop Logic (Uses main grid) ---
-            } else {
-                document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
-                element.classList.add('active');
-                // Desktop vẫn dùng logic cũ, điền vào grid chính
-                processCharacterSelection(vocabItem.word, vocabItem.pinyin);
-            }
-        }
-
-        // SỬA ĐỔI: Cập nhật `parseText` để dọn dẹp sub-grids
         function parseText() {
             const textInput = document.getElementById('textInput');
             const word = textInput.value.trim();
 
-            // Clear active state in lesson list AND any open sub-grids
             document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove('active'));
-            document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
-
 
             if (!word) {
-                // SỬA LỖI: Sử dụng 'mistake' thay vì 'error'
-                showQuizFeedback('Vui lòng nhập chữ Hán hoặc từ để phân tích.', 'mistake'); 
+                showQuizFeedback('Vui lòng nhập chữ Hán hoặc từ để phân tích.', 'mistake');
                 resetWritingArea(false); 
                 return;
             }
             
-            // This function populates the *main* grid, which is correct for manual input
             processCharacterSelection(word, 'tự nhập');
             hideQuizFeedback();
         }
 
-        // === START SỬA LỖI: THÊM LẠI HÀM displayCharacters ===
-        // Hiển thị Hán tự đơn trong grid (cho desktop hoặc manual input)
         function displayCharacters(charList) {
             const grid = document.getElementById('charactersGrid');
             grid.innerHTML = '';
@@ -896,14 +810,11 @@
                 grid.appendChild(charElement);
             });
         }
-        // === END SỬA LỖI ===
-
-        // === START SỬA LỖI: SỬA LẠI HÀM initializeSVG ===
+        
         // Tạo SVG với background grid
         function initializeSVG(containerId, size) {
             const container = document.getElementById(containerId);
-            // Luôn dọn dẹp SVG cũ
-            container.innerHTML = '';
+            container.innerHTML = ''; // Luôn dọn dẹp SVG cũ
             
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             const svgId = containerId + '-svg';
@@ -914,10 +825,8 @@
             
             // Add grid lines
             const lines = [
-                // Diagonal lines
                 { x1: 0, y1: 0, x2: size, y2: size, stroke: '#EEE', opacity: 0.5 },
                 { x1: size, y1: 0, x2: 0, y2: size, stroke: '#EEE', opacity: 0.5 },
-                // Center lines
                 { x1: size/2, y1: 0, x2: size/2, y2: size, stroke: '#DDD', opacity: 1 },
                 { x1: 0, y1: size/2, x2: size, y2: size/2, stroke: '#DDD', opacity: 1 }
             ];
@@ -937,21 +846,13 @@
             container.appendChild(svg);
             return svgId;
         }
-        // === END SỬA LỖI ===
 
-        // SỬA ĐỔI: Cập nhật `showCharacterWriter` để highlight sub-items
         // Show character writer
         async function showCharacterWriter(character, element) {
-            // Update active character styling
-            // SỬA ĐỔI: Dọn dẹp *cả hai* loại item
             document.querySelectorAll('.character-item').forEach(item => {
                 item.classList.remove('active');
             });
-            document.querySelectorAll('.sub-char-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            element.classList.add('active'); // Thêm active cho element được click
+            element.classList.add('active');
 
             const writerSection = document.getElementById('writerSection');
             writerSection.classList.remove('hidden');
@@ -1017,35 +918,6 @@
             }
         }
         
-        /**
-         * NEW: Hiển thị Hán tự đơn bên trong .vocab-item (chỉ cho mobile)
-         */
-        function displayCharactersInRow(vocabItem, element) {
-            const characters = vocabItem.word.split('').filter(char => 
-                /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(char)
-            );
-
-            if (characters.length === 0) return;
-
-            const subGrid = document.createElement('div');
-            subGrid.className = 'char-sub-grid';
-
-            characters.forEach(char => {
-                const charBtn = document.createElement('div');
-                charBtn.className = 'sub-char-item';
-                charBtn.textContent = char;
-                charBtn.onclick = (e) => {
-                    e.stopPropagation(); // Ngăn .vocab-item's click
-                    
-                    // Gọi showCharacterWriter, truyền 'charBtn' làm element
-                    showCharacterWriter(char, charBtn); 
-                };
-                subGrid.appendChild(charBtn);
-            });
-
-            element.appendChild(subGrid);
-        }
-
         // Create HanziWriter instance
         async function createWriter(svgId, character, size) {
             return new Promise((resolve, reject) => {
@@ -1197,9 +1069,7 @@
                     isInitialized = false; 
                     
                     setTimeout(() => {
-                        // SỬA LỖI: Tìm activeElement ở cả hai nơi
-                        const activeElement = document.querySelector('.character-item.active') || document.querySelector('.sub-char-item.active');
-                        
+                        const activeElement = document.querySelector('.character-item.active');
                         if (activeElement) {
                             // Gọi lại showCharacterWriter để nó tự tính toán lại size
                             showCharacterWriter(currentCharacter, activeElement); 
@@ -1212,4 +1082,6 @@
     </script>
 </body>
 </html>
+
+
 
