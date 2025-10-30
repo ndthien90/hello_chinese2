@@ -281,7 +281,7 @@
                  <!-- Cập nhật màu nền và text cho selector trong dark mode -->
                 <select id="match-type-selector" class="bg-gray-100 border border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 rounded-lg p-1.5 shadow-sm text-sm cursor-pointer w-full transition-colors duration-300">
                     <option value="pinyin">Pinyin</option>
-                    <option value="vietnamese">Nghĩa (Tiếng Việt)</option>
+                    <option value="vietnamese">Nghĩa</option>
                     <option value="image">Hình ảnh</option>
                 </select>
             </div>
@@ -290,7 +290,7 @@
         <div class="flex justify-center mb-4 space-x-3">
              <!-- Nút Gợi ý mới -->
             <button id="hint-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-lg shadow transition disabled:opacity-50 disabled:cursor-not-allowed">
-                Gợi ý (<span id="hints-left">3</span>)
+                Gợi ý (<span id="hints-left"></span>)
             </button>
             <!-- Nút Chơi lại -->
             <button id="restart-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow transition">
@@ -339,7 +339,7 @@
         const POINTS_PER_MISS = -5;  // ĐIỂM MỚI: Trừ 1 điểm khi ghép đôi sai
         const FLIP_DELAY = 1000; // 1 giây
         const HINT_DURATION = 1000; // 1 giây hiển thị gợi ý
-        const MAX_HINTS = 6; // Số lượt gợi ý tối đa
+        const MAX_HINTS = 2; // Số lượt gợi ý tối đa
         const BASE_DATA_PATH = './data_imgpractice/';
         
         // --- Cấu hình các Bài học (Người dùng có thể tự chỉnh sửa) ---
