@@ -581,14 +581,14 @@
 
         .flashcard-nav {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around; /* Đổi thành space-around */
             align-items: center;
             width: 100%;
             max-width: 500px;
         }
 
         .flashcard-nav-btn {
-            padding: 12px 25px;
+            padding: 12px 20px; /* Giảm padding một chút */
             font-size: 1rem;
             font-weight: bold;
             color: #667eea;
@@ -597,6 +597,8 @@
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
+            flex-basis: 30%; /* Phân bố không gian */
+            text-align: center;
         }
         
         .flashcard-nav-btn:hover {
@@ -607,6 +609,15 @@
             background: #ccc;
             color: #888;
             cursor: not-allowed;
+        }
+        
+        /* Nút Ngẫu nhiên */
+        #flashcardRandomBtn {
+            background: #ff6b6b;
+            color: white;
+        }
+        #flashcardRandomBtn:hover {
+            background: #e65a5a;
         }
         /* === END: FLASHCARD STYLES === */
 
@@ -701,6 +712,8 @@
         
         <div class="flashcard-nav">
             <button id="flashcardPrevBtn" class="flashcard-nav-btn" onclick="prevFlashcard()">Trước</button>
+            <!-- NEW: Nút Ngẫu nhiên -->
+            <button id="flashcardRandomBtn" class="flashcard-nav-btn" onclick="randomFlashcard()">Ngẫu nhiên</button>
             <button id="flashcardNextBtn" class="flashcard-nav-btn" onclick="nextFlashcard()">Sau</button>
         </div>
     </div>
@@ -1163,7 +1176,7 @@
             
             currentFlashcardIndex = 0;
             document.getElementById('flashcardModal').style.display = 'flex';
-            showFlashcard(currentFlashcardIndex);
+            showFlashcard(currentFlashcardIndex, true); // Thêm true để đọc thẻ đầu tiên
         }
         
         function closeFlashcardMode() {
@@ -1174,7 +1187,7 @@
             document.getElementById('flashcard').classList.toggle('is-flipped');
         }
         
-        function showFlashcard(index) {
+        function showFlashcard(index, autoSpeak = false) {
             // Đảm bảo index nằm trong giới hạn
             if (index < 0 || index >= lessonFlashcards.length) return;
             
@@ -1195,14 +1208,27 @@
             // Cập nhật trạng thái nút
             document.getElementById('flashcardPrevBtn').disabled = (index === 0);
             document.getElementById('flashcardNextBtn').disabled = (index === lessonFlashcards.length - 1);
+            
+            // Tự động đọc
+            if (autoSpeak) {
+                speakWord(cardData.word);
+            }
         }
         
         function nextFlashcard() {
-            showFlashcard(currentFlashcardIndex + 1);
+            showFlashcard(currentFlashcardIndex + 1, true); // Đọc thẻ tiếp theo
         }
         
         function prevFlashcard() {
-            showFlashcard(currentFlashcardIndex - 1);
+            showFlashcard(currentFlashcardIndex - 1, true); // Đọc thẻ trước đó
+        }
+        
+        // NEW: Hàm chọn thẻ ngẫu nhiên
+        function randomFlashcard() {
+            if (!lessonFlashcards || lessonFlashcards.length === 0) return;
+            
+            const newIndex = Math.floor(Math.random() * lessonFlashcards.length);
+            showFlashcard(newIndex, true); // Hiển thị và đọc thẻ ngẫu nhiên
         }
         
         // === END: FLASHCARD FUNCTIONS ===
