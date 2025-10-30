@@ -789,7 +789,7 @@
             <div class="characters-section">
                 <h3></h3>
                 <div id="charactersGrid" class="characters-grid">
-                    <div style="color: #666;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>
+                    <div style="color: #666;"></div>
                 </div>
             </div>
 
@@ -1003,7 +1003,7 @@
 
             if (window.innerWidth <= 768) {
                 document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
-                document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>';
+                document.getElementById('charactersGrid').innerHTML = '<div style="color: #666; width: 100%;"></div>';
                 document.getElementById('writerSection').classList.add('hidden');
 
                 if (!isAlreadyActive) {
@@ -1163,7 +1163,7 @@
              const textInput = document.getElementById('textInput');
              if (clearInput && textInput) { textInput.value = ''; }
              const charactersGrid = document.getElementById('charactersGrid');
-             if (charactersGrid) charactersGrid.innerHTML = '<div style="color: #666; width: 100%;">Chọn từ vựng hoặc nhập từ để xem Hán tự đơn.</div>';
+             if (charactersGrid) charactersGrid.innerHTML = '<div style="color: #666; width: 100%;"></div>';
              const writerSection = document.getElementById('writerSection');
              if (writerSection) writerSection.classList.add('hidden');
              isInitialized = false;
