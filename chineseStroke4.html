@@ -1197,12 +1197,12 @@
             hideQuizFeedback();
             document.getElementById('cancelBtn').classList.remove('hidden');
             currentWriter.quiz({
-                onCorrectStroke: (d) => showQuizFeedback(`Tuyệt vời! Nét ${d.strokeNum + 1} chính xác! Còn ${d.strokesRemaining} nét.`, 'correct'),
-                onMistake: (d) => showQuizFeedback(`Sai nét, hãy thử lại! (Nét ${d.strokeNum + 1}, sai ${d.mistakesOnStroke} lần)`, 'mistake'),
+                //onCorrectStroke: (d) => showQuizFeedback(`Tuyệt vời! Nét ${d.strokeNum + 1} chính xác! Còn ${d.strokesRemaining} nét.`, 'correct'),
+                //onMistake: (d) => showQuizFeedback(`Sai nét, hãy thử lại! (Nét ${d.strokeNum + 1}, sai ${d.mistakesOnStroke} lần)`, 'mistake'),
                 onComplete: (d) => {
                     isQuizMode = false;
                     document.getElementById('cancelBtn').classList.add('hidden');
-                    showQuizFeedback(`🎉 Hoàn thành Hán tự "${d.character}"! Tổng lỗi sai: ${d.totalMistakes}.`, 'complete');
+                    //showQuizFeedback(`🎉 Hoàn thành Hán tự "${d.character}"! Tổng lỗi sai: ${d.totalMistakes}.`, 'complete');
                 },
                 showHintAfterMisses: 3, highlightOnComplete: true
             });
