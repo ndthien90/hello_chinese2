@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth"> <!-- BẮT ĐẦU: Không có class 'dark' ban đầu -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Viết Chữ Hán (Tailwind)</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải Hanzi Writer -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    
+    <!-- Cấu hình Tailwind (Tùy chọn) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Bật chế độ 'class'
+            theme: {
+                extend: {
+                    fontFamily: {
+                        // Thêm font Kaiti vào danh sách font-['Kaiti',_sans-serif]
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        kaiti: ['Kaiti', 'Arial', '宋体', 'sans-serif'],
+                    },
+                    // Thêm các thuộc tính cho flashcard 3D
+                    transitionDuration: {
+                        '600': '600ms',
+                    },
+                    transformStyle: { // Yêu cầu plugin, nhưng có thể dùng arbitrary value
+                        'preserve-3d': 'preserve-3d',
+                    },
+                    backfaceVisibility: { // Yêu cầu plugin, nhưng có thể dùng arbitrary value
+                        'hidden': 'hidden',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 
+      Style tối giản cho các hiệu ứng không có trong Tailwind
+      (hoặc khó dùng với arbitrary values)
+    -->
+    <style>
+        /* Mặc dù Tailwind có `transform-style-preserve-3d` và `backface-hidden`,
+          việc đảm bảo chúng hoạt động với CDN có thể không ổn định.
+          Sử dụng arbitrary values [property:value] trực tiếp trong HTML.
+        */
+        
+        /* Đặt font-family Inter làm mặc định */
+        body {
+            font-family: 'Inter', 'system-ui', sans-serif;
+        }
+
+        /* Tùy chỉnh thanh cuộn (Tùy chọn, không bắt buộc)
+          Sử dụng CSS thuần túy vì plugin scrollbar của Tailwind không có sẵn qua CDN
+        */
+        .vocabulary-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .vocabulary-list::-webkit-scrollbar-thumb {
+            background-color: #a5b4fc; /* indigo-300 */
+            border-radius: 3px;
+        }
+        .dark .vocabulary-list::-webkit-scrollbar-thumb {
+            background-color: #6366f1; /* indigo-500 */
+        }
+        
+        /* Sửa lỗi placeholder cho Hán tự (trước đó dùng style*="...")
+          Giờ đây chúng ta có thể nhắm mục tiêu tốt hơn
+        */
+        .placeholder-text {
+            color: #9ca3af; /* gray-400 */
+            width: 100%;
+        }
+        .dark .placeholder-text {
+            color: #6b7280; /* gray-500 */
+        }
+        .loading-text {
+             color: #6366f1; /* indigo-500 */
+             text-align: center;
+             margin-top: 30px;
+        }
+        .dark .loading-text {
+            color: #a5b4fc; /* indigo-300 */
+        }
+
+        /* THÊM MỚI: Đảm bảo các thuộc tính 3D cho Flashcard hoạt động */
+        .flashcard-container {
+            perspective: 1000px;
+        }
+        .flashcard {
+            transform-style: preserve-3d;
+            /* THÊM MỚI: Chuyển transition vào CSS */
+            transition: transform 0.6s;
+        }
+        .flashcard-face {
+            /* THÊM MỚI: Đảm bảo các thuộc tính này được áp dụng */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* --- */
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden; /* Tương thích Safari */
+        }
+        
+        /* THÊM MỚI: Định nghĩa xoay cho mặt sau */
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+
+        /* THÊM MỚI: Lớp kích hoạt lật thẻ */
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+    </style>
+</head>
+<!-- 
+  Nền gradient cho body
+  font-sans: Sử dụng font Inter đã định nghĩa
+  transition-colors: Thêm hiệu ứng chuyển màu mượt mà
+-->
+<body class="bg-gradient-to-br from-indigo-500 to-purple-700 dark:from-gray-900 dark:to-black min-h-screen p-0 md:p-2.5 flex flex-col justify-start items-center transition-colors duration-300">
+
+    <!-- 
+      Mobile Sticky Header
+      md:hidden - Ẩn trên desktop (từ breakpoint 'md' trở lên)
+      flex - Hiển thị trên mobile
+    -->
+    <div class="flex md:hidden sticky top-0 left-0 w-full bg-gray-100 dark:bg-gray-800 p-3 md:px-4 px-3.5 border-b border-gray-200 dark:border-gray-700 z-50 shadow-md justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Luyện viết chữ Hán</h2>
+        <!-- Nút chuyển theme (Mobile) -->
+        <button id="themeToggleBtnMobile" class="theme-toggle-btn bg-transparent dark:bg-transparent text-gray-800 dark:text-gray-100 border-none rounded-full w-9 h-9 text-2xl cursor-pointer transition-all duration-300 flex-shrink-0 flex items-center justify-center">🌙</button>
+    </div>
+
+    <!-- 
+      Container chính
+      flex-col-reverse: Xếp sidebar bên dưới main content trên mobile
+      md:flex-row: Quay lại layout sidebar/main content trên desktop
+      rounded-none shadow-none: Full-screen trên mobile
+      md:rounded-2xl md:shadow-2xl: Bo góc và đổ bóng trên desktop
+    -->
+    <div class="container w-full max-w-6xl mx-auto bg-white dark:bg-gray-900 rounded-none shadow-none md:rounded-2xl md:shadow-2xl overflow-hidden flex min-h-[95vh] transition-colors duration-300 flex-col-reverse md:flex-row">
+        
+        <!-- START: Sidebar Navigation -->
+        <!--
+          w-full md:w-[300px]: Full-width trên mobile, 300px trên desktop
+          max-h-[45vh] md:max-h-none: Giới hạn chiều cao trên mobile
+        -->
+        <div class="sidebar w-full md:w-[300px] bg-gray-50 dark:bg-gray-800 p-3 md:p-5 border-t md:border-t-0 md:border-r border-gray-200 dark:border-gray-700 flex-shrink-0 flex flex-col md:h-[95vh] h-auto max-h-[45vh] md:max-h-none transition-colors duration-300">
+            
+            <!-- 
+              Sidebar Header (Desktop)
+              hidden md:flex: Ẩn trên mobile, hiển thị trên desktop
+            -->
+            <div class="sidebar-header hidden md:flex justify-between items-center mb-4 border-b-2 border-gray-300 dark:border-gray-600 pb-2.5">
+                <h2 class="desktop-title text-2xl font-semibold text-gray-800 dark:text-gray-100">Luyện viết chữ Hán</h2>
+                <!-- Nút chuyển theme (Desktop) -->
+                <button id="themeToggleBtnDesktop" class="theme-toggle-btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-full w-10 h-10 text-xl cursor-pointer transition-all duration-300 flex-shrink-0 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600">🌙</button>
+            </div>
+            
+            <div class="lesson-selector mb-3 md:mb-5">
+                <label for="lessonDropdown" class="hidden">Chọn bài</label>
+                <!-- 
+                  lesson-controls
+                  flex md:block: Xếp hàng ngang trên mobile, xếp khối trên desktop
+                -->
+                <div class="lesson-controls flex md:block gap-1.5 items-center">
+                    <select id="lessonDropdown" onchange="loadLesson()" class="w-full flex-grow p-2.5 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 appearance-none cursor-pointer transition-colors duration-300 focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none">
+                        <option value="bai1">Bài 1: 老师您好！</option>
+                        <option value="bai2">Bài 2: 谢谢你！</option>
+                        <option value="bai3">Bài 3: 你叫什么名字？</option>
+                    </select>
+                    
+                    <!-- 
+                      Nút Flashcard & Quiz
+                      basis-1/4: Chiếm 1/4 chiều rộng trên mobile
+                      md:w-full: Full-width trên desktop
+                    -->
+                    <button class="flashcard-btn w-full md:w-full flex-shrink-0 basis-1/4 md:basis-auto text-center p-2.5 text-sm md:text-base font-bold text-white border-none rounded-lg cursor-pointer md:mt-2.5 transition-colors duration-300 bg-red-500 hover:bg-red-600" onclick="startFlashcardMode()">📚Học tập</button>
+                    <button class="quiz-btn w-full md:w-full flex-shrink-0 basis-1/4 md:basis-auto text-center p-2.5 text-sm md:text-base font-bold text-white border-none rounded-lg cursor-pointer md:mt-2.5 transition-colors duration-300 bg-emerald-500 hover:bg-emerald-600" onclick="startQuizMode()">📋Kiểm tra</button>
+                </div>
+            </div>
+
+            <!-- 
+              Danh sách từ vựng
+              Sử dụng class 'vocabulary-list' để style thanh cuộn (xem <style> ở trên)
+            -->
+            <div class="vocabulary-list flex-grow overflow-y-auto pr-1.5" id="vocabularyList">
+                <p class="loading-text">
+                    Đang tải từ vựng...
+                </p>
+            </div>
+        </div>
+        <!-- END: Sidebar Navigation -->
+
+        <!-- START: Main Content -->
+        <div class="main-content flex-grow p-3 md:p-5 flex flex-col h-auto md:h-[95vh] overflow-y-auto">
+            
+            <div class="manual-input-section mb-5 p-4 bg-indigo-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2.5"></h3>
+                <!-- 
+                  input-group
+                  flex-col md:flex-row: Xếp chồng trên mobile, hàng ngang trên desktop
+                -->
+                <div class="input-group flex gap-2.5 flex-col md:flex-row">
+                    <input type="text" id="textInput" placeholder="Nhập chữ Hán, từ, hoặc câu để luyện viết..." class="flex-grow p-2.5 px-4 text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg transition-colors duration-300 placeholder-gray-500 dark:placeholder-gray-400 focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-700" />
+                    <!-- 
+                      Nút Phân tích
+                      Sử dụng base-class 'control-btn' và các lớp tùy chỉnh
+                    -->
+                    <button class="control-btn analyze-btn border-red-500 text-red-500 dark:border-red-400 dark:text-red-400 p-2.5 px-5 text-sm w-full md:w-auto hover:bg-red-500 dark:hover:bg-red-400 hover:text-white dark:hover:text-gray-900 py-2 px-4 border-2 rounded-full cursor-pointer font-bold transition-all duration-300 text-xs md:text-sm whitespace-nowrap" onclick="parseText()">Phân tích</button>
+                </div>
+            </div>
+
+            <div class="characters-section p-0 mb-5">
+                <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2.5"></h3>
+                <div id="charactersGrid" class="characters-grid flex gap-2.5 justify-start flex-wrap">
+                    <div class="placeholder-text"></div>
+                </div>
+            </div>
+
+            <!--
+              Khu vực viết
+              'hidden' - Lớp 'hidden' của Tailwind (display: none) được bật/tắt bằng JS
+            -->
+            <div id="writerSection" class="writer-section text-center p-3 md:p-4 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-400 ease-in-out relative rounded-2xl mt-auto hidden">
+                <div class="writer-container inline-block p-2.5 bg-white dark:bg-gray-900 rounded-2xl shadow-xl my-2.5 mx-0 max-w-full">
+                    <div id="writer" class="mx-auto max-w-full flex justify-center items-center"></div>
+                    <!-- 'hidden' được bật/tắt bằng JS -->
+                    <div id="loadingMessage" class="loading text-center p-4 text-indigo-600 dark:text-indigo-400 font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 rounded-lg shadow-lg z-10 min-w-[120px] hidden">Đang tải...</div>
+                    <!-- 'hidden' được bật/tắt bằng JS. Các lớp màu được thêm bằng JS -->
+                    <div id="quizFeedback" class="quiz-feedback mt-4 p-2.5 rounded-lg font-bold text-sm hidden"></div>
+                </div>
+                <div class="controls mt-4 flex gap-2 justify-center flex-wrap">
+                    <!-- Base class 'control-btn' được áp dụng cho tất cả -->
+                    <button class="control-btn py-2 px-4 border-2 border-indigo-500 dark:border-indigo-400 bg-white dark:bg-gray-800 text-indigo-500 dark:text-indigo-400 rounded-full cursor-pointer font-bold transition-all duration-300 text-xs md:text-sm whitespace-nowrap hover:bg-indigo-500 dark:hover:bg-indigo-400 hover:text-white dark:hover:text-gray-900" onclick="animateCharacter()">🎬</button>
+                    <button class="control-btn py-2 px-4 border-2 border-indigo-500 dark:border-indigo-400 bg-white dark:bg-gray-800 text-indigo-500 dark:text-indigo-400 rounded-full cursor-pointer font-bold transition-all duration-300 text-xs md:text-sm whitespace-nowrap hover:bg-indigo-500 dark:hover:bg-indigo-400 hover:text-white dark:hover:text-gray-900" onclick="showCharacter()">👁️</button>
+                    <button class="control-btn py-2 px-4 border-2 border-indigo-500 dark:border-indigo-400 bg-white dark:bg-gray-800 text-indigo-500 dark:text-indigo-400 rounded-full cursor-pointer font-bold transition-all duration-300 text-xs md:text-sm whitespace-nowrap hover:bg-indigo-500 dark:hover:bg-indigo-400 hover:text-white dark:hover:text-gray-900" onclick="hideCharacter()">🙈</button>
+                    <button class="control-btn py-2 px-4 border-2 border-indigo-500 dark:border-indigo-400 bg-white dark:bg-gray-800 text-indigo-500 dark:text-indigo-400 rounded-full cursor-pointer font-bold transition-all duration-300 text-xs md:text-sm whitespace-nowrap hover:bg-indigo-500 dark:hover:bg-indigo-400 hover:text-white dark:hover:text-gray-900" onclick="startQuiz()">✍️ </button>
+                    <button class="control-btn py-2 px-4 border-2 border-indigo-500 dark:border-indigo-400 bg-white dark:bg-gray-800 text-indigo-500 dark:text-indigo-400 rounded-full cursor-pointer font-bold transition-all duration-300 text-xs md:text-sm whitespace-nowrap hover:bg-indigo-500 dark:hover:bg-indigo-400 hover:text-white dark:hover:text-gray-900 hidden" onclick="cancelQuiz()" id="cancelBtn">❌ Hủy luyện</button>
+                </div>
+            </div>
+        </div>
+        <!-- END: Main Content -->
+
+    </div>
+    
+    <!-- === START: FLASHCARD MODAL === -->
+    <!-- 'hidden' thay vì 'style="display: none;"' -->
+    <div id="flashcardModal" class="flashcard-modal fixed top-0 left-0 w-full h-[100dvh] bg-black/80 dark:bg-black/85 backdrop-blur-sm z-[200] flex flex-col justify-center items-center p-2.5 hidden">
+        <button class="modal-close-btn absolute top-4 right-4 text-4xl text-white dark:text-gray-200 bg-transparent border-none cursor-pointer leading-none" onclick="closeFlashcardMode()">&times;</button>
+        
+        <div id="flashcardCounter" class="flashcard-counter text-white dark:text-gray-100 text-lg mb-5">Thẻ 1 / 10</div>
+        
+        <!-- THAY ĐỔI: Xóa [perspective:1000px] -->
+        <div class="flashcard-container w-full max-w-lg mb-5">
+            <!-- 
+              Lớp 'is-flipped' đã bị loại bỏ. 
+              JS sẽ thêm/xóa lớp 'rotate-y-180' của Tailwind.
+            -->
+            <!-- THAY ĐỔI: Xóa [transform-style:preserve-3d] -->
+            <!-- THAY ĐỔI: Xóa transition-transform duration-600 -->
+            <div id="flashcard" class="flashcard w-full aspect-video relative cursor-pointer" onclick="flipFlashcard()">
+                <!-- Mặt trước -->
+                <!-- THAY ĐỔI: Xóa [backface-visibility:hidden] -->
+                <div class="flashcard-face flashcard-front absolute w-full h-full flex flex-col justify-center items-center bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 overflow-y-auto">
+                    <div id="flashcardWord" class="flashcard-word text-6xl sm:text-9xl text-red-500 dark:text-red-400 font-kaiti">你好</div>
+                </div>
+                <!-- Mặt sau -->
+                <!-- THAY ĐỔI: Xóa [backface-visibility:hidden] -->
+                <!-- THAY ĐỔI: Xóa rotate-y-180 -->
+                <div class="flashcard-face flashcard-back absolute w-full h-full flex flex-col justify-center items-center bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 overflow-y-auto gap-4">
+                    <div id="flashcardPinyin" class="flashcard-pinyin text-3xl sm:text-4xl text-purple-600 dark:text-purple-400 italic">nǐ hǎo</div>
+                    <div id="flashcardMeaning" class="flashcard-meaning text-2xl sm:text-3xl text-gray-800 dark:text-gray-100 text-center">Xin chào</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flashcard-nav flex justify-around items-center w-full max-w-lg">
+            <!-- 
+              Nút điều hướng flashcard
+              'disabled:' - Style của Tailwind cho trạng thái disabled
+            -->
+            <button id="flashcardPrevBtn" class="flashcard-nav-btn py-3 px-5 text-base font-bold text-indigo-600 dark:text-indigo-300 bg-white dark:bg-gray-700 border border-indigo-400 dark:border-indigo-500 rounded-2xl cursor-pointer transition-all duration-300 basis-[30%] text-center hover:bg-indigo-50 dark:hover:bg-gray-600 disabled:bg-gray-300 dark:disabled:bg-gray-500 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed" onclick="prevFlashcard()">Trước</button>
+            <!-- 
+              !bg-red-500 - '!' để ưu tiên (override) lớp base
+            -->
+            <button id="flashcardRandomBtn" class="flashcard-nav-btn py-3 px-5 text-base font-bold rounded-2xl cursor-pointer transition-all duration-300 basis-[30%] text-center hover:bg-indigo-50 dark:hover:bg-gray-600 disabled:bg-gray-300 dark:disabled:bg-gray-500 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed !bg-red-500 !text-white !border-red-500 hover:!bg-red-600" onclick="randomFlashcard()">Ngẫu nhiên</button>
+            <button id="flashcardNextBtn" class="flashcard-nav-btn py-3 px-5 text-base font-bold text-indigo-600 dark:text-indigo-300 bg-white dark:bg-gray-700 border border-indigo-400 dark:border-indigo-500 rounded-2xl cursor-pointer transition-all duration-300 basis-[30%] text-center hover:bg-indigo-50 dark:hover:bg-gray-600 disabled:bg-gray-300 dark:disabled:bg-gray-500 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:cursor-not-allowed" onclick="nextFlashcard()">Sau</button>
+        </div>
+    </div>
+    <!-- === END: FLASHCARD MODAL === -->
+
+    <!-- === START: QUIZ MODAL === -->
+    <div id="quizModal" class="quiz-modal fixed top-0 left-0 w-full h-[100dvh] bg-gray-100 dark:bg-gray-900 z-[200] flex flex-col justify-start items-center p-2.5 pt-16 hidden">
+        <!-- Nút đóng '!' để ưu tiên màu -->
+        <button class="modal-close-btn absolute top-4 right-4 text-4xl bg-transparent border-none cursor-pointer leading-none !text-gray-500 dark:!text-gray-400" onclick="closeQuizMode()">&times;</button>
+        
+        <div class="quiz-container w-full max-w-3xl flex flex-col flex-grow">
+            <!-- Phần hiển thị câu hỏi -->
+            <div id="quizQuestionArea">
+                <div class="quiz-progress w-full h-2.5 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden mb-2.5">
+                    <div id="quizProgressBar" class="w-0 h-full bg-emerald-500 transition-all duration-300 ease-linear"></div>
+                </div>
+                <div id="quizCounter" class="text-sm font-bold text-gray-600 dark:text-gray-400 mb-5 text-center">Câu 1 / 10</div>
+                <div id="quizQuestionWord" class="text-6xl sm:text-7xl text-red-500 dark:text-red-400 font-kaiti text-center mb-1.5 bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg">你好</div>
+                <div id="quizQuestionPinyin" class="quiz-question-pinyin text-xl sm:text-2xl text-purple-600 dark:text-purple-400 italic text-center mb-5">nǐ hǎo</div>
+                
+                <!-- 
+                  Lưới đáp án
+                  grid-cols-1 md:grid-cols-2: 1 cột trên mobile, 2 cột trên desktop
+                -->
+                <div id="quizAnswerOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                    <!-- Các nút đáp án sẽ được chèn vào đây bởi JS -->
+                </div>
+            </div>
+            
+            <!-- 
+              Phần hiển thị kết quả
+              'hidden' được bật/tắt bằng JS
+            -->
+            <div id="quizResultScreen" class="flex-col justify-center items-center text-center p-5 flex-grow hidden">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">Hoàn thành!</h2>
+                <div id="quizResultScore" class="text-xl text-gray-600 dark:text-gray-400 mb-8">Bạn đã trả lời đúng 8 / 10 câu!</div>
+                <button class="quiz-restart-btn py-4 px-8 text-lg font-bold text-white bg-indigo-600 dark:bg-indigo-500 border-none rounded-full cursor-pointer hover:bg-indigo-700" onclick="startQuizMode()">Làm lại</button>
+            </div>
+        </div>
+    </div>
+    <!-- === END: QUIZ MODAL === -->
+
+
+    <script>
+        // Global state variables
+        let currentWriter = null;
+        let currentCharacter = '';
+        let characters = [];
+        let isQuizMode = false;
+        let isInitialized = false;
+        let allLessonsData = {};
+
+        // Flashcard state
+        let lessonFlashcards = [];
+        let currentFlashcardIndex = 0;
+        
+        // === NEW: Quiz state ===
+        let quizQuestions = [];
+        let currentQuizQuestionIndex = 0;
+        let quizScore = 0;
+        let quizInProgress = false;
+        
+        // === START: LOGIC CHẾ ĐỘ SÁNG/TỐI (ĐÃ CẬP NHẬT CHO TAILWIND) ===
+        const themeToggleBtnDesktop = document.getElementById('themeToggleBtnDesktop');
+        const themeToggleBtnMobile = document.getElementById('themeToggleBtnMobile');
+        const htmlElement = document.documentElement; // Dùng thẻ <html>
+
+        /**
+         * Đặt theme cho ứng dụng (light hoặc dark)
+         * @param {'light' | 'dark'} theme
+         */
+        function setAppTheme(theme) {
+            // THAY ĐỔI: Hardcode màu cho HanziWriter
+            let newStrokeColor;
+            
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark');
+                if (themeToggleBtnDesktop) themeToggleBtnDesktop.textContent = '☀️';
+                if (themeToggleBtnMobile) themeToggleBtnMobile.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+                // Màu stroke cho dark mode (từ CSS gốc)
+                newStrokeColor = '#fcf803';
+            } else {
+                htmlElement.classList.remove('dark');
+                if (themeToggleBtnDesktop) themeToggleBtnDesktop.textContent = '🌙';
+                if (themeToggleBtnMobile) themeToggleBtnMobile.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+                // Màu stroke cho light mode (từ CSS gốc)
+                newStrokeColor = '#555';
+            }
+            
+            // Cập nhật màu của HanziWriter nếu nó đang tồn tại
+            if (currentWriter) {
+                try {
+                    currentWriter.updateColor('strokeColor', newStrokeColor);
+                } catch (e) {
+                    console.error("Lỗi cập nhật màu HanziWriter:", e);
+                }
+            }
+        }
+
+        /**
+         * Chuyển đổi giữa 2 chế độ
+         */
+        function toggleTheme() {
+            const currentTheme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+            setAppTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        /**
+         * Áp dụng theme ban đầu khi tải trang (ưu tiên localStorage, sau đó đến hệ thống)
+         */
+        function applyInitialTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme) {
+                setAppTheme(savedTheme);
+            } else if (prefersDark) {
+                setAppTheme('dark');
+            } else {
+                setAppTheme('light'); // Mặc định là sáng
+            }
+        }
+        // === END: LOGIC CHẾ ĐỘ SÁNG/TỐI ===
+
+
+        async function fetchLessonData(lessonKey) {
+            // Giả sử các tệp data nằm trong một thư mục 'data_chineseStroke'
+            // Bạn cần đảm bảo đường dẫn này đúng
+            const filePath = `data_chineseStroke/${lessonKey}.txt`;
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error(`Không thể tải tệp: ${response.statusText}`);
+                const textData = await response.text();
+                const parsedData = textData.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && line.includes('|'))
+                    .map(line => {
+                        const parts = line.split('|');
+                        if (parts.length >= 3) { 
+                            return { word: parts[0], pinyin: parts[1], meaning: parts[2] };
+                        }
+                        return null;
+                    })
+                    .filter(item => item !== null);
+                return parsedData;
+            } catch (error) {
+                console.error(`Lỗi khi tải bài học ${lessonKey}:`, error);
+                // THAY ĐỔI: Xóa bỏ dữ liệu cứng, chỉ trả về mảng rỗng nếu có lỗi
+                 return [];
+            }
+        }
+        
+        // --- Speech Synthesis ---
+        const synth = window.speechSynthesis;
+        let chineseVoice = null;
+        function getChineseVoice() {
+            if (chineseVoice) return;
+            const voices = synth.getVoices();
+            chineseVoice = voices.find(v => v.lang.startsWith('zh-') || v.lang.startsWith('cmn-')) ||
+                           voices.find(v => v.name.includes('Chinese') || v.name.includes('Mandarin'));
+            if (!chineseVoice) console.warn("Không tìm thấy giọng tiếng Trung.");
+        }
+        if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = getChineseVoice;
+        getChineseVoice();
+
+        function speakWord(text) {
+            if (!synth) return;
+            synth.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN'; 
+            if (chineseVoice) utterance.voice = chineseVoice;
+            utterance.rate = 0.9;
+            synth.speak(utterance);
+        }
+
+        // --- Core Functions ---
+        window.onload = function() {
+            console.log('App initialized');
+            
+            // --- Gắn sự kiện và áp dụng theme ---
+            if (themeToggleBtnDesktop) themeToggleBtnDesktop.addEventListener('click', toggleTheme);
+            if (themeToggleBtnMobile) themeToggleBtnMobile.addEventListener('click', toggleTheme);
+            applyInitialTheme(); // Áp dụng theme ngay khi DOM sẵn sàng
+            
+            loadLesson();
+            document.getElementById('textInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') parseText();
+            });
+        };
+        
+        async function loadLesson() {
+            const dropdown = document.getElementById('lessonDropdown');
+            const lessonKey = dropdown.value;
+            const vocabListDiv = document.getElementById('vocabularyList');
+            vocabListDiv.innerHTML = '<p class="loading-text">Đang tải...</p>';
+            
+            try {
+                const lessonData = await fetchLessonData(lessonKey);
+                allLessonsData[lessonKey] = lessonData; // Cache dữ liệu
+                displayVocabulary(lessonData);
+                resetWritingArea(); 
+            } catch (error) {
+                vocabListDiv.innerHTML = `<p class="text-red-500">Lỗi tải dữ liệu: ${error.message}</p>`;
+            }
+        }
+
+        function displayVocabulary(vocabList) {
+            const vocabListDiv = document.getElementById('vocabularyList');
+            vocabListDiv.innerHTML = ''; 
+            if (vocabList.length === 0) {
+                vocabListDiv.innerHTML = '<p class="placeholder-text text-center mt-8">Bài học này chưa có từ vựng.</p>';
+                return;
+            }
+            vocabList.forEach(item => {
+                const itemElement = document.createElement('div');
+                // THAY ĐỔI: Sử dụng lớp Tailwind
+                itemElement.className = 'vocab-item flex items-center p-2 md:p-2.5 mb-2 bg-white dark:bg-gray-700 rounded-xl shadow-md cursor-pointer transition-all duration-300 flex-wrap hover:bg-indigo-50 dark:hover:bg-gray-600 hover:-translate-y-0.5 hover:shadow-lg';
+                itemElement.dataset.word = item.word;
+                itemElement.onclick = () => selectWord(item, itemElement);
+                
+                // THAY ĐỔI: Sử dụng lớp Tailwind
+                itemElement.innerHTML = `
+                    <div class="vocab-word text-3xl md:text-3xl text-red-500 dark:text-red-400 mr-2.5 font-kaiti whitespace-nowrap">${item.word}</div>
+                    <div class="vocab-details flex-grow flex flex-wrap items-baseline">
+                        <div class="vocab-pinyin text-lg md:text-lg text-purple-600 dark:text-purple-400 italic mr-2">${item.pinyin}</div>
+                        <div class="vocab-meaning text-lg md:text-lg text-gray-600 dark:text-gray-400 mt-0.5 md:mt-0">${item.meaning}</div>
+                    </div>
+                `;
+                vocabListDiv.appendChild(itemElement);
+            });
+        }
+        
+        function processCharacterSelection(word, pinyin) {
+            characters = word.split('').filter(char => /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(char));
+            displayCharacters(characters);
+            if (characters.length > 0) {
+                const firstElement = document.querySelector(`#charactersGrid .character-item:first-child`);
+                if (firstElement) showCharacterWriter(characters[0], firstElement);
+            } else {
+                resetWritingArea(false); 
+                document.getElementById('charactersGrid').innerHTML = '<div class="placeholder-text">Không tìm thấy Hán tự để luyện viết.</div>';
+            }
+        }
+
+        function selectWord(vocabItem, element) {
+            speakWord(vocabItem.word);
+            document.getElementById('textInput').value = ''; 
+            
+            // THAY ĐỔI: Sử dụng các lớp Tailwind cho trạng thái 'active'
+            const activeClasses = ['bg-red-100', 'border', 'border-red-400', 'dark:bg-red-900', 'dark:border-red-600'];
+            const isAlreadyActive = element.classList.contains('bg-red-100'); // Chỉ cần kiểm tra một lớp
+            
+            // Xóa 'active' khỏi tất cả
+            document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove(...activeClasses));
+            // --- Kết thúc thay đổi ---
+
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
+                document.getElementById('charactersGrid').innerHTML = '<div class="placeholder-text"></div>';
+                document.getElementById('writerSection').classList.add('hidden');
+
+                if (!isAlreadyActive) {
+                    // THAY ĐỔI: Thêm các lớp 'active'
+                    element.classList.add(...activeClasses);
+                    const chars = vocabItem.word.split('').filter(char => /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/.test(char));
+                    if (chars.length === 1) {
+                        showCharacterWriter(chars[0], null); 
+                    } else if (chars.length > 1) {
+                        displayCharactersInRow(chars, element);
+                        const firstSubCharElement = element.querySelector('.sub-char-item');
+                        if (firstSubCharElement) showCharacterWriter(chars[0], firstSubCharElement);
+                    }
+                }
+            } else {
+                 if (!isAlreadyActive) {
+                    element.classList.add(...activeClasses);
+                } else {
+                    // Nếu click lại, chỉ cần bỏ active, không cần xử lý thêm
+                    resetWritingArea(false);
+                    return;
+                }
+                processCharacterSelection(vocabItem.word, vocabItem.pinyin);
+            }
+        }
+
+        function parseText() {
+            // THAY ĐỔI: Xóa lớp 'active' của Tailwind
+            const activeClasses = ['bg-red-100', 'border', 'border-red-400', 'dark:bg-red-900', 'dark:border-red-600'];
+            document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove(...activeClasses));
+            // --- Kết thúc thay đổi ---
+            
+            document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
+            const word = document.getElementById('textInput').value.trim();
+            if (!word) {
+                showQuizFeedback('Vui lòng nhập chữ Hán hoặc từ để phân tích.', 'mistake');
+                resetWritingArea(false); 
+                return;
+            }
+            processCharacterSelection(word, 'tự nhập');
+            hideQuizFeedback();
+        }
+
+        function displayCharacters(charList) {
+            const grid = document.getElementById('charactersGrid');
+            grid.innerHTML = '';
+            if (charList.length === 0) {
+                grid.innerHTML = '<div class="placeholder-text">Từ vựng này không chứa Hán tự.</div>';
+                return;
+            }
+            charList.forEach(char => {
+                const charElement = document.createElement('div');
+                // THAY ĐỔI: Sử dụng lớp Tailwind
+                charElement.className = "character-item w-14 h-14 md:w-[70px] md:h-[70px] bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-3xl md:text-4xl rounded-xl cursor-pointer transition-all duration-300 shadow-lg hover:-translate-y-1 hover:scale-105 hover:shadow-indigo-300 dark:hover:shadow-indigo-800 relative overflow-hidden font-kaiti";
+                charElement.textContent = char;
+                charElement.onclick = () => showCharacterWriter(char, charElement);
+                grid.appendChild(charElement);
+            });
+        }
+        
+        function displayCharactersInRow(charList, element) {
+            if (charList.length === 0) return;
+            const subGrid = document.createElement('div');
+            // THAY ĐỔI: Sử dụng lớp Tailwind
+            subGrid.className = 'char-sub-grid flex flex-wrap gap-2 w-full p-2.5 mt-2 border-t border-gray-200 dark:border-gray-700';
+            charList.forEach(char => {
+                const charBtn = document.createElement('div');
+                // THAY ĐỔI: Sử dụng lớp Tailwind
+                charBtn.className = "sub-char-item w-11 h-11 bg-indigo-500 text-white flex items-center justify-center text-2xl rounded-lg cursor-pointer transition-all duration-300 font-kaiti hover:bg-red-500 hover:scale-105";
+                charBtn.textContent = char;
+                charBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    showCharacterWriter(char, charBtn);
+                };
+                subGrid.appendChild(charBtn);
+            });
+            element.appendChild(subGrid);
+        }
+
+        // THAY ĐỔI: Cập nhật hàm để dùng lớp Tailwind cho SVG
+        function initializeSVG(containerId, size) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            const svgId = containerId + '-svg';
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+            svg.setAttribute('id', svgId);
+            // THAY ĐỔI: Sử dụng lớp Tailwind
+            svg.setAttribute('class', 'border border-gray-300 dark:border-gray-600 transition-colors duration-300');
+            
+            const lines = [
+                { x1: 0, y1: 0, x2: size, y2: size }, { x1: size, y1: 0, x2: 0, y2: size },
+                { x1: size/2, y1: 0, x2: size/2, y2: size }, { x1: 0, y1: size/2, x2: size, y2: size/2 }
+            ];
+            lines.forEach((lineData, index) => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', lineData.x1); line.setAttribute('y1', lineData.y1);
+                line.setAttribute('x2', lineData.x2); line.setAttribute('y2', lineData.y2);
+                // THAY ĐỔI: Sử dụng lớp Tailwind
+                const lineClass = index < 2 ? 'stroke-gray-200 dark:stroke-gray-700' : 'stroke-gray-300 dark:stroke-gray-600';
+                line.setAttribute('class', `${lineClass} transition-colors duration-300`);
+                line.setAttribute('stroke-dasharray', '5,5');
+                svg.appendChild(line);
+            });
+            container.appendChild(svg);
+            return svgId;
+        }
+
+        async function showCharacterWriter(character, element) {
+            // THAY ĐỔI: Lớp 'active' cho Hán tự
+            const activeClasses = ['!bg-gradient-to-br', '!from-red-500', '!to-yellow-500', 'shadow-lg', 'shadow-red-300', 'dark:shadow-red-800'];
+            const subActiveClasses = ['!bg-red-500', 'scale-105'];
+            
+            document.querySelectorAll('.character-item, .sub-char-item').forEach(item => {
+                item.classList.remove(...activeClasses, ...subActiveClasses);
+            });
+            if (element) {
+                // Áp dụng đúng lớp active
+                const classes = element.classList.contains('sub-char-item') ? subActiveClasses : activeClasses;
+                element.classList.add(...classes);
+            }
+            // --- Kết thúc thay đổi ---
+
+            if (!character) {
+                document.getElementById('writerSection').classList.add('hidden');
+                return;
+            }
+
+            const writerSection = document.getElementById('writerSection');
+            writerSection.classList.remove('hidden');
+
+            if (window.innerWidth <= 768) {
+                setTimeout(() => writerSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
+            }
+
+            hideQuizFeedback();
+            document.getElementById('cancelBtn').classList.add('hidden');
+            isQuizMode = false;
+            currentCharacter = character;
+
+            try {
+                showLoadingMessage();
+                const writerDiv = document.getElementById('writer');
+                let writerSize;
+                if (window.innerWidth <= 768) {
+                    const writerContainer = writerDiv.parentElement;
+                    const containerPadding = parseFloat(getComputedStyle(writerContainer).paddingLeft) * 2;
+                    let availableWidth = writerContainer.offsetWidth - containerPadding;
+                    writerSize = Math.max(240, Math.min(availableWidth, 350));
+                } else {
+                    writerSize = 280;
+                }
+                writerDiv.style.width = `${writerSize}px`;
+                writerDiv.style.height = `${writerSize}px`;
+                const svgId = initializeSVG('writer', writerSize);
+                if (currentWriter) currentWriter = null; 
+                currentWriter = await createWriter(svgId, character, writerSize);
+                isInitialized = true; 
+                hideLoadingMessage();
+                setTimeout(() => {
+                    if (currentWriter && !isQuizMode) currentWriter.animateCharacter();
+                }, 200);
+            } catch (error) {
+                console.error('Error handling character:', error);
+                hideLoadingMessage();
+                showQuizFeedback(`Lỗi khi tải Hán tự "${character}".`, 'mistake');
+            }
+        }
+
+        // THAY ĐỔI: Cập nhật hàm để dùng màu động (hardcoded)
+        async function createWriter(svgId, character, size) {
+            return new Promise((resolve, reject) => {
+                // Xác định màu stroke dựa trên theme hiện tại
+                const isDark = document.documentElement.classList.contains('dark');
+                // Hardcode màu (từ CSS gốc)
+                const strokeColor = isDark ? '#fcf803' : '#555';
+
+                const writer = HanziWriter.create(svgId, character, {
+                    width: size, height: size, padding: 20,
+                    strokeColor: strokeColor, // DÙNG MÀU ĐỘNG
+                    strokeAnimationSpeed: 1, delayBetweenStrokes: 500,
+                    showOutline: true, showCharacter: true,
+                    onLoadCharDataSuccess: (data) => resolve(writer),
+                    onLoadCharDataError: (reason) => reject(new Error(`HanziWriter failed to load ${character}`))
+                });
+            });
+        }
+        
+        function resetWritingArea(clearInput = true) {
+             const textInput = document.getElementById('textInput');
+             if (clearInput && textInput) { textInput.value = ''; }
+             const charactersGrid = document.getElementById('charactersGrid');
+             if (charactersGrid) charactersGrid.innerHTML = '<div class="placeholder-text"></div>';
+             const writerSection = document.getElementById('writerSection');
+             if (writerSection) writerSection.classList.add('hidden');
+             isInitialized = false;
+             currentCharacter = '';
+             
+             // THAY ĐỔI: Xóa lớp active của Tailwind
+             const activeClasses = ['bg-red-100', 'border', 'border-red-400', 'dark:bg-red-900', 'dark:border-red-600'];
+             document.querySelectorAll('.vocab-item').forEach(item => item.classList.remove(...activeClasses));
+             // --- Kết thúc thay đổi ---
+
+             document.querySelectorAll('.char-sub-grid').forEach(grid => grid.remove());
+             const writerDiv = document.getElementById('writer');
+             if (writerDiv) writerDiv.innerHTML = '';
+             currentWriter = null;
+             hideQuizFeedback();
+        }
+
+        // --- Control Functions ---
+        function animateCharacter() {
+            if (currentWriter) {
+                currentWriter.animateCharacter();
+                hideQuizFeedback();
+            } else {
+                showQuizFeedback('Vui lòng chọn một Hán tự để luyện viết trước.', 'mistake');
+            }
+        }
+        function showCharacter() { if (currentWriter) currentWriter.showCharacter(); hideQuizFeedback(); }
+        function hideCharacter() { if (currentWriter) currentWriter.hideCharacter(); hideQuizFeedback(); }
+        
+        function startQuiz() {
+            if (!currentWriter) {
+                showQuizFeedback('Vui lòng chọn một Hán tự để luyện viết trước.', 'mistake'); return;
+            }
+            isQuizMode = true;
+            hideQuizFeedback();
+            document.getElementById('cancelBtn').classList.remove('hidden');
+            currentWriter.quiz({
+                onComplete: (d) => {
+                    isQuizMode = false;
+                    document.getElementById('cancelBtn').classList.add('hidden');
+                },
+                showHintAfterMisses: 3, highlightOnComplete: true
+            });
+        }
+        function cancelQuiz() {
+            if (currentWriter && isQuizMode) {
+                currentWriter.cancelQuiz();
+                isQuizMode = false;
+                document.getElementById('cancelBtn').classList.add('hidden');
+                hideQuizFeedback();
+            }
+        }
+
+        // --- UI Helper Functions ---
+        function showLoadingMessage() { document.getElementById('loadingMessage').classList.remove('hidden'); }
+        function hideLoadingMessage() { document.getElementById('loadingMessage').classList.add('hidden'); }
+        
+        // THAY ĐỔI: Sử dụng lớp Tailwind cho feedback
+        function showQuizFeedback(message, type) {
+            const feedback = document.getElementById('quizFeedback');
+            if (!feedback) return;
+            
+            // Đặt lại các lớp base
+            feedback.className = 'quiz-feedback mt-4 p-2.5 rounded-lg font-bold text-sm';
+            feedback.textContent = message;
+
+            if (type === 'correct') {
+                feedback.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-300', 'dark:bg-green-900', 'dark:text-green-200', 'dark:border-green-700');
+            } else if (type === 'mistake') {
+                feedback.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-300', 'dark:bg-red-900', 'dark:text-red-200', 'dark:border-red-700');
+            } else if (type === 'complete') {
+                 feedback.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-300', 'dark:bg-blue-900', 'dark:text-blue-200', 'dark:border-blue-700');
+            }
+
+            feedback.classList.remove('hidden');
+            
+            if (type === 'correct') {
+                setTimeout(() => {
+                    if (feedback.textContent === message) hideQuizFeedback();
+                }, 1500);
+            }
+        }
+        function hideQuizFeedback() {
+            const feedback = document.getElementById('quizFeedback');
+            if (feedback) { feedback.classList.add('hidden'); }
+        }
+
+        // --- Resize Handler ---
+        window.addEventListener('resize', function() {
+            if (currentWriter && currentCharacter && isInitialized) {
+                const writerDiv = document.getElementById('writer');
+                let newSize;
+                if (window.innerWidth <= 768) {
+                    const writerContainer = writerDiv.parentElement;
+                    const containerPadding = parseFloat(getComputedStyle(writerContainer).paddingLeft) * 2;
+                    let availableWidth = writerContainer.offsetWidth - containerPadding;
+                    newSize = Math.max(240, Math.min(availableWidth, 350));
+                } else {
+                    newSize = 280;
+                }
+                const currentSVG = document.querySelector('#writer-svg');
+                if (currentSVG && currentSVG.getAttribute('width') !== newSize.toString()) {
+                    isInitialized = false;
+                    setTimeout(() => {
+                        // THAY ĐỔI: Tìm Hán tự active bằng lớp Tailwind
+                        const activeHanzi = document.querySelector('.character-item.\\!bg-gradient-to-br') || 
+                                              document.querySelector('.sub-char-item.\\!bg-red-500');
+                        const activeVocab = document.querySelector('.vocab-item.bg-red-100');
+                        // --- Kết thúc thay đổi ---
+
+                        if (activeHanzi) {
+                            showCharacterWriter(currentCharacter, activeHanzi);
+                        } else if (activeVocab) {
+                            showCharacterWriter(currentCharacter, null);
+                        }
+                    }, 100);
+                }
+            }
+        });
+        
+        // === START: FLASHCARD FUNCTIONS ===
+        
+        function startFlashcardMode() {
+            const lessonKey = document.getElementById('lessonDropdown').value;
+            const vocabData = allLessonsData[lessonKey]; // Lấy dữ liệu gốc
+            
+            if (!vocabData || vocabData.length === 0) {
+                alert("Không có từ vựng nào để học."); return;
+            }
+
+            // THAY ĐỔI: Tạo một bản sao của mảng
+            // Điều này đảm bảo mảng gốc trong cache (allLessonsData) không bị thay đổi
+            // và danh sách sẽ theo đúng thứ tự
+            lessonFlashcards = [...vocabData]; 
+            
+            // ĐÃ XÓA: Vòng lặp for xáo trộn mảng (Fisher-Yates shuffle) đã bị xóa khỏi đây
+            
+            currentFlashcardIndex = 0; // Luôn bắt đầu từ 0
+            
+            // THAY ĐỔI: Sử dụng 'hidden'
+            document.getElementById('flashcardModal').classList.remove('hidden');
+            document.getElementById('flashcardModal').classList.add('flex'); // Đảm bảo nó là flex
+            showFlashcard(currentFlashcardIndex, true);
+        }
+        
+        function closeFlashcardMode() {
+            // THAY ĐỔI: Sử dụng 'hidden'
+            document.getElementById('flashcardModal').classList.add('hidden');
+            document.getElementById('flashcardModal').classList.remove('flex');
+        }
+        
+        function flipFlashcard() {
+            // THAY ĐỔI: Bật/tắt lớp 'is-flipped' (CSS) thay vì 'rotate-y-180' (Tailwind)
+            document.getElementById('flashcard').classList.toggle('is-flipped');
+        }
+        
+        function showFlashcard(index, autoSpeak = false) {
+            if (index < 0 || index >= lessonFlashcards.length) return;
+            currentFlashcardIndex = index;
+            const cardData = lessonFlashcards[index];
+            document.getElementById('flashcardWord').textContent = cardData.word;
+            document.getElementById('flashcardPinyin').textContent = cardData.pinyin;
+            document.getElementById('flashcardMeaning').textContent = cardData.meaning;
+            document.getElementById('flashcardCounter').textContent = `Thẻ ${index + 1} / ${lessonFlashcards.length}`;
+            // THAY ĐỔI: Đảm bảo thẻ luôn lật về mặt trước (dùng lớp .is-flipped)
+            document.getElementById('flashcard').classList.remove('is-flipped');
+            
+            document.getElementById('flashcardPrevBtn').disabled = (index === 0);
+            document.getElementById('flashcardNextBtn').disabled = (index === lessonFlashcards.length - 1);
+            if (autoSpeak) speakWord(cardData.word);
+        }
+        
+        function nextFlashcard() { showFlashcard(currentFlashcardIndex + 1, true); }
+        function prevFlashcard() { showFlashcard(currentFlashcardIndex - 1, true); }
+        function randomFlashcard() {
+            if (!lessonFlashcards || lessonFlashcards.length === 0) return;
+            const newIndex = Math.floor(Math.random() * lessonFlashcards.length);
+            showFlashcard(newIndex, true);
+        }
+        
+        // === END: FLASHCARD FUNCTIONS ===
+
+        // === START: QUIZ FUNCTIONS ===
+        
+        function startQuizMode() {
+            const lessonKey = document.getElementById('lessonDropdown').value;
+            const allVocab = allLessonsData[lessonKey];
+            
+            if (!allVocab || allVocab.length < 4) {
+                alert("Cần ít nhất 4 từ vựng trong bài học này để bắt đầu kiểm tra.");
+                return;
+            }
+            
+            // THAY ĐỔI: Sử dụng 'hidden' và 'flex'
+            const quizModal = document.getElementById('quizModal');
+            quizModal.classList.remove('hidden');
+            quizModal.classList.add('flex');
+            
+            document.getElementById('quizResultScreen').classList.add('hidden');
+            document.getElementById('quizResultScreen').classList.remove('flex');
+            
+            document.getElementById('quizQuestionArea').classList.remove('hidden');
+            // --- Kết thúc thay đổi ---
+            
+            quizQuestions = generateQuizQuestions(allVocab);
+            currentQuizQuestionIndex = 0;
+            quizScore = 0;
+            showQuizQuestion(currentQuizQuestionIndex);
+        }
+        
+        function closeQuizMode() {
+            // THAY ĐỔI: Sử dụng 'hidden'
+            const quizModal = document.getElementById('quizModal');
+            quizModal.classList.add('hidden');
+            quizModal.classList.remove('flex');
+        }
+        
+        function generateQuizQuestions(allVocab) {
+            let shuffledVocab = [...allVocab].sort(() => 0.5 - Math.random());
+            let numQuestions = Math.min(10, shuffledVocab.length);
+            let questions = [];
+
+            for (let i = 0; i < numQuestions; i++) {
+                const correctWord = shuffledVocab[i];
+                let distractors = allVocab
+                    .filter(v => v.word !== correctWord.word)
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 3);
+                let options = [correctWord, ...distractors];
+                let shuffledOptions = options.sort(() => 0.5 - Math.random());
+                
+                questions.push({
+                    word: correctWord.word,
+                    pinyin: correctWord.pinyin,
+                    options: shuffledOptions.map(o => o.meaning),
+                    correctAnswer: correctWord.meaning
+                });
+            }
+            return questions;
+        }
+
+        function showQuizQuestion(index) {
+            if (index >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            quizInProgress = true;
+            const question = quizQuestions[index];
+            
+            const progress = ((index + 1) / quizQuestions.length) * 100;
+            document.getElementById('quizProgressBar').style.width = `${progress}%`;
+            document.getElementById('quizCounter').textContent = `Câu ${index + 1} / ${quizQuestions.length}`;
+            document.getElementById('quizQuestionWord').textContent = question.word;
+            document.getElementById('quizQuestionPinyin').textContent = question.pinyin;
+            speakWord(question.word);
+            
+            const optionsContainer = document.getElementById('quizAnswerOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach(optionText => {
+                const optionButton = document.createElement('button');
+                // THAY ĐỔI: Sử dụng lớp Tailwind
+                optionButton.className = 'quiz-option w-full p-5 text-lg text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-xl cursor-pointer transition-all duration-200 ease-in-out text-left hover:border-indigo-500 dark:hover:border-indigo-400 hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-gray-200 dark:disabled:bg-gray-700';
+                optionButton.textContent = optionText;
+                optionButton.onclick = () => handleQuizAnswer(optionText, question.correctAnswer, optionButton);
+                optionsContainer.appendChild(optionButton);
+            });
+        }
+        
+        // THAY ĐỔI: Sử dụng lớp Tailwind cho feedback
+        function handleQuizAnswer(selectedAnswer, correctAnswer, clickedButton) {
+            if (!quizInProgress) return;
+            quizInProgress = false;
+            
+            const allOptions = document.querySelectorAll('#quizAnswerOptions .quiz-option');
+            allOptions.forEach(btn => btn.disabled = true);
+            
+            // Định nghĩa các lớp feedback
+            const correctClasses = ['!border-green-500', '!bg-green-100', '!text-green-800', 'dark:!bg-green-900', 'dark:!text-green-200', 'font-bold'];
+            const incorrectClasses = ['!border-red-500', '!bg-red-100', '!text-red-800', 'dark:!bg-red-900', 'dark:!text-red-200', 'font-bold'];
+
+            if (selectedAnswer === correctAnswer) {
+                clickedButton.classList.add(...correctClasses);
+                quizScore++;
+            } else {
+                clickedButton.classList.add(...incorrectClasses);
+                // Tìm và highlight đáp án đúng
+                allOptions.forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.add(...correctClasses);
+                    }
+                });
+            }
+            
+            setTimeout(() => {
+                currentQuizQuestionIndex++;
+                showQuizQuestion(currentQuizQuestionIndex);
+            }, 1000);
+        }
+        
+        function showQuizResults() {
+            // THAY ĐỔI: Sử dụng 'hidden' và 'flex'
+            document.getElementById('quizQuestionArea').classList.add('hidden');
+            
+            const resultScreen = document.getElementById('quizResultScreen');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex'); // Đảm bảo nó là flex
+            // --- Kết thúc thay đổi ---
+            
+            document.getElementById('quizResultScore').textContent = 
+                `Bạn đã trả lời đúng ${quizScore} / ${quizQuestions.length} câu!`;
+        }
+
+        // === END: QUIZ FUNCTIONS ===
+    </script>
+</body>
+</html>
+
+
+
+
