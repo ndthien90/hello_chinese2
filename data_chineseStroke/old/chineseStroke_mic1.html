@@ -422,14 +422,32 @@
 
         #textInput:focus { border-color: var(--border-input-focus); outline: none; } /* THAY ĐỔI */
 
-        .analyze-btn {
-            border-color: var(--text-accent3); /* THAY ĐỔI */
-            color: var(--text-accent3); /* THAY ĐỔI */
-            padding: 10px 20px;
-            font-size: 14px;
+        /* === XÓA CSS CỦA NÚT ANALYZE === */
+        /* .analyze-btn { ... } (đã xóa) */
+        /* .analyze-btn:hover { ... } (đã xóa) */
+        
+        /* === BỔ SUNG: CSS CHO NÚT GHI ÂM === */
+        #voiceInputBtn {
+            flex-shrink: 0; /* Ngăn nút bị co lại */
+            padding: 10px 12px;
+            font-size: 1.2rem;
+            line-height: 1.2; /* Căn giữa icon */
+        }
+        
+        /* Hiệu ứng khi đang ghi âm */
+        #voiceInputBtn.is-listening {
+            background-color: var(--text-accent3); /* Dùng màu đỏ nhấn */
+            color: var(--text-on-accent);
+            border-color: var(--text-accent3);
+            animation: pulse 1.5s infinite;
         }
 
-        .analyze-btn:hover { background: var(--text-accent3); color: var(--text-on-accent); } /* THAY ĐỔI */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+        /* === KẾT THÚC BỔ SUNG === */
         
         .selected-word-display { display:none; }
         
@@ -689,8 +707,27 @@
             }
             
             .manual-input-section h3 { font-size: 0.9em; }
-            .input-group { flex-direction: column; }
-            .analyze-btn { width: 100%; padding: 12px; }
+            
+            /* === THAY ĐỔI: Sửa layout input-group trên mobile === */
+            .input-group { 
+                flex-direction: row; /* Giữ là row */
+                gap: 5px; /* Giảm gap */
+            }
+            
+            #textInput {
+                flex-grow: 1; /* Cho phép input co giãn */
+                min-width: 0; /* Cho phép co lại */
+            }
+            
+            /* === XÓA CSS NÚT ANALYZE TRÊN MOBILE === */
+            /* .analyze-btn { ... } (đã xóa) */
+            
+            #voiceInputBtn {
+                padding: 10px 12px;
+                flex-shrink: 0;
+            }
+            /* === KẾT THÚC THAY ĐỔI MOBILE === */
+
 
             .character-item {
                 width: 55px;
@@ -1018,7 +1055,10 @@
                 <h3></h3>
                 <div class="input-group">
                     <input type="text" id="textInput" placeholder="Nhập chữ Hán, từ, hoặc câu để luyện viết..." />
-                    <button class="control-btn analyze-btn" onclick="parseText()">Phân tích</button>
+                    <!-- BỔ SUNG NÚT MICRO -->
+                    <button id="voiceInputBtn" class="control-btn" onclick="startSpeechRecognition()" title="Nhập bằng giọng nói (Tiếng Trung)">🎤</button>
+                    <!-- === XÓA NÚT PHÂN TÍCH === -->
+                    <!-- <button class="control-btn analyze-btn" onclick="parseText()">Phân tích</button> -->
                 </div>
             </div>
 
@@ -1112,6 +1152,10 @@
         let isQuizMode = false;
         let isInitialized = false;
         let allLessonsData = {};
+        
+        // BỔ SUNG: Biến cho Speech API
+        let recognition = null; 
+        let debounceTimer = null; // BỔ SUNG: Timer cho debounce
 
         // Flashcard state
         let lessonFlashcards = [];
@@ -1244,10 +1288,73 @@
             applyInitialTheme(); // Áp dụng theme ngay khi DOM sẵn sàng
             // --- KẾT THÚC THAY ĐỔI ---
             
+            // === BỔ SUNG: KHỞI TẠO SPEECH RECOGNITION ===
+            try {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const voiceBtn = document.getElementById('voiceInputBtn');
+                
+                if (SpeechRecognition) {
+                    recognition = new SpeechRecognition();
+                    recognition.lang = 'zh-CN'; // Rất quan trọng: Đặt ngôn ngữ là tiếng Trung
+                    recognition.interimResults = false; // Chỉ lấy kết quả cuối cùng
+                    recognition.maxAlternatives = 1; // Chỉ lấy 1 kết quả tốt nhất
+
+                    // Xử lý khi có kết quả
+                    recognition.onresult = (event) => {
+                        const speechResult = event.results[0][0].transcript;
+                        document.getElementById('textInput').value = speechResult;
+                        // Tự động phân tích sau khi nói xong
+                        parseText(); // Giữ lại vì gán .value không kích hoạt sự kiện 'input'
+                    };
+
+                    // Xử lý khi kết thúc (dù thành công hay không)
+                    recognition.onend = () => {
+                        if (voiceBtn) voiceBtn.classList.remove('is-listening');
+                    };
+
+                    // Xử lý lỗi
+                    recognition.onerror = (event) => {
+                        console.error('Lỗi Speech Recognition:', event.error);
+                        if (voiceBtn) voiceBtn.classList.remove('is-listening');
+                        let errorMsg = 'Lỗi ghi âm: ' + event.error;
+                        if (event.error === 'no-speech') {
+                            errorMsg = 'Không nhận diện được giọng nói.';
+                        } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                            errorMsg = 'Vui lòng cấp quyền truy cập micro.';
+                        }
+                        // Sử dụng hàm feedback có sẵn của app, rất tốt!
+                        showQuizFeedback(errorMsg, 'mistake'); 
+                    };
+                } else {
+                    console.warn("Trình duyệt này không hỗ trợ Web Speech API.");
+                    if(voiceBtn) {
+                        voiceBtn.disabled = true;
+                        voiceBtn.textContent = '❌';
+                        voiceBtn.title = "Trình duyệt không hỗ trợ";
+                    }
+                }
+            } catch (e) {
+                console.error("Lỗi khởi tạo Speech API:", e);
+                const voiceBtn = document.getElementById('voiceInputBtn');
+                if(voiceBtn) {
+                    voiceBtn.disabled = true;
+                    voiceBtn.title = "Lỗi khởi tạo API";
+                }
+            }
+            // === KẾT THÚC BỔ SUNG ===
+            
+            
             loadLesson();
-            document.getElementById('textInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') parseText();
+            // === THAY ĐỔI: Xóa listener 'Enter' và thêm listener 'input' với debounce ===
+            document.getElementById('textInput').addEventListener('input', () => {
+                // Xóa timer cũ nếu có
+                clearTimeout(debounceTimer);
+                // Đặt timer mới
+                debounceTimer = setTimeout(() => {
+                    parseText();
+                }, 500); // Chờ 500ms sau khi ngừng gõ
             });
+            // === KẾT THÚC THAY ĐỔI ===
         };
         
         async function loadLesson() {
@@ -1341,6 +1448,37 @@
             processCharacterSelection(word, 'tự nhập');
             hideQuizFeedback();
         }
+        
+        // === BỔ SUNG: HÀM BẮT ĐẦU GHI ÂM ===
+        function startSpeechRecognition() {
+            if (!recognition) {
+                showQuizFeedback('Tính năng ghi âm không khả dụng.', 'mistake');
+                return;
+            }
+            
+            const voiceBtn = document.getElementById('voiceInputBtn');
+            if (voiceBtn.classList.contains('is-listening')) {
+                // Nếu đang nghe -> bấm để dừng
+                recognition.stop();
+                voiceBtn.classList.remove('is-listening');
+            } else {
+                // Nếu chưa nghe -> bấm để bắt đầu
+                try {
+                    voiceBtn.classList.add('is-listening');
+                    recognition.start();
+                } catch (e) {
+                    // Xử lý lỗi nếu việc .start() bị trục trặc (ví dụ: đang xử lý)
+                    console.warn("Lỗi khi bắt đầu ghi âm:", e.message);
+                    voiceBtn.classList.remove('is-listening');
+                    if(e.message.includes("already started")) {
+                         // không cần thông báo lỗi này
+                    } else {
+                        showQuizFeedback('Không thể bắt đầu ghi âm.', 'mistake');
+                    }
+                }
+            }
+        }
+        // === KẾT THÚC BỔ SUNG ===
 
         function displayCharacters(charList) {
             const grid = document.getElementById('charactersGrid');
@@ -1784,3 +1922,4 @@
     </script>
 </body>
 </html>
+

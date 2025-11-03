@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Viết Chữ Hán (Real-time)</title>
+    <title>Học Viết Chữ Hán (Mobile)</title>
     <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
     <style>
         /* CSS reset & base styles */
@@ -1172,9 +1172,6 @@
         // BỔ SUNG: Biến cho Speech API
         let recognition = null; 
         let debounceTimer = null; // BỔ SUNG: Timer cho debounce
-        // === START: THAY ĐỔI Real-time Mic ===
-        let final_transcript = ''; // Biến lưu trữ transcript đã chốt
-        // === END: THAY ĐỔI ===
 
         // Flashcard state
         let lessonFlashcards = [];
@@ -1307,7 +1304,7 @@
             applyInitialTheme(); // Áp dụng theme ngay khi DOM sẵn sàng
             // --- KẾT THÚC THAY ĐỔI ---
             
-            // === START: THAY ĐỔI Real-time Mic ===
+            // === BỔ SUNG: KHỞI TẠO SPEECH RECOGNITION ===
             try {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 const voiceBtn = document.getElementById('voiceInputBtn');
@@ -1315,78 +1312,35 @@
                 if (SpeechRecognition) {
                     recognition = new SpeechRecognition();
                     recognition.lang = 'zh-CN'; // Rất quan trọng: Đặt ngôn ngữ là tiếng Trung
-                    
-                    // THAY ĐỔI QUAN TRỌNG: Bật kết quả tạm thời
-                    recognition.interimResults = true; 
-                    
-                    // === START: THAY ĐỔI MỚI ===
-                    // Yêu cầu trình duyệt tiếp tục lắng nghe, không tự động dừng khi im lặng
-                    recognition.continuous = true; 
-                    // === END: THAY ĐỔI MỚI ===
-                    
+                    recognition.interimResults = false; // Chỉ lấy kết quả cuối cùng
                     recognition.maxAlternatives = 1; // Chỉ lấy 1 kết quả tốt nhất
 
-                    // THAY ĐỔI: Thêm onstart để reset transcript
-                    recognition.onstart = () => {
-                        final_transcript = ''; // Xóa transcript cũ khi bắt đầu phiên mới
-                        if (voiceBtn) voiceBtn.classList.add('is-listening');
-                    };
-
-                    // THAY ĐỔI: Cập nhật onresult để xử lý interim
+                    // Xử lý khi có kết quả
                     recognition.onresult = (event) => {
-                        let interim_transcript = ''; // Transcript tạm thời cho lần này
-
-                        // Lặp qua tất cả các kết quả
-                        for (let i = event.resultIndex; i < event.results.length; ++i) {
-                            if (event.results[i].isFinal) {
-                                // Nếu là kết quả cuối cùng, cộng vào final_transcript
-                                final_transcript += event.results[i][0].transcript;
-                            } else {
-                                // Nếu là kết quả tạm thời, cộng vào interim_transcript
-                                interim_transcript += event.results[i][0].transcript;
-                            }
-                        }
-
-                        // Cập nhật ô input theo thời gian thực
-                        // Hiển thị phần đã chốt (final) và phần đang nhận diện (interim)
-                        document.getElementById('textInput').value = final_transcript + interim_transcript;
-                        
-                        // KHÔNG gọi parseText() ở đây để tránh spam
+                        const speechResult = event.results[0][0].transcript;
+                        document.getElementById('textInput').value = speechResult;
+                        // Tự động phân tích sau khi nói xong
+                        parseText(); // Giữ lại vì gán .value không kích hoạt sự kiện 'input'
                     };
 
-                    // THAY ĐỔI: Cập nhật onend
+                    // Xử lý khi kết thúc (dù thành công hay không)
                     recognition.onend = () => {
                         if (voiceBtn) voiceBtn.classList.remove('is-listening');
-                        // Chỉ gọi parseText() MỘT LẦN khi đã kết thúc
-                        // Lúc này, textInput.value đã chứa kết quả cuối cùng
-                        if (document.getElementById('textInput').value.trim() !== '') {
-                            // Tự động phân tích sau khi nói xong
-                            parseText();
-                        }
-                        // Không cần dọn dẹp final_transcript ở đây, onstart sẽ làm
                     };
 
-                    // Cập nhật onerror
+                    // Xử lý lỗi
                     recognition.onerror = (event) => {
                         console.error('Lỗi Speech Recognition:', event.error);
                         if (voiceBtn) voiceBtn.classList.remove('is-listening');
                         let errorMsg = 'Lỗi ghi âm: ' + event.error;
-                        
-                        // === START: THAY ĐỔI MỚI ===
                         if (event.error === 'no-speech') {
-                             // Với continuous=true, lỗi 'no-speech' có thể xảy ra
-                             // nhưng chúng ta muốn bỏ qua nó và để nó tiếp tục chạy
-                             console.warn('Speech recognition: no speech detected, but continuing.');
-                             return; // Bỏ qua, không hiển thị lỗi
-                        } 
-                        // === END: THAY ĐỔI MỚI ===
-                        
-                        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                            errorMsg = 'Không nhận diện được giọng nói.';
+                        } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                             errorMsg = 'Vui lòng cấp quyền truy cập micro.';
                         }
-                        showQuizFeedback(errorMsg, 'mistake');
+                        // Sử dụng hàm feedback có sẵn của app, rất tốt!
+                        showQuizFeedback(errorMsg, 'mistake'); 
                     };
-                    
                 } else {
                     console.warn("Trình duyệt này không hỗ trợ Web Speech API.");
                     if(voiceBtn) {
@@ -1403,7 +1357,7 @@
                     voiceBtn.title = "Lỗi khởi tạo API";
                 }
             }
-            // === END: THAY ĐỔI ===
+            // === KẾT THÚC BỔ SUNG ===
             
             
             loadLesson();
@@ -1519,21 +1473,15 @@
             }
             
             const voiceBtn = document.getElementById('voiceInputBtn');
-            // Kiểm tra trạng thái listening thông qua class (vì 'onstart' có thể có độ trễ)
             if (voiceBtn.classList.contains('is-listening')) {
                 // Nếu đang nghe -> bấm để dừng
                 recognition.stop();
-                // onend sẽ tự động xóa class
+                voiceBtn.classList.remove('is-listening');
             } else {
                 // Nếu chưa nghe -> bấm để bắt đầu
                 try {
-                    // === START: THAY ĐỔI MỚI ===
-                    // Xóa text cũ VÀ final_transcript cũ trước khi bắt đầu
-                    document.getElementById('textInput').value = '';
-                    final_transcript = ''; 
-                    // === END: THAY ĐỔI MỚI ===
+                    voiceBtn.classList.add('is-listening');
                     recognition.start();
-                    // onstart sẽ tự động thêm class
                 } catch (e) {
                     // Xử lý lỗi nếu việc .start() bị trục trặc (ví dụ: đang xử lý)
                     console.warn("Lỗi khi bắt đầu ghi âm:", e.message);
@@ -1877,7 +1825,7 @@
          */
         function generateQuizQuestions(allVocab) {
             let shuffledVocab = [...allVocab].sort(() => 0.5 - Math.random());
-            let numQuestions = Math.min(10, shuffledVocab.length);
+            let numQuestions = Math.min(15, shuffledVocab.length);
             let questions = [];
 
             for (let i = 0; i < numQuestions; i++) {
@@ -1990,4 +1938,5 @@
     </script>
 </body>
 </html>
+
 

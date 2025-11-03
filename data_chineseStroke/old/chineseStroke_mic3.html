@@ -1861,7 +1861,7 @@
          */
         function generateQuizQuestions(allVocab) {
             let shuffledVocab = [...allVocab].sort(() => 0.5 - Math.random());
-            let numQuestions = Math.min(10, shuffledVocab.length);
+            let numQuestions = Math.min(15, shuffledVocab.length);
             let questions = [];
 
             for (let i = 0; i < numQuestions; i++) {

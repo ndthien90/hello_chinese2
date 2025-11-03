@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Viết Chữ Hán (Mobile)</title>
+    <title>Học Viết Chữ Hán (Real-time)</title>
     <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
     <style>
         /* CSS reset & base styles */
@@ -422,21 +422,25 @@
 
         #textInput:focus { border-color: var(--border-input-focus); outline: none; } /* THAY ĐỔI */
 
-        .analyze-btn {
-            border-color: var(--text-accent3); /* THAY ĐỔI */
-            color: var(--text-accent3); /* THAY ĐỔI */
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-
-        .analyze-btn:hover { background: var(--text-accent3); color: var(--text-on-accent); } /* THAY ĐỔI */
+        /* === XÓA CSS CỦA NÚT ANALYZE === */
+        /* .analyze-btn { ... } (đã xóa) */
+        /* .analyze-btn:hover { ... } (đã xóa) */
         
         /* === BỔ SUNG: CSS CHO NÚT GHI ÂM === */
         #voiceInputBtn {
             flex-shrink: 0; /* Ngăn nút bị co lại */
             padding: 10px 12px;
             font-size: 1.2rem;
-            line-height: 1.2; /* Căn giữa icon */
+            /* THAY ĐỔI: Căn giữa SVG */
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            line-height: 1; /* Reset line-height */
+        }
+        
+        #voiceInputBtn svg {
+            width: 1em;
+            height: 1em;
         }
         
         /* Hiệu ứng khi đang ghi âm */
@@ -724,12 +728,8 @@
                 min-width: 0; /* Cho phép co lại */
             }
             
-            .analyze-btn { 
-                width: auto; /* Bỏ width 100% */
-                padding: 10px 15px; /* Chỉnh lại padding */
-                flex-shrink: 0;
-                font-size: 13px; /* Đồng bộ font */
-            }
+            /* === XÓA CSS NÚT ANALYZE TRÊN MOBILE === */
+            /* .analyze-btn { ... } (đã xóa) */
             
             #voiceInputBtn {
                 padding: 10px 12px;
@@ -1064,9 +1064,17 @@
                 <h3></h3>
                 <div class="input-group">
                     <input type="text" id="textInput" placeholder="Nhập chữ Hán, từ, hoặc câu để luyện viết..." />
-                    <!-- BỔ SUNG NÚT MICRO -->
-                    <button id="voiceInputBtn" class="control-btn" onclick="startSpeechRecognition()" title="Nhập bằng giọng nói (Tiếng Trung)">🎤</button>
-                    <button class="control-btn analyze-btn" onclick="parseText()">Phân tích</button>
+                    <!-- THAY ĐỔI: Nút Micro dùng SVG -->
+                    <button id="voiceInputBtn" class="control-btn" onclick="startSpeechRecognition()" title="Nhập bằng giọng nói (Tiếng Trung)">
+                        <!-- BẮT ĐẦU ICON MIC SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+                          <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4 4.9V14h1.5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1H7v-1.1A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+                        </svg>
+                        <!-- KẾT THÚC ICON MIC SVG -->
+                    </button>
+                    <!-- === XÓA NÚT PHÂN TÍCH === -->
+                    <!-- <button class="control-btn analyze-btn" onclick="parseText()">Phân tích</button> -->
                 </div>
             </div>
 
@@ -1163,6 +1171,10 @@
         
         // BỔ SUNG: Biến cho Speech API
         let recognition = null; 
+        let debounceTimer = null; // BỔ SUNG: Timer cho debounce
+        // === START: THAY ĐỔI Real-time Mic ===
+        let final_transcript = ''; // Biến lưu trữ transcript đã chốt
+        // === END: THAY ĐỔI ===
 
         // Flashcard state
         let lessonFlashcards = [];
@@ -1295,7 +1307,7 @@
             applyInitialTheme(); // Áp dụng theme ngay khi DOM sẵn sàng
             // --- KẾT THÚC THAY ĐỔI ---
             
-            // === BỔ SUNG: KHỞI TẠO SPEECH RECOGNITION ===
+            // === START: THAY ĐỔI Real-time Mic ===
             try {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 const voiceBtn = document.getElementById('voiceInputBtn');
@@ -1303,35 +1315,78 @@
                 if (SpeechRecognition) {
                     recognition = new SpeechRecognition();
                     recognition.lang = 'zh-CN'; // Rất quan trọng: Đặt ngôn ngữ là tiếng Trung
-                    recognition.interimResults = false; // Chỉ lấy kết quả cuối cùng
+                    
+                    // THAY ĐỔI QUAN TRỌNG: Bật kết quả tạm thời
+                    recognition.interimResults = true; 
+                    
+                    // === START: THAY ĐỔI MỚI ===
+                    // Yêu cầu trình duyệt tiếp tục lắng nghe, không tự động dừng khi im lặng
+                    recognition.continuous = true; 
+                    // === END: THAY ĐỔI MỚI ===
+                    
                     recognition.maxAlternatives = 1; // Chỉ lấy 1 kết quả tốt nhất
 
-                    // Xử lý khi có kết quả
-                    recognition.onresult = (event) => {
-                        const speechResult = event.results[0][0].transcript;
-                        document.getElementById('textInput').value = speechResult;
-                        // Tự động phân tích sau khi nói xong
-                        parseText(); 
+                    // THAY ĐỔI: Thêm onstart để reset transcript
+                    recognition.onstart = () => {
+                        final_transcript = ''; // Xóa transcript cũ khi bắt đầu phiên mới
+                        if (voiceBtn) voiceBtn.classList.add('is-listening');
                     };
 
-                    // Xử lý khi kết thúc (dù thành công hay không)
+                    // THAY ĐỔI: Cập nhật onresult để xử lý interim
+                    recognition.onresult = (event) => {
+                        let interim_transcript = ''; // Transcript tạm thời cho lần này
+
+                        // Lặp qua tất cả các kết quả
+                        for (let i = event.resultIndex; i < event.results.length; ++i) {
+                            if (event.results[i].isFinal) {
+                                // Nếu là kết quả cuối cùng, cộng vào final_transcript
+                                final_transcript += event.results[i][0].transcript;
+                            } else {
+                                // Nếu là kết quả tạm thời, cộng vào interim_transcript
+                                interim_transcript += event.results[i][0].transcript;
+                            }
+                        }
+
+                        // Cập nhật ô input theo thời gian thực
+                        // Hiển thị phần đã chốt (final) và phần đang nhận diện (interim)
+                        document.getElementById('textInput').value = final_transcript + interim_transcript;
+                        
+                        // KHÔNG gọi parseText() ở đây để tránh spam
+                    };
+
+                    // THAY ĐỔI: Cập nhật onend
                     recognition.onend = () => {
                         if (voiceBtn) voiceBtn.classList.remove('is-listening');
+                        // Chỉ gọi parseText() MỘT LẦN khi đã kết thúc
+                        // Lúc này, textInput.value đã chứa kết quả cuối cùng
+                        if (document.getElementById('textInput').value.trim() !== '') {
+                            // Tự động phân tích sau khi nói xong
+                            parseText();
+                        }
+                        // Không cần dọn dẹp final_transcript ở đây, onstart sẽ làm
                     };
 
-                    // Xử lý lỗi
+                    // Cập nhật onerror
                     recognition.onerror = (event) => {
                         console.error('Lỗi Speech Recognition:', event.error);
                         if (voiceBtn) voiceBtn.classList.remove('is-listening');
                         let errorMsg = 'Lỗi ghi âm: ' + event.error;
+                        
+                        // === START: THAY ĐỔI MỚI ===
                         if (event.error === 'no-speech') {
-                            errorMsg = 'Không nhận diện được giọng nói.';
-                        } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                             // Với continuous=true, lỗi 'no-speech' có thể xảy ra
+                             // nhưng chúng ta muốn bỏ qua nó và để nó tiếp tục chạy
+                             console.warn('Speech recognition: no speech detected, but continuing.');
+                             return; // Bỏ qua, không hiển thị lỗi
+                        } 
+                        // === END: THAY ĐỔI MỚI ===
+                        
+                        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                             errorMsg = 'Vui lòng cấp quyền truy cập micro.';
                         }
-                        // Sử dụng hàm feedback có sẵn của app, rất tốt!
-                        showQuizFeedback(errorMsg, 'mistake'); 
+                        showQuizFeedback(errorMsg, 'mistake');
                     };
+                    
                 } else {
                     console.warn("Trình duyệt này không hỗ trợ Web Speech API.");
                     if(voiceBtn) {
@@ -1348,13 +1403,20 @@
                     voiceBtn.title = "Lỗi khởi tạo API";
                 }
             }
-            // === KẾT THÚC BỔ SUNG ===
+            // === END: THAY ĐỔI ===
             
             
             loadLesson();
-            document.getElementById('textInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') parseText();
+            // === THAY ĐỔI: Xóa listener 'Enter' và thêm listener 'input' với debounce ===
+            document.getElementById('textInput').addEventListener('input', () => {
+                // Xóa timer cũ nếu có
+                clearTimeout(debounceTimer);
+                // Đặt timer mới
+                debounceTimer = setTimeout(() => {
+                    parseText();
+                }, 500); // Chờ 500ms sau khi ngừng gõ
             });
+            // === KẾT THÚC THAY ĐỔI ===
         };
         
         async function loadLesson() {
@@ -1457,15 +1519,21 @@
             }
             
             const voiceBtn = document.getElementById('voiceInputBtn');
+            // Kiểm tra trạng thái listening thông qua class (vì 'onstart' có thể có độ trễ)
             if (voiceBtn.classList.contains('is-listening')) {
                 // Nếu đang nghe -> bấm để dừng
                 recognition.stop();
-                voiceBtn.classList.remove('is-listening');
+                // onend sẽ tự động xóa class
             } else {
                 // Nếu chưa nghe -> bấm để bắt đầu
                 try {
-                    voiceBtn.classList.add('is-listening');
+                    // === START: THAY ĐỔI MỚI ===
+                    // Xóa text cũ VÀ final_transcript cũ trước khi bắt đầu
+                    document.getElementById('textInput').value = '';
+                    final_transcript = ''; 
+                    // === END: THAY ĐỔI MỚI ===
                     recognition.start();
+                    // onstart sẽ tự động thêm class
                 } catch (e) {
                     // Xử lý lỗi nếu việc .start() bị trục trặc (ví dụ: đang xử lý)
                     console.warn("Lỗi khi bắt đầu ghi âm:", e.message);
@@ -1809,7 +1877,7 @@
          */
         function generateQuizQuestions(allVocab) {
             let shuffledVocab = [...allVocab].sort(() => 0.5 - Math.random());
-            let numQuestions = Math.min(10, shuffledVocab.length);
+            let numQuestions = Math.min(15, shuffledVocab.length);
             let questions = [];
 
             for (let i = 0; i < numQuestions; i++) {
@@ -1922,3 +1990,4 @@
     </script>
 </body>
 </html>
+
