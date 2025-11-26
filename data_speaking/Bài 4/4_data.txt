@@ -1,0 +1,60 @@
+谁是李月
+Shéi shì Lǐ Yuè
+Lý Nguyệt là ai?
+/#
+你是哪国人？
+Nǐ shì nǎ guórén?
+Bạn là người nước nào?
+/#
+一张桌子和两把雨伞。
+Yì zhāng zhuōzi hé liǎng bǎ yǔsǎn.
+Một cái bàn và hai cái ô (dù).
+/#
+我有两双鞋。
+Wǒ yǒu liǎng shuāng xié.
+Tôi có hai đôi giày.
+/#
+这是我的书。
+Zhè shì wǒ de shū.
+Đây là sách của tôi.
+/#
+他是我的汉语老师
+Tā shì wǒ de Hànyǔ lǎoshī
+Anh ấy/Ông ấy là giáo viên tiếng Hán của tôi.
+/#
+我是陈楠，你呢？
+Wǒ shì Chén Nán, nǐ ne?
+Tôi là Trần Nam, còn bạn?
+/#
+我喜欢踢足球。
+Wǒ xǐhuān tī zúqiú.
+Tôi thích đá bóng (đá banh).
+/#
+她喜欢打羽毛球。
+Tā xǐhuān dǎ yǔmáoqiú.
+Cô ấy/Chị ấy thích chơi cầu lông.
+/#
+我们都喜欢看电影。
+Wǒmen dōu xǐhuān kàn diànyǐng.
+Chúng tôi đều thích xem phim.
+/#
+我不喜欢狗，我喜欢猫
+Wǒ bù xǐhuān gǒu, wǒ xǐhuān māo
+Tôi không thích chó, tôi thích mèo.
+/#
+她喜欢穿拖鞋。
+Tā xǐhuān chuān tuōxié.
+Cô ấy/Chị ấy thích mang (đi) dép lê.
+/#
+他不是我朋友，她是我同学。
+Tā bú shì wǒ péngyou, tā shì wǒ tóngxué.
+Anh ấy không phải là bạn của tôi, cô ấy là bạn học của tôi.
+/#
+你喝哪杯奶茶？
+Nǐ hē nǎ bēi nǎichá?
+Bạn uống ly trà sữa nào?
+/#
+奶茶和咖啡我都喜欢喝。
+Nǎichá hé kāfēi wǒ dōu xǐhuān hē.
+Trà sữa và cà phê tôi đều thích uống.
+/#

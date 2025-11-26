@@ -1,0 +1,25 @@
+谁|shéi|ai, người nào|他是谁？|Tā shì shéi?|Anh ấy là ai?
+哪|nǎ|nào, chỗ nào|你是哪国人？|Nǐ shì nǎ guó rén?|Bạn là người nước nào?
+呢|ne|thì sao(trợ từ nghi vấn)|我很好，你呢？|Wǒ hěn hǎo, nǐ ne?|Tôi rất khỏe, còn bạn thì sao?
+的|de|của (trợ từ sở hữu)|这是我的书。|Zhè shì wǒ de shū.|Đây là sách của tôi.
+两|liǎng|hai (dùng với lượng từ)|我有两本书。|Wǒ yǒu liǎng běn shū.|Tôi có hai quyển sách.
+和|hé|và, với|我和你是朋友。|Wǒ hé nǐ shì péngyou.|Tôi và bạn là bạn bè.
+个|gè|cái, chiếc, người, quả(lượng từ phổ biến)|我有一个苹果。|Wǒ yǒu yīgè píngguǒ.|Tôi có một quả táo.
+本|běn|quyển (lượng từ cho sách, vở)|这是一本书。|Zhè shì yī běn shū.|Đây là một quyển sách.
+条|tiáo|cái , con, sợi(lượng từ cho vật dài, mảnh)|我有一条裤子。|Wǒ yǒu yī tiáo kùzi.|Tôi có một chiếc quần dài.
+件|jiàn|cái, kiện(lượng từ cho quần áo trên, sự việc)|一件衣服很贵。|Yī jiàn yīfu hěn guì.|Một chiếc áo rất đắt.
+张|zhāng|tấm, tờ (lượng từ cho vật phẳng)|一张桌子。|Yī zhāng zhuōzi.|Một cái bàn.
+把|bǎ|cái (lượng từ cho vật có tay cầm)|一把椅子。|Yī bǎ yǐzi.|Một cái ghế.
+只|zhī|con (lượng từ cho động vật); chiếc (lượng từ cho vật đi đôi)|一只猫。|Yī zhī māo.|Một con mèo.
+双|shuāng|đôi, cặp|一双鞋子。|Yī shuāng xiézi.|Một đôi giày.
+辆|liàng|chiếc (lượng từ cho xe cộ)|一辆汽车。|Yī liàng qìchē.|Một chiếc ô tô.
+看|kàn|xem, nhìn, đọc|我在看电视。|Wǒ zài kàn diànshì.|Tôi đang xem TV.
+打|dǎ|đánh|我们去打篮球。|Wǒmen qù dǎ lánqiú.|Chúng tôi đi chơi bóng rổ.
+踢|tī|đá|你喜欢踢足球吗？|Nǐ xǐhuan tī zúqiú ma?|Bạn thích đá bóng không?
+穿|chuān|mặc (quần áo), đi (giày)|她穿一件新衣服。|Tā chuān yī jiàn xīn yīfu.|Cô ấy mặc một chiếc áo mới.
+朋友|péngyou|bạn bè|他是我朋友。|Tā shì wǒ péngyou.|Anh ấy là bạn của tôi.
+同学|tóngxué|bạn học|他是我同学。|Tā shì wǒ tóngxué.|Anh ấy là bạn học của tôi.
+电视|diànshì|TV, truyền hình|我没看电视。|Wǒ méi kàn diànshì.|Tôi chưa xem TV.
+电影|diànyǐng|phim điện ảnh|你想看电影吗？|Nǐ xiǎng kàn diànyǐng ma?|Bạn muốn xem phim không?
+衣服|yīfu|quần áo|这件衣服很漂亮。|Zhè jiàn yīfu hěn piàoliang.|Chiếc áo này rất đẹp.
+颜色|yánsè|màu sắc|你喜欢什么颜色？|Nǐ xǐhuan shénme yánsè?|Bạn thích màu gì?
