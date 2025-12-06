@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tìm Số - HelloChinese Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        /* Number Circle Style */
+        .number-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            aspect-ratio: 1 / 1;
+        }
+        .number-btn:active { transform: scale(0.9); }
+        
+        .number-btn.correct {
+            background-color: #22c55e; /* green-500 */
+            color: white;
+            border-color: #16a34a;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+        }
+
+        .number-btn.wrong {
+            background-color: #ef4444; /* red-500 */
+            color: white;
+            border-color: #dc2626;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .number-btn.hidden-circle {
+            opacity: 0.1;
+            pointer-events: none;
+            transform: scale(0.8);
+        }
+
+        /* Custom Range Slider for Settings */
+        input[type=range] {
+            -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+            width: 100%; /* Specific width is required for Firefox. */
+            background: transparent; /* Otherwise white in Chrome */
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            margin-top: -8px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative text-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="handleBack()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Tìm Số</h1>
+        <div class="flex items-center gap-2">
+            <div id="roundBadge" class="hidden bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold border border-blue-200">
+                0/5
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar relative">
+        
+        <!-- SETUP SCREEN -->
+        <div id="setup-screen" class="flex flex-col gap-6 pt-4 transition-all duration-300">
+            <!-- Icon Hero -->
+            <div class="flex justify-center mb-2">
+                <div class="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center shadow-inner animate-pulse">
+                    <span class="text-5xl">🔢</span>
+                </div>
+            </div>
+
+            <div class="text-center mb-2">
+                <h2 class="text-2xl font-extrabold text-gray-800">Thử thách Tìm Số</h2>
+                <p class="text-gray-500 text-sm">Nghe và tìm số tương ứng với Hán tự</p>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+                <!-- Round Count -->
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="block text-sm font-bold text-gray-600 uppercase tracking-wider">Số vòng chơi</label>
+                        <span id="roundCountDisplay" class="bg-teal-100 text-teal-700 text-xs font-bold px-3 py-1 rounded-lg">5 vòng</span>
+                    </div>
+                    <input type="range" id="roundSelector" min="5" max="20" step="5" value="5" class="w-full">
+                    <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium">
+                        <span>5</span>
+                        <span>10</span>
+                        <span>15</span>
+                        <span>20</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <button id="startBtn" onclick="startGame()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-teal-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 text-lg">
+                <i class="fas fa-play"></i> Bắt đầu ngay
+            </button>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="hidden flex-col h-full relative">
+            
+            <!-- Info Bar (Timer & Score) -->
+            <div class="flex justify-between items-center mb-4 px-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <span id="timerDisplay" class="font-mono font-bold text-red-500 text-lg">00:00</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="scoreDisplay" class="font-bold text-green-600 text-lg">0</span>
+                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-500 flex items-center justify-center">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Target Number Card -->
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-6 shadow-lg shadow-blue-200 mb-6 text-center relative overflow-hidden">
+                <!-- Decoration Circles -->
+                <div class="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 rounded-full bg-white opacity-10"></div>
+                <div class="absolute bottom-0 left-0 -ml-4 -mb-4 w-16 h-16 rounded-full bg-white opacity-10"></div>
+
+                <p class="text-blue-100 text-xs font-bold uppercase tracking-widest mb-1">Tìm số này</p>
+                
+                <div class="flex flex-col items-center justify-center">
+                    <div id="targetChineseChar" class="chinese-font text-6xl text-white font-medium mb-1 drop-shadow-md transition-all transform hover:scale-105">??</div>
+                    <div id="targetPinyin" class="text-blue-200 font-medium text-lg h-6"></div>
+                </div>
+
+                <button onclick="speakTarget()" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center backdrop-blur-sm transition">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+
+            <!-- Grid Container -->
+            <div class="flex-1 relative">
+                <div id="numbersContainer" class="grid grid-cols-5 gap-3 sm:gap-4 justify-items-center pb-20">
+                    <!-- Numbers injected here -->
+                </div>
+                
+                <!-- Floating Help Button -->
+                <div class="fixed bottom-24 right-4 z-20">
+                    <button id="helpBtn" onclick="useHelp()" class="w-14 h-14 rounded-full bg-yellow-400 text-yellow-900 shadow-lg shadow-yellow-200 border-2 border-white flex items-center justify-center text-xl font-bold active:scale-90 transition-all hover:bg-yellow-300 group">
+                        <i class="fas fa-lightbulb group-hover:animate-pulse"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full border border-white">50%</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden flex-col items-center justify-center h-full text-center pop-in pt-10">
+            <div id="resultIcon" class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-sm animate-bounce text-green-500">
+                <span class="text-5xl">🏆</span>
+            </div>
+            <h2 id="resultTitle" class="text-3xl font-extrabold text-gray-800 mb-2">Hoàn thành!</h2>
+            <p id="resultMessage" class="text-gray-500 mb-8 px-4">Bạn đã hoàn thành xuất sắc thử thách.</p>
+            
+            <div class="bg-gray-50 rounded-xl p-6 w-full mb-8 border border-gray-100 shadow-sm grid grid-cols-2 gap-4">
+                <div class="text-center border-r border-gray-200">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Điểm số</p>
+                    <p id="finalScore" class="text-2xl font-bold text-blue-600">0/0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Thời gian</p>
+                    <p id="finalTime" class="text-2xl font-bold text-gray-800">0s</p>
+                </div>
+            </div>
+
+            <button onclick="resetGame()" class="w-full bg-teal-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-teal-200 active:scale-95 transition mb-3">
+                Chơi lại
+            </button>
+            <button onclick="handleBack()" class="w-full bg-white text-gray-600 border border-gray-200 font-bold py-4 rounded-xl active:scale-95 transition">
+                Về màn hình chính
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="FlashCard_new.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-layer-group text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Thẻ</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        // --- CONSTANTS ---
+        const unitPinyin = ['', 'yī', 'èr', 'sān', 'sì', 'wǔ', 'liù', 'qī', 'bā', 'jiǔ'];
+        const unitChar = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+        const tenChar = '十';
+        const tenPinyin = 'shí';
+        const TIME_PER_ROUND = 10; // 10 seconds per round
+
+        // --- STATE ---
+        let totalRounds = 5;
+        let currentRound = 0;
+        let correctGuesses = 0;
+        let targetNumber = null;
+        let isGameActive = false;
+        let isHelpUsed = false;
+        let remainingTime = 0;
+        let timerInterval = null;
+        let usedNumbers = new Set();
+        let currentNumbersInGrid = [];
+
+        // --- DOM ELEMENTS ---
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const roundSelector = document.getElementById('roundSelector');
+        const roundCountDisplay = document.getElementById('roundCountDisplay');
+        const roundBadge = document.getElementById('roundBadge');
+        
+        const targetChineseChar = document.getElementById('targetChineseChar');
+        const targetPinyin = document.getElementById('targetPinyin');
+        const numbersContainer = document.getElementById('numbersContainer');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const helpBtn = document.getElementById('helpBtn');
+
+        // --- INIT ---
+        roundSelector.addEventListener('input', (e) => {
+            roundCountDisplay.textContent = `${e.target.value} vòng`;
+        });
+
+        function handleBack() {
+            if (!setupScreen.classList.contains('hidden')) {
+                window.history.back();
+            } else {
+                resetGame();
+            }
+        }
+
+        // --- CORE LOGIC ---
+
+        function numberToChinese(num) {
+            if (num < 1 || num > 99) return { char: '?', pinyin: '?' };
+            const tens = Math.floor(num / 10);
+            const ones = num % 10;
+            let char = '', pinyin = '';
+
+            if (num < 10) {
+                char = unitChar[num];
+                pinyin = unitPinyin[num];
+            } else if (num === 10) {
+                char = tenChar;
+                pinyin = tenPinyin;
+            } else if (num < 20) {
+                char = tenChar + unitChar[ones];
+                pinyin = tenPinyin + ' ' + unitPinyin[ones];
+            } else {
+                char = unitChar[tens] + tenChar;
+                pinyin = unitPinyin[tens] + ' ' + tenPinyin;
+                if (ones > 0) {
+                    char += unitChar[ones];
+                    pinyin += ' ' + unitPinyin[ones];
+                }
+            }
+            return { char: char.trim(), pinyin: pinyin.trim() };
+        }
+
+        function speakTarget() {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            
+            const text = targetChineseChar.textContent;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.8;
+            
+            // Prefer Google Chinese voice if available
+            const voices = window.speechSynthesis.getVoices();
+            const zhVoice = voices.find(v => v.lang === 'zh-CN' || v.name.includes('Chinese'));
+            if (zhVoice) utterance.voice = zhVoice;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- GAMEPLAY ---
+
+        function startGame() {
+            totalRounds = parseInt(roundSelector.value);
+            currentRound = 0;
+            correctGuesses = 0;
+            usedNumbers.clear();
+            remainingTime = totalRounds * TIME_PER_ROUND; // Total pool time
+
+            setupScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            gameScreen.classList.add('flex');
+            roundBadge.classList.remove('hidden');
+
+            startNextRound();
+            startTimer();
+        }
+
+        function startNextRound() {
+            if (currentRound >= totalRounds) {
+                finishGame(true);
+                return;
+            }
+
+            currentRound++;
+            roundBadge.textContent = `${currentRound}/${totalRounds}`;
+            scoreDisplay.textContent = correctGuesses;
+            isGameActive = true;
+            isHelpUsed = false;
+            helpBtn.disabled = false;
+            helpBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            // 1. Pick Target
+            let newTarget;
+            do {
+                newTarget = Math.floor(Math.random() * 99) + 1;
+            } while (usedNumbers.has(newTarget));
+            
+            targetNumber = newTarget;
+            usedNumbers.add(newTarget);
+
+            // 2. Display Target
+            const chinese = numberToChinese(targetNumber);
+            targetChineseChar.textContent = chinese.char;
+            targetPinyin.textContent = `(${chinese.pinyin})`;
+            speakTarget();
+
+            // 3. Generate Grid (1 correct + 9 decoys = 10 total for 5x2 grid on mobile)
+            const totalItems = 10;
+            const numbers = new Set([targetNumber]);
+            while (numbers.size < totalItems) {
+                numbers.add(Math.floor(Math.random() * 99) + 1);
+            }
+            
+            currentNumbersInGrid = Array.from(numbers).sort(() => 0.5 - Math.random());
+            renderGrid();
+        }
+
+        function renderGrid() {
+            numbersContainer.innerHTML = '';
+            currentNumbersInGrid.forEach(num => {
+                const btn = document.createElement('button');
+                btn.className = 'number-btn w-full bg-white rounded-xl shadow-sm border border-gray-200 text-gray-700 font-bold text-lg sm:text-xl flex items-center justify-center hover:bg-gray-50';
+                btn.textContent = num;
+                btn.dataset.number = num;
+                btn.onclick = () => handleNumberClick(btn, num);
+                numbersContainer.appendChild(btn);
+            });
+        }
+
+        function handleNumberClick(btn, num) {
+            if (!isGameActive || btn.classList.contains('hidden-circle')) return;
+
+            if (num === targetNumber) {
+                // Correct
+                isGameActive = false;
+                btn.classList.add('correct');
+                correctGuesses++;
+                scoreDisplay.textContent = correctGuesses;
+                
+                // Little delay then next round
+                setTimeout(() => {
+                    startNextRound();
+                }, 800);
+            } else {
+                // Wrong
+                btn.classList.add('wrong');
+                // Vibrate if mobile
+                if (navigator.vibrate) navigator.vibrate(200);
+                
+                setTimeout(() => {
+                    btn.classList.remove('wrong');
+                }, 400);
+            }
+        }
+
+        function useHelp() {
+            if (isHelpUsed || !isGameActive) return;
+            
+            // Remove 50% of wrong answers
+            const buttons = Array.from(numbersContainer.children);
+            const wrongButtons = buttons.filter(b => parseInt(b.dataset.number) !== targetNumber && !b.classList.contains('hidden-circle'));
+            
+            // Remove half
+            const toRemove = Math.floor(wrongButtons.length / 2);
+            // Shuffle wrong buttons to remove random ones
+            wrongButtons.sort(() => 0.5 - Math.random());
+            
+            for(let i = 0; i < toRemove; i++) {
+                wrongButtons[i].classList.add('hidden-circle');
+            }
+
+            isHelpUsed = true;
+            helpBtn.disabled = true;
+            helpBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        // --- TIMER ---
+
+        function startTimer() {
+            updateTimerUI();
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                updateTimerUI();
+                
+                if (remainingTime <= 0) {
+                    finishGame(false);
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const m = Math.floor(remainingTime / 60);
+            const s = remainingTime % 60;
+            timerDisplay.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            
+            if (remainingTime <= 10) {
+                timerDisplay.classList.add('animate-pulse');
+            } else {
+                timerDisplay.classList.remove('animate-pulse');
+            }
+        }
+
+        function finishGame(completed) {
+            clearInterval(timerInterval);
+            isGameActive = false;
+
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+            roundBadge.classList.add('hidden');
+
+            // Setup Result Screen
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+
+            if (completed) {
+                resultIcon.innerHTML = '<span class="text-5xl">🏆</span>';
+                resultIcon.className = "w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-sm animate-bounce text-green-500";
+                resultTitle.textContent = "Hoàn thành!";
+                resultMessage.textContent = "Bạn đã vượt qua tất cả các vòng chơi.";
+                // Confetti
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#22c55e', '#3b82f6', '#f59e0b']
+                });
+            } else {
+                resultIcon.innerHTML = '<span class="text-5xl">⏰</span>';
+                resultIcon.className = "w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-4 shadow-sm text-red-500";
+                resultTitle.textContent = "Hết giờ!";
+                resultMessage.textContent = "Rất tiếc, bạn đã hết thời gian.";
+            }
+
+            document.getElementById('finalScore').textContent = `${correctGuesses}/${totalRounds}`;
+            // Calculate time taken
+            const totalTime = totalRounds * TIME_PER_ROUND;
+            const timeUsed = totalTime - (remainingTime < 0 ? 0 : remainingTime);
+            document.getElementById('finalTime').textContent = `${timeUsed}s`;
+        }
+
+        function resetGame() {
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+            roundBadge.classList.add('hidden');
+            clearInterval(timerInterval);
+        }
+
+        // Init Speech
+        window.speechSynthesis.getVoices();
+
+    </script>
+</body>
+</html>

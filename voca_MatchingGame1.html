@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nối Từ - HelloChinese Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Select */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25em 1.25em;
+            appearance: none;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        @keyframes popOut {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        .pop-out { animation: popOut 0.5s forwards; }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Card Styles */
+        .word-card {
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+        .word-card:active { transform: scale(0.95); }
+        
+        /* Selected State */
+        .word-card.selected {
+            background-color: #eff6ff; /* blue-50 */
+            border-color: #3b82f6; /* blue-500 */
+            color: #1d4ed8; /* blue-700 */
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Correct State */
+        .word-card.correct {
+            background-color: #dcfce7; /* green-100 */
+            border-color: #22c55e; /* green-500 */
+            color: #15803d; /* green-700 */
+            transform: scale(1.05);
+        }
+
+        /* Wrong State */
+        .word-card.wrong {
+            background-color: #fee2e2; /* red-100 */
+            border-color: #ef4444; /* red-500 */
+            color: #b91c1c; /* red-700 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative text-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="handleBack()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Nối từ</h1>
+        <div class="w-10 h-10"></div> <!-- Spacer for alignment -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar relative">
+        
+        <!-- SETUP SCREEN -->
+        <div id="setup-screen" class="flex flex-col gap-6 pt-4 transition-all duration-300">
+            <!-- Icon Hero -->
+            <div class="flex justify-center mb-2">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center shadow-inner">
+                    <span class="text-5xl">🧩</span>
+                </div>
+            </div>
+
+            <!-- Lesson Selection -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Bài học</label>
+                <div class="relative">
+                    <select id="lessonSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                        <option value="">Chọn bài học...</option>
+                        <!-- Options injected via JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Count Selection -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Số lượng thẻ</label>
+                    <span id="countDisplay" class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-lg">5 cặp</span>
+                </div>
+                <input type="range" id="vocabCount" min="2" max="10" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium">
+                    <span>2</span>
+                    <span>10</span>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <button id="startBtn" disabled class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 text-lg">
+                <i class="fas fa-play"></i> Bắt đầu
+            </button>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="hidden flex-col h-full pt-2">
+            
+            <!-- Game Board -->
+            <div class="flex gap-3 flex-1">
+                <!-- Left Column (Chinese) -->
+                <div id="leftColumn" class="flex-1 flex flex-col gap-3"></div>
+                
+                <!-- Right Column (Vietnamese) -->
+                <div id="rightColumn" class="flex-1 flex flex-col gap-3"></div>
+            </div>
+
+            <!-- Floating Actions -->
+            <div class="fixed bottom-24 right-4 flex flex-col gap-3 z-20">
+                <button id="shuffleBtn" class="w-12 h-12 rounded-full bg-white text-orange-500 shadow-lg border border-orange-100 flex items-center justify-center active:scale-90 transition hover:bg-orange-50" title="Trộn lại">
+                    <i class="fas fa-random"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden flex-col items-center justify-center h-full text-center pop-in pt-10">
+            <div class="text-6xl mb-4">🏆</div>
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-2">Hoàn thành!</h2>
+            <p id="resultMessage" class="text-gray-500 mb-8 px-4">Bạn đã xuất sắc ghép đúng tất cả các cặp từ.</p>
+            
+            <button onclick="resetGame()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition mb-3">
+                Chơi lại
+            </button>
+            <button onclick="handleBack()" class="w-full bg-white text-gray-600 border border-gray-200 font-bold py-4 rounded-xl active:scale-95 transition">
+                Về màn hình chính
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="FlashCard_new.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-layer-group text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Thẻ</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const lessonVocabulary = {
+            'H1 Bài 1: 老师您好！': [
+                { vocab: "你", meaning: "bạn, cậu" }, { vocab: "我", meaning: "tôi" },
+                { vocab: "您", meaning: "ngài" }, { vocab: "老师", meaning: "thầy/cô giáo" },
+                { vocab: "学生", meaning: "học sinh" }, { vocab: "好", meaning: "tốt, khỏe" },
+                { vocab: "很", meaning: "rất" }, { vocab: "吗", meaning: "không?" },
+                { vocab: "谢谢", meaning: "cảm ơn" }, { vocab: "这", meaning: "đây" },
+                { vocab: "那", meaning: "kia" }, { vocab: "是", meaning: "là" },
+                { vocab: "不", meaning: "không" }, { vocab: "本子", meaning: "vở" },
+                { vocab: "书", meaning: "sách" }, { vocab: "你好", meaning: "xin chào" },
+                { vocab: "再见", meaning: "tạm biệt" }, { vocab: "陈楠", meaning: "Trần Nam" },
+                { vocab: "国安", meaning: "Quốc An" }
+            ],
+            'H1 Bài 2: 谢谢你！': [
+                { vocab: "爷爷", meaning: "ông" }, { vocab: "奶奶", meaning: "bà" },
+                { vocab: "爸爸", meaning: "bố" }, { vocab: "妈妈", meaning: "mẹ" },
+                { vocab: "哥哥", meaning: "anh trai" }, { vocab: "姐姐", meaning: "chị gái" },
+                { vocab: "弟弟", meaning: "em trai" }, { vocab: "妹妹", meaning: "em gái" },
+                { vocab: "医生", meaning: "bác sĩ" }, { vocab: "记者", meaning: "phóng viên" },
+                { vocab: "公安", meaning: "công an" }, { vocab: "警察", meaning: "cảnh sát" },
+                { vocab: "律师", meaning: "luật sư" }, { vocab: "厨师", meaning: "đầu bếp" },
+                { vocab: "演员", meaning: "diễn viên" }, { vocab: "司机", meaning: "tài xế" },
+                { vocab: "护士", meaning: "y tá" }, { vocab: "部队", meaning: "bộ đội" },
+                { vocab: "消防员", meaning: "lính cứu hỏa" }, { vocab: "工人", meaning: "công nhân" },
+                { vocab: "农民", meaning: "nông dân" }, { vocab: "公务员", meaning: "công chức" }
+            ],
+            'H1 Bài 3: 你叫什么名字?': [
+                { vocab: "叫", meaning: "gọi" }, { vocab: "请", meaning: "mời" },
+                { vocab: "问", meaning: "hỏi" }, { vocab: "吃", meaning: "ăn" },
+                { vocab: "喝", meaning: "uống" }, { vocab: "说", meaning: "nói" },
+                { vocab: "喜欢", meaning: "thích" }, { vocab: "什么", meaning: "cái gì" },
+                { vocab: "名字", meaning: "tên" }, { vocab: "贵姓", meaning: "quý tính" },
+                { vocab: "姓", meaning: "họ" }, { vocab: "他", meaning: "anh ấy" },
+                { vocab: "她", meaning: "cô ấy" }, { vocab: "们", meaning: "các (số nhiều)" },
+                { vocab: "人", meaning: "người" }, { vocab: "也", meaning: "cũng" },
+                { vocab: "都", meaning: "đều" }, { vocab: "中国", meaning: "Trung Quốc" },
+                { vocab: "美国", meaning: "Mỹ" }, { vocab: "英国", meaning: "Anh" },
+                { vocab: "韩国", meaning: "Hàn Quốc" }, { vocab: "泰国", meaning: "Thái Lan" },
+                { vocab: "德国", meaning: "Đức" }, { vocab: "法国", meaning: "Pháp" },
+                { vocab: "日本", meaning: "Nhật Bản" }, { vocab: "越南", meaning: "Việt Nam" },
+                { vocab: "汉语", meaning: "Tiếng Hán" }, { vocab: "英语", meaning: "Tiếng Anh" }
+            ],
+            'H1 Bài 4: 她是我的汉语老师': [
+                { vocab: "谁", meaning: "ai" }, { vocab: "哪", meaning: "nào" },
+                { vocab: "呢", meaning: "thì sao" }, { vocab: "的", meaning: "của" },
+                { vocab: "两", meaning: "hai" }, { vocab: "和", meaning: "và" },
+                { vocab: "个", meaning: "cái (lượng từ)" }, { vocab: "本", meaning: "quyển" },
+                { vocab: "条", meaning: "chiếc/sợi" }, { vocab: "件", meaning: "chiếc (áo)" },
+                { vocab: "张", meaning: "tấm/tờ" }, { vocab: "把", meaning: "cái (ghế)" },
+                { vocab: "只", meaning: "con (vật)" }, { vocab: "双", meaning: "đôi" },
+                { vocab: "辆", meaning: "chiếc (xe)" }, { vocab: "看", meaning: "xem/nhìn" },
+                { vocab: "打", meaning: "đánh" }, { vocab: "踢", meaning: "đá" },
+                { vocab: "穿", meaning: "mặc" }, { vocab: "同学", meaning: "bạn học" },
+                { vocab: "朋友", meaning: "bạn bè" }, { vocab: "电视", meaning: "ti vi" },
+                { vocab: "电影", meaning: "phim" }, { vocab: "衣服", meaning: "quần áo" },
+                { vocab: "颜色", meaning: "màu sắc" }
+            ]
+        };
+
+        // --- STATE ---
+        let vocabPairs = [];
+        let selectedWord1 = null; // DOM Element
+        let selectedWord2 = null; // DOM Element
+        let correctPairs = {};
+        let matchedPairsCount = 0;
+        let totalPairs = 0;
+
+        // --- UI ELEMENTS ---
+        const lessonSelect = document.getElementById('lessonSelect');
+        const countInput = document.getElementById('vocabCount');
+        const countDisplay = document.getElementById('countDisplay');
+        const startBtn = document.getElementById('startBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const leftColumn = document.getElementById('leftColumn');
+        const rightColumn = document.getElementById('rightColumn');
+
+        // --- INITIALIZATION ---
+        function init() {
+            // Populate Lesson Select
+            Object.keys(lessonVocabulary).forEach(lesson => {
+                const option = document.createElement('option');
+                option.value = lesson;
+                option.textContent = lesson;
+                lessonSelect.appendChild(option);
+            });
+
+            // Count Input Listener
+            countInput.addEventListener('input', (e) => {
+                countDisplay.textContent = `${e.target.value} cặp`;
+            });
+
+            // Lesson Select Listener
+            lessonSelect.addEventListener('change', () => {
+                startBtn.disabled = !lessonSelect.value;
+            });
+
+            // Start Button
+            startBtn.addEventListener('click', startGame);
+            
+            // Shuffle Button
+            shuffleBtn.addEventListener('click', shuffleRightColumn);
+        }
+
+        // --- GAME LOGIC ---
+
+        function startGame() {
+            const selectedLesson = lessonSelect.value;
+            if (!selectedLesson) return;
+
+            // Setup Data
+            vocabPairs = [...lessonVocabulary[selectedLesson]];
+            const count = Math.min(parseInt(countInput.value), vocabPairs.length);
+            
+            // Switch Screens
+            setupScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            gameScreen.classList.add('flex');
+
+            // Prepare Game Board
+            prepareBoard(count);
+        }
+
+        function handleBack() {
+            if (!setupScreen.classList.contains('hidden')) {
+                // If on setup screen, go back history
+                window.history.back();
+            } else {
+                // If on game/result screen, go back to setup
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+            
+            // Reset state
+            selectedWord1 = null;
+            selectedWord2 = null;
+        }
+
+        function prepareBoard(count) {
+            leftColumn.innerHTML = '';
+            rightColumn.innerHTML = '';
+            correctPairs = {};
+            matchedPairsCount = 0;
+            totalPairs = count;
+            selectedWord1 = null;
+            selectedWord2 = null;
+
+            // Pick random pairs
+            let randomPairs = vocabPairs.sort(() => 0.5 - Math.random()).slice(0, count);
+            
+            // Create Left Column (Chinese)
+            randomPairs.forEach(pair => {
+                correctPairs[pair.vocab] = pair.meaning;
+                createCard(pair.vocab, 'chinese', leftColumn);
+            });
+
+            // Create Right Column (Meaning) - Shuffled
+            let shuffledMeanings = randomPairs.map(p => p.meaning).sort(() => 0.5 - Math.random());
+            shuffledMeanings.forEach(meaning => {
+                createCard(meaning, 'meaning', rightColumn);
+            });
+        }
+
+        function createCard(text, type, container) {
+            const card = document.createElement('div');
+            card.className = `word-card w-full bg-white p-3 rounded-xl shadow-sm border-2 border-transparent cursor-pointer flex items-center justify-center text-center min-h-[70px] select-none`;
+            
+            // Text Styling
+            if (type === 'chinese') {
+                card.classList.add('chinese-font', 'text-2xl', 'font-medium', 'text-gray-800');
+            } else {
+                card.classList.add('text-sm', 'font-bold', 'text-gray-600');
+            }
+            
+            card.textContent = text;
+            card.dataset.value = text;
+            card.dataset.type = type;
+
+            card.addEventListener('click', () => handleCardClick(card));
+            
+            container.appendChild(card);
+        }
+
+        function handleCardClick(card) {
+            // Ignore if already matched or animating
+            if (card.classList.contains('correct') || card.classList.contains('pop-out')) return;
+
+            // Deselect if clicking same card
+            if (card === selectedWord1) {
+                card.classList.remove('selected');
+                selectedWord1 = null;
+                return;
+            }
+
+            if (!selectedWord1) {
+                // First selection
+                selectedWord1 = card;
+                card.classList.add('selected');
+            } else {
+                // Second selection
+                selectedWord2 = card;
+                card.classList.add('selected');
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const val1 = selectedWord1.dataset.value;
+            const val2 = selectedWord2.dataset.value;
+            const type1 = selectedWord1.dataset.type;
+
+            let isMatch = false;
+
+            // Determine checking direction
+            if (type1 === 'chinese') {
+                isMatch = correctPairs[val1] === val2;
+            } else {
+                // type1 is meaning, so check if correctPairs[val2] === val1
+                isMatch = correctPairs[val2] === val1;
+            }
+
+            if (isMatch) {
+                handleCorrectMatch();
+            } else {
+                handleWrongMatch();
+            }
+        }
+
+        function handleCorrectMatch() {
+            // Apply correct style
+            selectedWord1.classList.remove('selected');
+            selectedWord2.classList.remove('selected');
+            selectedWord1.classList.add('correct');
+            selectedWord2.classList.add('correct');
+
+            // Play small confetti or sound here if desired
+            
+            // Remove matching cards after short delay
+            const s1 = selectedWord1;
+            const s2 = selectedWord2;
+            
+            setTimeout(() => {
+                s1.classList.add('pop-out');
+                s2.classList.add('pop-out');
+                
+                // Actually remove from DOM after animation to clear space
+                setTimeout(() => {
+                    s1.style.visibility = 'hidden'; 
+                    s2.style.visibility = 'hidden';
+                    // We don't remove() to keep the grid structure stable, 
+                    // or we can remove() if we want items to shift up.
+                    // Let's remove() to be cleaner for mobile scroll
+                    s1.remove();
+                    s2.remove();
+                }, 500);
+
+            }, 400);
+
+            matchedPairsCount++;
+            selectedWord1 = null;
+            selectedWord2 = null;
+
+            if (matchedPairsCount === totalPairs) {
+                setTimeout(showWinResult, 1000);
+            }
+        }
+
+        function handleWrongMatch() {
+            selectedWord1.classList.add('wrong', 'animate-shake');
+            selectedWord2.classList.add('wrong', 'animate-shake');
+
+            // Reset after animation
+            setTimeout(() => {
+                if (selectedWord1) selectedWord1.classList.remove('wrong', 'animate-shake', 'selected');
+                if (selectedWord2) selectedWord2.classList.remove('wrong', 'animate-shake', 'selected');
+                selectedWord1 = null;
+                selectedWord2 = null;
+            }, 600);
+        }
+
+        function showWinResult() {
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+
+            // Fire Confetti
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function shuffleRightColumn() {
+            // Only shuffle items currently in the container (not removed ones)
+            const cards = Array.from(rightColumn.children);
+            if (cards.length === 0) return;
+
+            // Fade out
+            rightColumn.style.opacity = '0';
+            
+            setTimeout(() => {
+                cards.sort(() => 0.5 - Math.random());
+                cards.forEach(card => rightColumn.appendChild(card));
+                // Fade in
+                rightColumn.style.opacity = '1';
+                rightColumn.classList.add('transition-opacity', 'duration-300');
+            }, 200);
+        }
+
+        // Run Init
+        window.onload = init;
+
+    </script>
+</body>
+</html>

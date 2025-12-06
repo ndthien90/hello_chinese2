@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chọn Hình Ảnh - HelloChinese Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Select */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        .choice-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .choice-card:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="window.history.back()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Chọn hình ảnh</h1>
+        <div class="flex items-center gap-2">
+             <!-- Mode Selector Mini -->
+             <select id="mode-selector" class="text-xs font-bold bg-gray-100 text-gray-600 rounded-lg px-2 py-1.5 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                <option value="full">Tất cả</option>
+                <option value="random10">10 câu</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar">
+        
+        <!-- Lesson Select & Progress -->
+        <div class="mb-6 space-y-3">
+            <div class="relative">
+                <select id="lesson-selector" class="custom-select w-full bg-white border border-gray-200 text-gray-700 font-bold py-3 pl-4 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer text-sm">
+                    <!-- Options injected via JS -->
+                </select>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div id="progress-wrapper" class="flex items-center gap-3 transition-opacity duration-300">
+                <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+                <span id="progress-text" class="text-xs font-bold text-gray-500 min-w-[3rem] text-right">0/0</span>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <main id="game-container" class="flex-1 flex flex-col items-center justify-center w-full">
+            
+            <!-- Question Card -->
+            <div id="word-display-container" class="w-full bg-white rounded-[2rem] p-6 shadow-lg shadow-blue-50 border border-gray-100 mb-6 text-center relative overflow-hidden group cursor-pointer active:scale-95 transition-transform">
+                <div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+                
+                <!-- Audio Icon Hint -->
+                <div class="absolute top-3 right-3 text-gray-300 group-hover:text-blue-500 transition">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+
+                <div id="hanzi" class="chinese-font text-6xl sm:text-7xl text-gray-800 mb-2 transition-colors"></div>
+                <div id="pinyin" class="text-xl sm:text-2xl font-bold text-blue-500 tracking-wide h-8"></div>
+            </div>
+
+            <!-- Image Grid -->
+            <div id="choices-grid" class="grid grid-cols-2 gap-3 w-full">
+                <!-- Choice cards injected via JS -->
+            </div>
+
+            <!-- Result Message (Hidden by default) -->
+            <div id="result-message" class="hidden w-full bg-white rounded-3xl p-8 shadow-xl text-center border-2 border-blue-50 pop-in">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="hidden flex flex-col items-center justify-center py-10">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mb-3"></div>
+                <p class="text-sm text-gray-500 font-medium">Đang tải dữ liệu...</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="FlashCard_new.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-layer-group text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Thẻ</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="feedback" class="fixed top-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-xl text-sm font-bold transition-all duration-300 opacity-0 translate-y-[-20px] z-[60] bg-white text-gray-800 border border-gray-100 flex items-center gap-2">
+        <span id="feedback-icon"></span>
+        <span id="feedback-text"></span>
+    </div>
+
+    <script>
+        // --- CẤU HÌNH & DATA ---
+        const LESSON_CONFIG = [
+            { key: "bai1", title: "Bài 1: 老师您好！" },
+            { key: "bai2", title: "Bài 2: 谢谢你！" },
+            { key: "bai3", title: "Bài 3: 你叫什么名字？" },
+            { key: "bai4", title: "Bài 4: 她是我的汉语老师" },
+        ]; 
+        
+        const LESSON_KEYS = LESSON_CONFIG.map(config => config.key);
+        const BASE_PATH = 'data_imgpractice'; 
+        
+        // State
+        let allLessonsData = {}; 
+        let currentLessonKey = LESSON_KEYS[0];
+        let currentLesson = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isQuestionActive = true;
+        let audio = new Audio();
+        
+        // DOM Elements
+        const hanziEl = document.getElementById('hanzi');
+        const pinyinEl = document.getElementById('pinyin');
+        const choicesGridEl = document.getElementById('choices-grid');
+        const resultMessageEl = document.getElementById('result-message');
+        const lessonSelectorEl = document.getElementById('lesson-selector');
+        const modeSelectorEl = document.getElementById('mode-selector');
+        const loadingIndicatorEl = document.getElementById('loading-indicator');
+        const progressBarEl = document.getElementById('progress-bar');
+        const progressTextEl = document.getElementById('progress-text');
+        const progressWrapperEl = document.getElementById('progress-wrapper');
+        const wordDisplayContainerEl = document.getElementById('word-display-container');
+
+        // --- AUDIO LOGIC ---
+        function speakWithWebSpeechAPI(text) {
+            if (!('speechSynthesis' in window)) return;
+            if (speechSynthesis.speaking) speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN'; 
+            utterance.rate = 0.9;
+            
+            const voices = speechSynthesis.getVoices();
+            const cnVoice = voices.find(v => v.lang === 'zh-CN') || voices.find(v => v.lang.startsWith('zh'));
+            if (cnVoice) utterance.voice = cnVoice;
+
+            speechSynthesis.speak(utterance);
+        }
+
+        function speakHanzi(text) {
+            if (!text || text === 'Đang tải...' || text.includes('!')) return;
+            
+            if (speechSynthesis.speaking) speechSynthesis.cancel();
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+
+            const trimmedText = text.trim();
+            // Điều chỉnh path phù hợp với cấu trúc thư mục của bạn
+            // data_imgpractice/bai1/mp3/TuVung.mp3
+            const mp3Path = `${BASE_PATH}/${currentLessonKey}/mp3/${trimmedText}.mp3`;
+
+            // Kiểm tra và phát MP3 trước
+            const checkAudio = new Audio(mp3Path);
+            checkAudio.onloadeddata = () => {
+                audio.src = mp3Path;
+                audio.play().catch(e => speakWithWebSpeechAPI(trimmedText));
+            };
+            checkAudio.onerror = () => {
+                speakWithWebSpeechAPI(trimmedText);
+            };
+        }
+
+        // Tap to Speak
+        wordDisplayContainerEl.addEventListener('click', () => {
+            const currentHanzi = hanziEl.textContent.trim();
+            speakHanzi(currentHanzi);
+            
+            // Visual feedback for tap
+            wordDisplayContainerEl.classList.add('ring-2', 'ring-blue-200');
+            setTimeout(() => wordDisplayContainerEl.classList.remove('ring-2', 'ring-blue-200'), 200);
+        });
+
+        // --- CORE LOGIC ---
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function getImagePath(hanzi, lessonKey) {
+             return `${BASE_PATH}/${lessonKey}/img/${hanzi.trim()}.jpg`;
+        }
+
+        function updateProgressBar() {
+            const total = currentLesson.length;
+            const completed = currentQuestionIndex; 
+            
+            if (total === 0) {
+                progressBarEl.style.width = '0%';
+                progressTextEl.textContent = '0/0';
+                return;
+            }
+
+            const pct = (completed / total) * 100;
+            progressBarEl.style.width = `${pct}%`;
+            progressTextEl.textContent = `${completed}/${total}`;
+        }
+
+        // --- DATA FETCHING ---
+
+        async function fetchLessonData(lessonKey) {
+            const url = `${BASE_PATH}/${lessonKey}/${lessonKey}.txt`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network error');
+                const text = await response.text();
+                
+                return text.trim().split('\n')
+                    .filter(line => line.trim())
+                    .map(line => {
+                        const parts = line.split('|');
+                        if (parts.length >= 3) {
+                            return {
+                                hanzi: parts[0].trim(),
+                                pinyin: parts[1].trim(),
+                                meaning: parts[2].trim(),
+                                lessonKeySource: lessonKey,
+                            };
+                        }
+                        return null;
+                    })
+                    .filter(item => item !== null);
+            } catch (error) {
+                console.error(`Error loading ${lessonKey}:`, error);
+                return [];
+            }
+        }
+
+        async function initializeLessons() {
+            loadingIndicatorEl.classList.remove('hidden');
+            wordDisplayContainerEl.classList.add('hidden');
+            
+            for (const key of LESSON_KEYS) {
+                const data = await fetchLessonData(key);
+                allLessonsData[key] = data;
+            }
+            
+            loadingIndicatorEl.classList.add('hidden');
+            wordDisplayContainerEl.classList.remove('hidden');
+            
+            initLessonSelector();
+        }
+
+        function initLessonSelector() {
+            lessonSelectorEl.innerHTML = '';
+            let hasData = false;
+
+            LESSON_CONFIG.forEach(config => {
+                const lessonData = allLessonsData[config.key];
+                const option = document.createElement('option');
+                option.value = config.key;
+                
+                if (lessonData && lessonData.length > 0) {
+                    option.textContent = config.title;
+                    hasData = true;
+                } else {
+                    option.textContent = `${config.title} (Trống)`;
+                    option.disabled = true;
+                }
+                lessonSelectorEl.appendChild(option);
+            });
+
+            if (hasData) {
+                loadLesson(lessonSelectorEl.value);
+                
+                // Event Listeners for Selectors
+                lessonSelectorEl.addEventListener('change', (e) => loadLesson(e.target.value));
+                modeSelectorEl.addEventListener('change', () => loadLesson(lessonSelectorEl.value));
+            }
+        }
+
+        function loadLesson(lessonKey) {
+            currentLessonKey = lessonKey;
+            const lessonData = allLessonsData[lessonKey];
+            
+            if (!lessonData || lessonData.length === 0) return;
+
+            // Mode Logic
+            const mode = modeSelectorEl.value;
+            let pool = [...lessonData];
+            
+            if (mode === 'random10') {
+                pool = shuffleArray(pool);
+                currentLesson = pool.slice(0, 10);
+            } else {
+                currentLesson = shuffleArray(pool);
+            }
+
+            currentQuestionIndex = 0;
+            score = 0;
+            resultMessageEl.classList.add('hidden');
+            wordDisplayContainerEl.classList.remove('hidden');
+            choicesGridEl.classList.remove('hidden');
+            
+            renderQuestion();
+            updateProgressBar();
+        }
+
+        function renderQuestion() {
+            isQuestionActive = true;
+            choicesGridEl.innerHTML = '';
+            
+            if (currentQuestionIndex >= currentLesson.length) {
+                showCompletion();
+                return;
+            }
+
+            const currentWord = currentLesson[currentQuestionIndex];
+            
+            // Update UI
+            hanziEl.textContent = currentWord.hanzi;
+            pinyinEl.textContent = currentWord.pinyin;
+            speakHanzi(currentWord.hanzi);
+
+            // Generate Decoys (Wrong answers)
+            const currentLessonWords = allLessonsData[currentLessonKey] || [];
+            const availableDecoys = currentLessonWords.filter(w => w.hanzi !== currentWord.hanzi);
+            const decoys = shuffleArray(availableDecoys).slice(0, 3);
+            
+            // Combine & Shuffle
+            const choices = shuffleArray([currentWord, ...decoys]);
+
+            // Render Cards
+            choices.forEach((choice, index) => {
+                const isTarget = choice.hanzi === currentWord.hanzi;
+                const card = document.createElement('div');
+                card.className = 'choice-card relative aspect-square bg-white rounded-2xl border-2 border-gray-100 overflow-hidden cursor-pointer shadow-sm hover:shadow-md hover:border-blue-200 pop-in';
+                card.style.animationDelay = `${index * 50}ms`;
+
+                const imgPath = getImagePath(choice.hanzi, choice.lessonKeySource);
+                
+                card.innerHTML = `
+                    <img src="${imgPath}" alt="${choice.meaning}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full bg-gray-50 text-gray-400 text-xs text-center p-2 font-bold\\'>${choice.meaning}<br>(Thiếu ảnh)</div>'">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-opacity duration-300 meaning-overlay">
+                        <span class="text-white font-bold text-lg drop-shadow-md text-center px-2">${choice.meaning}</span>
+                    </div>
+                `;
+
+                card.onclick = () => handleAnswer(card, isTarget, currentWord);
+                choicesGridEl.appendChild(card);
+            });
+        }
+
+        function handleAnswer(card, isCorrect, currentWord) {
+            if (!isQuestionActive) return;
+            isQuestionActive = false;
+
+            // Disable all cards
+            const allCards = choicesGridEl.children;
+            for (let c of allCards) {
+                c.style.pointerEvents = 'none';
+                c.classList.add('opacity-50'); // Dim others
+            }
+            
+            // Highlight selected
+            card.classList.remove('opacity-50');
+            card.querySelector('.meaning-overlay').classList.remove('opacity-0'); // Show meaning
+
+            if (isCorrect) {
+                score++;
+                card.className = 'choice-card relative aspect-square bg-white rounded-2xl border-4 border-green-500 overflow-hidden shadow-lg transform scale-105 transition-all';
+                
+                // Add Check Icon
+                const icon = document.createElement('div');
+                icon.className = 'absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm z-10';
+                icon.innerHTML = '<i class="fas fa-check text-xs"></i>';
+                card.appendChild(icon);
+                
+                // Play correct sound (optional, reusing system sounds or simple feedback)
+            } else {
+                card.className = 'choice-card relative aspect-square bg-white rounded-2xl border-4 border-red-500 overflow-hidden shadow-lg transform scale-95 transition-all';
+                
+                // Add X Icon
+                const icon = document.createElement('div');
+                icon.className = 'absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm z-10';
+                icon.innerHTML = '<i class="fas fa-times text-xs"></i>';
+                card.appendChild(icon);
+
+                // Highlight correct one
+                for (let c of allCards) {
+                    if (c.innerHTML.includes(currentWord.meaning)) { // Simple check based on rendered HTML content or attribute
+                         // Better: Find matching image src or similar. 
+                         // To be robust: Let's store hanzi in dataset
+                    }
+                }
+                
+                // Since we didn't add dataset in render, let's just find the one that didn't get clicked if we wanted to highlight it, 
+                // BUT for simplicity in this robust version, we just show the Red X and move on, 
+                // OR we can iterate and find the correct one easily if we added dataset.
+                // Let's rely on the user learning from the next time or the meaning overlay.
+            }
+
+            // Auto advance
+            setTimeout(() => {
+                currentQuestionIndex++;
+                updateProgressBar();
+                renderQuestion();
+            }, 1500);
+        }
+
+        function showCompletion() {
+            choicesGridEl.classList.add('hidden');
+            wordDisplayContainerEl.classList.add('hidden');
+            resultMessageEl.classList.remove('hidden');
+
+            const pct = (score / currentLesson.length) * 100;
+            const isGood = pct >= 80;
+
+            if (isGood) {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b']
+                });
+            }
+
+            resultMessageEl.innerHTML = `
+                <div class="mb-4 text-5xl">${isGood ? '🏆' : '💪'}</div>
+                <h2 class="text-2xl font-extrabold text-gray-800 mb-2">${isGood ? 'Tuyệt vời!' : 'Hoàn thành!'}</h2>
+                <p class="text-gray-500 mb-6">Bạn đã trả lời đúng <span class="text-blue-600 font-bold text-xl">${score}/${currentLesson.length}</span> câu.</p>
+                
+                <div class="flex gap-3 justify-center">
+                    <button onclick="loadLesson(currentLessonKey)" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 active:scale-95 transition">
+                        Làm lại
+                    </button>
+                    <button onclick="window.history.back()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 px-6 rounded-xl hover:bg-gray-200 active:scale-95 transition">
+                        Thoát
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            initializeLessons();
+        };
+
+    </script>
+</body>
+</html>

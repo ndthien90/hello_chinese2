@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tìm Hán Tự - HelloChinese Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        /* Character Button Style */
+        .char-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            aspect-ratio: 1 / 1;
+        }
+        .char-btn:active { transform: scale(0.95); }
+        
+        .char-btn.correct {
+            background-color: #22c55e; /* green-500 */
+            color: white;
+            border-color: #16a34a;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+        }
+
+        .char-btn.wrong {
+            background-color: #ef4444; /* red-500 */
+            color: white;
+            border-color: #dc2626;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .char-btn.hidden-circle {
+            opacity: 0.1;
+            pointer-events: none;
+            transform: scale(0.8);
+        }
+
+        /* Custom Select */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25em 1.25em;
+            appearance: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative text-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="handleBack()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Tìm Hán Tự</h1>
+        <div class="flex items-center gap-2">
+            <div id="roundBadge" class="hidden bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200">
+                0/10
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar relative">
+        
+        <!-- SETUP SCREEN -->
+        <div id="setup-screen" class="flex flex-col gap-6 pt-4 transition-all duration-300">
+            <!-- Icon Hero -->
+            <div class="flex justify-center mb-2">
+                <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center shadow-inner animate-pulse">
+                    <span class="text-5xl chinese-font text-purple-600">字</span>
+                </div>
+            </div>
+
+            <div class="text-center mb-2">
+                <h2 class="text-2xl font-extrabold text-gray-800">Thử thách Hán Tự</h2>
+                <p class="text-gray-500 text-sm">Chọn chữ Hán đúng với ý nghĩa</p>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+                <!-- Lesson Selection -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-600 uppercase tracking-wider mb-2">Bài học</label>
+                    <div class="relative">
+                        <select id="lessonSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition cursor-pointer">
+                            <option value="1">H1 Bài 1: 老师您好！</option>
+                            <option value="2">H1 Bài 2: 谢谢你！</option>
+                            <option value="3">H1 Bài 3: 你叫什么名字？</option>
+                            <option value="4">H1 Bài 4: 她是我的汉语老师</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <button id="startBtn" onclick="startGame()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-purple-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 text-lg">
+                <i class="fas fa-play"></i> Bắt đầu ngay
+            </button>
+            
+            <!-- Loading State inside Setup -->
+            <div id="loadingState" class="hidden text-center text-gray-500 text-sm mt-2">
+                <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải dữ liệu...
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="hidden flex-col h-full relative">
+            
+            <!-- Info Bar (Timer & Score) -->
+            <div class="flex justify-between items-center mb-4 px-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <span id="timerDisplay" class="font-mono font-bold text-red-500 text-lg">00:00</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="scoreDisplay" class="font-bold text-green-600 text-lg">0</span>
+                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-500 flex items-center justify-center">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Target Card -->
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl p-6 shadow-lg shadow-purple-200 mb-6 text-center relative overflow-hidden min-h-[140px] flex flex-col justify-center">
+                <!-- Decoration Circles -->
+                <div class="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 rounded-full bg-white opacity-10"></div>
+                <div class="absolute bottom-0 left-0 -ml-4 -mb-4 w-16 h-16 rounded-full bg-white opacity-10"></div>
+
+                <p class="text-indigo-100 text-xs font-bold uppercase tracking-widest mb-2 opacity-80">Tìm chữ Hán cho</p>
+                
+                <div class="flex flex-col items-center justify-center relative z-10">
+                    <div id="targetMeaning" class="text-3xl text-white font-extrabold mb-1 drop-shadow-md leading-tight">??</div>
+                    <div id="targetPinyin" class="text-indigo-200 font-medium text-lg italic"></div>
+                </div>
+
+                <!-- Hint/Audio Button -->
+                <button onclick="playTargetAudio()" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center backdrop-blur-sm transition" title="Nghe phát âm">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+
+            <!-- Grid Container -->
+            <div class="flex-1 relative">
+                <!-- Grid 5x2 (10 items) optimized for mobile -->
+                <div id="charsContainer" class="grid grid-cols-5 gap-3 sm:gap-4 justify-items-center pb-20">
+                    <!-- Characters injected here -->
+                </div>
+                
+                <!-- Floating Help Button -->
+                <div class="fixed bottom-24 right-4 z-20">
+                    <button id="helpBtn" onclick="useHelp()" class="w-14 h-14 rounded-full bg-yellow-400 text-yellow-900 shadow-lg shadow-yellow-200 border-2 border-white flex items-center justify-center text-xl font-bold active:scale-90 transition-all hover:bg-yellow-300 group">
+                        <i class="fas fa-lightbulb group-hover:animate-pulse"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full border border-white">50%</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden flex-col items-center justify-center h-full text-center pop-in pt-10">
+            <div id="resultIcon" class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-sm animate-bounce text-green-500">
+                <span class="text-5xl">🏆</span>
+            </div>
+            <h2 id="resultTitle" class="text-3xl font-extrabold text-gray-800 mb-2">Hoàn thành!</h2>
+            <p id="resultMessage" class="text-gray-500 mb-8 px-4">Bạn đã hoàn thành xuất sắc thử thách.</p>
+            
+            <div class="bg-gray-50 rounded-xl p-6 w-full mb-8 border border-gray-100 shadow-sm grid grid-cols-2 gap-4">
+                <div class="text-center border-r border-gray-200">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Điểm số</p>
+                    <p id="finalScore" class="text-2xl font-bold text-indigo-600">0/0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Thời gian</p>
+                    <p id="finalTime" class="text-2xl font-bold text-gray-800">0s</p>
+                </div>
+            </div>
+
+            <button onclick="resetGame()" class="w-full bg-purple-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-purple-200 active:scale-95 transition mb-3">
+                Chơi lại
+            </button>
+            <button onclick="handleBack()" class="w-full bg-white text-gray-600 border border-gray-200 font-bold py-4 rounded-xl active:scale-95 transition">
+                Về màn hình chính
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="FlashCard_new.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-layer-group text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Thẻ</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        // --- CONSTANTS ---
+        const OPTIONS_COUNT = 10;
+        const DEFAULT_ROUNDS = 10;
+        const TIME_PER_ROUND = 10; // 10 seconds per round
+
+        // --- STATE ---
+        let lessonData = []; // Vocabulary data
+        let totalRounds = DEFAULT_ROUNDS;
+        let currentRound = 0;
+        let correctGuesses = 0;
+        let targetCharObject = null;
+        let isGameActive = false;
+        let isHelpUsed = false;
+        let remainingTime = 0;
+        let timerInterval = null;
+        let usedTargetIndexes = new Set();
+        let currentAudio = new Audio();
+
+        // --- DOM ELEMENTS ---
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const lessonSelect = document.getElementById('lessonSelect');
+        const roundBadge = document.getElementById('roundBadge');
+        const loadingState = document.getElementById('loadingState');
+        
+        const targetMeaning = document.getElementById('targetMeaning');
+        const targetPinyin = document.getElementById('targetPinyin');
+        const charsContainer = document.getElementById('charsContainer');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const helpBtn = document.getElementById('helpBtn');
+
+        // --- DATA FETCHING ---
+        async function fetchLessonData(lessonId) {
+            const filePath = `data_flashcard/bai${lessonId}/bai${lessonId}.txt`;
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error('File not found');
+                const text = await response.text();
+                
+                return text.split('\n')
+                    .filter(line => line.trim() !== '')
+                    .map(line => {
+                        const parts = line.split('|');
+                        if (parts.length >= 3) {
+                            return { 
+                                char: parts[0].trim(), 
+                                pinyin: parts[1].trim(), 
+                                meaning: parts[2].trim() 
+                            };
+                        }
+                        return null;
+                    })
+                    .filter(item => item !== null);
+            } catch (error) {
+                console.error("Error loading data:", error);
+                alert(`Không thể tải dữ liệu bài học ${lessonId}. Vui lòng kiểm tra lại.`);
+                return [];
+            }
+        }
+
+        function getAudioPath(lessonId, char) {
+            return `data_flashcard/bai${lessonId}/mp3/${char.replace(/\s+/g, '')}.mp3`;
+        }
+
+        // --- AUDIO ---
+        function playTargetAudio() {
+            if (!targetCharObject) return;
+            const lessonId = lessonSelect.value;
+            const path = getAudioPath(lessonId, targetCharObject.char);
+            
+            // Stop current
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio.src = path;
+            
+            currentAudio.play().catch(e => {
+                console.warn("Audio file missing, using TTS fallback", e);
+                speakFallback(targetCharObject.char);
+            });
+        }
+
+        function speakFallback(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- GAMEPLAY ---
+
+        async function startGame() {
+            loadingState.classList.remove('hidden');
+            const lessonId = lessonSelect.value;
+            
+            // Load data
+            lessonData = await fetchLessonData(lessonId);
+            loadingState.classList.add('hidden');
+
+            if (lessonData.length < OPTIONS_COUNT) {
+                alert(`Bài học này chỉ có ${lessonData.length} từ. Cần ít nhất ${OPTIONS_COUNT} từ để chơi.`);
+                return;
+            }
+
+            // Init state
+            totalRounds = Math.min(DEFAULT_ROUNDS, lessonData.length);
+            currentRound = 0;
+            correctGuesses = 0;
+            usedTargetIndexes.clear();
+            remainingTime = totalRounds * TIME_PER_ROUND;
+
+            // UI Switch
+            setupScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            gameScreen.classList.add('flex');
+            roundBadge.classList.remove('hidden');
+
+            startNextRound();
+            startTimer();
+        }
+
+        function handleBack() {
+            if (!setupScreen.classList.contains('hidden')) {
+                window.history.back();
+            } else {
+                resetGame();
+            }
+        }
+
+        function startNextRound() {
+            if (currentRound >= totalRounds) {
+                finishGame(true);
+                return;
+            }
+
+            currentRound++;
+            roundBadge.textContent = `${currentRound}/${totalRounds}`;
+            scoreDisplay.textContent = correctGuesses;
+            isGameActive = true;
+            isHelpUsed = false;
+            helpBtn.disabled = false;
+            helpBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            // 1. Generate Options
+            const { options, target } = generateRandomCharacters();
+            if (!target) {
+                finishGame(true); // Should not happen if logic is correct
+                return;
+            }
+            targetCharObject = target;
+
+            // 2. Display Target
+            targetMeaning.textContent = target.meaning;
+            targetPinyin.textContent = `(${target.pinyin})`;
+            
+            // Auto play audio? Usually better to let user try reading first, or auto-play.
+            // Let's auto-play for immersion.
+            playTargetAudio();
+
+            // 3. Render Grid
+            renderGrid(options);
+        }
+
+        function generateRandomCharacters() {
+            // Find a new target
+            let availableIndexes = [];
+            for(let i=0; i<lessonData.length; i++) {
+                if(!usedTargetIndexes.has(i)) availableIndexes.push(i);
+            }
+            
+            if(availableIndexes.length === 0) return { options: [], target: null };
+            
+            const targetIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+            usedTargetIndexes.add(targetIndex);
+            const target = lessonData[targetIndex];
+
+            // Pick 9 distractors
+            const pool = lessonData.filter((_, idx) => idx !== targetIndex);
+            const distractors = pool.sort(() => 0.5 - Math.random()).slice(0, OPTIONS_COUNT - 1);
+            
+            // Combine
+            const options = [target, ...distractors].sort(() => 0.5 - Math.random());
+            return { options, target };
+        }
+
+        function renderGrid(options) {
+            charsContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'char-btn w-full bg-white rounded-xl shadow-sm border border-gray-200 text-gray-800 chinese-font text-2xl sm:text-3xl font-medium flex items-center justify-center hover:bg-gray-50';
+                btn.textContent = opt.char;
+                btn.onclick = () => handleCharClick(btn, opt);
+                charsContainer.appendChild(btn);
+            });
+        }
+
+        function handleCharClick(btn, opt) {
+            if (!isGameActive || btn.classList.contains('hidden-circle')) return;
+
+            if (opt.char === targetCharObject.char) {
+                // Correct
+                isGameActive = false;
+                btn.classList.add('correct');
+                correctGuesses++;
+                scoreDisplay.textContent = correctGuesses;
+                
+                // Audio feedback (optional success sound or replay word)
+                
+                setTimeout(() => {
+                    startNextRound();
+                }, 800);
+            } else {
+                // Wrong
+                btn.classList.add('wrong');
+                // Vibrate
+                if (navigator.vibrate) navigator.vibrate(200);
+                setTimeout(() => {
+                    btn.classList.remove('wrong');
+                }, 400);
+            }
+        }
+
+        function useHelp() {
+            if (isHelpUsed || !isGameActive) return;
+            
+            const buttons = Array.from(charsContainer.children);
+            const wrongButtons = buttons.filter(b => b.textContent !== targetCharObject.char && !b.classList.contains('hidden-circle'));
+            
+            const toRemove = Math.floor(wrongButtons.length / 2);
+            wrongButtons.sort(() => 0.5 - Math.random());
+            
+            for(let i=0; i<toRemove; i++) {
+                wrongButtons[i].classList.add('hidden-circle');
+            }
+
+            isHelpUsed = true;
+            helpBtn.disabled = true;
+            helpBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        // --- TIMER ---
+
+        function startTimer() {
+            updateTimerUI();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                updateTimerUI();
+                if (remainingTime <= 0) finishGame(false);
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const m = Math.floor(remainingTime / 60);
+            const s = remainingTime % 60;
+            timerDisplay.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            
+            if (remainingTime <= 10) timerDisplay.classList.add('animate-pulse');
+            else timerDisplay.classList.remove('animate-pulse');
+        }
+
+        function finishGame(completed) {
+            clearInterval(timerInterval);
+            isGameActive = false;
+
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+            roundBadge.classList.add('hidden');
+
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+
+            if (completed) {
+                resultIcon.innerHTML = '<span class="text-5xl">🏆</span>';
+                resultIcon.className = "w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-sm animate-bounce text-green-500";
+                resultTitle.textContent = "Hoàn thành!";
+                resultMessage.textContent = "Bạn đã vượt qua tất cả các vòng chơi.";
+                
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#22c55e', '#8b5cf6', '#f59e0b']
+                });
+            } else {
+                resultIcon.innerHTML = '<span class="text-5xl">⏰</span>';
+                resultIcon.className = "w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-4 shadow-sm text-red-500";
+                resultTitle.textContent = "Hết giờ!";
+                resultMessage.textContent = "Rất tiếc, bạn đã hết thời gian.";
+            }
+
+            document.getElementById('finalScore').textContent = `${correctGuesses}/${totalRounds}`;
+            const totalTime = totalRounds * TIME_PER_ROUND;
+            const timeUsed = totalTime - (remainingTime < 0 ? 0 : remainingTime);
+            document.getElementById('finalTime').textContent = `${timeUsed}s`;
+        }
+
+        function resetGame() {
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+            roundBadge.classList.add('hidden');
+            clearInterval(timerInterval);
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Hội Thoại - HelloChinese Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Select */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25em 1.25em;
+            appearance: none;
+        }
+
+        /* Message Bubble Animation */
+        .message-bubble {
+            transition: all 0.3s ease;
+        }
+        
+        .message-bubble.active {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6; /* blue-500 */
+        }
+
+        .message-bubble.active .chinese-text {
+            color: #2563eb; /* blue-600 */
+        }
+
+        /* Equalizer Animation for Playing State */
+        .playing-indicator span {
+            display: inline-block;
+            width: 3px;
+            background-color: #3b82f6;
+            animation: equalize 1s infinite;
+        }
+        .playing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .playing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes equalize {
+            0%, 100% { height: 4px; }
+            50% { height: 12px; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative text-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="window.history.back()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Hội thoại</h1>
+        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">
+            <i class="fas fa-comments"></i>
+        </div>
+    </div>
+
+    <!-- Filters Section (Sticky under Top Bar) -->
+    <div class="bg-white px-4 pb-3 border-b border-gray-100 sticky top-[64px] z-20">
+        <div class="flex gap-2">
+            <div class="relative flex-1">
+                <select id="lessonGroupSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2.5 pl-3 pr-8 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer truncate">
+                    <option value="Bài 1">Bài 1: 老师您好</option>
+                    <option value="Bài 2">Bài 2: 谢谢你！</option>
+                    <option value="Bài 3">Bài 3: 你叫什么名字？</option>
+                    <option value="Bài 4">Bài 4: 她是我的汉语老师</option>
+                </select>
+            </div>
+            <div class="relative w-28">
+                <select id="conversationSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2.5 pl-3 pr-8 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat Content -->
+    <div id="conversationContainer" class="flex-1 overflow-y-auto p-4 space-y-4 pb-32 no-scrollbar scroll-smooth">
+        <!-- Messages will be injected here -->
+        
+        <!-- Skeleton Loading State -->
+        <div id="loading" class="space-y-4 animate-pulse">
+            <div class="flex gap-3">
+                <div class="w-10 h-10 rounded-full bg-gray-200"></div>
+                <div class="flex-1 bg-white p-3 rounded-2xl h-24"></div>
+            </div>
+            <div class="flex gap-3 flex-row-reverse">
+                <div class="w-10 h-10 rounded-full bg-gray-200"></div>
+                <div class="flex-1 bg-white p-3 rounded-2xl h-24"></div>
+            </div>
+        </div>
+        
+        <!-- Error State -->
+        <div id="error" class="hidden flex flex-col items-center justify-center py-10 text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-500 text-2xl mb-3">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <p class="text-gray-500 text-sm">Không thể tải dữ liệu hội thoại.</p>
+            <button onclick="location.reload()" class="mt-3 text-blue-600 font-bold text-sm hover:underline">Thử lại</button>
+        </div>
+    </div>
+
+    <!-- Player Controls (Floating above Bottom Bar) -->
+    <div class="fixed bottom-[70px] left-0 right-0 max-w-md mx-auto px-4 z-20">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-3 flex items-center justify-between gap-4">
+            
+            <button id="prevBtn" onclick="previousConversation()" class="w-10 h-10 rounded-full bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed">
+                <i class="fas fa-step-backward"></i>
+            </button>
+
+            <button id="playBtn" onclick="playFullConversation()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition flex items-center justify-center gap-2">
+                <span id="playIcon"><i class="fas fa-play"></i></span>
+                <span id="playText">Nghe tất cả</span>
+            </button>
+
+            <button id="nextBtn" onclick="nextConversation()" class="w-10 h-10 rounded-full bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="FlashCard_new.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-layer-group text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Thẻ</span>
+        </a>
+        <a href="Conversation.html" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-comments text-xl"></i>
+            <span class="text-[10px] font-medium">Hội thoại</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        let currentLessonGroup = 'Bài 1';
+        let currentHT = 1;
+        let currentAudio = null;
+        let currentDialog = 0;
+        let isPlayingFull = false;
+        let conversationData = [];
+        
+        // Cấu hình số lượng hội thoại mỗi bài
+        const lessonConfig = {
+            'Bài 1': 2, 'Bài 2': 2, 'Bài 3': 3, 'Bài 4': 3,
+            'Bài 5': 3, 'Bài 6': 3, 'Bài 7': 3, 'Bài 8': 3, 'Bài 9': 3
+        };
+
+        // --- DOM Elements ---
+        const container = document.getElementById('conversationContainer');
+        const loadingEl = document.getElementById('loading');
+        const errorEl = document.getElementById('error');
+        const lessonGroupSelect = document.getElementById('lessonGroupSelect');
+        const conversationSelect = document.getElementById('conversationSelect');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playText = document.getElementById('playText');
+
+        // --- Core Functions ---
+
+        function updateConversationSelect(lessonGroup) {
+            conversationSelect.innerHTML = '';
+            const count = lessonConfig[lessonGroup] || 2;
+            for (let i = 1; i <= count; i++) {
+                const option = document.createElement('option');
+                option.value = `HT${i}`;
+                option.textContent = `Hội thoại ${i}`;
+                conversationSelect.appendChild(option);
+            }
+        }
+
+        async function loadConversationData(lessonGroup, htNumber) {
+            try {
+                // Show loading
+                container.innerHTML = '';
+                container.appendChild(loadingEl);
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+
+                const htName = `HT${htNumber}`;
+                // Fetch data text
+                const response = await fetch(`data_conversation/${lessonGroup}/${htName}/${htName}.txt`);
+                if (!response.ok) throw new Error('Load failed');
+                
+                const text = await response.text();
+                const lines = text.trim().split('\n');
+                
+                conversationData = lines.filter(line => line.trim()).map((line, index) => {
+                    const parts = line.split('|');
+                    return {
+                        speaker: index % 2 === 0 ? 'A' : 'B',
+                        pinyin: parts[0]?.trim() || '',
+                        chinese: parts[1]?.trim() || '',
+                        vietnamese: parts[2]?.trim() || ''
+                    };
+                });
+
+                renderConversation();
+                updateNavigationButtons();
+                
+            } catch (error) {
+                console.error(error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'flex';
+                container.appendChild(errorEl);
+            }
+        }
+
+        function renderConversation() {
+            container.innerHTML = ''; // Clear loading/error
+
+            conversationData.forEach((msg, index) => {
+                const isSpeakerA = msg.speaker === 'A';
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex gap-3 mb-4 cursor-pointer group ${isSpeakerA ? '' : 'flex-row-reverse'}`;
+                wrapper.onclick = () => playSingleDialog(index);
+
+                // Avatar
+                const avatar = document.createElement('div');
+                avatar.className = `w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm shrink-0 ${isSpeakerA ? 'bg-blue-500' : 'bg-orange-400'}`;
+                avatar.textContent = msg.speaker;
+
+                // Bubble
+                const bubble = document.createElement('div');
+                bubble.id = `msg-${index}`;
+                bubble.className = `message-bubble flex-1 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative group-hover:border-blue-200`;
+                
+                // Active indicator (playing bars) - Hidden by default
+                const indicator = `<div class="playing-indicator absolute top-3 right-3 hidden"><span></span><span></span><span></span></div>`;
+
+                bubble.innerHTML = `
+                    ${indicator}
+                    <div class="chinese-font text-xl text-gray-800 mb-1 chinese-text font-medium leading-relaxed">${msg.chinese}</div>
+                    <div class="text-sm text-blue-500 font-medium mb-2">${msg.pinyin}</div>
+                    <div class="text-xs text-gray-500 italic border-t border-gray-100 pt-2 mt-1">${msg.vietnamese}</div>
+                `;
+
+                wrapper.appendChild(avatar);
+                wrapper.appendChild(bubble);
+                container.appendChild(wrapper);
+            });
+            
+            // Add padding at bottom for the fixed player
+            const spacer = document.createElement('div');
+            spacer.className = "h-20";
+            container.appendChild(spacer);
+        }
+
+        function updateNavigationButtons() {
+            const maxHT = lessonConfig[currentLessonGroup] || 2;
+            document.getElementById('prevBtn').disabled = currentHT === 1;
+            document.getElementById('nextBtn').disabled = currentHT === maxHT;
+            conversationSelect.value = `HT${currentHT}`;
+        }
+
+        // --- Audio Logic ---
+
+        function stopCurrentAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            isPlayingFull = false;
+            
+            // Reset UI
+            playIcon.innerHTML = '<i class="fas fa-play"></i>';
+            playText.textContent = "Nghe tất cả";
+            playBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+            playBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+
+            document.querySelectorAll('.message-bubble').forEach(el => {
+                el.classList.remove('active', 'ring-2', 'ring-blue-400', 'bg-blue-50');
+                el.querySelector('.playing-indicator').classList.add('hidden');
+            });
+        }
+
+        function highlightMessage(index) {
+            // Remove previous highlights
+            document.querySelectorAll('.message-bubble').forEach(el => {
+                el.classList.remove('active', 'ring-2', 'ring-blue-400', 'bg-blue-50');
+                el.querySelector('.playing-indicator').classList.add('hidden');
+            });
+
+            const bubble = document.getElementById(`msg-${index}`);
+            if (bubble) {
+                bubble.classList.add('active', 'ring-2', 'ring-blue-400', 'bg-blue-50');
+                bubble.querySelector('.playing-indicator').classList.remove('hidden');
+                
+                // Scroll to view
+                bubble.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function playSingleDialog(index) {
+            stopCurrentAudio(); // Stop any full playback
+            currentDialog = index;
+            highlightMessage(index);
+
+            const htName = `HT${currentHT}`;
+            // Path: data_conversation/Bài 1/HT1/audio/output_1.mp3
+            const audioPath = `data_conversation/${currentLessonGroup}/${htName}/audio/output_${index + 1}.mp3`;
+            
+            currentAudio = new Audio(audioPath);
+            currentAudio.onended = () => {
+                // Remove highlight smoothly
+                const bubble = document.getElementById(`msg-${index}`);
+                if (bubble) bubble.querySelector('.playing-indicator').classList.add('hidden');
+            };
+            
+            currentAudio.play().catch(e => console.error("Audio error:", e));
+        }
+
+        async function playFullConversation() {
+            if (isPlayingFull) {
+                stopCurrentAudio();
+                return;
+            }
+
+            isPlayingFull = true;
+            
+            // Update Button UI
+            playIcon.innerHTML = '<i class="fas fa-stop"></i>';
+            playText.textContent = "Dừng lại";
+            playBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            playBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+
+            for (let i = 0; i < conversationData.length; i++) {
+                if (!isPlayingFull) break;
+
+                currentDialog = i;
+                highlightMessage(i);
+
+                const htName = `HT${currentHT}`;
+                const audioPath = `data_conversation/${currentLessonGroup}/${htName}/audio/output_${i + 1}.mp3`;
+                currentAudio = new Audio(audioPath);
+
+                try {
+                    await new Promise((resolve, reject) => {
+                        currentAudio.onended = resolve;
+                        currentAudio.onerror = reject;
+                        currentAudio.play();
+                    });
+                } catch (e) {
+                    console.error("Audio chain error:", e);
+                    break; 
+                }
+            }
+
+            stopCurrentAudio();
+        }
+
+        function previousConversation() {
+            if (currentHT > 1) {
+                stopCurrentAudio();
+                currentHT--;
+                loadConversationData(currentLessonGroup, currentHT);
+            }
+        }
+
+        function nextConversation() {
+            const maxHT = lessonConfig[currentLessonGroup] || 2;
+            if (currentHT < maxHT) {
+                stopCurrentAudio();
+                currentHT++;
+                loadConversationData(currentLessonGroup, currentHT);
+            }
+        }
+
+        // --- Event Listeners ---
+
+        lessonGroupSelect.addEventListener('change', (e) => {
+            currentLessonGroup = e.target.value;
+            updateConversationSelect(currentLessonGroup);
+            currentHT = 1;
+            stopCurrentAudio();
+            loadConversationData(currentLessonGroup, currentHT);
+        });
+
+        conversationSelect.addEventListener('change', (e) => {
+            currentHT = parseInt(e.target.value.replace('HT', ''));
+            stopCurrentAudio();
+            loadConversationData(currentLessonGroup, currentHT);
+        });
+
+        // Initialize
+        updateConversationSelect(currentLessonGroup);
+        loadConversationData(currentLessonGroup, currentHT);
+
+    </script>
+</body>
+</html>
