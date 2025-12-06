@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vui học tiếng Trung - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            height: 250px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        /* Custom Scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+    <!-- Palette: Vibrant Blue & Gold -->
+    <!-- Plan Summary:
+         1. Header: App branding and User Profile snippet.
+         2. Overview Section: Data visualizations of User Progress (Chart.js).
+            - Radar Chart: Skill Balance (Listening, Speaking, Reading, Writing).
+            - Bar Chart: Weekly Study Activity.
+         3. Learning Modules: Categorized grid of features from the original source.
+            - Nền tảng (Foundation)
+            - Kỹ năng (Skills)
+            - Trò chơi (Games)
+            - Luyện thi (HSK)
+    -->
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navbar / Header -->
+    <header class="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo area -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white text-blue-600 p-2 rounded-lg font-bold text-xl h-10 w-10 flex items-center justify-center shadow-md">
+                        文
+                    </div>
+                    <span class="text-xl md:text-2xl font-bold tracking-tight">Vui học tiếng Trung</span>
+                </div>
+                
+                <!-- User Profile / HSK Badge -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex flex-col items-end">
+                        <span class="font-semibold text-sm">Học viên: Minh Anh</span>
+                        <span class="text-xs text-blue-100 bg-blue-700 px-2 py-0.5 rounded-full">HSK 3 Đang học</span>
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-yellow-400 flex items-center justify-center text-blue-800 font-bold border-2 border-white shadow-sm">
+                        MA
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- SECTION 1: DASHBOARD OVERVIEW (Data Visualization) -->
+        <section>
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold text-slate-800 flex items-center">
+                    <span class="text-2xl mr-2">📊</span> Tổng quan tiến độ
+                </h2>
+                <p class="text-slate-500 mt-1">Theo dõi sự cân bằng kỹ năng và thời gian học tập của bạn trong tuần này.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Stat Cards -->
+                <div class="md:col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div class="text-slate-500 text-sm font-medium">Từ vựng đã thuộc</div>
+                        <div class="text-3xl font-bold text-blue-600 mt-2">450</div>
+                        <div class="text-xs text-green-500 font-semibold mt-2">↑ 12 tuần này</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div class="text-slate-500 text-sm font-medium">Chuỗi ngày học</div>
+                        <div class="text-3xl font-bold text-yellow-500 mt-2">5</div>
+                        <div class="text-xs text-slate-400 mt-2">Ngày liên tiếp 🔥</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow col-span-2">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-sm font-medium">Mục tiêu HSK 3</span>
+                                <span class="text-4xl font-bold text-slate-800 mt-2">65%</span>
+                            </div>
+                            <div class="text-4xl">🎯</div>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5 mt-4">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="md:col-span-6 lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="font-semibold text-slate-700 mb-4">Biểu đồ Kỹ năng</h3>
+                    <div class="chart-container mx-auto">
+                        <canvas id="skillsRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="md:col-span-6 lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="font-semibold text-slate-700 mb-4">Thời gian học tập (Phút)</h3>
+                    <div class="chart-container mx-auto">
+                        <canvas id="studyTimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: LEARNING MODULES -->
+        <section>
+            <div class="mb-6 border-l-4 border-blue-500 pl-4">
+                <h2 class="text-2xl font-bold text-slate-800">Trung tâm học tập</h2>
+                <p class="text-slate-500">Truy cập các bài học và công cụ luyện tập.</p>
+            </div>
+
+            <!-- Group 1: Foundation (Nền tảng) -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center">
+                    <span class="bg-blue-100 text-blue-600 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide mr-3">Cơ bản</span>
+                    Nền tảng ngôn ngữ
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a href="phatam.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-blue-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-blue-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🗣️</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-blue-600">Phát âm</h4>
+                        <p class="text-sm text-slate-500 mt-2">Thanh mẫu, vận mẫu & thanh điệu</p>
+                    </a>
+                    
+                    <a href="pinyin_practice.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-blue-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-green-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">✍️</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-green-600">Luyện Pinyin</h4>
+                        <p class="text-sm text-slate-500 mt-2">Ghép vần và quy tắc viết</p>
+                    </a>
+
+                    <a href="chineseStroke_micSpace.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-blue-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-purple-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🖌️</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-purple-600">Luyện viết</h4>
+                        <p class="text-sm text-slate-500 mt-2">Thứ tự nét & cấu trúc chữ</p>
+                    </a>
+
+                     <a href="study.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-blue-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-indigo-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">📚</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-indigo-600">Bài học</h4>
+                        <p class="text-sm text-slate-500 mt-2">Giáo trình & ngữ pháp tổng hợp</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Group 2: Skills & Vocabulary (Kỹ năng & Từ vựng) -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center">
+                    <span class="bg-yellow-100 text-yellow-600 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide mr-3">Kỹ năng</span>
+                    Từ vựng & Giao tiếp
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a href="FlashCard_new.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-yellow-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-yellow-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">📖</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-yellow-600">Flashcard Từ vựng</h4>
+                        <p class="text-sm text-slate-500 mt-2">Học từ mới qua thẻ bài</p>
+                    </a>
+
+                    <a href="Conversation.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-emerald-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-emerald-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">💬</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-emerald-600">Hội thoại</h4>
+                        <p class="text-sm text-slate-500 mt-2">Tình huống giao tiếp thực tế</p>
+                    </a>
+
+                    <a href="SpeakingPro3.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-red-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-red-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🎤</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-red-600">Luyện nói Pro</h4>
+                        <p class="text-sm text-slate-500 mt-2">Thực hành phát âm nâng cao</p>
+                    </a>
+
+                    <a href="img_practice.html" class="group bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-teal-300 hover:shadow-md transition-all duration-200 flex flex-col items-center text-center">
+                        <div class="h-14 w-14 bg-teal-50 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🖼️</div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-teal-600">Học qua Hình ảnh</h4>
+                        <p class="text-sm text-slate-500 mt-2">Ghi nhớ trực quan sinh động</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Group 3: Games (Trò chơi) -->
+             <div class="mb-8">
+                <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center">
+                    <span class="bg-pink-100 text-pink-600 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide mr-3">Giải trí</span>
+                    Vừa học vừa chơi
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <a href="voca_MatchingGame.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-pink-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🧩</div>
+                        <div class="font-semibold text-sm text-slate-700">Ghép từ</div>
+                    </a>
+                    <a href="voca_FillBlankGame.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-indigo-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">📝</div>
+                        <div class="font-semibold text-sm text-slate-700">Điền từ</div>
+                    </a>
+                    <a href="wordGame.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-orange-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🔠</div>
+                        <div class="font-semibold text-sm text-slate-700">Xếp từ</div>
+                    </a>
+                    <a href="timso.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-cyan-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🥇</div>
+                        <div class="font-semibold text-sm text-slate-700">Tìm số</div>
+                    </a>
+                     <a href="timchu.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-lime-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🀄</div>
+                        <div class="font-semibold text-sm text-slate-700">Tìm chữ</div>
+                    </a>
+                     <a href="gheptu_Final.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-rose-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🐉</div>
+                        <div class="font-semibold text-sm text-slate-700">Ghép Hán tự</div>
+                    </a>
+                     <a href="Hanzi_matchGame.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-fuchsia-50 transition-colors text-center group">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🎳</div>
+                        <div class="font-semibold text-sm text-slate-700">Ghép đôi</div>
+                    </a>
+                     <a href="2048_hanzi.html" class="bg-white p-4 rounded-lg shadow-sm border border-slate-100 hover:bg-amber-50 transition-colors text-center group col-span-2 md:col-span-1">
+                        <div class="text-2xl mb-2 group-hover:scale-125 transition-transform duration-300">🎮</div>
+                        <div class="font-semibold text-sm text-slate-700">2048 Hán tự</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Group 4: Advanced (Luyện thi) -->
+            <div class="mt-8">
+                 <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 text-white flex flex-col md:flex-row items-center justify-between shadow-xl">
+                    <div class="mb-6 md:mb-0 md:mr-6">
+                        <h3 class="text-2xl font-bold mb-2 flex items-center">
+                            <span class="text-3xl mr-3">🏆</span> Luyện thi HSK
+                        </h3>
+                        <p class="text-slate-300 max-w-lg">
+                            Chuẩn bị cho kỳ thi năng lực Hán ngữ với bộ đề thi thử và danh sách từ vựng chuẩn HSK 1-6.
+                        </p>
+                    </div>
+                    <a href="voca_hsk.html" class="bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center">
+                        Bắt đầu ôn luyện
+                        <span class="ml-2 text-xl">→</span>
+                    </a>
+                 </div>
+            </div>
+
+        </section>
+
+        <footer class="mt-12 pt-8 border-t border-slate-200 text-center text-slate-500 text-sm pb-8">
+            <p>&copy; 2024 Vui học tiếng Trung. Học mỗi ngày, tiến bộ mỗi ngày.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- CHART DATA & CONFIGURATION ---
+
+        // Chart 1: Skills Radar Chart
+        const radarCtx = document.getElementById('skillsRadarChart').getContext('2d');
+        const radarData = {
+            labels: ['Nghe (Listening)', 'Nói (Speaking)', 'Đọc (Reading)', 'Viết (Writing)'],
+            datasets: [{
+                label: 'Kỹ năng hiện tại',
+                data: [75, 60, 85, 50],
+                fill: true,
+                backgroundColor: 'rgba(59, 130, 246, 0.2)', // Blue-500 with opacity
+                borderColor: 'rgb(37, 99, 235)', // Blue-600
+                pointBackgroundColor: 'rgb(37, 99, 235)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(37, 99, 235)'
+            }]
+        };
+
+        const radarConfig = {
+            type: 'radar',
+            data: radarData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: {
+                        borderWidth: 2
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true,
+                            color: '#e2e8f0'
+                        },
+                        grid: {
+                            color: '#e2e8f0'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: {
+                            stepSize: 20,
+                            backdropColor: 'transparent',
+                            font: {
+                                size: 10
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 11,
+                                weight: '600'
+                            },
+                            color: '#475569'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        };
+        new Chart(radarCtx, radarConfig);
+
+
+        // Chart 2: Study Time Bar Chart
+        const barCtx = document.getElementById('studyTimeChart').getContext('2d');
+        
+        // Label wrapping logic as per requirement
+        const rawLabels = ['Thứ 2 (Mon)', 'Thứ 3 (Tue)', 'Thứ 4 (Wed)', 'Thứ 5 (Thu)', 'Thứ 6 (Fri)', 'Thứ 7 (Sat)', 'Chủ nhật (Sun)'];
+        const processedLabels = rawLabels.map(label => {
+            if (label.length > 16) {
+                return label.split(' '); // Simple split for this context
+            }
+            return label;
+        });
+
+        const barData = {
+            labels: processedLabels,
+            datasets: [{
+                label: 'Phút học',
+                data: [30, 45, 20, 60, 40, 90, 15],
+                backgroundColor: [
+                    'rgba(203, 213, 225, 0.6)', // Slate-300
+                    'rgba(203, 213, 225, 0.6)',
+                    'rgba(203, 213, 225, 0.6)',
+                    'rgba(59, 130, 246, 0.8)', // Blue-500 (Highlight)
+                    'rgba(203, 213, 225, 0.6)',
+                    'rgba(250, 204, 21, 0.8)', // Yellow-400 (Peak)
+                    'rgba(203, 213, 225, 0.6)'
+                ],
+                borderColor: [
+                    'rgb(148, 163, 184)',
+                    'rgb(148, 163, 184)',
+                    'rgb(148, 163, 184)',
+                    'rgb(37, 99, 235)',
+                    'rgb(148, 163, 184)',
+                    'rgb(234, 179, 8)',
+                    'rgb(148, 163, 184)'
+                ],
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        };
+
+        const barConfig = {
+            type: 'bar',
+            data: barData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#64748b'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                         callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        };
+        new Chart(barCtx, barConfig);
+
+    </script>
+</body>
+</html>

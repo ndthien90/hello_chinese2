@@ -2,107 +2,459 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vui học tiếng Trung</title>
-    <!-- Thêm Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mobile App Advanced Streak</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Tùy chỉnh font chữ cho toàn bộ trang */
-        body {
-            font-family: 'Inter', sans-serif;
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { background-color: #f3f4f6; padding-bottom: 90px; }
+        
+        .emoji-select.selected { background-color: #dbeafe; border-color: #3b82f6; transform: scale(1.1); }
+        
+        /* Hiệu ứng lửa cháy */
+        @keyframes fire-pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0)); }
+            50% { transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.5)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0)); }
         }
+        .fire-anim { animation: fire-pulse 2s infinite; }
+        
+        /* Hiệu ứng rung lắc cho hộp quà lớn */
+        @keyframes shake {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        .shake-anim { animation: shake 0.5s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg w-11/12 max-w-md">
-        <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6 md:mb-8">Vui học tiếng Trung</h1>
-        <div class="grid grid-cols-2 gap-4 md:gap-6">
-            <a href="phatam.html" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🗣️</span>
-                <br>
-                Phát âm
-            </a>
-            <a href="pinyin_practice.html" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">✍️</span>
-                <br>
-                Luyện Pinyin
-            </a>
-            <a href="study.html" class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">📚</span>
-                <br>
-                Bài học
-            </a>
-            <a href="FlashCard_new.html" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">📖</span>
-                <br>
-                Từ vựng
-            </a>
-            <a href="voca_MatchingGame.html" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🧩</span>
-                <br>
-                Ghép từ
-            </a>
-            <a href="voca_FillBlankGame.html" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">📝</span>
-                <br>
-                Điền từ
-            </a>
-            <a href="wordGame.html" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🔠</span>
-                <br>
-                Xếp từ
-            </a>
-            <a href="Conversation.html" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🎯</span>
-                <br>
-                Hội thoại
-            </a>
-            <a href="SpeakingPro3.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🎤</span>
-                <br>
-                Luyện nói
-            </a>
-            <a href="timso.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🥇️</span>
-                <br>
-                Tìm số
-            </a>
-            <a href="timchu.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🀄</span>
-                <br>
-                Tìm chữ
-            </a>
-            <a href="gheptu_Final.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🀄</span>
-                <br>
-                Ghép Hán tự
-            </a>
-            <a href="img_practice.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🖼️</span>
-                <br>
-                Chọn hình
-            </a>
-            <a href="Hanzi_matchGame.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🎳</span>
-                <br>
-                Ghép đôi
-            </a>
-            <a href="chineseStroke_micSpace.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">✍️</span>
-                <br>
-                Luyện viết
-            </a>
-            <a href="2048_hanzi.html" class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-4 rounded-xl shadow-md text-center transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🎮</span>
-                <br>
-                2048汉字
-            </a>
-            <a href="voca_hsk.html" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-4 rounded-xl shadow-md text-center col-span-2 transition-all duration-300 transform hover:scale-105">
-                <span class="text-3xl">🏆</span>
-                <br>
-                HSK
-            </a>
+<body class="max-w-md mx-auto min-h-screen bg-gray-50 border-x border-gray-200 shadow-xl relative font-sans">
+
+    <!-- Top Bar -->
+    <div class="bg-white px-4 py-3 flex justify-between items-center sticky top-0 z-30 shadow-sm">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="openProfileModal()">
+            <div id="userAvatarDisplay" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-2xl border-2 border-white shadow-sm">
+                🐼
+            </div>
+            <div>
+                <h2 class="text-xs text-gray-500 font-medium">Xin chào,</h2>
+                <h3 id="userNameDisplay" class="font-bold text-gray-800 text-sm truncate max-w-[120px]">Học viên mới</h3>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <!-- Streak Display -->
+            <div id="streakDisplay" class="px-2 py-1 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-1 text-xs font-bold text-yellow-700 transition-all duration-300">
+                <i class="fas fa-fire text-orange-500"></i> <span id="streakCountText">0</span>
+            </div>
+            
+            <div class="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 relative hover:bg-gray-200 transition">
+                <i class="fas fa-bell"></i>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            </div>
         </div>
     </div>
+
+    <!-- Scrollable Content -->
+    <div class="p-4 space-y-6">
+        
+        <!-- Featured Banner -->
+        <a href="voca_hsk.html" class="block group relative overflow-hidden rounded-2xl p-5 text-white shadow-lg shadow-blue-200 bg-gradient-to-r from-blue-600 to-indigo-700">
+            <div class="absolute right-0 top-0 h-full w-24 bg-white/10 skew-x-12 transform translate-x-10 group-hover:translate-x-5 transition duration-500"></div>
+            <div class="relative z-10 flex justify-between items-center">
+                <div>
+                    <span class="bg-orange-500 text-white text-[10px] px-2 py-0.5 rounded font-bold mb-2 inline-block uppercase tracking-wider">Hot</span>
+                    <h3 class="font-bold text-lg">Luyện thi HSK</h3>
+                    <p class="text-blue-100 text-xs mt-1 opacity-90">Bộ đề chuẩn & Từ vựng</p>
+                </div>
+                <div class="text-5xl drop-shadow-md">🏆</div>
+            </div>
+        </a>
+
+        <!-- Section 1: Học tập -->
+        <div>
+            <div class="flex justify-between items-end mb-3 px-1">
+                <h3 class="font-bold text-gray-800">📚 Góc Học Tập</h3>
+                <span class="text-blue-600 text-xs font-semibold">Cốt lõi</span>
+            </div>
+            <div class="flex gap-4 overflow-x-auto no-scrollbar pb-2 px-1">
+                <a href="phatam.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition group-hover:border-blue-300">🗣️</div>
+                    <span class="text-xs font-medium text-gray-700">Phát âm</span>
+                </a>
+                <a href="pinyin_practice.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition group-hover:border-blue-300">ā</div>
+                    <span class="text-xs font-medium text-gray-700">Pinyin</span>
+                </a>
+                <a href="study.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl shadow-md shadow-blue-200 text-white group-hover:scale-105 transition">📚</div>
+                    <span class="text-xs font-bold text-blue-700">Bài học</span>
+                </a>
+                <a href="chineseStroke_micSpace.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition group-hover:border-blue-300">✍️</div>
+                    <span class="text-xs font-medium text-gray-700">Luyện viết</span>
+                </a>
+                <a href="img_practice.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition group-hover:border-blue-300">🖼️</div>
+                    <span class="text-xs font-medium text-gray-700">Chọn hình</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Section 2: Kỹ năng bổ trợ -->
+        <div>
+            <h3 class="font-bold text-gray-800 mb-3 px-1">🛠️ Kỹ Năng Bổ Trợ</h3>
+            <div class="space-y-3">
+                <a href="SpeakingPro3.html" class="bg-white p-3 rounded-xl shadow-sm flex items-center gap-4 hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-2xl">🎤</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800 text-sm">Luyện nói AI Pro</h4>
+                        <p class="text-gray-400 text-[10px] mt-0.5">Công nghệ nhận diện giọng nói</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                </a>
+                <a href="Conversation.html" class="bg-white p-3 rounded-xl shadow-sm flex items-center gap-4 hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl">🎯</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800 text-sm">Hội thoại mẫu</h4>
+                        <p class="text-gray-400 text-[10px] mt-0.5">Giao tiếp thực tế hàng ngày</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                </a>
+                <a href="FlashCard_new.html" class="bg-white p-3 rounded-xl shadow-sm flex items-center gap-4 hover:bg-gray-50 transition border border-transparent hover:border-gray-200">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center text-2xl">📖</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800 text-sm">Flashcard Từ vựng</h4>
+                        <p class="text-gray-400 text-[10px] mt-0.5">Phương pháp ghi nhớ nhanh</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Section 3: Game Arcade -->
+         <div id="games">
+            <h3 class="font-bold text-gray-800 mb-3 px-1 flex items-center gap-2">
+                🎮 Phòng Trò Chơi
+                <span class="bg-purple-100 text-purple-600 text-[10px] px-2 py-0.5 rounded-full">9 Games</span>
+            </h3>
+            <div class="grid grid-cols-3 gap-3">
+                 <a href="voca_MatchingGame.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🧩</div>
+                    <p class="text-[10px] font-bold text-gray-600">Ghép từ</p>
+                 </a>
+                 <a href="voca_FillBlankGame.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">📝</div>
+                    <p class="text-[10px] font-bold text-gray-600">Điền từ</p>
+                 </a>
+                 <a href="wordGame.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🔠</div>
+                    <p class="text-[10px] font-bold text-gray-600">Xếp từ</p>
+                 </a>
+                 <a href="timso.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🥇</div>
+                    <p class="text-[10px] font-bold text-gray-600">Tìm số</p>
+                 </a>
+                 <a href="timchu.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🀄</div>
+                    <p class="text-[10px] font-bold text-gray-600">Tìm chữ</p>
+                 </a>
+                 <a href="gheptu_Final.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🈴</div>
+                    <p class="text-[10px] font-bold text-gray-600">Ghép Hán</p>
+                 </a>
+                 <a href="Hanzi_matchGame.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🎳</div>
+                    <p class="text-[10px] font-bold text-gray-600">Ghép đôi</p>
+                 </a>
+                 <a href="2048_hanzi.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🔢</div>
+                    <p class="text-[10px] font-bold text-gray-600">2048</p>
+                 </a>
+                 <a href="img_practice.html" class="bg-white p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                    <div class="text-2xl mb-1">🖼️</div>
+                    <p class="text-[10px] font-bold text-gray-600">Hình ảnh</p>
+                 </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3">
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="study.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-book-open text-xl"></i>
+            <span class="text-[10px] font-medium">Học</span>
+        </a>
+        <a href="#games" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="javascript:void(0)" onclick="openProfileModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <!-- STREAK REWARD MODAL -->
+    <div id="streakModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div id="streakContent" class="bg-white rounded-3xl w-full max-w-xs p-8 shadow-2xl text-center transform transition-all scale-95 opacity-0 relative overflow-hidden">
+            <!-- Background effects -->
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-yellow-50 to-white -z-10"></div>
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200 rounded-full opacity-50 blur-xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-200 rounded-full opacity-50 blur-xl"></div>
+
+            <div class="mb-4 relative">
+                <!-- Icon thay đổi dựa trên phần thưởng -->
+                <div id="rewardIconContainer">
+                    <i class="fas fa-fire text-6xl text-orange-500 fire-anim drop-shadow-lg"></i>
+                </div>
+            </div>
+
+            <h2 id="rewardTitle" class="text-2xl font-extrabold text-gray-800 mb-2">Tuyệt vời!</h2>
+            <p id="rewardSubtitle" class="text-gray-600 text-sm mb-6">Bạn đã chăm chỉ học tập hôm nay.</p>
+
+            <!-- Box phần thưởng -->
+            <div id="rewardBox" class="bg-orange-50 border border-orange-100 rounded-xl p-3 mb-6 transition-all duration-300">
+                <p id="rewardValue" class="text-orange-800 font-bold text-lg flex items-center justify-center gap-2">
+                    +1 <i class="fas fa-fire"></i> Steak
+                </p>
+            </div>
+            
+            <p id="loginDayCount" class="text-xs text-gray-400 mb-4 font-medium">Ngày liên tiếp: 1</p>
+
+            <button onclick="closeStreakModal()" class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-orange-200 active:scale-95 transition">
+                Tiếp tục học
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Setup Modal -->
+    <div id="profileModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95 opacity-0" id="modalContent">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Hồ sơ học viên</h2>
+                <p class="text-gray-500 text-sm mt-1">Hãy tạo danh tính của bạn để bắt đầu!</p>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-3 text-center tracking-wider">Chọn Avatar</label>
+                <div class="grid grid-cols-4 gap-3 justify-items-center" id="emojiGrid"></div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-2 ml-1">Tên hiển thị</label>
+                <input type="text" id="nameInput" placeholder="Nhập tên của bạn..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold text-gray-700 text-center">
+            </div>
+
+            <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition">
+                Lưu hồ sơ
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Logic Streak Nâng Cao ---
+        function checkDailyStreak() {
+            const today = new Date().toLocaleDateString('vi-VN');
+            const lastStreakDate = localStorage.getItem('lastStreakDate');
+            
+            // Lấy tổng số steak (điểm) và số ngày login (bộ đếm ngày)
+            let totalSteaks = parseInt(localStorage.getItem('totalSteaks') || 0);
+            let loginDays = parseInt(localStorage.getItem('loginDays') || 0);
+
+            updateStreakUI(totalSteaks);
+
+            // Nếu hôm nay chưa nhận thưởng
+            if (lastStreakDate !== today) {
+                // Tăng số ngày login
+                loginDays++;
+                localStorage.setItem('loginDays', loginDays);
+                localStorage.setItem('lastStreakDate', today);
+
+                // Tính toán phần thưởng
+                let reward = 1;
+                let isMilestone = false;
+
+                // Logic ngày thứ 7, 14, 21...
+                if (loginDays % 7 === 0) {
+                    // Công thức: (Ngày / 7) * 10. VD: Ngày 7 -> 10, Ngày 14 -> 20
+                    reward = (loginDays / 7) * 10;
+                    isMilestone = true;
+                }
+
+                // Cộng điểm và lưu
+                totalSteaks += reward;
+                localStorage.setItem('totalSteaks', totalSteaks);
+
+                // Hiển thị UI
+                updateStreakUI(totalSteaks);
+                showStreakModal(reward, isMilestone, loginDays);
+            }
+        }
+
+        function updateStreakUI(count) {
+            const display = document.getElementById('streakCountText');
+            display.innerText = count;
+            
+            // Hiệu ứng nhẹ
+            const container = document.getElementById('streakDisplay');
+            if(count > 0) {
+                 container.classList.add('bg-orange-100', 'border-orange-300', 'scale-110');
+                 setTimeout(() => container.classList.remove('scale-110'), 300);
+            }
+        }
+
+        function showStreakModal(rewardAmount, isMilestone, currentDay) {
+            const modal = document.getElementById('streakModal');
+            const content = document.getElementById('streakContent');
+            const rewardBox = document.getElementById('rewardBox');
+            const rewardTitle = document.getElementById('rewardTitle');
+            const rewardSubtitle = document.getElementById('rewardSubtitle');
+            const rewardValue = document.getElementById('rewardValue');
+            const iconContainer = document.getElementById('rewardIconContainer');
+            const loginDayCount = document.getElementById('loginDayCount');
+
+            // Cập nhật nội dung Modal
+            loginDayCount.innerText = `Ngày đăng nhập thứ: ${currentDay}`;
+
+            if (isMilestone) {
+                // Giao diện cho ngày đặc biệt (7, 14...)
+                rewardTitle.innerText = "Siêu cấp!";
+                rewardTitle.classList.add('text-purple-600');
+                rewardSubtitle.innerText = `Chúc mừng cột mốc ngày thứ ${currentDay}!`;
+                
+                rewardValue.innerHTML = `+${rewardAmount} <i class="fas fa-gem text-purple-500"></i> STEAK`;
+                rewardBox.classList.remove('bg-orange-50', 'border-orange-100');
+                rewardBox.classList.add('bg-purple-50', 'border-purple-200', 'shake-anim', 'scale-110');
+                
+                iconContainer.innerHTML = '<i class="fas fa-gift text-6xl text-purple-500 drop-shadow-lg animate-bounce"></i>';
+            } else {
+                // Giao diện ngày thường
+                rewardTitle.innerText = "Tuyệt vời!";
+                rewardTitle.classList.remove('text-purple-600');
+                rewardSubtitle.innerText = "Bạn đã chăm chỉ học tập hôm nay.";
+                
+                rewardValue.innerHTML = `+${rewardAmount} <i class="fas fa-fire text-orange-500"></i> Steak`;
+                rewardBox.classList.add('bg-orange-50', 'border-orange-100');
+                rewardBox.classList.remove('bg-purple-50', 'border-purple-200', 'shake-anim', 'scale-110');
+                
+                iconContainer.innerHTML = '<i class="fas fa-fire text-6xl text-orange-500 fire-anim drop-shadow-lg"></i>';
+            }
+            
+            // Hiện Modal
+            setTimeout(() => {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 100);
+            }, 1000);
+        }
+
+        function closeStreakModal() {
+            const modal = document.getElementById('streakModal');
+            const content = document.getElementById('streakContent');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- Profile Logic ---
+        const emojis = ['🐼', '🐰', '🐯', '🦁', '🦊', '🐸', '🐷', '🐨'];
+        let selectedEmoji = '🐼';
+
+        const modal = document.getElementById('profileModal');
+        const modalContent = document.getElementById('modalContent');
+        const emojiGrid = document.getElementById('emojiGrid');
+        const nameInput = document.getElementById('nameInput');
+        const userAvatarDisplay = document.getElementById('userAvatarDisplay');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+
+        emojis.forEach(emoji => {
+            const div = document.createElement('div');
+            div.className = `emoji-select w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-2xl cursor-pointer border-2 border-transparent transition hover:bg-gray-200 ${emoji === selectedEmoji ? 'selected' : ''}`;
+            div.textContent = emoji;
+            div.onclick = () => selectEmoji(div, emoji);
+            emojiGrid.appendChild(div);
+        });
+
+        function selectEmoji(element, emoji) {
+            document.querySelectorAll('.emoji-select').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedEmoji = emoji;
+        }
+
+        function openProfileModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            
+            const storedName = localStorage.getItem('username');
+            const storedAvatar = localStorage.getItem('avatar');
+            if (storedName) nameInput.value = storedName;
+            if (storedAvatar) {
+                selectedEmoji = storedAvatar;
+                const items = document.querySelectorAll('.emoji-select');
+                items.forEach(el => {
+                    el.classList.remove('selected');
+                    if (el.textContent === storedAvatar) el.classList.add('selected');
+                });
+            }
+        }
+
+        function closeProfileModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function saveProfile() {
+            const name = nameInput.value.trim() || "Học viên";
+            localStorage.setItem('username', name);
+            localStorage.setItem('avatar', selectedEmoji);
+            updateUI();
+            closeProfileModal();
+        }
+
+        function updateUI() {
+            const storedName = localStorage.getItem('username');
+            const storedAvatar = localStorage.getItem('avatar');
+
+            if (storedName) userNameDisplay.textContent = storedName;
+            if (storedAvatar) userAvatarDisplay.textContent = storedAvatar;
+        }
+
+        // --- Initialization ---
+        window.addEventListener('load', () => {
+            if (!localStorage.getItem('username')) {
+                setTimeout(openProfileModal, 500);
+            } else {
+                updateUI();
+                checkDailyStreak(); 
+            }
+        });
+
+        const originalSaveProfile = saveProfile;
+        saveProfile = function() {
+            originalSaveProfile();
+            checkDailyStreak();
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeProfileModal();
+        });
+    </script>
 </body>
 </html>
