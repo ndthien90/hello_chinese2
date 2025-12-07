@@ -133,11 +133,9 @@
                 group relative overflow-hidden
             `;
             
-            // Icon nhỏ trang trí mờ mờ
-            const iconType = isConsonant ? 'fa-comment' : 'fa-volume-up';
+            // Xóa icon trang trí, chỉ giữ lại chữ
             card.innerHTML = `
                 <span class="relative z-10">${phoneme}</span>
-                <i class="fas ${iconType} absolute -bottom-2 -right-2 text-gray-50 text-3xl group-hover:text-blue-50 transition-colors"></i>
             `;
             
             card.addEventListener('click', () => {
