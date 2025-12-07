@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Phát Âm Pinyin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { background-color: #f9fafb; padding-bottom: 90px; }
+        
+        /* Hiệu ứng sóng âm khi đang phát */
+        @keyframes playing-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .playing-anim {
+            animation: playing-pulse 1s infinite;
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen bg-gray-50 border-x border-gray-200 shadow-xl relative font-sans">
+
+    <!-- Header (Back button + Title) -->
+    <div class="bg-white px-4 py-4 flex items-center gap-4 sticky top-0 z-30 shadow-sm">
+        <a href="index.html" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-600">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="font-bold text-xl text-gray-800">Luyện Phát Âm</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="p-4 space-y-6">
+        
+        <!-- Intro Card -->
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-5 text-white shadow-lg shadow-blue-200 relative overflow-hidden">
+            <div class="absolute right-0 bottom-0 opacity-10 text-8xl transform translate-x-4 translate-y-4">
+                <i class="fas fa-microphone-alt"></i>
+            </div>
+            <div class="relative z-10">
+                <h2 class="font-bold text-lg mb-1">Bảng Pinyin Chuẩn</h2>
+                <p class="text-blue-100 text-xs opacity-90 leading-relaxed max-w-[80%]">
+                    Bấm vào từng ô để nghe phát âm giọng bản xứ. Hãy lặp lại để ghi nhớ tốt hơn.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 1: Thanh Mẫu (Consonants) -->
+        <div>
+            <div class="flex items-center gap-2 mb-4 px-1">
+                <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+                    <i class="fas fa-feather-alt"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-lg leading-tight">Thanh Mẫu</h3>
+                    <p class="text-xs text-gray-500">23 phụ âm cơ bản</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-3" id="consonantGrid">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+
+        <!-- Section 2: Vận Mẫu (Vowels) -->
+        <div>
+            <div class="flex items-center gap-2 mb-4 px-1 pt-4 border-t border-gray-100">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-lg leading-tight">Vận Mẫu</h3>
+                    <p class="text-xs text-gray-500">24 nguyên âm & tổ hợp</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-3" id="vowelGrid">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar (Consistent with Index) -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="study.html" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-book-open text-xl"></i>
+            <span class="text-[10px] font-medium">Học</span>
+        </a>
+        <a href="index.html#games" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="javascript:void(0)" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        // Data
+        const consonants = [
+            'b', 'p', 'm', 'f', 'd', 't', 'n', 'l',
+            'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch',
+            'sh', 'r', 'z', 'c', 's', 'y', 'w'
+        ];
+
+        const vowels = [
+            'a', 'o', 'e', 'i', 'u', 'ü', 'ai', 'ei',
+            'ui', 'ao', 'ou', 'iu', 'ie', 'üe', 'er', 'an',
+            'en', 'in', 'un', 'ün', 'ang', 'eng', 'ing', 'ong'
+        ];
+
+        // Function to create styled cards (Tailwind)
+        function createPhonemeCard(phoneme, index, isConsonant = true) {
+            const card = document.createElement('div');
+            // Tailwind classes: White bg, shadow, rounded, centering, transition effects
+            card.className = `
+                bg-white aspect-square rounded-2xl shadow-sm border border-gray-100 
+                flex items-center justify-center 
+                text-xl font-bold text-gray-700 
+                cursor-pointer select-none
+                transition-all duration-200 
+                active:scale-95 active:shadow-inner
+                hover:border-blue-300 hover:shadow-md
+                group relative overflow-hidden
+            `;
+            
+            // Icon nhỏ trang trí mờ mờ
+            const iconType = isConsonant ? 'fa-comment' : 'fa-volume-up';
+            card.innerHTML = `
+                <span class="relative z-10">${phoneme}</span>
+                <i class="fas ${iconType} absolute -bottom-2 -right-2 text-gray-50 text-3xl group-hover:text-blue-50 transition-colors"></i>
+            `;
+            
+            card.addEventListener('click', () => {
+                playAudio(index + 1, card, isConsonant);
+            });
+            
+            return card;
+        }
+
+        function playAudio(audioNumber, cardElement, isConsonant) {
+            // Visual feedback: Đổi màu thành xanh khi đang phát
+            const originalClasses = cardElement.className;
+            
+            // Active state classes
+            cardElement.classList.add('bg-blue-500', 'text-white', 'border-blue-600', 'playing-anim');
+            cardElement.classList.remove('bg-white', 'text-gray-700', 'hover:border-blue-300');
+            
+            // Tìm icon bên trong để đổi màu (nếu cần thiết, ở đây text-white đã xử lý chữ, icon mờ thì kệ)
+            
+            // Reset visual after delay (hoặc khi audio end - ở đây dùng timeout cho đơn giản và phản hồi nhanh)
+            setTimeout(() => {
+                cardElement.className = originalClasses;
+            }, 600);
+
+            // Audio Logic
+            const audioPath = isConsonant 
+                ? `phatam/amdau/${audioNumber}.wav`
+                : `phatam/nguyenam/${audioNumber}.wav`;
+            
+            const audio = new Audio(audioPath);
+            
+            audio.addEventListener('canplaythrough', () => {
+                audio.play().catch(error => {
+                    console.error('Không thể phát âm thanh:', error);
+                });
+            });
+            
+            audio.addEventListener('error', (e) => {
+                // Hiển thị thông báo lỗi nhẹ nhàng hơn alert
+                console.error('Lỗi load file:', audioPath);
+            });
+            
+            audio.load();
+        }
+
+        function populateGrids() {
+            const consonantGrid = document.getElementById('consonantGrid');
+            const vowelGrid = document.getElementById('vowelGrid');
+
+            consonants.forEach((consonant, index) => {
+                consonantGrid.appendChild(createPhonemeCard(consonant, index, true));
+            });
+
+            vowels.forEach((vowel, index) => {
+                vowelGrid.appendChild(createPhonemeCard(vowel, index, false));
+            });
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            populateGrids();
+        });
+    </script>
+</body>
+</html>
