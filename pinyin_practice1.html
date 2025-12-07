@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trắc Nghiệm Pinyin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Kaiti';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body { 
+            background-color: #f3f4f6; 
+            font-family: 'Mulish', sans-serif;
+            padding-bottom: 90px; /* Space for bottom nav */
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animation Classes */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in-up 0.4s ease-out forwards; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .playing-audio { animation: pulse-ring 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite; }
+
+        /* Custom Chinese Font */
+        .font-chinese { font-family: 'Kaiti', serif; }
+
+        /* Option Interactions */
+        .option-card.selected { @apply border-blue-500 bg-blue-50; }
+        .option-card.correct { @apply border-green-500 bg-green-100 text-green-800; }
+        .option-card.incorrect { @apply border-red-500 bg-red-50 text-red-800; }
+        .option-card.disabled { @apply opacity-60 cursor-not-allowed pointer-events-none; }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen bg-gray-50 border-x border-gray-200 shadow-xl relative text-gray-800">
+
+    <!-- Header -->
+    <div class="bg-white px-4 py-4 flex items-center gap-4 sticky top-0 z-30 shadow-sm">
+        <a href="index.html" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-600">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="font-bold text-xl text-gray-800 flex-1">Trắc Nghiệm Pinyin</h1>
+        <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-700 rounded-lg">
+            HSK 1
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="p-4">
+
+        <!-- SETUP VIEW (Input Name & Select Lesson) -->
+        <div id="setup-view" class="space-y-6 animate-fade-in">
+            <!-- Banner -->
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="font-bold text-2xl mb-2">Kiểm tra Pinyin</h2>
+                    <p class="text-indigo-100 text-sm opacity-90">Chọn bài học để bắt đầu thử thách!</p>
+                </div>
+                <div class="absolute right-[-20px] bottom-[-20px] text-8xl opacity-10 rotate-12">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Tên học viên</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user-graduate text-gray-400"></i>
+                        </div>
+                        <input type="text" id="student-name" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3.5 font-semibold" placeholder="Nhập tên của bạn...">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Chọn bài luyện tập</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-book text-gray-400"></i>
+                        </div>
+                        <select id="practice-dropdown" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3.5 appearance-none font-medium">
+                            <option value="">-- Chọn bài học --</option>
+                            <!-- Options populated by JS -->
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-gray-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="error-msg" class="hidden text-red-500 text-xs text-center font-medium bg-red-50 p-2 rounded-lg">
+                    <!-- Error text here -->
+                </div>
+
+                <button id="load-btn" onclick="loadPractice()" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-bold rounded-xl text-sm px-5 py-3.5 text-center shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <span>Tải dữ liệu bài học</span>
+                    <i class="fas fa-cloud-download-alt"></i>
+                </button>
+            </div>
+
+            <!-- Info Card (Hidden by default) -->
+            <div id="practice-info" class="hidden bg-blue-50 rounded-2xl p-5 border border-blue-100 animate-fade-in">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800">Thông tin bài thi</h3>
+                        <p class="text-xs text-gray-500" id="info-details">...</p>
+                    </div>
+                </div>
+                <button onclick="startQuiz()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl py-3 shadow-md hover:shadow-lg transition-all active:scale-95">
+                    Bắt đầu làm bài <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- QUIZ VIEW -->
+        <div id="quiz-view" class="hidden space-y-5 animate-fade-in h-full flex flex-col">
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-3 gap-2">
+                <div class="bg-white p-2 rounded-xl border border-gray-100 text-center shadow-sm">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">Câu hỏi</p>
+                    <p class="text-lg font-bold text-gray-700" id="stat-question">1/10</p>
+                </div>
+                <div class="bg-white p-2 rounded-xl border border-gray-100 text-center shadow-sm">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">Điểm</p>
+                    <p class="text-lg font-bold text-blue-600" id="stat-score">0</p>
+                </div>
+                <div class="bg-white p-2 rounded-xl border border-gray-100 text-center shadow-sm">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">Chính xác</p>
+                    <p class="text-lg font-bold text-green-600" id="stat-accuracy">0%</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center flex-1 flex flex-col justify-center items-center relative overflow-hidden">
+                <p class="text-sm text-gray-500 mb-2 font-medium">Chọn Pinyin đúng cho từ:</p>
+                
+                <!-- Main Character Display -->
+                <div onclick="playAudio()" class="chinese-display cursor-pointer transition transform active:scale-95 group">
+                    <h1 id="chinese-text" class="font-chinese text-7xl md:text-8xl text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">?</h1>
+                </div>
+                
+                <p id="meaning-text" class="text-gray-500 italic text-sm mb-6">?</p>
+
+                <!-- Audio Button -->
+                <button id="audio-btn" onclick="playAudio()" class="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl shadow-sm hover:bg-blue-200 transition mb-4 active:scale-90">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+
+            <!-- Options Grid -->
+            <div id="options-grid" class="grid grid-cols-2 gap-3">
+                <!-- Options will be injected here -->
+            </div>
+
+            <!-- Feedback Alert (Fixed bottom relative to content) -->
+            <div id="feedback-area" class="min-h-[30px] text-center font-bold text-sm"></div>
+
+            <!-- Navigation Actions -->
+            <div class="pt-2">
+                <button id="next-btn" onclick="nextQuestion()" disabled class="w-full bg-gray-800 text-white font-bold rounded-xl py-3.5 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95">
+                    Câu tiếp theo <i class="fas fa-chevron-right ml-1"></i>
+                </button>
+                <button id="submit-btn" onclick="submitQuiz()" class="hidden w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-bold rounded-xl py-3.5 shadow-lg shadow-green-200 transition-all active:scale-95">
+                    Nộp bài <i class="fas fa-check-circle ml-1"></i>
+                </button>
+            </div>
+            
+            <!-- Audio Status Toast -->
+            <div id="audio-status" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs py-2 px-4 rounded-full shadow-lg z-50">
+                Đang dùng âm thanh máy đọc
+            </div>
+        </div>
+
+        <!-- RESULTS VIEW -->
+        <div id="result-view" class="hidden text-center space-y-6 animate-fade-in pt-10">
+            <div class="relative inline-block">
+                <div class="absolute inset-0 bg-yellow-200 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                <div class="relative w-32 h-32 bg-white rounded-full flex items-center justify-center text-6xl shadow-xl mx-auto border-4 border-yellow-400">
+                    🏆
+                </div>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-1" id="result-title">Xuất sắc!</h2>
+                <p class="text-gray-500" id="result-message">Bạn đã hoàn thành bài kiểm tra.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Điểm số</p>
+                    <p class="text-3xl font-bold text-blue-600" id="final-score">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Tỷ lệ đúng</p>
+                    <p class="text-3xl font-bold text-green-600" id="final-accuracy">0%</p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-2xl text-left border border-blue-100">
+                <p class="text-xs text-blue-400 uppercase font-bold mb-1">Thông tin</p>
+                <p class="text-sm text-blue-900 font-semibold flex justify-between">
+                    <span>Học viên:</span>
+                    <span id="final-student">---</span>
+                </p>
+                <p class="text-sm text-blue-900 font-semibold flex justify-between mt-1">
+                    <span>Bài học:</span>
+                    <span id="final-lesson">---</span>
+                </p>
+            </div>
+
+            <div class="space-y-3 pt-4">
+                <button onclick="resetQuiz()" class="w-full bg-blue-600 text-white font-bold rounded-xl py-3.5 shadow-lg shadow-blue-200 active:scale-95 transition">
+                    Làm lại bài này
+                </button>
+                <button onclick="backToSelection()" class="w-full bg-white text-gray-700 font-bold rounded-xl py-3.5 border border-gray-200 hover:bg-gray-50 active:scale-95 transition">
+                    Chọn bài khác
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="study.html" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-book-open text-xl"></i>
+            <span class="text-[10px] font-medium">Học</span>
+        </a>
+        <a href="index.html#games" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="javascript:void(0)" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        // --- CONFIG & STATE ---
+        const CONFIG = {
+            dataPath: 'data_pinyinPractice/',
+            practices: Array.from({length: 20}, (_, i) => ({ id: `practice${i+1}`, name: `Bài luyện tập ${i+1}` }))
+        };
+
+        const demoData = {
+            practice1: `你|bạn|nī|ní|*nǐ|nì\n我|tôi|wō|wó|*wǒ|wò\n他|anh ấy|tā|tá|*tā|tà\n好|tốt|hāo|háo|*hǎo|hào`
+        };
+
+        let state = {
+            questions: [],
+            currentQIndex: 0,
+            userAnswers: {},
+            score: 0,
+            correctCount: 0,
+            studentName: '',
+            practiceId: '',
+            isAnswered: false,
+            audio: null
+        };
+
+        // --- DOM ELEMENTS ---
+        const views = {
+            setup: document.getElementById('setup-view'),
+            quiz: document.getElementById('quiz-view'),
+            result: document.getElementById('result-view')
+        };
+        
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdown = document.getElementById('practice-dropdown');
+            CONFIG.practices.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.name;
+                dropdown.appendChild(opt);
+            });
+        });
+
+        // --- CORE FUNCTIONS ---
+
+        async function loadPractice() {
+            const nameInput = document.getElementById('student-name');
+            const practiceSelect = document.getElementById('practice-dropdown');
+            const errorMsg = document.getElementById('error-msg');
+            const loadBtn = document.getElementById('load-btn');
+
+            const name = nameInput.value.trim();
+            const practiceId = practiceSelect.value;
+
+            if (!name || !practiceId) {
+                errorMsg.textContent = !name ? "Vui lòng nhập tên học viên!" : "Vui lòng chọn bài học!";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            errorMsg.classList.add('hidden');
+            loadBtn.disabled = true;
+            loadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
+
+            state.studentName = name;
+            state.practiceId = practiceId;
+
+            try {
+                // Simulate fetch or use demo
+                let content = '';
+                const path = `${CONFIG.dataPath}${practiceId}/${practiceId}.txt`;
+                
+                try {
+                    const res = await fetch(path);
+                    if (!res.ok) throw new Error("File not found");
+                    content = await res.text();
+                } catch (e) {
+                    console.warn("Using demo data fallback");
+                    content = demoData[practiceId] || demoData['practice1'];
+                }
+
+                parseQuestions(content);
+                
+                // Show info card
+                const infoDetails = document.getElementById('info-details');
+                infoDetails.textContent = `${state.studentName} - ${CONFIG.practices.find(p=>p.id===practiceId).name} - ${state.questions.length} câu hỏi`;
+                
+                document.getElementById('practice-info').classList.remove('hidden');
+                loadBtn.innerHTML = '<span>Tải lại dữ liệu</span><i class="fas fa-sync"></i>';
+                loadBtn.disabled = false;
+                
+            } catch (err) {
+                errorMsg.textContent = "Không tải được dữ liệu bài học.";
+                errorMsg.classList.remove('hidden');
+                loadBtn.disabled = false;
+                loadBtn.innerHTML = '<span>Tải dữ liệu bài học</span><i class="fas fa-cloud-download-alt"></i>';
+            }
+        }
+
+        function parseQuestions(text) {
+            state.questions = text.trim().split('\n').filter(line => line.trim()).map(line => {
+                const parts = line.split('|');
+                if (parts.length < 6) return null;
+                const [chinese, meaning, ...opts] = parts;
+                const correctOpt = opts.find(o => o.startsWith('*'));
+                return {
+                    chinese, 
+                    meaning,
+                    correct: correctOpt ? correctOpt.substring(1) : opts[0],
+                    options: opts.map(o => o.startsWith('*') ? o.substring(1) : o).sort(() => Math.random() - 0.5),
+                    audioFile: `${chinese}.mp3`
+                };
+            }).filter(q => q !== null);
+        }
+
+        function startQuiz() {
+            if (state.questions.length === 0) return;
+            
+            // Reset state
+            state.currentQIndex = 0;
+            state.score = 0;
+            state.correctCount = 0;
+            state.userAnswers = {};
+            state.isAnswered = false;
+
+            // Switch views
+            views.setup.classList.add('hidden');
+            views.quiz.classList.remove('hidden');
+            views.result.classList.add('hidden');
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = state.questions[state.currentQIndex];
+            state.isAnswered = false;
+
+            // UI Updates
+            document.getElementById('stat-question').textContent = `${state.currentQIndex + 1}/${state.questions.length}`;
+            document.getElementById('stat-score').textContent = state.score;
+            document.getElementById('stat-accuracy').textContent = state.currentQIndex === 0 ? '100%' : `${Math.round((state.correctCount / state.currentQIndex) * 100)}%`;
+            
+            document.getElementById('progress-bar').style.width = `${((state.currentQIndex) / state.questions.length) * 100}%`;
+            
+            document.getElementById('chinese-text').textContent = q.chinese;
+            document.getElementById('meaning-text').textContent = q.meaning;
+            
+            document.getElementById('feedback-area').textContent = '';
+            document.getElementById('feedback-area').className = 'min-h-[30px] text-center font-bold text-sm';
+
+            // Buttons
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('next-btn').classList.remove('hidden');
+            document.getElementById('submit-btn').classList.add('hidden');
+
+            if (state.currentQIndex === state.questions.length - 1) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+                document.getElementById('submit-btn').disabled = true;
+            }
+
+            // Options
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-card w-full p-4 rounded-xl border-2 border-gray-200 bg-white text-lg font-bold text-gray-700 shadow-sm transition-all hover:border-blue-300 active:scale-95';
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(opt, btn, q);
+                grid.appendChild(btn);
+            });
+
+            // Auto play audio (optional, maybe distracting)
+            // playAudio(); 
+        }
+
+        function handleAnswer(selected, btnElement, question) {
+            if (state.isAnswered) return;
+            state.isAnswered = true;
+
+            const isCorrect = selected === question.correct;
+            const allBtns = document.querySelectorAll('.option-card');
+
+            // Style selected button
+            btnElement.classList.remove('border-gray-200', 'bg-white');
+            
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                state.score += 10;
+                state.correctCount++;
+                document.getElementById('feedback-area').textContent = "🎉 Chính xác!";
+                document.getElementById('feedback-area').classList.add('text-green-600');
+                playSuccessSound();
+            } else {
+                btnElement.classList.add('incorrect');
+                document.getElementById('feedback-area').innerHTML = `Sai rồi! Đáp án đúng: <span class="text-green-600">${question.correct}</span>`;
+                document.getElementById('feedback-area').classList.add('text-red-500');
+                
+                // Highlight correct one
+                allBtns.forEach(b => {
+                    if (b.textContent === question.correct) {
+                        b.classList.remove('border-gray-200', 'bg-white');
+                        b.classList.add('correct');
+                    }
+                });
+                playErrorSound();
+            }
+
+            // Disable all
+            allBtns.forEach(b => b.classList.add('disabled'));
+
+            // Enable navigation
+            document.getElementById('next-btn').disabled = false;
+            document.getElementById('submit-btn').disabled = false;
+
+            // Update stats immediately
+            document.getElementById('stat-score').textContent = state.score;
+        }
+
+        function nextQuestion() {
+            if (state.currentQIndex < state.questions.length - 1) {
+                state.currentQIndex++;
+                renderQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            views.quiz.classList.add('hidden');
+            views.result.classList.remove('hidden');
+
+            const accuracy = Math.round((state.correctCount / state.questions.length) * 100);
+            
+            document.getElementById('final-score').textContent = `${state.correctCount}/${state.questions.length}`;
+            document.getElementById('final-accuracy').textContent = `${accuracy}%`;
+            document.getElementById('final-student').textContent = state.studentName;
+            document.getElementById('final-lesson').textContent = CONFIG.practices.find(p=>p.id===state.practiceId).name;
+
+            const title = document.getElementById('result-title');
+            const msg = document.getElementById('result-message');
+            
+            if (accuracy >= 90) {
+                title.textContent = "Tuyệt đỉnh! 🌟";
+                msg.textContent = "Bạn là bậc thầy Pinyin!";
+            } else if (accuracy >= 70) {
+                title.textContent = "Làm tốt lắm! 👍";
+                msg.textContent = "Tiếp tục phát huy nhé.";
+            } else {
+                title.textContent = "Cố gắng thêm nhé 💪";
+                msg.textContent = "Hãy luyện tập thêm để cải thiện.";
+            }
+        }
+
+        function resetQuiz() {
+            startQuiz();
+        }
+
+        function backToSelection() {
+            views.result.classList.add('hidden');
+            views.setup.classList.remove('hidden');
+            document.getElementById('practice-info').classList.add('hidden');
+            // document.getElementById('student-name').value = ''; // Optional: Clear name
+        }
+
+        // --- AUDIO HANDLING ---
+        function playAudio() {
+            if (state.audio) {
+                state.audio.pause();
+            }
+
+            const q = state.questions[state.currentQIndex];
+            const btn = document.getElementById('audio-btn');
+            
+            // Visual loading
+            btn.classList.add('playing-audio', 'bg-blue-200');
+
+            // Try real file
+            const path = `${CONFIG.dataPath}${state.practiceId}/mp3/${q.audioFile}`; // Assuming folder structure
+            state.audio = new Audio(path);
+            
+            state.audio.onended = () => {
+                btn.classList.remove('playing-audio', 'bg-blue-200');
+            };
+            
+            state.audio.onerror = () => {
+                console.warn("Audio file missing, using TTS");
+                playTTS(q.chinese);
+                btn.classList.remove('playing-audio', 'bg-blue-200');
+                
+                const toast = document.getElementById('audio-status');
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 2000);
+            };
+
+            state.audio.play().catch(e => {
+                console.error(e);
+                btn.classList.remove('playing-audio', 'bg-blue-200');
+            });
+        }
+
+        function playTTS(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Simple sound effects for feedback (optional)
+        function playSuccessSound() {
+            // Placeholder for ding sound
+        }
+        function playErrorSound() {
+            // Placeholder for buzz sound
+        }
+
+    </script>
+</body>
+</html>
