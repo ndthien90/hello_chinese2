@@ -209,14 +209,6 @@
         // Helper Paths
         const getPath = (col) => `artifacts/${appId}/public/data/${col}`;
         const getRef = (col) => collection(db, 'artifacts', appId, 'public', 'data', col);
-// --- HÀM HELPER: FORMAT VĂN BẢN (QUAN TRỌNG: Cần có để hiển thị danh sách câu hỏi) ---
-        // Hàm này xử lý việc biến đổi **từ vựng** thành chữ xanh đậm
-        const formatText = (text) => {
-            if (!text) return '';
-            // Loại bỏ thẻ HTML thừa nếu có, sau đó format dấu **
-            // return text.replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-600 font-bold">$1</span>');
-             return text.replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-600 font-bold text-lg mx-1">$1</span>');
-        };
 
         // --- 2. STATE MANAGEMENT ---
         const state = {
@@ -2068,8 +2060,9 @@ const renderQuestionInputForm = () => {
             // Lấy giá trị Cấp độ và Bài học đang chọn
             const lvl = document.getElementById('assign-level') ? document.getElementById('assign-level').value : 'H1';
             const lsn = document.getElementById('assign-lesson') ? document.getElementById('assign-lesson').value : 'Bai1';
-            const folderName = `${lvl}_${lsn}`;
+            const folderName = `${lvl}_${lsn}`; // Kết hợp: H1_Bai1
 
+            // Helper hiển thị ghi chú đường dẫn
             const renderPathNote = (placeholder) => `
                 <div class="mb-3 p-3 bg-slate-100 rounded-lg border border-slate-200 text-xs text-slate-600">
                     <p><i data-lucide="folder-open" class="inline w-3 h-3"></i> File sẽ được lấy từ:</p>
@@ -2079,42 +2072,25 @@ const renderQuestionInputForm = () => {
 
             let inputs = '';
             
-            // Helper tạo giao diện 1 dòng đáp án có nút tích
-            const renderOptionRow = (idx, placeholder) => `
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="flex items-center justify-center">
-                        <input type="radio" name="mcq_correct_input" value="${idx}" ${idx === 0 ? 'checked' : ''} 
-                               class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 cursor-pointer accent-green-600" title="Chọn làm đáp án đúng">
-                    </div>
-                    <input id="opt-${idx}" class="flex-1 p-2 border rounded-lg focus:border-green-500 transition" placeholder="${placeholder}">
-                </div>
-            `;
-            // Helper cho listen mcq
-            const renderListenOptionRow = (idx, placeholder) => `
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="flex items-center justify-center">
-                        <input type="radio" name="lmcq_correct_input" value="${idx}" ${idx === 0 ? 'checked' : ''} 
-                               class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 cursor-pointer accent-green-600" title="Chọn làm đáp án đúng">
-                    </div>
-                    <input id="lmcq-opt-${idx}" class="flex-1 p-2 border rounded-lg focus:border-green-500 transition" placeholder="${placeholder}">
-                </div>
-            `;
-
             switch (type) {
-                // --- 1. TRẮC NGHIỆM (MCQ) - ĐÃ CẬP NHẬT GIAO DIỆN ---
+                // ... (GIỮ NGUYÊN các case: mcq, fib, jumble, match, translation) ...
                 case 'mcq':
                     inputs = `
-                        <input id="q-text" class="w-full p-2 border rounded-lg mb-4" placeholder="Nội dung câu hỏi">
-                        <p class="text-xs font-bold text-slate-500 mb-2 uppercase">Nhập đáp án & Tích chọn câu đúng:</p>
-                        <div class="space-y-1 mb-3">
-                            ${renderOptionRow(0, 'Đáp án A')}
-                            ${renderOptionRow(1, 'Đáp án B')}
-                            ${renderOptionRow(2, 'Đáp án C')}
-                            ${renderOptionRow(3, 'Đáp án D')}
+                        <input id="q-text" class="w-full p-2 border rounded-lg mb-3" placeholder="Nội dung câu hỏi">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                            <input id="opt-0" class="p-2 border rounded" placeholder="Đáp án 1">
+                            <input id="opt-1" class="p-2 border rounded" placeholder="Đáp án 2">
+                            <input id="opt-2" class="p-2 border rounded" placeholder="Đáp án 3">
+                            <input id="opt-3" class="p-2 border rounded" placeholder="Đáp án 4">
                         </div>
+                        <select id="q-correct" class="w-full p-2 border rounded mb-3">
+                            <option value="0">Đáp án 1 đúng</option>
+                            <option value="1">Đáp án 2 đúng</option>
+                            <option value="2">Đáp án 3 đúng</option>
+                            <option value="3">Đáp án 4 đúng</option>
+                        </select>
                     `;
                     break;
-
                 case 'fib':
                     inputs = `
                         <p class="text-sm text-slate-500 mb-2">Sử dụng chuỗi <code>[BLANK]</code> để đánh dấu vị trí điền từ.</p>
@@ -2149,24 +2125,29 @@ const renderQuestionInputForm = () => {
                     `;
                     break;
 
-                // --- 2. NGHE TRẮC NGHIỆM (LISTEN MCQ) - ĐÃ CẬP NHẬT GIAO DIỆN ---
+                // --- CÁC PHẦN NGHE (Đã cập nhật hướng dẫn) ---
                 case 'listen_mcq':
                     inputs = `
                         ${renderPathNote('Tên_file')}
-                        <div class="flex items-center gap-2 mb-4">
+                        <div class="flex items-center gap-2 mb-3">
                             <input id="listen-mcq-audio" class="flex-1 p-2 border rounded-lg font-bold text-blue-700" placeholder="Nhập tên file (Ví dụ: 你好)">
                             <span class="text-slate-400 font-mono">.mp3</span>
                         </div>
-                        <p class="text-xs font-bold text-slate-500 mb-2 uppercase">Nhập nghĩa & Tích chọn câu đúng:</p>
-                        <div class="space-y-1 mb-3">
-                            ${renderListenOptionRow(0, 'Nghĩa A')}
-                            ${renderListenOptionRow(1, 'Nghĩa B')}
-                            ${renderListenOptionRow(2, 'Nghĩa C')}
-                            ${renderListenOptionRow(3, 'Nghĩa D')}
+                        <p class="text-sm text-slate-500 mb-2">Các lựa chọn (tiếng Việt - nghĩa):</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                            <input id="lmcq-opt-0" class="p-2 border rounded" placeholder="Nghĩa 1">
+                            <input id="lmcq-opt-1" class="p-2 border rounded" placeholder="Nghĩa 2">
+                            <input id="lmcq-opt-2" class="p-2 border rounded" placeholder="Nghĩa 3">
+                            <input id="lmcq-opt-3" class="p-2 border rounded" placeholder="Nghĩa 4">
                         </div>
+                        <select id="lmcq-correct" class="w-full p-2 border rounded mb-3">
+                            <option value="0">Đáp án 1 đúng</option>
+                            <option value="1">Đáp án 2 đúng</option>
+                            <option value="2">Đáp án 3 đúng</option>
+                            <option value="3">Đáp án 4 đúng</option>
+                        </select>
                     `;
                     break;
-
                 case 'listen_write':
                     inputs = `
                         ${renderPathNote('Tên_file')}
@@ -2190,6 +2171,7 @@ const renderQuestionInputForm = () => {
             }
             return inputs;
         };
+
         const renderClassSelector = () => {
             const myClasses = state.data.classes.filter(c => c.teacherId === state.user.uid);
             
@@ -2313,162 +2295,78 @@ const renderCreateAssignmentForm = () => {
             `;
         };
         
-const renderQuestionSelectionFromBank = () => {
-            // Lấy danh sách ngân hàng đề của tôi
-            const myBanks = (state.data.questionBanks || []).filter(b => b.createdBy === state.user.uid);
+        const renderQuestionSelectionFromBank = () => {
+            const myBanks = state.data.questionBanks.filter(b => b.createdBy === state.user.uid);
             const selectedBank = myBanks.find(b => b.id === state.ui.selectedBankId);
             
-            // --- TRƯỜNG HỢP 1: CHƯA CHỌN BANK (HIỆN DANH SÁCH) ---
             if (!selectedBank) {
                 return `
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
-                        <h3 class="text-xl font-bold text-yellow-600 mb-6 border-b pb-3">Chọn Ngân hàng đề nguồn</h3>
+                        <h3 class="text-xl font-bold text-yellow-600 mb-6 border-b pb-3">Chọn Ngân hàng đề</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             ${myBanks.map(bank => `
-                                <button onclick="selectBankToDraw('${bank.id}')" class="p-4 rounded-xl shadow-md border border-slate-200 hover:bg-yellow-50 text-left transition relative overflow-hidden group">
-                                    <div class="absolute inset-0 bg-yellow-100 opacity-0 group-hover:opacity-20 transition"></div>
-                                    <p class="font-bold text-slate-800 text-lg truncate">${bank.title}</p>
-                                    <p class="text-sm text-slate-500 mt-1"><i data-lucide="layers" class="inline w-3 h-3"></i> ${bank.questions.length} câu hỏi</p>
+                                <button onclick="selectBankToDraw('${bank.id}')" class="p-4 rounded-xl shadow-md border border-slate-200 hover:bg-yellow-50 text-left transition">
+                                    <p class="font-bold text-slate-800">${bank.title}</p>
+                                    <p class="text-sm text-slate-500">${bank.questions.length} câu hỏi</p>
                                 </button>
                             `).join('')}
                         </div>
-                        <button onclick="setSelectingBankQuestions(false)" class="mt-6 text-slate-500 text-sm hover:text-red-500 flex items-center gap-1"><i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại</button>
+                        <button onclick="setSelectingBankQuestions(false)" class="mt-6 text-red-500 text-sm hover:text-red-700">Quay lại form Bài tập</button>
                     </div>
                 `;
             }
 
-            // --- TRƯỜNG HỢP 2: ĐÃ CHỌN BANK (HIỆN CHI TIẾT ĐỂ LẤY CÂU HỎI) ---
-            const availableQuestions = selectedBank.questions || [];
-            const currentAssignmentQs = state.ui.newAssignment.questions || [];
+            const availableQuestions = selectedBank.questions;
+            const currentAssignmentQuestions = state.ui.newAssignment.questions.length;
             
-            // A. Logic thống kê cho phần Ngẫu nhiên
-            const typeStats = availableQuestions.reduce((acc, q) => {
-                const label = getQuestionTypeLabel(q.type);
-                if (!acc[q.type]) acc[q.type] = { label: label, count: 0 };
-                acc[q.type].count++;
-                return acc;
-            }, {});
-
-            const statsInputs = Object.keys(typeStats).map(type => {
-                const info = typeStats[type];
-                return `
-                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                        <div>
-                            <p class="font-bold text-slate-700 text-sm">${info.label}</p>
-                            <p class="text-xs text-slate-500">Có sẵn: <span class="font-bold text-blue-600">${info.count}</span></p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs text-slate-500 font-bold">Lấy:</label>
-                            <input type="number" id="count-for-${type}" min="0" max="${info.count}" value="0" 
-                                class="w-14 p-1 text-center border-2 border-slate-300 rounded-lg focus:border-blue-500 font-bold text-sm">
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            // B. Logic hiển thị danh sách câu hỏi để chọn Thủ công
-            const manualList = availableQuestions.map((q, idx) => {
-                // Kiểm tra xem câu này đã có trong bài tập chưa
-                const isSelected = currentAssignmentQs.some(existQ => 
-                    JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
-                    JSON.stringify({t: q.text, o: q.options, a: q.answer})
+            const qList = availableQuestions.map((q, idx) => {
+                const questionInAssignment = state.ui.newAssignment.questions.some(aq => 
+                    JSON.stringify(aq) === JSON.stringify(q) // Simple deep comparison
                 );
-
-                // --- LOGIC MỚI: XÁC ĐỊNH NỘI DUNG HIỂN THỊ THÔNG MINH ---
-                let previewText = '';
+                const typeLabel = getQuestionTypeLabel(q.type);
                 
-                switch(q.type) {
-                    case 'listen_mcq':
-                    case 'listen_write':
-                    case 'listen_translate':
-                        // Với bài nghe, hiển thị nội dung Audio Script
-                        previewText = `<span class="text-purple-600 font-bold">[Audio: ${q.audioText || '...'}]</span> `;
-                        break;
-                        
-                    case 'jumble':
-                        // Với bài xếp từ, hiển thị câu đáp án hoàn chỉnh
-                        const jumbleAns = Array.isArray(q.answer) ? q.answer.join(' ') : q.answer;
-                        previewText = `<span class="text-green-600 font-bold">[Câu: ${jumbleAns}]</span>`;
-                        break;
-                        
-                    case 'match':
-                        // Với bài nối, hiển thị các cặp
-                        const pairsText = q.pairs ? q.pairs.map(p => `${p.a}-${p.b}`).join(', ') : '';
-                        previewText = `<span class="text-orange-600 font-bold">[Cặp: ${pairsText}]</span>`;
-                        break;
-                        
-                    case 'translation':
-                        // Với bài dịch, ưu tiên hiển thị câu tiếng Việt
-                        previewText = `<span class="text-blue-600 font-bold">[Dịch]</span> ${q.vietnamese}`;
-                        break;
-                        
-                    default:
-                        // Các bài còn lại (MCQ, FIB) hiển thị text câu hỏi
-                        previewText = q.text;
-                }
-                
-                // Xử lý format text (đậm, xanh...)
-                const formattedPreview = formatText(previewText);
-                const qTextClean = previewText.replace(/<[^>]*>?/gm, ''); // Cho tooltip
-
                 return `
-                    <div class="flex items-center justify-between p-3 border-b last:border-0 hover:bg-slate-50 transition group">
-                        <div class="pr-3 overflow-hidden flex-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border border-slate-200 px-1 rounded">${getQuestionTypeLabel(q.type)}</span>
-                            <div class="text-sm font-medium text-slate-800 truncate mt-1" title="${qTextClean}">
-                                ${formattedPreview}
-                            </div>
+                    <div class="p-3 border rounded-xl mb-2 flex justify-between items-center ${questionInAssignment ? 'bg-green-50 border-green-300' : 'bg-white border-slate-200'}">
+                        <div class="pr-2">
+                            <p class="font-medium text-slate-700 text-sm truncate">${typeLabel}: ${q.text.length > 50 ? q.text.substring(0, 50) + '...' : q.text}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">${q.type === 'translation' ? `(VN: ${q.vietnamese})` : q.type === 'listen_translate' ? `(TC: ${q.audioText})` : ''}</p>
                         </div>
-                        <button onclick="selectQuestionFromBank(${idx})" 
-                            class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center
-                            ${isSelected ? 'bg-red-100 text-red-600 hover:bg-red-200 border border-red-200' : 'bg-blue-600 text-white hover:bg-blue-700'}">
-                            ${isSelected ? '<i data-lucide="minus" class="w-3 h-3"></i> Bỏ' : '<i data-lucide="plus" class="w-3 h-3"></i> Chọn'}
+                        <button onclick="selectQuestionFromBank(${idx}, ${questionInAssignment})" class="px-3 py-1 rounded-lg text-xs font-bold transition flex-shrink-0 ${questionInAssignment ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}">
+                            ${questionInAssignment ? 'Đã thêm' : 'Chọn'}
                         </button>
                     </div>
                 `;
             }).join('');
 
             return `
-                <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-6xl mx-auto flex flex-col h-[85vh] md:h-[90vh]">
-                    <div class="flex justify-between items-center mb-4 border-b pb-3 flex-shrink-0">
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-800">Bank: <span class="text-yellow-600">${selectedBank.title}</span></h3>
-                            <p class="text-xs text-slate-500">Đã chọn: <span class="font-bold text-blue-600 text-lg">${currentAssignmentQs.length}</span> câu vào bài tập</p>
-                        </div>
-                        <button onclick="setSelectingBankQuestions(false)" class="text-slate-400 hover:text-red-500 bg-slate-100 p-2 rounded-full"><i data-lucide="x" size="20"></i></button>
+                <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
+                    <div class="flex justify-between items-center mb-4 md:mb-6 border-b pb-3">
+                        <h3 class="text-xl font-bold text-yellow-600 truncate">Lấy từ: ${selectedBank.title}</h3>
+                        <button onclick="setSelectingBankQuestions(false)" class="text-slate-500 hover:text-red-500"><i data-lucide="x"></i></button>
                     </div>
                     
-                    <div class="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        
-                        <div class="lg:col-span-1 flex flex-col overflow-y-auto pr-1">
-                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-4 shadow-sm">
-                                <h4 class="font-bold text-blue-800 mb-3 text-sm uppercase flex items-center gap-2"><i data-lucide="shuffle" class="w-4 h-4"></i> 1. Lấy Ngẫu nhiên</h4>
-                                <div class="grid grid-cols-1 gap-2 mb-4">
-                                    ${statsInputs || '<p class="text-xs text-slate-400 italic">Ngân hàng đề trống.</p>'}
-                                </div>
-                                <button onclick="addRandomQuestions('${selectedBank.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-bold shadow-md transition text-sm flex items-center justify-center gap-2">
-                                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Thêm ngẫu nhiên
-                                </button>
+                    <div class="p-4 bg-blue-50 border border-blue-300 rounded-xl mb-6 flex flex-col sm:flex-row items-center justify-between">
+                        <div>
+                            <label for="random-count" class="font-bold text-blue-700 block mb-2">Lấy ngẫu nhiên:</label>
+                            <div class="flex items-center gap-2">
+                                <input id="random-count" type="number" min="10" max="${availableQuestions.length}" value="10" class="w-20 p-2 border rounded-lg text-center">
+                                <span class="text-slate-600 text-sm">câu hỏi (Tối đa ${availableQuestions.length})</span>
                             </div>
-                            
-                            <button onclick="selectBankToDraw(null)" class="w-full py-3 rounded-xl bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition text-sm mt-auto">
-                                <i data-lucide="arrow-left" class="w-4 h-4 inline"></i> Chọn Bank khác
-                            </button>
                         </div>
+                        <button onclick="addRandomQuestions('${selectedBank.id}')" class="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition text-sm">
+                            <i data-lucide="shuffle" size="18" class="inline-block mr-1"></i> Thêm ngẫu nhiên
+                        </button>
+                    </div>
 
-                        <div class="lg:col-span-2 flex flex-col h-full border-2 border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                            <div class="bg-slate-100 p-3 border-b text-xs font-bold text-slate-600 flex justify-between uppercase tracking-wider items-center">
-                                <span class="flex items-center gap-2"><i data-lucide="check-square" class="w-4 h-4"></i> 2. Chọn thủ công từng câu (${availableQuestions.length})</span>
-                                <span class="text-slate-400">Trạng thái</span>
-                            </div>
-                         <div id="bank-scroll-view" class="flex-1 overflow-y-auto p-0 bg-white">
-                                ${manualList || '<div class="p-8 text-center text-slate-400">Chưa có câu hỏi nào.</div>'}
-                            </div>
-                        </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-3">Chọn thủ công các câu hỏi:</h4>
+                    <p class="text-sm text-slate-500 mb-4">Bài tập hiện tại có ${currentAssignmentQuestions} câu hỏi.</p>
+                    <div class="h-80 md:h-96 overflow-y-auto pr-2">
+                        ${qList}
                     </div>
                 </div>
             `;
-        };
+        }
+
         const renderAssignmentDetails = () => {
             const assign = state.data.assignments.find(a => a.id === state.ui.viewAssignmentId);
             if (!assign) return `<p class="text-red-500">Không tìm thấy bài tập.</p>`;
@@ -2542,65 +2440,44 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
             const userAnswer = state.ui.assignmentAnswers[qIdx];
             let content = '';
 
-            // 1. XỬ LÝ NÚT ÂM THANH NHỎ GỌN
+            // 1. XỬ LÝ ÂM THANH (Logic Mới)
             const audioText = q.audioText || q.audioWord;
-            const audioUrl = q.audioUrl; 
-            const audioId = `audio-ref-${qIdx}`; // ID duy nhất cho mỗi audio
+            const audioUrl = q.audioUrl; // URL file tải lên (nếu có)
             
-            let audioButtonHtml = '';
+            let audioPlayerHtml = '';
             
             if (audioUrl) {
-                // Audio từ File (Nút bấm nhỏ)
-                audioButtonHtml = `
-                    <audio id="${audioId}" src="${audioUrl}" style="display:none"></audio>
-                    <button onclick="playCustomAudio('${audioId}', this)" 
-                        class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center hover:bg-purple-200 transition shadow-sm"
-                        title="Nghe âm thanh">
-                        <i data-lucide="volume-2" size="20"></i>
-                    </button>
+                // Ưu tiên 1: Nếu có file upload -> Dùng trình phát Audio HTML5 chuẩn
+                audioPlayerHtml = `
+                    <div class="mb-6 flex justify-center fade-in">
+                        <audio controls autoplay class="w-full max-w-md shadow-md rounded-full bg-slate-100 border border-slate-200">
+                            <source src="${audioUrl}" type="audio/mpeg">
+                            <source src="${audioUrl}" type="audio/wav">
+                            Trình duyệt không hỗ trợ phát âm thanh.
+                        </audio>
+                    </div>
                 `;
             } else if (audioText) {
-                // Audio TTS (Nút bấm nhỏ tương tự)
+                // Ưu tiên 2: Nếu không có file -> Dùng Text-to-Speech (Web Speech API)
                 const audioLang = 'zh-CN'; 
-                audioButtonHtml = `
+                
+                audioPlayerHtml = `
                     <button onclick="speakWord('${audioText.replace(/'/g, "\\'")}', '${audioLang}')" 
-                        class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center hover:bg-purple-200 transition shadow-sm"
-                        title="Nghe đọc (TTS)">
-                        <i data-lucide="volume-2" size="20"></i>
+                        class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-6 py-3 rounded-full font-bold hover:bg-purple-200 transition text-sm md:text-base mb-4 shadow-sm animate-bounce-in">
+                        <i data-lucide="volume-2" size="20"></i> Nghe đọc (TTS)
                     </button>
                 `;
             }
 
-            // 2. XỬ LÝ TIÊU ĐỀ (HEADER)
-            // Thay đổi: Kết hợp Header Text và Nút Audio vào cùng một dòng Flex
-            let headerText = q.text || q.vietnamese || '';
-            let headerHtml = '';
-
-            // Format lại text header
-            if (q.type === 'fib') {
-                headerText = `Điền từ thích hợp:<br><span class="text-blue-600 font-bold text-xl mt-1 block">${q.text.replace('[BLANK]', '______')}</span>`;
-            } else if (q.type === 'translation') {
-                headerText = `Dịch sang tiếng Trung:<br><span class="text-blue-600 font-bold text-xl mt-1 block">${q.vietnamese}</span>`;
-            } else if (q.type === 'listen_mcq') {
-                headerText = `Nghe và chọn nghĩa đúng:`;
-            }
-
-            // GỘP TEXT VÀ NÚT VÀO CÙNG HÀNG
-            headerHtml = `
-                <div class="flex items-center justify-center gap-3 mb-6">
-                    <div class="text-xl md:text-2xl font-bold text-slate-800 leading-relaxed">
-                        ${headerText}
-                    </div>
-                    ${audioButtonHtml} </div>
-            `;
-
-            // 3. XỬ LÝ NỘI DUNG ĐÁP ÁN (GIỮ NGUYÊN LOGIC CŨ)
+            // 2. XỬ LÝ TIÊU ĐỀ VÀ NỘI DUNG
+            let header = q.text || q.vietnamese || '';
             let placeholderText = '';
             let inputId = `input-q-${qIdx}`;
 
             switch (q.type) {
                 case 'mcq':
                 case 'listen_mcq': 
+                    header = q.type === 'listen_mcq' ? `Nghe và chọn nghĩa đúng:` : header;
                     content = q.options.map((opt, oIdx) => `
                         <button onclick="selectAnswer(${qIdx}, ${oIdx})" 
                             class="w-full text-left p-3 md:p-4 border-2 rounded-xl transition-all transform active:scale-[0.99] font-medium text-base md:text-lg mb-3
@@ -2608,71 +2485,139 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                             <span class="font-bold mr-2 w-8 inline-block">${String.fromCharCode(65 + oIdx)}.</span> ${opt}
                         </button>
                     `).join('');
-                    content = `<div class="mt-2 max-w-2xl mx-auto">${content}</div>`;
+                    content = `<div class="mt-4">${content}</div>`;
                     break;
 
-                case 'jumble': // Logic cũ
+                case 'fib':
+                    header = `Điền từ thích hợp vào chỗ trống:<br><span class="text-blue-600 font-bold text-xl md:text-2xl mt-2 block leading-relaxed">${q.text.replace('[BLANK]', '______')}</span>`;
+                    placeholderText = 'Nhập từ/cụm từ còn thiếu...';
+                    break;
+
+                case 'translation':
+                    header = `Dịch câu tiếng Việt sang tiếng Trung:<br><span class="text-blue-600 font-bold text-xl md:text-2xl mt-2 block leading-relaxed">${q.vietnamese}</span>`;
+                    placeholderText = 'Nhập câu trả lời bằng tiếng Trung...';
+                    break;
+
+                case 'listen_write': 
+                    //header = `Nghe và viết lại câu tiếng Trung:`;
+                    placeholderText = 'Nhập câu tiếng Trung đã nghe...';
+                    break;
+
+                case 'listen_translate': 
+                    header = `Nghe và dịch câu sang tiếng Việt:`;
+                    placeholderText = 'Nhập bản dịch tiếng Việt...';
+                    break;
+                    
+                case 'jumble':
+                    header = `Sắp xếp các từ thành câu đúng:`;
                     const availableWords = q.shuffledWords || q.answer; 
                     const placedWords = window.getJumbleAnswer(qIdx);
+                    
                     const remainingWords = availableWords.filter(word => {
                         const availableCount = availableWords.filter(w => w === word).length;
                         const placedCount = placedWords.filter(w => w === word).length;
                         return placedCount < availableCount;
                     });
+
                     content = `
-                        <div class="mb-6 p-4 border-2 border-dashed border-blue-300 rounded-2xl bg-blue-50 min-h-[5rem] flex flex-wrap items-center gap-2 justify-center transition-colors">
+                        <div class="mb-6 p-4 md:p-6 border-2 border-dashed border-blue-300 rounded-2xl bg-blue-50 min-h-[6rem] flex flex-wrap items-center gap-2 justify-center transition-colors ${placedWords.length === 0 ? 'hover:bg-blue-100' : ''}">
                             ${placedWords.map((word, wIdx) => `
-                                <button onclick="removeJumbleWord(${qIdx}, '${word}', ${wIdx})" class="jumble-word bg-blue-600 text-white shadow-md px-3 py-1 rounded-lg font-bold">${word} <i data-lucide="x" class="w-3 h-3 ml-1 inline"></i></button>
+                                <button onclick="removeJumbleWord(${qIdx}, '${word}', ${wIdx})" 
+                                    class="jumble-word bg-blue-600 text-white hover:bg-blue-700 transition transform active:scale-95 shadow-md px-4 py-2 rounded-lg font-bold text-lg flex items-center gap-2">
+                                    ${word} <i data-lucide="x" class="w-4 h-4 opacity-70"></i>
+                                </button>
                             `).join('')}
+                            ${placedWords.length === 0 ? '<span class="text-slate-400 italic font-medium select-none pointer-events-none">Nhấn vào các từ bên dưới để sắp xếp</span>' : ''}
                         </div>
-                        <div class="flex flex-wrap gap-2 justify-center p-4 bg-slate-100 rounded-2xl">
+                        <div class="flex flex-wrap gap-3 justify-center p-6 bg-slate-100 rounded-2xl border border-slate-200">
                             ${remainingWords.map(word => `
-                                <button onclick="addJumbleWord(${qIdx}, '${word}')" class="jumble-word bg-white border hover:border-blue-500 px-3 py-1 rounded-lg font-bold shadow-sm">${word}</button>
+                                <button onclick="addJumbleWord(${qIdx}, '${word}')" class="jumble-word bg-white text-slate-700 border border-slate-300 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-bold text-lg shadow-sm transition transform active:scale-95">
+                                    ${word}
+                                </button>
                             `).join('')}
                         </div>
                     `;
                     break;
                     
-                case 'match': // Logic cũ
+                case 'match':
                     const colB = q.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5); 
                     const colA = q.pairs.map(p => p.a);
                     const currentMatches = state.ui.assignmentAnswers[qIdx] || {};
+                    
                     content = `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-left">
-                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                                <h4 class="font-bold text-blue-800 mb-2">Cột A</h4>
-                                ${colA.map((textA, aIdx) => `<div class="p-3 bg-white border mb-2 rounded-lg text-sm font-medium"><span class="bg-blue-100 text-blue-700 w-5 h-5 rounded-full inline-flex items-center justify-center text-xs font-bold mr-2">${aIdx + 1}</span>${textA}</div>`).join('')}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <h4 class="font-bold text-blue-800 mb-4 text-lg flex items-center gap-2"><i data-lucide="list" size="20"></i> Cột A (Câu hỏi)</h4>
+                                <div class="space-y-4">
+                                ${colA.map((textA, aIdx) => `
+                                    <div class="p-4 bg-white border border-blue-200 rounded-xl text-slate-700 font-medium text-base shadow-sm flex items-center min-h-[3.5rem]">
+                                        <span class="bg-blue-100 text-blue-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">${aIdx + 1}</span>
+                                        ${textA}
+                                    </div>
+                                `).join('')}
+                                </div>
                             </div>
-                            <div class="bg-green-50 p-3 rounded-xl border border-green-100">
-                                <h4 class="font-bold text-green-800 mb-2">Cột B</h4>
+                            <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                                <h4 class="font-bold text-green-800 mb-4 text-lg flex items-center gap-2"><i data-lucide="link" size="20"></i> Cột B (Ghép đáp án)</h4>
+                                <div class="space-y-4">
                                 ${colA.map((_, aIdx) => {
                                     const selectedBIndex = currentMatches[aIdx] === undefined ? "" : currentMatches[aIdx];
-                                    return `<select onchange="selectMatchAnswer(${qIdx}, ${aIdx}, this.value)" class="w-full p-2 mb-2 border rounded-lg text-sm bg-white ${selectedBIndex !== "" ? 'border-green-500 text-green-700 font-bold' : ''}"><option value="">-- Ghép với câu ${aIdx+1} --</option>${colB.map((textB, bIdx) => `<option value="${bIdx}" ${selectedBIndex == bIdx ? 'selected' : ''}>${String.fromCharCode(65+bIdx)}. ${textB}</option>`).join('')}</select>`;
+                                    const isSelected = selectedBIndex !== "";
+                                    
+                                    return `
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 bg-green-100 text-green-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold z-10 pointer-events-none">${aIdx + 1}</span>
+                                            <select onchange="selectMatchAnswer(${qIdx}, ${aIdx}, this.value)" 
+                                                class="w-full p-4 pl-12 border-2 rounded-xl appearance-none transition cursor-pointer text-base font-medium shadow-sm outline-none min-h-[3.5rem]
+                                                ${isSelected ? 'bg-green-600 text-white border-green-600 font-bold' : 'bg-white border-green-200 text-slate-700 hover:border-green-400 focus:border-green-500'}">
+                                                <option value="" class="bg-white text-slate-500">-- Chọn đáp án ghép với câu ${aIdx+1} --</option>
+                                                ${colB.map((textB, bIdx) => `
+                                                    <option value="${bIdx}" class="bg-white text-slate-800" ${selectedBIndex == bIdx ? 'selected' : ''}>
+                                                        ${String.fromCharCode(65+bIdx)}. ${textB}
+                                                    </option>
+                                                `).join('')}
+                                            </select>
+                                            <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none ${isSelected ? 'text-white' : 'text-slate-400'}">
+                                                <i data-lucide="chevron-down" size="16"></i>
+                                            </div>
+                                        </div>
+                                    `;
                                 }).join('')}
+                                </div>
                             </div>
                         </div>
                     `;
                     break;
             }
             
-            // Input Text
+            // Input Text cho các câu hỏi điền/dịch
             if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
-                if(q.type === 'listen_write') placeholderText = 'Nhập câu tiếng Trung đã nghe...';
-                if(q.type === 'listen_translate') placeholderText = 'Nhập bản dịch tiếng Việt...';
-                
                 const initialValue = userAnswer || '';
                 content = `
-                    <div class="text-center mt-6">
-                        <input type="text" id="${inputId}" oninput="captureInputAnswer(${qIdx}, this.value)" value="${initialValue}" 
-                            class="w-full p-4 text-lg border-2 border-slate-300 rounded-xl focus:border-blue-500 outline-none text-center font-bold shadow-sm" 
-                            placeholder="${placeholderText}" autocomplete="off" />
+                    <div class="text-center mt-8">
+                        <div class="relative max-w-2xl mx-auto">
+                            <input type="text" id="${inputId}" 
+                                oninput="captureInputAnswer(${qIdx}, this.value)" 
+                                value="${initialValue}"
+                                class="w-full p-4 pl-6 pr-12 text-lg md:text-xl border-2 border-slate-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none text-center font-bold transition shadow-sm text-slate-700 placeholder:text-slate-300 placeholder:font-normal" 
+                                placeholder="${placeholderText}" autocomplete="off" />
+                            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                <i data-lucide="edit-3" size="20"></i>
+                            </div>
+                        </div>
                     </div>
                 `;
             }
 
             return `
-                <div class="mb-8 fade-in text-center max-w-4xl mx-auto">
-                    ${headerHtml} <div class="w-full">
+                <div class="mb-8 fade-in text-center">
+                    <div class="text-xl md:text-3xl font-bold text-slate-800 mb-6 leading-relaxed max-w-4xl mx-auto">
+                        ${header}
+                    </div>
+                    
+                    ${audioPlayerHtml}
+                    
+                    <div class="text-left w-full mx-auto">
                         ${content}
                     </div>
                 </div>
@@ -3758,173 +3703,151 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
         };
         
         // Logic phân tích cú pháp file content
-// --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ CẬP NHẬT TRỘN ĐÁP ÁN) ---
-// --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ CẬP NHẬT TẠO DISTRACTORS TỪ FILE) ---
-// --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ CẬP NHẬT TRỘN ĐÁP ÁN NGẪU NHIÊN) ---
-// --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ SỬA: BỎ DẤU SAO **, THAY BẰNG MÀU XANH IN ĐẬM) ---
-// --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ CẬP NHẬT: THÊM DẠNG NGHĨA -> TỪ) ---
         const parseFileContent = (text, qType) => {
-            // 1. Hàm trộn mảng
-            const shuffle = (array) => {
-                let currentIndex = array.length, randomIndex;
-                while (currentIndex != 0) {
-                    randomIndex = Math.floor(Math.random() * currentIndex);
-                    currentIndex--;
-                    [array[currentIndex], array[randomIndex]] = [
-                        array[randomIndex], array[currentIndex]];
-                }
-                return array;
-            };
-
             const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             const newQuestions = [];
-            
-            // 2. ĐỌC DỮ LIỆU ĐỂ TẠO DISTRACTORS (ĐÁP ÁN NHIỄU)
-            const tempVocabList = [];
-            lines.forEach(line => {
-                const parts = line.split('|');
-                if (parts.length >= 3) {
-                    tempVocabList.push({
-                        word: parts[0].trim(),
-                        pinyin: parts[1].trim(),
-                        meaning: parts[2].trim()
-                    });
-                }
-            });
 
-            // Thêm dữ liệu giả nếu file quá ít
-            while (tempVocabList.length < 4) {
-                tempVocabList.push({ word: 'Ví dụ', pinyin: 'lìrú', meaning: 'Mẫu' });
-            }
-
-            // Helper lấy đáp án sai
-            const getDistractors = (correctValue, field) => {
-                const distractors = [];
-                const candidates = shuffle([...tempVocabList]); 
-                
-                for (const item of candidates) {
-                    const value = item[field];
-                    if (value !== correctValue && !distractors.includes(value)) {
-                        distractors.push(value);
-                    }
-                    if (distractors.length === 3) break;
-                }
-                while (distractors.length < 3) distractors.push(`Lựa chọn ${distractors.length + 1}`);
-                return distractors;
-            };
-
-            // 3. TẠO CÂU HỎI
             lines.forEach(line => {
                 try {
-                    // Lấy context đường dẫn âm thanh
-                    const lvl = document.getElementById('assign-level') ? document.getElementById('assign-level').value : 'H1';
-                    const lsn = document.getElementById('assign-lesson') ? document.getElementById('assign-lesson').value : 'Bai1';
-                    const folderPath = `data_Edubattle/${lvl}_${lsn}`;
-
                     switch (qType) {
-                        case 'vocab_mcq': // Từ vựng|Pinyin|Nghĩa
+                        case 'vocab_mcq': // Từ vựng|Pinyin|Nghĩa -> Tạo Trắc nghiệm (chọn nghĩa, pinyin, từ)
+                        case 'listen_mcq': // Từ vựng|Pinyin|Nghĩa -> Tạo Nghe (chọn nghĩa)
                             const parts_v = line.split('|');
-                            if (parts_v.length < 3) return;
+                            if (parts_v.length < 3) throw new Error("Missing parts");
                             const [word, pinyin, meaning] = parts_v.map(p => p.trim());
                             
-                            // 1. Dạng: Cho TỪ chọn NGHĨA
-                            let optionsM = [meaning, ...getDistractors(meaning, 'meaning')];
-                            optionsM = shuffle(optionsM); 
-                            newQuestions.push({
-                                type: 'mcq',
-                                text: `Nghĩa của từ <span class="font-bold text-blue-600 text-xl mx-1">${word}</span> là gì?`,
-                                options: optionsM,
-                                correct: optionsM.indexOf(meaning) 
-                            });
+                            // Lấy danh sách từ vựng hiện có để tạo distractors
+                            const vocabList = state.data.vocabulary;
 
-                            // 2. Dạng: Cho TỪ chọn PINYIN
-                            let optionsP = [pinyin, ...getDistractors(pinyin, 'pinyin')];
-                            optionsP = shuffle(optionsP); 
-                            newQuestions.push({
-                                type: 'mcq',
-                                text: `Pinyin của từ <span class="font-bold text-blue-600 text-xl mx-1">${word}</span> là gì?`,
-                                options: optionsP,
-                                correct: optionsP.indexOf(pinyin)
-                            });
-
-                            // --- MỚI THÊM: 3. Dạng: Cho NGHĨA chọn TỪ ---
-                            // Lấy 3 từ tiếng Trung khác làm đáp án sai
-                            let optionsW = [word, ...getDistractors(word, 'word')];
-                            optionsW = shuffle(optionsW); 
-                            newQuestions.push({
-                                type: 'mcq',
-                                text: `Từ có nghĩa là: <span class="font-bold text-blue-600 text-xl mx-1">"${meaning}"</span>?`,
-                                options: optionsW,
-                                correct: optionsW.indexOf(word)
-                            });
-                            break;
-
-                        case 'listen_mcq': // Nghe từ chọn Nghĩa
-                            const parts_l = line.split('|');
-                            if (parts_l.length < 3) return;
-                            const [word_l, pinyin_l, meaning_l] = parts_l.map(p => p.trim());
-
-                            let options_l = [meaning_l, ...getDistractors(meaning_l, 'meaning')];
-                            options_l = shuffle(options_l); 
-
-                            newQuestions.push({
-                                type: 'listen_mcq',
-                                audioText: word_l,
-                                audioUrl: `${folderPath}/${word_l}.mp3`, 
-                                text: "Nghe âm thanh và chọn nghĩa đúng:",
-                                options: options_l,
-                                correct: options_l.indexOf(meaning_l)
-                            });
-                            break;
-
-                        // --- CÁC DẠNG KHÁC GIỮ NGUYÊN ---
-                        case 'fib': 
-                            const match_fib = line.match(/\|([^|]+)\|/);
-                            if (match_fib) {
-                                newQuestions.push({
-                                    type: 'fib',
-                                    text: line.replace(/\|[^|]+\|/, '[BLANK]').trim(),
-                                    answer: match_fib[1].trim()
-                                });
-                            }
-                            break;
-
-                        case 'jumble':
-                            const words = line.split(/\s+/).filter(w => w.length > 0);
-                            if (words.length >= 2) {
-                                newQuestions.push({
-                                    type: 'jumble',
-                                    text: "Sắp xếp các từ thành câu đúng:",
-                                    answer: words
-                                });
-                            }
-                            break;
-
-                        case 'translation':
-                        case 'listen_translate':
-                        case 'listen_write':
-                            const parts_common = line.split('|');
-                            if (parts_common.length >= 2) {
-                                const [tc, tv] = parts_common.map(p => p.trim());
-                                const audioCommon = `${folderPath}/${tc}.mp3`;
-
-                                if (qType === 'translation') {
-                                    newQuestions.push({ type: 'translation', vietnamese: tv, chinese: tc, text: tv });
-                                } else if (qType === 'listen_translate') {
-                                    newQuestions.push({ type: 'listen_translate', audioText: tc, audioUrl: audioCommon, answer: tv, text: "Nghe câu và dịch nghĩa sang tiếng Việt." });
-                                } else {
-                                    newQuestions.push({ type: 'listen_write', audioText: tc, audioUrl: audioCommon, answer: tc, text: "Nghe câu và viết lại." });
+                            // Helper để lấy 3 đáp án sai (distractors)
+                            const getDistractors = (correctValue, field) => {
+                                const distractors = [];
+                                const candidates = shuffleArray([...vocabList]);
+                                for (const item of candidates) {
+                                    const value = item[field];
+                                    if (value !== correctValue && distractors.length < 3 && !distractors.includes(value)) {
+                                        distractors.push(value);
+                                    }
+                                    if (distractors.length === 3) break;
                                 }
+                                // Đảm bảo luôn có 4 đáp án (cả đúng và sai)
+                                while (distractors.length < 3) distractors.push(`[Distractor ${distractors.length + 1}]`);
+                                return distractors;
+                            };
+
+                            // Loại 1: Trắc nghiệm - Chọn Nghĩa (cho Từ)
+                            if (qType === 'vocab_mcq') {
+                                const meaningDistractors = getDistractors(meaning, 'meaning');
+                                const optionsM = shuffleArray([meaning, ...meaningDistractors]);
+                                newQuestions.push({
+                                    type: 'mcq',
+                                    text: `Nghĩa của từ **${word}** là gì?`,
+                                    options: optionsM,
+                                    correct: optionsM.indexOf(meaning)
+                                });
+
+                                // Loại 1: Trắc nghiệm - Chọn Pinyin (cho Từ)
+                                const pinyinDistractors = getDistractors(pinyin, 'pinyin');
+                                const optionsP = shuffleArray([pinyin, ...pinyinDistractors]);
+                                newQuestions.push({
+                                    type: 'mcq',
+                                    text: `Pinyin của từ **${word}** là gì?`,
+                                    options: optionsP,
+                                    correct: optionsP.indexOf(pinyin)
+                                });
                             }
+
+
+                            // Loại 2: Nghe từ và chọn nghĩa
+                            if (qType === 'listen_mcq') {
+                                const meaningDistractors_L = getDistractors(meaning, 'meaning');
+                                const optionsLM = shuffleArray([meaning, ...meaningDistractors_L]);
+                                newQuestions.push({
+                                    type: 'listen_mcq',
+                                    audioText: word,
+                                    text: `Nghe từ "**${word}**" và chọn nghĩa đúng:`,
+                                    options: optionsLM,
+                                    correct: optionsLM.indexOf(meaning)
+                                });
+                            }
+
+                            break;
+
+                        case 'fib': // Câu có |Từ cần điền|
+                            // Tìm kiếm từ cần điền nằm giữa |...|
+                            const match_fib = line.match(/\|([^|]+)\|/);
+                            if (!match_fib) throw new Error("Missing | | markers");
+
+                            const answer = match_fib[1].trim();
+                            const text = line.replace(/\|[^|]+\|/, '[BLANK]').trim();
+                            
+                            if (!answer || !text) throw new Error("Invalid FIB structure");
+
+                            newQuestions.push({
+                                type: 'fib',
+                                text: text,
+                                answer: answer
+                            });
+                            break;
+
+                        case 'jumble': // Câu đúng (cách nhau bằng dấu cách)
+                            const words = line.split(/\s+/).filter(w => w.length > 0);
+                            if (words.length < 2) throw new Error("Sentence too short for Jumble");
+                            
+                            newQuestions.push({
+                                type: 'jumble',
+                                text: "Sắp xếp các từ thành câu đúng:",
+                                answer: words
+                            });
+                            break;
+
+                        case 'translation': // Câu TC|Câu TV
+                            const parts_t = line.split('|');
+                            if (parts_t.length < 2) throw new Error("Missing | separator for Translation");
+                            const [chinese_t, vietnamese_t] = parts_t.map(p => p.trim());
+                            
+                            newQuestions.push({
+                                type: 'translation',
+                                vietnamese: vietnamese_t,
+                                chinese: chinese_t,
+                                text: vietnamese_t // Text hiển thị là câu tiếng Việt cần dịch
+                            });
+                            break;
+
+                        case 'listen_translate': // Câu TC|Câu TV (Nghe TC, dịch TV)
+                            const parts_lt = line.split('|');
+                            if (parts_lt.length < 2) throw new Error("Missing | separator for Listen & Translate");
+                            const [chinese_lt, vietnamese_lt] = parts_lt.map(p => p.trim());
+                            
+                            newQuestions.push({
+                                type: 'listen_translate',
+                                audioText: chinese_lt,
+                                answer: vietnamese_lt,
+                                text: "Nghe câu tiếng Trung và dịch sang tiếng Việt." 
+                            });
+                            break;
+
+                        case 'listen_write': // Câu TC|Câu TV (Nghe TC, viết lại TC)
+                            const parts_lw = line.split('|');
+                            if (parts_lw.length < 2) throw new Error("Missing | separator for Listen & Write");
+                            const [chinese_lw, vietnamese_lw] = parts_lw.map(p => p.trim());
+                            
+                            newQuestions.push({
+                                type: 'listen_write',
+                                audioText: chinese_lw,
+                                answer: chinese_lw, // Đáp án là câu tiếng Trung
+                                text: "Nghe câu tiếng Trung và viết lại." 
+                            });
                             break;
                     }
                 } catch (error) {
-                    console.warn(`Bỏ qua dòng lỗi: ${line}`);
+                    console.warn(`Bỏ qua dòng lỗi (Loại ${qType}): ${line} - ${error.message}`);
                 }
             });
 
             return newQuestions;
         };
+
         // --- Handlers Ngân hàng đề (Giữ nguyên) ---
         window.setBankMode = (mode, id = null) => {
             state.ui.bankMode = mode;
@@ -4036,130 +3959,49 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
             renderApp();
         }
         
-// --- HÀM CHỌN THỦ CÔNG CÂU HỎI TỪ BANK (ĐÃ FIX LỖI NHẢY SCROLL) ---
-        window.selectQuestionFromBank = (qIndex) => {
-            // 1. LƯU VỊ TRÍ SCROLL HIỆN TẠI
-            const scrollContainer = document.getElementById('bank-scroll-view');
-            let savedScrollTop = 0;
-            if (scrollContainer) {
-                savedScrollTop = scrollContainer.scrollTop;
-            }
-
+        window.selectQuestionFromBank = (qIdx) => {
             const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
             if (!selectedBank) return;
-
-            const questionToToggle = selectedBank.questions[qIndex];
             
-            // Đảm bảo mảng câu hỏi tồn tại
-            if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
-            const currentAssignmentQs = state.ui.newAssignment.questions;
+            const questionToAdd = selectedBank.questions[qIdx];
+            const currentIndex = state.ui.newAssignment.questions.findIndex(aq => JSON.stringify(aq) === JSON.stringify(questionToAdd));
 
-            // Kiểm tra xem câu hỏi đã tồn tại chưa
-            const existingIndex = currentAssignmentQs.findIndex(existQ => 
-                JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
-                JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
+            if (currentIndex === -1) {
+                state.ui.newAssignment.questions.push(questionToAdd);
+                showToast("Đã thêm câu hỏi!");
+            } else {
+                state.ui.newAssignment.questions.splice(currentIndex, 1);
+                showToast("Đã xóa câu hỏi khỏi bài tập!");
+            }
+            renderApp();
+        }
+        
+        window.addRandomQuestions = (bankId) => {
+            const count = parseInt(document.getElementById('random-count').value);
+            const selectedBank = state.data.questionBanks.find(b => b.id === bankId);
+            
+            if (isNaN(count) || count <= 0) return showToast("Vui lòng nhập số lượng hợp lệ.", "error");
+            if (!selectedBank) return showToast("Không tìm thấy ngân hàng đề.", "error");
+            
+            const availableQuestions = selectedBank.questions;
+            if (count > availableQuestions.length) return showToast("Số lượng câu hỏi yêu cầu vượt quá số lượng có sẵn.", "error");
+
+            const newQuestionsCandidates = availableQuestions.filter(q => 
+                !state.ui.newAssignment.questions.some(aq => JSON.stringify(aq) === JSON.stringify(q))
             );
 
-            if (existingIndex !== -1) {
-                // Đã có -> Xóa đi (Bỏ chọn)
-                state.ui.newAssignment.questions.splice(existingIndex, 1);
+            if (newQuestionsCandidates.length < count) {
+                 state.ui.newAssignment.questions.push(...newQuestionsCandidates);
+                 showToast(`Đã thêm ${newQuestionsCandidates.length} câu hỏi còn lại!`);
             } else {
-                // Chưa có -> Thêm vào
-                state.ui.newAssignment.questions.push(questionToToggle);
+                 const randomSelection = shuffleArray([...newQuestionsCandidates]).slice(0, count);
+                 state.ui.newAssignment.questions.push(...randomSelection);
+                 showToast(`Đã thêm ngẫu nhiên ${count} câu hỏi!`);
             }
-
-            // 2. VẼ LẠI GIAO DIỆN
-            renderApp();
-
-            // 3. KHÔI PHỤC VỊ TRÍ SCROLL
-            // Cần tìm lại element mới sau khi renderApp đã chạy
-            const newScrollContainer = document.getElementById('bank-scroll-view');
-            if (newScrollContainer) {
-                newScrollContainer.scrollTop = savedScrollTop;
-            }
-        };
-        
-window.addRandomQuestions = (bankId) => {
-            const selectedBank = state.data.questionBanks.find(b => b.id === bankId);
-            if (!selectedBank) return showToast("Lỗi: Không tìm thấy ngân hàng đề.", "error");
-
-            const availableQuestions = selectedBank.questions;
-            let totalAdded = 0;
-            const currentAssignmentQs = state.ui.newAssignment.questions;
-
-            // Lấy danh sách các loại câu hỏi có trong bank
-            const typesInBank = [...new Set(availableQuestions.map(q => q.type))];
-
-            typesInBank.forEach(type => {
-                const inputEl = document.getElementById(`count-for-${type}`);
-                if (!inputEl) return;
-
-                const countNeeded = parseInt(inputEl.value) || 0;
-                if (countNeeded <= 0) return;
-
-                // 1. Lọc ra các câu hỏi thuộc loại này
-                const qsByType = availableQuestions.filter(q => q.type === type);
-
-                // 2. Lọc trùng nội dung (Deduplicate) - Giữ nguyên logic này vì nó tốt
-                const uniqueCandidates = [];
-                const seenContent = new Set();
-
-                qsByType.forEach(q => {
-                    // Tạo chữ ký để so sánh nội dung
-                    const contentSignature = JSON.stringify({
-                        text: q.text,
-                        vietnamese: q.vietnamese,
-                        audioText: q.audioText,
-                        options: q.options,
-                        answer: q.answer,
-                        pairs: q.pairs
-                    });
-
-                    if (!seenContent.has(contentSignature)) {
-                        seenContent.add(contentSignature);
-                        uniqueCandidates.push(q);
-                    }
-                });
-
-                // 3. Lọc bỏ các câu đã có trong bài tập hiện tại
-                const finalCandidates = uniqueCandidates.filter(q => 
-                    !currentAssignmentQs.some(existQ => {
-                        const sig1 = JSON.stringify({t: q.text, o: q.options, a: q.answer});
-                        const sig2 = JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer});
-                        return sig1 === sig2;
-                    })
-                );
-
-                if (finalCandidates.length < countNeeded) {
-                    showToast(`Loại "${getQuestionTypeLabel(type)}" chỉ còn ${finalCandidates.length} câu chưa sử dụng.`, "warning");
-                }
-
-                // --- 4. BƯỚC QUAN TRỌNG: TRỘN NGẪU NHIÊN TRỰC TIẾP TẠI ĐÂY ---
-                // Sử dụng thuật toán Fisher-Yates Shuffle nhúng trực tiếp
-                // Tạo bản sao để không ảnh hưởng mảng gốc
-                let shuffled = [...finalCandidates]; 
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                }
-                // -------------------------------------------------------------
-
-                // 5. Cắt lấy số lượng cần thiết từ mảng đã trộn
-                const selected = shuffled.slice(0, countNeeded);
-                
-                // 6. Thêm vào bài tập
-                state.ui.newAssignment.questions.push(...selected);
-                totalAdded += selected.length;
-            });
-
-            if (totalAdded > 0) {
-                showToast(`Đã thêm ngẫu nhiên ${totalAdded} câu hỏi!`, "success");
-                setSelectingBankQuestions(false); // Đóng modal
-                renderApp(); // Render lại
-            } else {
-                showToast("Vui lòng nhập số lượng câu hỏi cần lấy (lớn hơn 0).", "error");
-            }
+            
+            setSelectingBankQuestions(false); 
         }
+
 
         // --- Assignment Handlers (Giữ nguyên) ---
         window.handleClassSelection = (classId, isChecked) => {
@@ -4347,17 +4189,20 @@ window.addQuestion = () => {
             // 1. LẤY GIÁ TRỊ CẤP ĐỘ VÀ BÀI HỌC
             const lvl = document.getElementById('assign-level') ? document.getElementById('assign-level').value : 'H1';
             const lsn = document.getElementById('assign-lesson') ? document.getElementById('assign-lesson').value : 'Bai1';
+            
+            // 2. TẠO TÊN THƯ MỤC: H1_Bai1
             const folderName = `${lvl}_${lsn}`;
 
             // Helper tạo đường dẫn local
             const createLocalPath = (filename) => {
                 if(!filename) return null;
+                // Kết quả: data_Edubattle/H1_Bai1/filename.mp3
                 return `data_Edubattle/${folderName}/${filename.trim()}.mp3`;
             };
 
             try {
+                // ... (GIỮ NGUYÊN các case: mcq, fib, jumble, match, translation) ...
                 switch(type) {
-                    // --- 1. TRẮC NGHIỆM (MCQ) - LOGIC MỚI ---
                     case 'mcq':
                          const txt = document.getElementById('q-text').value;
                          const opts = [
@@ -4366,17 +4211,11 @@ window.addQuestion = () => {
                             document.getElementById('opt-2').value,
                             document.getElementById('opt-3').value
                         ];
-                        
-                        // Lấy đáp án đúng từ Radio Button
-                        const checkedRadio = document.querySelector('input[name="mcq_correct_input"]:checked');
-                        if (!checkedRadio) throw new Error("Vui lòng tích chọn đáp án đúng.");
-                        const correct = parseInt(checkedRadio.value);
-
+                        const correct = parseInt(document.getElementById('q-correct').value);
                         if(!txt || opts.some(o => !o)) throw new Error("Vui lòng điền đầy đủ nội dung.");
                         newQ = { ...newQ, text: txt, options: opts, correct };
                         isValid = true;
                         break;
-
                     case 'fib':
                         const fibText = document.getElementById('fib-text').value;
                         const fibAnswer = document.getElementById('fib-answer').value.trim();
@@ -4412,7 +4251,7 @@ window.addQuestion = () => {
                         isValid = true;
                         break;
 
-                    // --- 2. NGHE TRẮC NGHIỆM (LISTEN MCQ) - LOGIC MỚI ---
+                    // --- CÁC PHẦN NGHE (Đã cập nhật logic đường dẫn với H1_Bai1) ---
                     case 'listen_mcq':
                         const lmcqAudio = document.getElementById('listen-mcq-audio').value.trim();
                         const lmcqOpts = [
@@ -4421,18 +4260,14 @@ window.addQuestion = () => {
                             document.getElementById('lmcq-opt-2').value,
                             document.getElementById('lmcq-opt-3').value
                         ];
-                        
-                        // Lấy đáp án đúng từ Radio Button (name khác với mcq thường)
-                        const checkedListenRadio = document.querySelector('input[name="lmcq_correct_input"]:checked');
-                        if (!checkedListenRadio) throw new Error("Vui lòng tích chọn đáp án đúng.");
-                        const lmcqCorrect = parseInt(checkedListenRadio.value);
+                        const lmcqCorrect = parseInt(document.getElementById('lmcq-correct').value);
                         
                         if(!lmcqAudio || lmcqOpts.some(o => !o)) throw new Error("Vui lòng nhập tên file âm thanh và đáp án.");
                         
                         newQ = { 
                             ...newQ, 
                             audioText: lmcqAudio, 
-                            audioUrl: createLocalPath(lmcqAudio), 
+                            audioUrl: createLocalPath(lmcqAudio), // Đường dẫn H1_Bai1/...
                             text: "Nghe âm thanh và chọn nghĩa đúng:", 
                             options: lmcqOpts, 
                             correct: lmcqCorrect 
@@ -4448,7 +4283,7 @@ window.addQuestion = () => {
                         newQ = { 
                             ...newQ, 
                             audioText: lwAudio, 
-                            audioUrl: createLocalPath(lwAudio),
+                            audioUrl: createLocalPath(lwAudio), // Đường dẫn H1_Bai1/...
                             answer: lwAnswer, 
                             text: "Nghe câu và viết lại." 
                         }; 
@@ -4463,7 +4298,7 @@ window.addQuestion = () => {
                         newQ = { 
                             ...newQ, 
                             audioText: ltAudio, 
-                            audioUrl: createLocalPath(ltAudio),
+                            audioUrl: createLocalPath(ltAudio), // Đường dẫn H1_Bai1/...
                             answer: ltAnswer, 
                             text: "Nghe câu và dịch nghĩa sang tiếng Việt." 
                         }; 
@@ -5207,71 +5042,6 @@ window.addQuestion = () => {
                 }
             }
         };
-// --- HÀM HỖ TRỢ PHÁT AUDIO TÙY CHỈNH ---
-        window.playCustomAudio = (audioId, btnElement) => {
-            const audio = document.getElementById(audioId);
-            if (!audio) return;
-
-            // Nếu đang dừng thì phát
-            if (audio.paused) {
-                // Dừng các audio khác đang chạy (nếu có)
-                document.querySelectorAll('audio').forEach(a => {
-                    if(a.id !== audioId) { a.pause(); a.currentTime = 0; }
-                });
-
-                audio.play();
-                
-                // Hiệu ứng Visual: Đổi màu nút khi đang nghe
-                btnElement.classList.remove('bg-purple-100', 'text-purple-700');
-                btnElement.classList.add('bg-green-100', 'text-green-600', 'ring-2', 'ring-green-400', 'animate-pulse');
-                
-                // Khi phát xong thì reset nút về bình thường
-                audio.onended = () => {
-                    btnElement.classList.add('bg-purple-100', 'text-purple-700');
-                    btnElement.classList.remove('bg-green-100', 'text-green-600', 'ring-2', 'ring-green-400', 'animate-pulse');
-                };
-            } else {
-                // Nếu đang phát thì dừng
-                audio.pause();
-                btnElement.classList.add('bg-purple-100', 'text-purple-700');
-                btnElement.classList.remove('bg-green-100', 'text-green-600', 'ring-2', 'ring-green-400', 'animate-pulse');
-            }
-        };
-// --- HÀM CHỌN THỦ CÔNG CÂU HỎI TỪ BANK ---
-        window.selectQuestionFromBank = (qIndex) => {
-            const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
-            if (!selectedBank) return;
-
-            const questionToToggle = selectedBank.questions[qIndex];
-            
-            // Đảm bảo mảng câu hỏi tồn tại
-            if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
-            const currentAssignmentQs = state.ui.newAssignment.questions;
-
-            // Kiểm tra xem câu hỏi đã tồn tại chưa
-            const existingIndex = currentAssignmentQs.findIndex(existQ => 
-                JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
-                JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
-            );
-
-            if (existingIndex !== -1) {
-                // Đã có -> Xóa đi (Bỏ chọn)
-                state.ui.newAssignment.questions.splice(existingIndex, 1);
-            } else {
-                // Chưa có -> Thêm vào
-                state.ui.newAssignment.questions.push(questionToToggle);
-            }
-
-            // Render lại để cập nhật trạng thái nút
-            renderApp();
-        };
-        
-        // Đảm bảo hàm gọi modal cũng reset ID bank để hiển thị danh sách
-        window.setSelectingBankQuestions = (val) => {
-            state.ui.isSelectingBankQuestions = val;
-            if (val) state.ui.selectedBankId = null; // Reset để hiện list bank
-            renderApp();
-        }
     </script>
 </body>
 </html>
