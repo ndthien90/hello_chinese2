@@ -2806,28 +2806,24 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
         };
         
         // MỚI: RENDER KẾT QUẢ BÀI NỘP (Cập nhật Responsive)
-// --- HÀM RENDER KẾT QUẢ BÀI NỘP (FULL TÍNH NĂNG: TÊN HS, ĐIỂM, FEEDBACK) ---
+// --- CẬP NHẬT: RENDER KẾT QUẢ BÀI NỘP (ĐÃ FIX TÊN & SỐ CÂU ĐÚNG) ---
         const renderSubmissionResult = () => {
-            // 1. LẤY DỮ LIỆU MỚI NHẤT (Để cập nhật Real-time)
-            // Tìm bài nộp trong danh sách gốc để đảm bảo có dữ liệu mới nhất (ví dụ: lời phê vừa lưu)
-            const freshSub = state.data.submissions.find(s => s.id === state.ui.viewSubmission.id);
-            // Gộp với dữ liệu view hiện tại (để giữ lại thông tin assignment/questions đã được xử lý trước đó)
-            const sub = { ...state.ui.viewSubmission, ...freshSub };
-            
+            const sub = state.ui.viewSubmission;
             const assign = state.data.assignments.find(a => a.id === sub.assignmentId);
-            if (!assign) return `<p class="text-red-500">Không tìm thấy bài tập gốc.</p>`;
-
-            // 2. LẤY THÔNG TIN HỌC SINH & VAI TRÒ
+            
+            // 1. LẤY THÔNG TIN HỌC SINH
             const studentProfile = state.data.users.find(u => u.uid === sub.studentId);
             const studentName = studentProfile ? studentProfile.name : 'Học sinh';
-            const isTeacher = state.profile.role === 'teacher'; 
 
-            // 3. TÍNH SỐ CÂU ĐÚNG (Logic chấm điểm lại để hiển thị thống kê)
+            if (!assign) return `<p class="text-red-500">Không tìm thấy bài tập gốc.</p>`;
+
+            // --- [FIX LỖI 2]: TÍNH SỐ CÂU ĐÚNG ---
             let correctCount = 0;
             assign.questions.forEach((q, idx) => {
                 const uAns = sub.answers[idx];
                 let isRight = false;
                 
+                // Logic check đúng sai (Copy từ logic chấm điểm)
                 if (q.type === 'mcq' || q.type === 'listen_mcq') {
                     isRight = uAns === q.correct;
                 } else if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
@@ -2838,10 +2834,10 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                 } else if (q.type === 'jumble') {
                     if (Array.isArray(uAns)) isRight = uAns.join(' ') === q.answer.join(' ');
                 } else if (q.type === 'match') {
+                    // Match coi là đúng nếu đúng hết các cặp (đơn giản hóa cho việc đếm câu)
                     if (uAns) {
                         const subQData = sub.questionData?.[idx] || {};
                         const colB = subQData.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5);
-                        // Kiểm tra từng cặp một
                         const pairsCorrect = q.pairs.every((p, aIdx) => {
                             const bIdx = uAns[aIdx];
                             return colB[bIdx] === p.b;
@@ -2849,53 +2845,17 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                         isRight = pairsCorrect;
                     }
                 }
+                
                 if (isRight) correctCount++;
             });
+            // -------------------------------------
 
-            // 4. XỬ LÝ GIAO DIỆN NHẬN XÉT (FEEDBACK)
-            let feedbackHtml = '';
-            if (isTeacher) {
-                // --- GIAO DIỆN GIÁO VIÊN: Ô NHẬP LIỆU ---
-                feedbackHtml = `
-                    <div class="bg-purple-50 p-5 rounded-2xl border border-purple-200 mb-8 shadow-sm">
-                        <label class="block font-bold text-purple-800 mb-2 flex items-center gap-2 text-lg">
-                            <i data-lucide="message-square-plus"></i> Nhận xét / Góp ý cho bài làm này
-                        </label>
-                        <textarea id="teacher-comment-input" rows="3" 
-                            class="w-full p-4 border border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none bg-white text-slate-700 transition"
-                            placeholder="Nhập lời phê bình, động viên học sinh...">${sub.teacherComment || ''}</textarea>
-                        <div class="mt-3 text-right">
-                            <button onclick="saveTeacherFeedback('${sub.id}')" 
-                                class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 ml-auto">
-                                <i data-lucide="save" size="18"></i> Lưu Nhận Xét
-                            </button>
-                        </div>
-                    </div>
-                `;
-            } else if (sub.teacherComment) {
-                // --- GIAO DIỆN HỌC SINH: XEM LỜI PHÊ (Chỉ hiện khi có nội dung) ---
-                feedbackHtml = `
-                    <div class="bg-yellow-50 p-6 rounded-2xl border border-yellow-200 mb-8 shadow-md relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
-                        <h4 class="font-bold text-yellow-800 mb-3 flex items-center gap-2 text-lg">
-                            <i data-lucide="message-circle" class="text-yellow-600"></i> Lời phê của Giáo viên:
-                        </h4>
-                        <p class="text-slate-800 italic text-lg leading-relaxed pl-2">
-                            "${formatText(sub.teacherComment)}"
-                        </p>
-                        <div class="absolute -bottom-4 -right-4 opacity-10">
-                            <i data-lucide="quote" size="100" class="text-yellow-600"></i>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // 5. RENDER CHI TIẾT TỪNG CÂU HỎI
             const renderQuestionReview = (q, qIdx) => {
                 const userAnswer = sub.answers[qIdx];
                 const type = q.type;
                 let isCorrect = false;
                 let explanation = '';
+
                 const subQData = sub.questionData?.[qIdx] || {};
                 
                 switch(type) {
@@ -2971,7 +2931,6 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
             const qHtml = assign.questions.map(renderQuestionReview).join('');
             const isPassed = sub.score >= 50;
 
-            // 6. TRẢ VỀ GIAO DIỆN HOÀN CHỈNH
             return `
                 <div class="max-w-4xl mx-auto bg-white p-4 md:p-8 rounded-2xl shadow-lg fade-in">
                     <div class="flex justify-between items-start mb-6 pb-4 border-b">
@@ -2986,7 +2945,7 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                         </button>
                     </div>
 
-                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="flex flex-col md:flex-row gap-4 mb-8">
                         <div class="flex-1 text-center p-6 rounded-2xl ${isPassed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} flex flex-col justify-center items-center shadow-inner">
                             <p class="text-sm font-bold uppercase tracking-wider opacity-70">Tổng điểm</p>
                             <div class="text-6xl font-black my-2">${sub.score}</div>
@@ -3000,8 +2959,6 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                             </ul>
                         </div>
                     </div>
-
-                    ${feedbackHtml}
 
                     <h4 class="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2">
                         <i data-lucide="list-checks" size="24" class="text-blue-500"></i> Chi tiết bài làm
@@ -4731,7 +4688,7 @@ window.addQuestion = () => {
             renderApp();
         };
         
-window.viewSubmissionResult = (subId) => {
+  window.viewSubmissionResult = (subId) => {
             if (subId) {
                 const sub = state.data.submissions.find(s => s.id === subId);
                 const assign = state.data.assignments.find(a => a.id === sub.assignmentId);
@@ -4740,27 +4697,26 @@ window.viewSubmissionResult = (subId) => {
                     const questionsForReview = assign.questions.map((q, qIdx) => {
                          const subQData = sub.questionData?.[qIdx] || {};
                          let newQ = { ...q };
+                         
                          if (q.type === 'jumble' && subQData.shuffledWords) {
                             newQ.shuffledWords = subQData.shuffledWords;
                          } else if (q.type === 'match' && subQData.shuffledColB) {
                             newQ.shuffledColB = subQData.shuffledColB;
                          }
+                         
                         return newQ;
                     });
 
                     state.ui.viewSubmission = {
                         id: subId,
                         assignmentId: assign.id,
-                        studentId: sub.studentId,
+                        // --- [FIX LỖI 1]: Lấy ID của người làm bài, KHÔNG lấy ID người đang xem ---
+                        studentId: sub.studentId, 
+                        // ------------------------------------------------------------------------
                         score: sub.score,
                         answers: sub.answers,
                         questionData: sub.questionData, 
                         createdAt: sub.createdAt,
-                        
-                        // --- [THÊM DÒNG NÀY] ---
-                        teacherComment: sub.teacherComment, 
-                        // ----------------------
-                        
                         assignment: { ...assign, questions: questionsForReview }
                     };
 
@@ -5353,32 +5309,6 @@ window.viewSubmissionResult = (subId) => {
                     countEl.classList.remove('text-green-600', 'scale-110');
                     countEl.classList.add('text-blue-600');
                 }, 200);
-            }
-        };
-// --- HÀM LƯU NHẬN XÉT CỦA GIÁO VIÊN ---
-        window.saveTeacherFeedback = async (subId) => {
-            const comment = document.getElementById('teacher-comment-input').value.trim();
-            if (!comment) return showToast("Vui lòng nhập nội dung nhận xét trước khi lưu.", "error");
-
-            try {
-                // Cập nhật trường teacherComment trong submission
-                const subRef = doc(db, getPath('submissions'), subId);
-                await updateDoc(subRef, {
-                    teacherComment: comment
-                });
-                
-                // Cập nhật state local để không cần tải lại trang
-                if (state.ui.viewSubmission && state.ui.viewSubmission.id === subId) {
-                    state.ui.viewSubmission.teacherComment = comment;
-                }
-                
-                showToast("Đã lưu nhận xét thành công!");
-                
-                // Không cần render lại toàn bộ app để tránh mất vị trí, chỉ báo thành công là đủ
-                // Hoặc nếu muốn chắc chắn, có thể render lại: renderApp(); 
-            } catch (e) {
-                console.error("Error saving feedback:", e);
-                showToast(`Lỗi lưu nhận xét: ${e.message}`, "error");
             }
         };
 
