@@ -1271,19 +1271,12 @@ ${state.ui.isBulkModalOpen ? `
 
         // MỚI: CLASSES MANAGEMENT RENDERERS (Giáo viên)
 
-// MỚI: CLASSES MANAGEMENT RENDERERS (Giáo viên)
         const renderClasses = () => {
             const isTeacher = state.profile.role === 'teacher';
             if (!isTeacher) return `<p class="text-red-500">Bạn không có quyền truy cập tính năng này.</p>`;
 
-            // --- [FIX LỖI QUAN TRỌNG] THÊM ĐOẠN NÀY ĐỂ HIỂN THỊ CHI TIẾT BÀI LÀM ---
-            if (state.ui.viewSubmission) {
-                return renderSubmissionResult();
-            }
-            // -----------------------------------------------------------------------
-
             if (state.ui.viewClassId && (state.ui.isCreatingAssignment || state.ui.viewAssignmentId)) {
-                // NESTED VIEW: Nếu đang ở chế độ xem lớp nhưng lại đang tạo/sửa assignment
+                // NESTED VIEW: Nếu đang ở chế độ xem lớp nhưng lại đang tạo/sửa assignment, ưu tiên render form tạo/sửa
                  if (state.ui.isCreatingAssignment) {
                      if (state.ui.isSelectingBankQuestions) {
                          return renderQuestionSelectionFromBank(); 
@@ -1336,6 +1329,7 @@ ${state.ui.isBulkModalOpen ? `
                 </div>
             `;
         };
+
         const renderCreateClassForm = () => {
             return `
                 <div class="max-w-xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg fade-in">
@@ -1448,37 +1442,23 @@ return `
         };
         
         // --- MỚI: HÀM RENDER CHI TIẾT THỐNG KÊ BÀI TẬP ---
-// --- HÀM RENDER CHI TIẾT THỐNG KÊ BÀI TẬP (ĐÃ CẬP NHẬT: XEM CHI TIẾT BÀI LÀM) ---
         const renderAssignmentStatsDetail = (assign, studentList, submissions) => {
              
             const studentStats = studentList.map(student => {
                 const userProfile = state.data.users.find(u => u.uid === student.uid);
-                // Tìm bài nộp của học sinh này
                 const sub = submissions.find(s => s.studentId === student.uid);
                 return {
                     ...student,
                     ...userProfile, 
-                    subId: sub ? sub.id : null, // Lưu ID bài nộp
                     score: sub ? sub.score : 0,
                     submitted: !!sub
                 };
             });
             
-            // Sắp xếp theo điểm (cao -> thấp)
+            // Sort by score (high to low)
             studentStats.sort((a, b) => b.score - a.score);
 
-            const statsRows = studentStats.map((s, idx) => {
-                // Tạo nút xem điểm hoặc dấu gạch ngang nếu chưa nộp
-                const scoreDisplay = s.submitted 
-                    ? `<button onclick="viewSubmissionResult('${s.subId}')" 
-                               class="flex items-center justify-center gap-1 w-full py-1 px-2 rounded-lg font-bold transition shadow-sm
-                               ${s.score >= 50 ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'}"
-                               title="Nhấn để xem chi tiết bài làm">
-                            ${s.score} <i data-lucide="eye" class="w-3 h-3"></i>
-                       </button>`
-                    : `<span class="text-slate-300 font-bold">-</span>`;
-
-                return `
+            const statsRows = studentStats.map((s, idx) => `
                 <tr class="border-b last:border-0 hover:bg-slate-50 transition ${!s.submitted ? 'opacity-60' : ''}">
                     <td class="py-3 pl-4 font-medium text-slate-700 w-12 text-center">${idx + 1}</td>
                     <td class="py-3 flex items-center gap-3">
@@ -1486,25 +1466,20 @@ return `
                         <span class="font-medium text-slate-700 truncate">${s.name}</span>
                     </td>
                     <td class="py-3 text-center hidden sm:table-cell">
-                        <span class="px-2 py-0.5 rounded-full text-xs font-bold ${s.submitted ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}">
+                        <span class="px-2 py-0.5 rounded-full text-xs font-bold ${s.submitted ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
                             ${s.submitted ? 'Đã nộp' : 'Chưa nộp'}
                         </span>
                     </td>
-                    <td class="py-3 pr-4 text-right w-24">
-                        ${scoreDisplay}
-                    </td>
+                    <td class="py-3 pr-4 text-right font-bold text-lg ${s.score >= 50 ? 'text-green-600' : 'text-red-500'} w-20">${s.score}</td>
                 </tr>
-            `}).join('');
+            `).join('');
 
             return `
                 <div class="bg-white p-4 md:p-6 rounded-xl shadow-md border mb-6 fade-in">
                     <div class="flex justify-between items-center mb-4 border-b pb-2">
-                        <div>
-                            <h5 class="text-xl font-bold text-blue-600 truncate">${assign.title}</h5>
-                            <p class="text-xs text-slate-500">Tổng số câu: ${assign.questions.length}</p>
-                        </div>
-                        <button onclick="viewAssignmentStats(null)" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100 transition">
-                             <i data-lucide="x" size="24"></i>
+                        <h5 class="text-xl font-bold text-blue-600 truncate">${assign.title} (${assign.questions.length} câu)</h5>
+                        <button onclick="viewAssignmentStats(null)" class="text-red-500 hover:text-red-700">
+                             <i data-lucide="x" size="20"></i>
                         </button>
                     </div>
                     
@@ -1512,11 +1487,11 @@ return `
                         <div class="overflow-x-auto">
                             <table class="w-full min-w-[500px]">
                                 <thead>
-                                    <tr class="text-left text-slate-500 text-sm border-b bg-slate-100 uppercase tracking-wider">
-                                        <th class="pb-3 pt-3 pl-4 w-12 text-center">#</th>
+                                    <tr class="text-left text-slate-500 text-sm border-b bg-slate-100">
+                                        <th class="pb-3 pt-3 pl-4 w-12 text-center">Hạng</th>
                                         <th class="pb-3 pt-3">Học sinh</th>
                                         <th class="pb-3 pt-3 text-center hidden sm:table-cell">Trạng thái</th>
-                                        <th class="pb-3 pt-3 pr-4 text-right w-24">Điểm (Xem)</th>
+                                        <th class="pb-3 pt-3 pr-4 text-right w-20">Điểm (100)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2339,12 +2314,12 @@ const renderCreateAssignmentForm = () => {
         };
         
 const renderQuestionSelectionFromBank = () => {
-            // Lấy danh sách ngân hàng đề
+            // Lấy danh sách ngân hàng đề của tôi
             const myBanks = (state.data.questionBanks || []).filter(b => b.createdBy === state.user.uid);
             const selectedBank = myBanks.find(b => b.id === state.ui.selectedBankId);
             
+            // --- TRƯỜNG HỢP 1: CHƯA CHỌN BANK (HIỆN DANH SÁCH) ---
             if (!selectedBank) {
-                // (Giữ nguyên phần hiển thị danh sách Bank - không thay đổi)
                 return `
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
                         <h3 class="text-xl font-bold text-yellow-600 mb-6 border-b pb-3">Chọn Ngân hàng đề nguồn</h3>
@@ -2362,10 +2337,11 @@ const renderQuestionSelectionFromBank = () => {
                 `;
             }
 
+            // --- TRƯỜNG HỢP 2: ĐÃ CHỌN BANK (HIỆN CHI TIẾT ĐỂ LẤY CÂU HỎI) ---
             const availableQuestions = selectedBank.questions || [];
             const currentAssignmentQs = state.ui.newAssignment.questions || [];
             
-            // Logic thống kê (Giữ nguyên)
+            // A. Logic thống kê cho phần Ngẫu nhiên
             const typeStats = availableQuestions.reduce((acc, q) => {
                 const label = getQuestionTypeLabel(q.type);
                 if (!acc[q.type]) acc[q.type] = { label: label, count: 0 };
@@ -2390,30 +2366,50 @@ const renderQuestionSelectionFromBank = () => {
                 `;
             }).join('');
 
-            // Logic hiển thị danh sách (CÓ THÊM ID CHO BUTTON)
+            // B. Logic hiển thị danh sách câu hỏi để chọn Thủ công
             const manualList = availableQuestions.map((q, idx) => {
+                // Kiểm tra xem câu này đã có trong bài tập chưa
                 const isSelected = currentAssignmentQs.some(existQ => 
                     JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
                     JSON.stringify({t: q.text, o: q.options, a: q.answer})
                 );
 
+                // --- LOGIC MỚI: XÁC ĐỊNH NỘI DUNG HIỂN THỊ THÔNG MINH ---
                 let previewText = '';
+                
                 switch(q.type) {
-                    case 'listen_mcq': case 'listen_write': case 'listen_translate':
-                        previewText = `<span class="text-purple-600 font-bold">[Audio]</span> ${q.text}`; break;
+                    case 'listen_mcq':
+                    case 'listen_write':
+                    case 'listen_translate':
+                        // Với bài nghe, hiển thị nội dung Audio Script
+                        previewText = `<span class="text-purple-600 font-bold">[Audio: ${q.audioText || '...'}]</span> `;
+                        break;
+                        
                     case 'jumble':
+                        // Với bài xếp từ, hiển thị câu đáp án hoàn chỉnh
                         const jumbleAns = Array.isArray(q.answer) ? q.answer.join(' ') : q.answer;
-                        previewText = `<span class="text-green-600 font-bold">[Câu: ${jumbleAns}]</span>`; break;
+                        previewText = `<span class="text-green-600 font-bold">[Câu: ${jumbleAns}]</span>`;
+                        break;
+                        
                     case 'match':
+                        // Với bài nối, hiển thị các cặp
                         const pairsText = q.pairs ? q.pairs.map(p => `${p.a}-${p.b}`).join(', ') : '';
-                        previewText = `<span class="text-orange-600 font-bold">[Cặp: ${pairsText}]</span>`; break;
+                        previewText = `<span class="text-orange-600 font-bold">[Cặp: ${pairsText}]</span>`;
+                        break;
+                        
                     case 'translation':
-                        previewText = `<span class="text-blue-600 font-bold">[Dịch]</span> ${q.vietnamese}`; break;
+                        // Với bài dịch, ưu tiên hiển thị câu tiếng Việt
+                        previewText = `<span class="text-blue-600 font-bold">[Dịch]</span> ${q.vietnamese}`;
+                        break;
+                        
                     default:
+                        // Các bài còn lại (MCQ, FIB) hiển thị text câu hỏi
                         previewText = q.text;
                 }
+                
+                // Xử lý format text (đậm, xanh...)
                 const formattedPreview = formatText(previewText);
-                const qTextClean = previewText.replace(/<[^>]*>?/gm, '');
+                const qTextClean = previewText.replace(/<[^>]*>?/gm, ''); // Cho tooltip
 
                 return `
                     <div class="flex items-center justify-between p-3 border-b last:border-0 hover:bg-slate-50 transition group">
@@ -2423,7 +2419,7 @@ const renderQuestionSelectionFromBank = () => {
                                 ${formattedPreview}
                             </div>
                         </div>
-                        <button id="btn-select-${idx}" onclick="selectQuestionFromBank(${idx})" 
+                        <button onclick="selectQuestionFromBank(${idx})" 
                             class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center
                             ${isSelected ? 'bg-red-100 text-red-600 hover:bg-red-200 border border-red-200' : 'bg-blue-600 text-white hover:bg-blue-700'}">
                             ${isSelected ? '<i data-lucide="minus" class="w-3 h-3"></i> Bỏ' : '<i data-lucide="plus" class="w-3 h-3"></i> Chọn'}
@@ -2437,7 +2433,7 @@ const renderQuestionSelectionFromBank = () => {
                     <div class="flex justify-between items-center mb-4 border-b pb-3 flex-shrink-0">
                         <div>
                             <h3 class="text-xl font-bold text-slate-800">Bank: <span class="text-yellow-600">${selectedBank.title}</span></h3>
-                            <p class="text-xs text-slate-500">Đã chọn: <span id="total-selected-count" class="font-bold text-blue-600 text-lg">${currentAssignmentQs.length}</span> câu vào bài tập</p>
+                            <p class="text-xs text-slate-500">Đã chọn: <span class="font-bold text-blue-600 text-lg">${currentAssignmentQs.length}</span> câu vào bài tập</p>
                         </div>
                         <button onclick="setSelectingBankQuestions(false)" class="text-slate-400 hover:text-red-500 bg-slate-100 p-2 rounded-full"><i data-lucide="x" size="20"></i></button>
                     </div>
@@ -2462,10 +2458,10 @@ const renderQuestionSelectionFromBank = () => {
 
                         <div class="lg:col-span-2 flex flex-col h-full border-2 border-slate-200 rounded-xl overflow-hidden shadow-sm">
                             <div class="bg-slate-100 p-3 border-b text-xs font-bold text-slate-600 flex justify-between uppercase tracking-wider items-center">
-                                <span class="flex items-center gap-2"><i data-lucide="check-square" class="w-4 h-4"></i> 2. Chọn thủ công từng câu</span>
+                                <span class="flex items-center gap-2"><i data-lucide="check-square" class="w-4 h-4"></i> 2. Chọn thủ công từng câu (${availableQuestions.length})</span>
                                 <span class="text-slate-400">Trạng thái</span>
                             </div>
-                            <div class="flex-1 overflow-y-auto p-0 bg-white">
+                         <div id="bank-scroll-view" class="flex-1 overflow-y-auto p-0 bg-white">
                                 ${manualList || '<div class="p-8 text-center text-slate-400">Chưa có câu hỏi nào.</div>'}
                             </div>
                         </div>
@@ -2806,49 +2802,10 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
         };
         
         // MỚI: RENDER KẾT QUẢ BÀI NỘP (Cập nhật Responsive)
-// --- CẬP NHẬT: RENDER KẾT QUẢ BÀI NỘP (ĐÃ FIX TÊN & SỐ CÂU ĐÚNG) ---
         const renderSubmissionResult = () => {
             const sub = state.ui.viewSubmission;
             const assign = state.data.assignments.find(a => a.id === sub.assignmentId);
-            
-            // 1. LẤY THÔNG TIN HỌC SINH
-            const studentProfile = state.data.users.find(u => u.uid === sub.studentId);
-            const studentName = studentProfile ? studentProfile.name : 'Học sinh';
-
             if (!assign) return `<p class="text-red-500">Không tìm thấy bài tập gốc.</p>`;
-
-            // --- [FIX LỖI 2]: TÍNH SỐ CÂU ĐÚNG ---
-            let correctCount = 0;
-            assign.questions.forEach((q, idx) => {
-                const uAns = sub.answers[idx];
-                let isRight = false;
-                
-                // Logic check đúng sai (Copy từ logic chấm điểm)
-                if (q.type === 'mcq' || q.type === 'listen_mcq') {
-                    isRight = uAns === q.correct;
-                } else if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
-                    if (uAns) {
-                        const expected = (q.type === 'translation' ? q.chinese : q.answer).trim().toLowerCase();
-                        isRight = uAns.trim().toLowerCase() === expected;
-                    }
-                } else if (q.type === 'jumble') {
-                    if (Array.isArray(uAns)) isRight = uAns.join(' ') === q.answer.join(' ');
-                } else if (q.type === 'match') {
-                    // Match coi là đúng nếu đúng hết các cặp (đơn giản hóa cho việc đếm câu)
-                    if (uAns) {
-                        const subQData = sub.questionData?.[idx] || {};
-                        const colB = subQData.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5);
-                        const pairsCorrect = q.pairs.every((p, aIdx) => {
-                            const bIdx = uAns[aIdx];
-                            return colB[bIdx] === p.b;
-                        });
-                        isRight = pairsCorrect;
-                    }
-                }
-                
-                if (isRight) correctCount++;
-            });
-            // -------------------------------------
 
             const renderQuestionReview = (q, qIdx) => {
                 const userAnswer = sub.answers[qIdx];
@@ -2877,7 +2834,7 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                             const userAnsClean = (userAnswer || '').trim().toLowerCase();
                             const expectedAnsClean = expectedAnswer.trim().toLowerCase();
                             isCorrect = userAnsClean === expectedAnsClean;
-                            explanation = `Đáp án đúng: **${expectedAnswer}**. Bạn trả lời: <span class="${isCorrect ? 'text-green-600' : 'text-red-600'}">${userAnswer || 'Chưa trả lời'}</span>`;
+                            explanation = `Đáp án đúng: **${expectedAnswer}** (${q.type === 'translation' ? 'Tiếng Trung' : q.type === 'listen_write' ? 'Tiếng Trung' : 'Tiếng Việt'}). Bạn trả lời: <span class="${isCorrect ? 'text-green-600' : 'text-red-600'}">${userAnswer || 'Chưa trả lời'}</span>`;
                         } else {
                             explanation = `Đáp án đúng: **${q.answer || q.chinese}**. Bạn trả lời: Chưa trả lời.`;
                         }
@@ -2908,22 +2865,18 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
                 const icon = isCorrect ? '<i data-lucide="check-circle" class="text-green-500 w-5 h-5 flex-shrink-0"></i>' : '<i data-lucide="x-circle" class="text-red-500 w-5 h-5 flex-shrink-0"></i>';
                 const bgColor = isCorrect ? 'bg-green-50' : 'bg-red-50';
                 
-                let questionText = q.type === 'translation' ? q.vietnamese : 
-                                     q.type.startsWith('listen_') ? `[Nghe] ${q.audioText || '...'}` : 
+                const questionText = q.type === 'translation' ? q.vietnamese : 
+                                     q.type.startsWith('listen_') ? `[Nghe] ${q.audioText}` : 
                                      q.text;
-                if(typeof formatText === 'function') questionText = formatText(questionText);
+
 
                 return `
                     <div class="p-3 md:p-4 rounded-xl border mb-4 ${bgColor}">
                         <div class="flex items-start justify-between mb-2">
-                            <div class="font-bold text-slate-800 text-sm md:text-base pr-2">
-                                <span class="text-blue-600">Câu ${qIdx+1}:</span> ${questionText}
-                            </div>
-                            <div class="flex items-center gap-2 font-medium text-sm ml-2 flex-shrink-0">${icon} <span class="hidden sm:inline">${isCorrect ? 'Đúng' : 'Sai'}</span></div>
+                            <p class="font-bold text-slate-800 text-sm md:text-base">Câu ${qIdx+1}: ${getQuestionTypeLabel(q.type)} - ${questionText}</p>
+                            <div class="flex items-center gap-2 font-medium text-sm ml-4">${icon} <span class="hidden sm:inline">${isCorrect ? 'Đúng' : 'Sai'}</span></div>
                         </div>
-                        <div class="text-sm text-slate-700 mt-1 pl-2 border-l-4 ${isCorrect ? 'border-green-300' : 'border-red-300'}">
-                            ${explanation}
-                        </div>
+                        <p class="text-sm text-slate-600">${explanation}</p>
                     </div>
                 `;
             }
@@ -2932,39 +2885,73 @@ const renderTakeAssignmentQuestion = (q, qIdx) => {
             const isPassed = sub.score >= 50;
 
             return `
-                <div class="max-w-4xl mx-auto bg-white p-4 md:p-8 rounded-2xl shadow-lg fade-in">
-                    <div class="flex justify-between items-start mb-6 pb-4 border-b">
-                        <div>
-                            <h3 class="text-xl md:text-2xl font-bold truncate text-slate-800">Kết quả: ${assign.title}</h3>
-                            <p class="text-slate-500 mt-1 font-medium text-base">
-                                Bài làm của: <span class="text-blue-600 font-bold text-lg border-b-2 border-blue-200">${studentName}</span>
-                            </p>
-                        </div>
-                        <button onclick="viewSubmissionResult(null)" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100 transition">
-                            <i data-lucide="x" size="28"></i>
-                        </button>
+                <div class="max-w-3xl mx-auto bg-white p-4 md:p-8 rounded-2xl shadow-lg fade-in">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b">
+                        <h3 class="text-xl md:text-2xl font-bold truncate">Kết quả bài làm: ${assign.title}</h3>
+                        <button onclick="viewSubmissionResult(null)" class="text-slate-400 hover:text-red-500"><i data-lucide="x"></i></button>
                     </div>
 
-                    <div class="flex flex-col md:flex-row gap-4 mb-8">
-                        <div class="flex-1 text-center p-6 rounded-2xl ${isPassed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} flex flex-col justify-center items-center shadow-inner">
-                            <p class="text-sm font-bold uppercase tracking-wider opacity-70">Tổng điểm</p>
-                            <div class="text-6xl font-black my-2">${sub.score}</div>
-                            <p class="text-lg font-bold">${isPassed ? '🎉 Đạt yêu cầu' : '😢 Cần cố gắng'}</p>
-                        </div>
-                        <div class="flex-1 bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                            <h4 class="font-bold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="info" size="18"></i> Thông tin chi tiết</h4>
-                            <ul class="space-y-3 text-sm text-slate-600">
-                                <li class="flex justify-between"><span>Ngày nộp:</span> <span class="font-medium text-slate-800">${sub.createdAt ? new Date(sub.createdAt.seconds * 1000).toLocaleString('vi-VN') : 'N/A'}</span></li>
-                                <li class="flex justify-between"><span>Số câu đúng:</span> <span class="font-bold text-green-600 text-lg">${correctCount} / ${assign.questions.length}</span></li>
-                            </ul>
-                        </div>
+                    <div class="text-center p-6 rounded-xl mb-6 ${isPassed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                        <p class="text-sm font-medium">Điểm số của bạn:</p>
+                        <p class="text-6xl font-black">${sub.score}<span class="text-3xl">/100</span></p>
+                        <p class="text-lg font-bold mt-2">${isPassed ? '🎉 Chúc mừng, bạn đã hoàn thành tốt!' : '😢 Cần cố gắng hơn.'}</p>
                     </div>
 
-                    <h4 class="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2">
-                        <i data-lucide="list-checks" size="24" class="text-blue-500"></i> Chi tiết bài làm
-                    </h4>
+                    <h4 class="text-xl font-bold text-slate-700 mb-4">Chi tiết từng câu hỏi</h4>
                     <div class="space-y-4">
                         ${qHtml}
+                    </div>
+                </div>
+            `;
+        };
+
+        // RANKING (Cập nhật Responsive)
+        const renderRanking = () => {
+            const sorted = [...state.data.users].sort((a,b) => (b.points||0) - (a.points||0));
+            
+            // Helper để render huy hiệu
+            const renderMedal = (rank) => {
+                if (rank === 1) return `<span class="text-2xl md:text-3xl">🥇</span>`;
+                if (rank === 2) return `<span class="text-2xl md:text-3xl">🥈</span>`;
+                if (rank === 3) return `<span class="text-2xl md:text-3xl">🥉</span>`;
+                return `<span class="font-bold text-sm md:text-base text-slate-500">#${rank}</span>`;
+            };
+
+            return `
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden max-w-4xl mx-auto fade-in">
+                    <div class="bg-yellow-500 p-6 md:p-8 text-center text-white">
+                        <i data-lucide="trophy" class="w-10 h-10 md:w-12 md:h-12 mx-auto drop-shadow-lg mb-2"></i>
+                        <h3 class="text-2xl md:text-3xl font-bold">Bảng Xếp Hạng Điểm</h3>
+                    </div>
+                    <div class="p-1 md:p-1">
+                        <div class="overflow-x-auto">
+                            <table class="w-full min-w-[200px]">
+                                <thead>
+                                    <tr class="text-left text-slate-500 text-sm border-b bg-slate-50">
+                                        <th class="pb-3 pl-4 pt-3 w-16">Hạng</th>
+                                        <th class="pb-3 pt-3">Học sinh</th>
+                                        <th class="pb-3 text-right pr-4 pt-3 w-20">Điểm số</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${sorted.map((u, idx) => {
+                                        let isMe = u.uid === state.user.uid;
+                                        return `
+                                        <tr class="border-b last:border-0 hover:bg-slate-100 transition ${isMe ? 'bg-blue-50 border-blue-200' : ''}">
+                                            <td class="py-3 md:py-4 pl-4 font-bold">
+                                                ${renderMedal(idx+1)}
+                                            </td>
+                                            <td class="py-3 md:py-4 flex items-center gap-3">
+                                                <!--${renderAvatar(u, 'w-6 h-6', 'text-sm')} -->
+                                                ${renderAvatar(u, 'w-6 h-6', 'text-sm')}
+                                                <span class="font-medium ${isMe ? 'text-blue-700' : 'text-slate-700'} truncate">${u.name} ${isMe ? '(Bạn)' : ''}</span>
+                                            </td>
+                                            <td class="py-3 md:py-4 text-right pr-4 font-bold text-lg md:text-xl text-yellow-600">${u.points || 0}</td>
+                                        </tr>`;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             `;
@@ -4688,7 +4675,7 @@ window.addQuestion = () => {
             renderApp();
         };
         
-  window.viewSubmissionResult = (subId) => {
+        window.viewSubmissionResult = (subId) => {
             if (subId) {
                 const sub = state.data.submissions.find(s => s.id === subId);
                 const assign = state.data.assignments.find(a => a.id === sub.assignmentId);
@@ -4710,9 +4697,7 @@ window.addQuestion = () => {
                     state.ui.viewSubmission = {
                         id: subId,
                         assignmentId: assign.id,
-                        // --- [FIX LỖI 1]: Lấy ID của người làm bài, KHÔNG lấy ID người đang xem ---
-                        studentId: sub.studentId, 
-                        // ------------------------------------------------------------------------
+                        studentId: state.user.uid,
                         score: sub.score,
                         answers: sub.answers,
                         questionData: sub.questionData, 
@@ -5252,66 +5237,41 @@ window.addQuestion = () => {
                 btnElement.classList.remove('bg-green-100', 'text-green-600', 'ring-2', 'ring-green-400', 'animate-pulse');
             }
         };
-// --- HÀM CHỌN THỦ CÔNG (LOGIC MỚI: KHÔNG RESET GIAO DIỆN) ---
+// --- HÀM CHỌN THỦ CÔNG CÂU HỎI TỪ BANK ---
         window.selectQuestionFromBank = (qIndex) => {
             const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
             if (!selectedBank) return;
 
             const questionToToggle = selectedBank.questions[qIndex];
+            
+            // Đảm bảo mảng câu hỏi tồn tại
             if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
             const currentAssignmentQs = state.ui.newAssignment.questions;
 
-            // Kiểm tra xem đã có chưa
+            // Kiểm tra xem câu hỏi đã tồn tại chưa
             const existingIndex = currentAssignmentQs.findIndex(existQ => 
                 JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
                 JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
             );
 
-            let isSelectedNow = false;
-
-            // Cập nhật State (Dữ liệu)
             if (existingIndex !== -1) {
-                // Đã có -> Xóa đi
+                // Đã có -> Xóa đi (Bỏ chọn)
                 state.ui.newAssignment.questions.splice(existingIndex, 1);
-                isSelectedNow = false;
             } else {
                 // Chưa có -> Thêm vào
                 state.ui.newAssignment.questions.push(questionToToggle);
-                isSelectedNow = true;
             }
 
-            // --- CẬP NHẬT GIAO DIỆN TRỰC TIẾP (KHÔNG DÙNG renderApp) ---
-            
-            // 1. Cập nhật nút bấm
-            const btn = document.getElementById(`btn-select-${qIndex}`);
-            if (btn) {
-                if (isSelectedNow) {
-                    // Đổi sang trạng thái "Đã chọn" (Màu đỏ, chữ Bỏ)
-                    btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-red-100 text-red-600 hover:bg-red-200 border border-red-200";
-                    btn.innerHTML = '<i data-lucide="minus" class="w-3 h-3"></i> Bỏ';
-                } else {
-                    // Đổi sang trạng thái "Chưa chọn" (Màu xanh, chữ Chọn)
-                    btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-blue-600 text-white hover:bg-blue-700";
-                    btn.innerHTML = '<i data-lucide="plus" class="w-3 h-3"></i> Chọn';
-                }
-                // Render lại icon vừa thêm vào nút
-                renderIcons();
-            }
-
-            // 2. Cập nhật con số tổng đếm trên Header
-            const countEl = document.getElementById('total-selected-count');
-            if (countEl) {
-                countEl.textContent = currentAssignmentQs.length;
-                // Hiệu ứng nháy nhẹ để báo hiệu
-                countEl.classList.remove('text-blue-600');
-                countEl.classList.add('text-green-600', 'scale-110');
-                setTimeout(() => {
-                    countEl.classList.remove('text-green-600', 'scale-110');
-                    countEl.classList.add('text-blue-600');
-                }, 200);
-            }
+            // Render lại để cập nhật trạng thái nút
+            renderApp();
         };
-
+        
+        // Đảm bảo hàm gọi modal cũng reset ID bank để hiển thị danh sách
+        window.setSelectingBankQuestions = (val) => {
+            state.ui.isSelectingBankQuestions = val;
+            if (val) state.ui.selectedBankId = null; // Reset để hiện list bank
+            renderApp();
+        }
     </script>
 </body>
 </html>
