@@ -2009,7 +2009,6 @@ const list = myBanks.map(bank => `
                         <option value="listen_write" ${state.ui.newQuestionType === 'listen_write' ? 'selected' : ''}>7. Nghe câu viết lại</option>
                         <option value="listen_translate" ${state.ui.newQuestionType === 'listen_translate' ? 'selected' : ''}>8. Nghe câu dịch nghĩa</option>
                         <option value="listen_conversation" ${state.ui.newQuestionType === 'listen_conversation' ? 'selected' : ''}>9. Nghe hội thoại & Trả lời</option>
-                       <option value="order_sentences" ${state.ui.newQuestionType === 'order_sentences' ? 'selected' : ''}>10. Sắp xếp câu thành đoạn văn</option>
                     </select>
                 </div>
 
@@ -2258,15 +2257,6 @@ const renderQuestionInputForm = () => {
                             ${renderOptionRow(1, 'Lựa chọn B')}
                             ${renderOptionRow(2, 'Lựa chọn C')}
                             ${renderOptionRow(3, 'Lựa chọn D')}
-                        </div>
-                    `;
-                    break;
-               case 'order_sentences':
-                    inputs = `
-                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-4">
-                            <label class="block text-sm font-bold text-slate-800 mb-2">Nhập các câu theo ĐÚNG THỨ TỰ (Mỗi câu 1 dòng):</label>
-                            <p class="text-xs text-slate-500 mb-2 italic">Hệ thống sẽ tự động xáo trộn thứ tự này khi học sinh làm bài.</p>
-                            <textarea id="order-sentences-input" rows="6" class="w-full p-3 border-2 border-yellow-300 rounded-xl focus:border-yellow-500 outline-none font-medium" placeholder="Ví dụ:\nXin chào, bạn tên là gì?\nTôi tên là Nam.\nRất vui được làm quen."></textarea>
                         </div>
                     `;
                     break;
@@ -4765,22 +4755,6 @@ window.addQuestion = () => {
                             answer: ltAnswer, 
                             text: "Nghe câu và dịch nghĩa sang tiếng Việt." 
                         }; 
-                        isValid = true;
-                        break;
-                      case 'order_sentences':
-                        const rawText = document.getElementById('order-sentences-input').value.trim();
-                        if (!rawText) throw new Error("Vui lòng nhập nội dung các câu.");
-                        
-                        // Tách dòng và lọc bỏ dòng trống
-                        const sentences = rawText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-                        
-                        if (sentences.length < 2) throw new Error("Vui lòng nhập ít nhất 2 câu để sắp xếp.");
-
-                        newQ = { 
-                            ...newQ, 
-                            text: "Sắp xếp các câu sau thành đoạn văn/hội thoại hợp lý:", 
-                            answer: sentences // Lưu mảng câu đúng thứ tự
-                        };
                         isValid = true;
                         break;
                 }
