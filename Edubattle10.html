@@ -176,7 +176,7 @@
          import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut, signInAnonymously,
                  createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, addDoc, updateDoc, onSnapshot, serverTimestamp, query, where, getDocs, deleteDoc, runTransaction, arrayRemove, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, addDoc, updateDoc, onSnapshot, serverTimestamp, query, where, getDocs, deleteDoc, runTransaction, arrayRemove, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"; // THÊM FIREBASE STORAGE
 
         // --- 1. CONFIGURATION ---
@@ -1392,26 +1392,18 @@ ${state.ui.isBulkModalOpen ? `
             `;
         }
 
- const renderClassAssignments = (classData, studentList) => {
+        const renderClassAssignments = (classData, studentList) => {
             // Lọc bài tập đã giao cho lớp này VÀ được tạo bởi giáo viên hiện tại
             const classAssignments = state.data.assignments.filter(a => 
                 (a.classIds || []).includes(classData.id) && a.createdBy === state.user.uid
             );
 
-            const list = classAssignments.map(a => {
-                // --- [FIX LỖI TẠI ĐÂY] ---
-                // 1. Lấy tất cả bài nộp hợp lệ của học sinh trong lớp này
-                const validSubmissions = state.data.submissions.filter(s => 
-                    s.assignmentId === a.id && studentList.some(st => st.uid === s.studentId)
-                );
-                // 2. Dùng Set để đếm số học sinh duy nhất (loại bỏ trùng lặp nếu 1 HS nộp nhiều lần)
-                const uniqueStudentIds = new Set(validSubmissions.map(s => s.studentId));
-                const submissionsCount = uniqueStudentIds.size;
-                // -------------------------
-
+const list = classAssignments.map(a => {
+                const submissionsCount = state.data.submissions.filter(s => s.assignmentId === a.id && studentList.some(st => st.uid === s.studentId)).length;
                 const completionRate = studentList.length > 0 ? Math.round((submissionsCount / studentList.length) * 100) : 0;
                 const completionColor = completionRate === 100 ? 'bg-green-100 text-green-700' : completionRate > 0 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700';
 
+                // GIAO DIỆN MỚI: Click thẻ, Hover xóa
                 return `
                     <div onclick="viewAssignmentDetailsInClass('${a.id}')" 
                          class="group bg-white p-3 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:border-yellow-200 transition flex items-center justify-between gap-3 cursor-pointer">
@@ -1442,7 +1434,7 @@ ${state.ui.isBulkModalOpen ? `
                 `;
             }).join('');
 
-            return `
+return `
                 <h4 class="text-xl font-bold text-slate-700 mb-4"></h4>
                 
                 <button onclick="createClassAssignment('${classData.id}', '${classData.title}')" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-bold shadow-md flex items-center gap-2 text-sm w-fit">
@@ -1537,7 +1529,7 @@ ${state.ui.isBulkModalOpen ? `
             `;
         }
 
-const renderClassStatistics = (classData, studentList) => {
+        const renderClassStatistics = (classData, studentList) => {
             const classAssignments = state.data.assignments.filter(a => 
                 (a.classIds || []).includes(classData.id) && a.createdBy === state.user.uid
             );
@@ -1546,7 +1538,7 @@ const renderClassStatistics = (classData, studentList) => {
                  return `<p class="text-slate-500">Chưa có bài tập nào được giao để thống kê.</p>`;
             }
 
-            // --- HIỂN THỊ CHI TIẾT BÀI TẬP ĐÃ CHỌN ---
+            // --- MỚI: Hiển thị chi tiết bài tập đã chọn ---
             if (state.ui.selectedStatAssignmentId) {
                 const selectedAssign = classAssignments.find(a => a.id === state.ui.selectedStatAssignmentId);
                 if (selectedAssign) {
@@ -1557,16 +1549,11 @@ const renderClassStatistics = (classData, studentList) => {
                 }
             }
             
-            // --- MẶC ĐỊNH: HIỂN THỊ DANH SÁCH BÀI TẬP ---
-            const assignmentCards = classAssignments.map(a => {
-                // --- [FIX LỖI TẠI ĐÂY] ---
-                const validSubmissions = state.data.submissions.filter(s => 
+            // --- MẶC ĐỊNH: Hiển thị danh sách các bài tập ---
+ const assignmentCards = classAssignments.map(a => {
+                const submissionsCount = state.data.submissions.filter(s => 
                     s.assignmentId === a.id && studentList.some(st => st.uid === s.studentId)
-                );
-                // Đếm Unique ID
-                const uniqueStudentIds = new Set(validSubmissions.map(s => s.studentId));
-                const submissionsCount = uniqueStudentIds.size;
-                // -------------------------
+                ).length;
                 
                 const completionRate = studentList.length > 0 ? 
                     Math.round((submissionsCount / studentList.length) * 100) : 0;
@@ -5227,33 +5214,7 @@ window.viewSubmissionResult = (subId) => {
             }
         };
 window.submitAssignment = async () => {
-            // --- [FIX 1] CHẶN NỘP ĐÚP (QUAN TRỌNG) ---
-            if (state.ui.isSubmitting) return; // Nếu đang nộp thì chặn luôn, không cho chạy tiếp
-            
-            // Kiểm tra xem đã nộp bài này chưa (tránh hack hoặc lỗi mạng)
-            const assignId = state.ui.takingAssignmentId;
-            const existingSub = state.data.submissions.find(s => s.assignmentId === assignId && s.studentId === state.user.uid);
-            
-            if (existingSub) {
-                showToast("Bạn đã nộp bài tập này rồi!", "error");
-                state.ui.takingAssignmentId = null;
-                renderApp();
-                return;
-            }
-
-            // Bật cờ đang xử lý để khóa các lần click tiếp theo
-            state.ui.isSubmitting = true; 
-            
-            // Hiển thị trạng thái đang nộp cho người dùng biết
-            const submitBtn = document.querySelector('#next-q-btn-container button');
-            if(submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="animate-spin" data-lucide="loader-2"></i> Đang nộp...';
-                renderIcons();
-            }
-            // ------------------------------------------
-
-            const assign = state.data.assignments.find(a => a.id === assignId);
+            const assign = state.data.assignments.find(a => a.id === state.ui.takingAssignmentId);
             let score = 0;
             const totalQuestions = assign.questions.length;
             const scorePerQuestion = 100 / totalQuestions;
@@ -5278,12 +5239,14 @@ window.submitAssignment = async () => {
                 }
 
                 switch(q.type) {
+                    // --- [QUAN TRỌNG: CÁC DẠNG TRẮC NGHIỆM] ---
                     case 'mcq':
                     case 'listen_mcq': 
-                    case 'listen_conversation':
-                    case 'reading_comprehension':
+                    case 'listen_conversation': // Hỗ trợ Nghe hội thoại
+                    case 'reading_comprehension': // Hỗ trợ Đọc hiểu
                         isCorrect = userAnswer === q.correct;
                         break;
+                    // ------------------------------------------
 
                     case 'fib':
                     case 'translation':
@@ -5348,12 +5311,9 @@ window.submitAssignment = async () => {
                     teacherComment: autoFeedback
                 });
                 
-                // --- [FIX 2] DÙNG INCREMENT ĐỂ CỘNG ĐIỂM AN TOÀN ---
-                // increment(score) đảm bảo database tự cộng, không phụ thuộc vào state cũ
                 await updateDoc(doc(db, getPath('users'), state.user.uid), {
-                    points: increment(score) 
+                    points: (state.profile.points || 0) + score
                 });
-                // ----------------------------------------------------
                 
                 state.ui.viewSubmission = {
                     id: subRef.id,
@@ -5373,9 +5333,6 @@ window.submitAssignment = async () => {
             } catch(e) { 
                 console.error("Lỗi nộp bài:", e);
                 showToast("Lỗi nộp bài: " + e.message, "error"); 
-            } finally {
-                // Mở khóa sau khi xử lý xong (dù thành công hay thất bại)
-                state.ui.isSubmitting = false;
             }
         };
 
