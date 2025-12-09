@@ -274,7 +274,6 @@
                 isJoiningClass: false, // Trạng thái modal nhập mã lớp
                 isBulkModalOpen: false,
                 isBulkCreating: false,
-                matchResult: null,
             },
             isAuthReady: false,
             initialAuthToken: typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null,
@@ -425,7 +424,7 @@ window.addEventListener('resize', () => {
                     { word: '书', pinyin: 'shū', meaning: 'Sách' }
                 ];
                 if (state.view === 'competition') {
-                   // showToast("Đang dùng dữ liệu mẫu (không tìm thấy dataLMS/data.txt)", "error");
+                    showToast("Đang dùng dữ liệu mẫu (không tìm thấy dataLMS/data.txt)", "error");
                 }
             }
         };
@@ -663,85 +662,87 @@ window.addEventListener('resize', () => {
                  if(state.view === 'classes' || state.ui.viewClassId || state.view === 'my_classes') renderApp();
             });
             
-// 5. Match Listener (FINAL FIX: HỦY PHÒNG & VÀO PHÒNG)
+            // 5. Match Listener (Giữ nguyên)
             onSnapshot(getRef('matches'), (snap) => {
                 state.data.matches = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 const uid = state.user?.uid;
-                
-                // 1. Tìm trận đấu của mình
-                const newActiveMatch = state.data.matches.find(m => 
+                const prevMatch = state.ui.activeMatch; 
+                const prevMode = state.ui.competitionMode;
+
+                state.ui.activeMatch = state.data.matches.find(m => 
                     (m.player1?.uid === uid || m.player2?.uid === uid) && m.status !== 'finished'
                 );
+                
+                let newMode = 'lobby';
+                if (state.ui.activeMatch) {
+                    newMode = state.ui.activeMatch.status === 'playing' ? 'playing' : 'waiting';
+                }
 
-                // 2. Xử lý Logic Kết thúc trận (Nếu trước đó có trận, giờ không thấy nữa và không phải do mình tự thoát)
-                // Logic: Kiểm tra xem trận đấu vừa biến mất có phải là finished không
-if (state.ui.activeMatch && !newActiveMatch) {
-                     const justFinished = state.data.matches.find(m => m.id === state.ui.activeMatch.id && m.status === 'finished');
-                     const finalMatchData = state.ui.lastFinishedMatch || justFinished;
+                const isPlayingContainerExists = document.getElementById('match-playing-container');
+                const isSameMode = prevMode === 'playing' && newMode === 'playing';
 
-                     if (finalMatchData) {
-                        const isP1 = finalMatchData.player1.uid === uid;
-                        const myScore = isP1 ? finalMatchData.player1.score : finalMatchData.player2.score;
-                        const opponentScore = isP1 ? finalMatchData.player2.score : finalMatchData.player1.score;
+                if (prevMatch && prevMatch.status === 'playing' && newMode !== 'playing') {
+                     const finishedMatch = state.data.matches.find(m => m.id === prevMatch.id && m.status === 'finished');
+                     if (finishedMatch) {
+                        state.ui.lastFinishedMatch = finishedMatch;
                         
-                        // Lấy thông tin đối thủ để hiển thị avatar
-                        const p1Profile = state.data.users.find(u => u.uid === finalMatchData.player1.uid);
-                        const p2Profile = state.data.users.find(u => u.uid === finalMatchData.player2.uid);
-                        
-                        const myInfo = isP1 ? p1Profile : p2Profile;
-                        const oppInfo = isP1 ? p2Profile : p1Profile;
-
-                        let resultType = 'draw';
-                        if (myScore > opponentScore) resultType = 'win';
-                        else if (myScore < opponentScore) resultType = 'lose';
-                        
-                        // [THAY ĐỔI Ở ĐÂY] Thay vì showToast, ta set state để hiện Modal
-                        if (state.ui.competitionMode === 'playing') {
-                            state.ui.matchResult = {
-                                result: resultType,
-                                myScore: myScore,
-                                oppScore: opponentScore,
-                                myName: myInfo?.name || 'Bạn',
-                                myAvatar: myInfo?.avatarUrl,
-                                myAvatarType: myInfo?.avatarType,
-                                oppName: oppInfo?.name || 'Đối thủ',
-                                oppAvatar: oppInfo?.avatarUrl,
-                                oppAvatarType: oppInfo?.avatarType
-                            };
-                        }
-                        
-                        // Clean up (Giữ nguyên)
-                        if (isP1 && justFinished) { deleteDoc(doc(db, getPath('matches'), justFinished.id)).catch(()=>{}); }
+                         deleteDoc(doc(db, getPath('matches'), finishedMatch.id))
+                             .catch(e => console.error("Error deleting finished match:", e));
                      }
                 }
+                
+                if (prevMatch && prevMatch.status === 'playing' && state.ui.activeMatch === null) {
+                    const finishedMatch = state.ui.lastFinishedMatch;
 
-                // 3. Cập nhật State
-                state.ui.activeMatch = newActiveMatch;
+                    if (finishedMatch) {
+                        const isP1 = finishedMatch.player1.uid === uid;
+                        const myScore = isP1 ? finishedMatch.player1.score : finishedMatch.player2.score;
+                        const opponentScore = isP1 ? finishedMatch.player2.score : finishedMatch.player1.score;
 
-                // 4. QUAN TRỌNG: Điều hướng màn hình tự động
-                if (state.ui.activeMatch) {
-                    // A. Nếu tìm thấy trận đấu -> Bắt buộc chuyển vào màn hình tương ứng
-                    const serverStatus = state.ui.activeMatch.status;
-                    state.ui.competitionMode = serverStatus === 'playing' ? 'playing' : 'waiting';
+                        let message;
+                        let type;
+
+                        if (myScore > opponentScore) {
+                            message = `🏆 CHÚC MỪNG! Bạn đã chiến thắng với ${myScore} - ${opponentScore} điểm!`;
+                            type = 'success';
+                        } else if (myScore < opponentScore) {
+                            message = `😭 Hãy cố gắng hơn nữa! Bạn đã thua ${myScore} - ${opponentScore} điểm.`;
+                            type = 'error';
+                        } else {
+                            message = `🤝 HÒA! Trận đấu kết thúc với tỷ số ${myScore} - ${opponentScore}.`;
+                            type = 'success';
+                        }
+                        showToast(message, type);
+                    }
                     
-                    // Nếu đang chơi, update UI thời gian thực
-                    if (serverStatus === 'playing' && document.getElementById('match-playing-container')) {
-                        updatePlayingUI();
-                    }
-                } else {
-                    // B. Nếu KHÔNG tìm thấy trận đấu
-                    // Chỉ đá về Lobby nếu đang ở màn hình Chờ hoặc Chơi (nghĩa là trận bị hủy/xóa)
-                    // Nếu đang ở 'join' (nhập mã) hoặc 'create' (đang bấm nút) thì GIỮ NGUYÊN để không bị bật input
-                    if (state.ui.competitionMode === 'waiting' || state.ui.competitionMode === 'playing') {
-                        state.ui.competitionMode = 'lobby';
-                        showToast("Phòng đã bị hủy hoặc trận đấu kết thúc.", "info");
-                    }
+                    state.ui.competitionMode = 'lobby';
+                    state.ui.lastFinishedMatch = null;
+                    state.ui.hasAnsweredCurrentQ = false; 
+                    renderApp();
+                    return;
                 }
 
-                // 5. Render lại nếu cần (Chỉ khi view đang là competition)
+                if (state.ui.activeMatch && prevMatch && state.ui.activeMatch.qIndex !== prevMatch.qIndex) {
+                    state.ui.hasAnsweredCurrentQ = false;
+                }
+
+                state.ui.competitionMode = newMode; 
+
                 if (state.view === 'competition') {
-                    // Tránh render lại toàn bộ nếu đang chơi để không mất animation
-                    if (state.ui.competitionMode !== 'playing' || !document.getElementById('match-playing-container')) {
+                    if (isSameMode && isPlayingContainerExists) {
+                        if (
+                            !prevMatch || 
+                            prevMatch.player1.score !== state.ui.activeMatch.player1.score || 
+                            prevMatch.player2.score !== state.ui.activeMatch.player2.score ||
+                            state.ui.activeMatch.qIndex !== prevMatch.qIndex 
+                        ) {
+                            state.ui.matchQIndex = state.ui.activeMatch.qIndex || 0; 
+                            updatePlayingUI();
+                        }
+                    } else {
+                        if (state.ui.activeMatch) {
+                            state.ui.matchQIndex = state.ui.activeMatch.qIndex || 0; 
+                        }
                         renderApp();
                     }
                 }
@@ -768,16 +769,11 @@ if (state.ui.activeMatch && !newActiveMatch) {
             }
         }
         
-const renderApp = () => {
+        const renderApp = () => {
             const appEl = document.getElementById('app');
             const modalEl = document.getElementById('avatar-modal-container');
-            const overlayEl = document.getElementById('mobile-overlay');
+            const overlayEl = document.getElementById('mobile-overlay'); // MỚI
 
-            // --- [FIX LỖI QUAN TRỌNG] Xóa Modal kết quả cũ nếu nó đang tồn tại ---
-            // Điều này đảm bảo khi bạn bấm "Quay về sảnh", modal sẽ biến mất
-            const oldMatchModal = document.getElementById('match-result-modal');
-            if (oldMatchModal) oldMatchModal.remove();
-            // ---------------------------------------------------------------------
             
             if (state.ui.isProcessingStudentCreation) {
                  appEl.innerHTML = `
@@ -787,20 +783,23 @@ const renderApp = () => {
                         <p class="text-sm text-slate-400 mt-2">Vui lòng chờ giây lát</p>
                     </div>
                 `;
+                // Đảm bảo modal avatar được ẩn khi đang xử lý
                 modalEl.innerHTML = '';
                 return;
             }
 
             if (!state.isAuthReady || !state.user || !state.profile) {
                 appEl.innerHTML = renderAuthScreen();
+                // Đảm bảo modal avatar được ẩn khi ở màn hình đăng nhập
                 modalEl.innerHTML = '';
                 renderIcons();
             } else {
+                // Giữ lại layout chính (Sidebar + Header + Bottom Nav) nếu đã tồn tại
                 if (!document.getElementById('main-layout-wrapper')) {
                     appEl.innerHTML = renderMainLayout();
                 }
                 
-                // Responsive Sidebar logic
+                // CẬP NHẬT TRẠNG THÁI SIDEBAR
                 const sidebarEl = document.getElementById('sidebar-desktop');
                 if (sidebarEl) {
                     sidebarEl.classList.toggle('open', window.innerWidth < 1024 && state.ui.isSidebarOpen);
@@ -813,22 +812,16 @@ const renderApp = () => {
                 if (headerScoreEl && state.profile) {
                      headerScoreEl.textContent = state.profile.points;
                 }
-                
+                // Chỉ cập nhật nội dung của MAIN (và modal import data nếu có)
                 updateMainContent();
             }
             
-            // Render Avatar Modal
+            // **FIX QUAN TRỌNG:** Phải render Avatar Modal vào container riêng (Đúng vị trí)
             if (state.ui.isAvatarModalOpen) {
                 modalEl.innerHTML = renderAvatarModal();
                 renderIcons();
             } else {
                 modalEl.innerHTML = '';
-            }
-
-            // Render Match Result Modal (Nếu có kết quả)
-            if (state.ui.matchResult) {
-                appEl.insertAdjacentHTML('beforeend', renderMatchResultModal());
-                renderIcons();
             }
         };
         
@@ -1358,12 +1351,9 @@ ${state.ui.isBulkModalOpen ? `
         };
         
         // Helper to render student list
-// --- CẬP NHẬT: THÊM CỘT ĐIỂM VÀ NÚT SỬA ĐIỂM ---
         const renderClassStudents = (classData, studentList) => {
             const studentRows = studentList.map(s => {
                 const studentProfile = state.data.users.find(u => u.uid === s.uid);
-                const currentPoints = studentProfile ? (studentProfile.points || 0) : 0;
-                
                 return `
                     <tr class="border-b last:border-0 hover:bg-slate-50 transition">
                         <td class="py-3 pl-4 flex items-center gap-3">
@@ -1371,24 +1361,9 @@ ${state.ui.isBulkModalOpen ? `
                             <span class="font-medium text-slate-700 truncate">${s.name}</span>
                         </td>
                         <td class="py-3 text-slate-500 hidden md:table-cell truncate">${s.email}</td>
-                        
-                        <td class="py-3 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <span class="font-bold text-yellow-600 text-lg bg-yellow-50 px-3 py-1 rounded-lg border border-yellow-200 min-w-[3rem]">
-                                    ${currentPoints}
-                                </span>
-                                <button onclick="handleEditStudentPoints('${s.uid}', '${s.name}', ${currentPoints})" 
-                                        class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition" 
-                                        title="Chỉnh sửa điểm số">
-                                    <i data-lucide="edit-3" size="16"></i>
-                                </button>
-                            </div>
-                        </td>
-
                         <td class="py-3 text-right pr-4">
                             <button onclick="confirmRemoveStudent('${classData.id}', '${s.uid}', '${s.name}')" 
-                                    class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition"
-                                    title="Gỡ khỏi lớp">
+                                    class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition">
                                 <i data-lucide="user-minus" size="18"></i>
                             </button>
                         </td>
@@ -1400,17 +1375,16 @@ ${state.ui.isBulkModalOpen ? `
                 <h4 class="text-xl font-bold text-slate-700 mb-4">Danh sách Học sinh</h4>
                 <div class="bg-slate-50 rounded-xl overflow-hidden shadow-inner border">
                     <div class="overflow-x-auto">
-                        <table class="w-full min-w-[600px] md:min-w-full">
+                        <table class="w-full min-w-[500px] md:min-w-full">
                             <thead>
                                 <tr class="text-left text-slate-500 text-sm border-b bg-slate-100">
                                     <th class="pb-3 pt-3 pl-4">Họ và Tên</th>
                                     <th class="pb-3 pt-3 hidden md:table-cell">Tài khoản (Email)</th>
-                                    <th class="pb-3 pt-3 text-center">Tổng Điểm</th>
                                     <th class="pb-3 pt-3 pr-4 text-right">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${studentRows || `<tr><td colspan="4" class="text-center py-8 text-slate-500">Chưa có học sinh nào trong lớp.</td></tr>`}
+                                ${studentRows || `<tr><td colspan="3" class="text-center py-8 text-slate-500">Chưa có học sinh nào trong lớp.</td></tr>`}
                             </tbody>
                         </table>
                     </div>
@@ -3287,44 +3261,26 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         };
         // COMPETITION RENDERERS (Cập nhật Responsive)
 
-// --- GIAO DIỆN LOBBY (CHỌN BANK ĐỂ ĐẤU) ---
-        const renderCompetitionLobby = () => {
-            // Lấy danh sách Bank (Của mình tạo hoặc Public)
-            // Ở đây lấy tất cả bank có trong state (do listener tải về)
-            const banks = state.data.questionBanks || [];
-
-            const bankOptions = banks.map(b => 
-                `<option value="${b.id}">${b.title} (${b.questions.length} câu)</option>`
-            ).join('');
-
-            return `
+        const renderCompetitionLobby = () => `
              <div class="text-center py-8 md:py-12 bg-white rounded-3xl shadow-xl max-w-2xl mx-auto fade-in">
                 <div class="inline-block p-4 md:p-6 bg-purple-100 rounded-full mb-4 md:mb-6">
                     <i data-lucide="swords" class="w-12 h-12 md:w-16 md:h-16 text-purple-600"></i>
                 </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Đấu trường Trực tuyến</h2>
-                <p class="text-slate-500 mb-8">Thi đấu tốc độ 1vs1 theo thời gian thực</p>
-                
-                <div class="max-w-md mx-auto px-6 text-left">
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Chọn bộ đề thi đấu:</label>
-                    <select id="arena-bank-select" class="w-full p-3 border-2 border-purple-200 rounded-xl mb-4 focus:border-purple-500 font-bold text-slate-700 bg-purple-50">
-                        <option value="" disabled selected>-- Chọn Ngân hàng đề --</option>
-                        ${bankOptions}
-                    </select>
-                    ${banks.length === 0 ? '<p class="text-red-500 text-xs mb-4">Chưa có ngân hàng đề nào. Hãy tạo ở mục "Ngân hàng đề".</p>' : ''}
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-4 md:mb-6">Đấu trường Từ vựng</h2>
+                <div class="mb-6">
+                    <p class="text-slate-500 text-sm md:text-base">Số lượng từ vựng hiện có: <span class="font-bold text-blue-600">${state.data.vocabulary.length}</span></p>
+                    <p class="text-xs text-slate-400 mt-1">(Dữ liệu load từ dataLMS/data.txt)</p>
                 </div>
-
-                <div class="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 px-4 mt-4">
-                    <button onclick="createMatchFromBank()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
-                        <i data-lucide="plus-circle" size="20"></i> Tạo Phòng
+                <div class="flex flex-col sm:flex-row justify-center gap-4 md:gap-8 px-4">
+                    <button onclick="createMatch()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg shadow-lg transition transform hover:-translate-y-0.5">
+                        Tạo Phòng Mới
                     </button>
-                    <button onclick="setCompetitionMode('join')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
-                        <i data-lucide="log-in" size="20"></i> Nhập Mã Phòng
+                    <button onclick="setCompetitionMode('join')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg shadow-lg transition transform hover:-translate-y-0.5">
+                        Tham Gia Phòng
                     </button>
                 </div>
             </div>
-            `;
-        };
+        `;
 
         const renderCompetitionJoin = () => `
             <div class="max-w-sm mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl text-center fade-in">
@@ -3365,59 +3321,42 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
             `;
         };
 
- // --- GIAO DIỆN ĐẤU TRƯỜNG NÂNG CẤP (THANH MÁU ĐỐI KHÁNG) ---
         const renderCompetitionPlaying = (match) => {
-            const p1 = match.player1;
-            const p2 = match.player2;
-            const currentQ = match.qIndex + 1;
-            const totalQ = match.questions.length;
-            
-            // Tính toán % thanh tiến độ (Max điểm giả định là 100 hoặc số câu * 10)
-            const maxScore = totalQ * 10;
-            const p1Percent = Math.min((p1.score / maxScore) * 100, 100);
-            const p2Percent = Math.min((p2.score / maxScore) * 100, 100);
-
             return `
-                <div id="match-playing-container" class="max-w-4xl mx-auto fade-in select-none">
-                    <div class="bg-white p-4 rounded-3xl shadow-lg mb-6 border-b-4 border-slate-200">
-                        <div class="flex justify-between items-end mb-2 px-2">
-                            <div class="flex flex-col items-start">
-                                <span class="text-xs font-bold text-slate-400 uppercase">Player 1</span>
-                                <span class="font-bold text-blue-600 truncate max-w-[120px]">${p1.name}</span>
-                            </div>
-                            <div class="text-3xl font-black text-slate-200 italic">VS</div>
-                            <div class="flex flex-col items-end">
-                                <span class="text-xs font-bold text-slate-400 uppercase">Player 2</span>
-                                <span class="font-bold text-red-600 truncate max-w-[120px]">${p2.name}</span>
+                <div id="match-playing-container" class="max-w-4xl mx-auto">
+                    <div class="flex justify-between items-center mb-6 md:mb-8">
+                        <!-- Player 1 Box (Responsive) -->
+                        <div class="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl shadow-lg transition-all duration-300 flex items-center gap-2 md:gap-3 flex-1 mr-2" id="p1-box">
+                            ${renderAvatar(state.data.users.find(u => u.uid === match.player1.uid), 'w-8 h-8', 'text-sm')}
+                            <div class="truncate">
+                                <p class="text-xs md:text-sm opacity-80 truncate">${match.player1.name}</p>
+                                <p class="text-2xl md:text-3xl font-bold" id="p1-score">${match.player1.score}</p>
                             </div>
                         </div>
                         
-                        <div class="relative h-6 bg-slate-100 rounded-full overflow-hidden flex">
-                            <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-500 ease-out flex items-center justify-end px-2" style="width: ${p1Percent}%">
-                                ${p1.score > 0 ? `<span class="text-[10px] text-white font-bold">${p1.score}</span>` : ''}
+                        <div class="text-xl font-extrabold text-slate-400 mx-2">VS</div>
+
+                        <!-- Player 2 Box (Responsive) -->
+                        <div class="bg-red-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl shadow-lg text-right transition-all duration-300 flex items-center gap-2 md:gap-3 flex-1 ml-2" id="p2-box">
+                            <div class="truncate">
+                                <p class="text-xs md:text-sm opacity-80 truncate">${match.player2.name}</p>
+                                <p class="text-2xl md:text-3xl font-bold" id="p2-score">${match.player2.score}</p>
                             </div>
-                            <div class="absolute top-0 right-0 h-full bg-gradient-to-l from-red-400 to-red-600 transition-all duration-500 ease-out flex items-center justify-start px-2" style="width: ${p2Percent}%">
-                                ${p2.score > 0 ? `<span class="text-[10px] text-white font-bold">${p2.score}</span>` : ''}
-                            </div>
-                            
-                            <div class="absolute top-0 left-1/2 w-0.5 h-full bg-white z-10 transform -translate-x-1/2"></div>
+                            ${renderAvatar(state.data.users.find(u => u.uid === match.player2.uid), 'w-8 h-8', 'text-sm')}
                         </div>
                     </div>
 
-                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl text-center border-b-8 border-slate-200 relative overflow-hidden">
-                        <div class="absolute top-4 left-4">
-                            <span id="q-counter" class="bg-slate-800 text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md">
-                                Q${currentQ}/${totalQ}
-                            </span>
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl text-center border-b-8 border-slate-200">
+                        <div class="mb-4 md:mb-6">
+                            <span id="q-counter" class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm font-bold uppercase"></span>
                         </div>
                         
-                        <div id="audio-container" class="mt-2 mb-4 h-12 flex justify-center items-center"></div>
+                        <div id="audio-container" class="mb-4 hidden"></div>
                         
-                        <h2 id="q-text" class="text-xl md:text-3xl font-bold text-slate-700 mb-8 leading-relaxed min-h-[4rem] flex items-center justify-center">
-                            Đang tải câu hỏi...
-                        </h2>
+                        <h2 id="q-text" class="text-xl md:text-3xl font-medium text-slate-700 mb-6 md:mb-8 leading-relaxed min-h-[3rem] md:min-h-[4rem] flex items-center justify-center">
+                            </h2>
 
-                        <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4" data-qid="-1">
+                        <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                             </div>
                     </div>
                 </div>
@@ -3425,94 +3364,85 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         };
 
         // Hàm Update thông minh (chạy mỗi khi có dữ liệu mới)
-// --- CẬP NHẬT UI KHI DATA THAY ĐỔI ---
-// --- CẬP NHẬT UI KHI DATA THAY ĐỔI (ĐÃ FIX: ƯU TIÊN AUDIO GỐC) ---
         window.updatePlayingUI = () => {
             const match = state.ui.activeMatch;
-            const container = document.getElementById('match-playing-container');
-            if (!match || !container) return;
+            if (!match || !document.getElementById('match-playing-container')) return;
 
-            // 1. Cập nhật thông tin cơ bản
             const qIndex = match.qIndex || 0;
             const q = match.questions[qIndex];
             
-            // Cập nhật Thanh Máu (Progress Bar)
-            const maxScore = match.questions.length * 10;
-            const p1Percent = Math.min((match.player1.score / maxScore) * 100, 100);
-            const p2Percent = Math.min((match.player2.score / maxScore) * 100, 100);
-            
-            const p1Bar = container.querySelector('.bg-gradient-to-r');
-            const p2Bar = container.querySelector('.bg-gradient-to-l');
-            if(p1Bar) p1Bar.style.width = `${p1Percent}%`;
-            if(p2Bar) p2Bar.style.width = `${p2Percent}%`;
+            // 1. Update Scores
+            document.getElementById('p1-score').textContent = match.player1.score;
+            document.getElementById('p2-score').textContent = match.player2.score;
 
-            // 2. Render nội dung câu hỏi (Chỉ khi chuyển câu mới)
+            // Highlight leader
+            const p1Box = document.getElementById('p1-box');
+            const p2Box = document.getElementById('p2-box');
+            p1Box.classList.remove('scale-105', 'ring-4', 'ring-blue-300', 'z-10');
+            p2Box.classList.remove('scale-105', 'ring-4', 'ring-red-300', 'z-10');
+
+            if (match.player1.score > match.player2.score) {
+                p1Box.classList.add('scale-105', 'ring-4', 'ring-blue-300', 'z-10');
+            } else if (match.player2.score > match.player1.score) {
+                p2Box.classList.add('scale-105', 'ring-4', 'ring-red-300', 'z-10');
+            }
+
+            // Nếu câu hỏi hiện tại đã được trả lời, vô hiệu hóa các nút
+            const buttonsDisabled = state.ui.hasAnsweredCurrentQ;
+
+            // 2. Update Counter
+            document.getElementById('q-counter').textContent = `Câu hỏi ${qIndex + 1}/${match.questions.length}`;
+
+            // 3. Update Audio Button
+            const audioText = q.audioWord || q.audioSentence;
+            const audioContainer = document.getElementById('audio-container');
+            if (audioText) {
+                audioContainer.innerHTML = `
+                    <button onclick="speakWord('${audioText.replace(/'/g, "\\'")}', 'zh-CN')" class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-6 py-3 rounded-full font-bold hover:bg-purple-200 transition text-sm md:text-base ${buttonsDisabled ? 'opacity-50 cursor-not-allowed' : ''}" ${buttonsDisabled ? 'disabled' : ''}>
+                        <i data-lucide="volume-2"></i> Nghe âm thanh
+                    </button>`;
+                audioContainer.classList.remove('hidden');
+            } else {
+                audioContainer.classList.add('hidden');
+            }
+            renderIcons();
+
+            // 4. Update Question Text
+            const qTextEl = document.getElementById('q-text');
+            if (qTextEl.innerHTML !== q.text) {
+                qTextEl.innerHTML = q.text;
+                if (audioText) setTimeout(() => speakWord(audioText, 'zh-CN'), 300); 
+            }
+
+            // 5. Update Options
             const grid = document.getElementById('options-grid');
-            const currentRenderedQId = grid.getAttribute('data-qid');
+            const currentQId = grid.getAttribute('data-qid');
 
-            if (currentRenderedQId !== String(qIndex)) {
-                // Reset trạng thái
-                state.ui.hasAnsweredCurrentQ = false; 
-                state.ui.matchQIndex = qIndex; 
-                
+            if (currentQId !== String(qIndex) || buttonsDisabled) { 
                 grid.setAttribute('data-qid', qIndex);
-
-                // Update Text
-                const qTextEl = document.getElementById('q-text');
-                qTextEl.innerHTML = formatText(q.text);
                 
-                // Animation Text
-                qTextEl.classList.remove('fade-in');
-                void qTextEl.offsetWidth; 
-                qTextEl.classList.add('fade-in');
-
-                // --- [PHẦN SỬA ĐỔI QUAN TRỌNG: AUDIO] ---
-                const audioContainer = document.getElementById('audio-container');
-                const audioUrl = q.audioUrl; // Link file gốc (data_Edubattle/H1_Bai1/...)
-                const audioText = q.audioWord || q.audioSentence || q.audioText; // Text để máy đọc
-                
-                if (audioUrl) {
-                    // TRƯỜNG HỢP 1: CÓ FILE GỐC -> Dùng playCustomAudio
-                    const audioId = `arena-audio-${qIndex}`;
-                    audioContainer.innerHTML = `
-                        <audio id="${audioId}" src="${audioUrl}" style="display:none"></audio>
-                        <button id="btn-play-audio" onclick="playCustomAudio('${audioId}', this)" 
-                            class="flex items-center gap-2 bg-purple-100 text-purple-700 px-5 py-2 rounded-full font-bold hover:bg-purple-200 transition shadow-sm animate-bounce-in ring-2 ring-purple-200">
-                            <i data-lucide="volume-2" size="20"></i> Nghe Audio Gốc
-                        </button>`;
-                    
-                    // Tự động phát âm thanh gốc sau 0.5s cho kịch tính (nếu muốn)
-                    setTimeout(() => {
-                        const btn = document.getElementById('btn-play-audio');
-                        if(btn) playCustomAudio(audioId, btn);
-                    }, 500);
-
-                } else if (audioText) {
-                    // TRƯỜNG HỢP 2: KHÔNG CÓ FILE -> Dùng Máy đọc (TTS)
-                    audioContainer.innerHTML = `
-                        <button onclick="speakWord('${audioText.replace(/'/g, "\\'")}', 'zh-CN')" 
-                            class="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold hover:bg-yellow-200 transition shadow-sm animate-bounce-in">
-                            <i data-lucide="volume-2" size="20"></i> Nghe câu hỏi (Máy đọc)
-                        </button>`;
-                    // Tự động đọc
-                    setTimeout(() => speakWord(audioText, 'zh-CN'), 500);
+                if (q.type === 'arena_input') {
+                     grid.innerHTML = `
+                        <div class="text-center mt-4 md:mt-6 col-span-full">
+                            <input type="text" id="arena-input-q-${qIndex}" 
+                                oninput="captureArenaInputAnswer(this.value)" 
+                                class="w-full max-w-xl p-3 md:p-4 text-lg md:text-xl border-2 border-slate-300 rounded-xl focus:border-blue-500 outline-none text-center font-bold" 
+                                placeholder="Nhập câu tiếng Trung đã nghe..." 
+                                ${buttonsDisabled ? 'disabled' : ''} />
+                            <button onclick="handleArenaInputAnswer('${match.id}')" 
+                                class="mt-4 bg-blue-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition text-sm md:text-base"
+                                ${buttonsDisabled ? 'disabled' : ''}>
+                                <i data-lucide="send" size="20" class="inline-block mr-1"></i> Trả lời
+                            </button>
+                        </div>
+                     `;
                 } else {
-                    audioContainer.innerHTML = '';
+                    grid.innerHTML = q.options.map((opt, idx) => `
+                        <button id="opt-btn-${idx}" onclick="handleAnswerAttempt(${idx === q.correct}, '${match.id}', ${idx})" class="p-4 md:p-6 bg-slate-50 border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 rounded-2xl text-base md:text-xl font-bold transition-all transform active:scale-95 text-slate-700 ${buttonsDisabled ? 'opacity-50 cursor-not-allowed' : ''}" ${buttonsDisabled ? 'disabled' : ''}>
+                            ${opt}
+                        </button>
+                    `).join('');
                 }
-                // ----------------------------------------
-
-                // Render Options (Đáp án)
-                grid.innerHTML = q.options.map((opt, idx) => `
-                    <button id="opt-btn-${idx}" onclick="handleAnswerAttempt(${idx === q.correct}, '${match.id}', ${idx})" 
-                        class="group relative p-4 md:p-6 bg-white border-2 border-slate-200 rounded-2xl text-lg md:text-xl font-bold text-slate-700 transition-all hover:border-blue-400 hover:shadow-md active:scale-95 flex items-center justify-center text-center">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-xs flex items-center justify-center font-black group-hover:bg-blue-100 group-hover:text-blue-600 transition">
-                            ${String.fromCharCode(65 + idx)}
-                        </span>
-                        ${opt}
-                    </button>
-                `).join('');
-                
-                renderIcons();
             }
         };
 
@@ -3592,85 +3522,79 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         
         window.captureArenaInputAnswer = (value) => {};
         
- // --- XỬ LÝ TRẢ LỜI (DÙNG TRANSACTION ĐỂ ĐỒNG BỘ) ---
         window.handleAnswerAttempt = async (isCorrect, mid, optionIndex) => {
              const match = state.ui.activeMatch;
-             // Chặn nếu trận đấu không diễn ra hoặc người chơi đã trả lời câu này rồi
              if (!match || match.status !== 'playing' || state.ui.hasAnsweredCurrentQ) return;
              
-             // Hiệu ứng Click ngay lập tức (Optimistic UI)
+             state.ui.hasAnsweredCurrentQ = true;
+
              const btn = document.getElementById(`opt-btn-${optionIndex}`);
              if (btn) {
-                 btn.classList.add('scale-95'); // Nhấn xuống
-                 if (!isCorrect) {
-                     // Nếu sai: Hiện màu đỏ ngay và khóa tạm thời
-                     btn.classList.remove('bg-white', 'hover:bg-blue-50');
-                     btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
-                     showToast("Sai rồi! Bị phạt chờ 2 giây.", "error");
-                     
-                     // Logic phạt: Khóa người chơi trong 2s
-                     state.ui.hasAnsweredCurrentQ = true; 
-                     setTimeout(() => {
-                         state.ui.hasAnsweredCurrentQ = false; // Mở khóa
-                         if(btn) {
-                             btn.classList.remove('bg-red-500', 'text-white', 'border-red-600');
-                             btn.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed'); // Disable nút sai
-                             btn.disabled = true;
-                         }
-                     }, 2000);
-                     return; // Dừng lại, không gửi lên server
+                 btn.disabled = true;
+                 if (isCorrect) {
+                     btn.classList.add('bg-green-500', 'text-white', 'scale-105', 'shadow-lg');
+                 } else {
+                     btn.classList.add('bg-red-500', 'text-white', 'scale-105', 'shadow-lg');
+                     const correctBtn = document.getElementById(`opt-btn-${match.questions[match.qIndex].correct}`);
+                     if (correctBtn) {
+                          setTimeout(() => {
+                            correctBtn.classList.add('bg-green-500', 'ring-2', 'ring-green-700');
+                         }, 500);
+                     }
                  }
              }
 
-             // Nếu ĐÚNG: Gửi transaction lên Server
-             state.ui.hasAnsweredCurrentQ = true; // Khóa tạm thời để tránh spam
-             if (btn) btn.classList.add('bg-green-500', 'text-white', 'border-green-600'); // Hiện xanh lá
+             const allBtns = document.getElementById('options-grid').querySelectorAll('button');
+             allBtns.forEach(b => b.disabled = true);
 
-             try {
-                 await runTransaction(db, async (transaction) => {
-                     const matchRef = doc(db, getPath('matches'), mid);
-                     const matchDoc = await transaction.get(matchRef);
+             if (isCorrect) {
+                 try {
+                     await runTransaction(db, async (transaction) => {
+                         const matchRef = doc(db, getPath('matches'), mid);
+                         const matchDoc = await transaction.get(matchRef);
 
-                     if (!matchDoc.exists) { throw "Trận đấu không tồn tại!"; }
+                         if (!matchDoc.exists) { throw "Match does not exist!"; }
 
-                     const matchData = matchDoc.data();
-                     
-                     // Kiểm tra xem câu hỏi này đã bị ai trả lời xong chưa (đề phòng race condition)
-                     // Ở đây logic là: Ai trả lời đúng thì next câu hỏi cho CẢ HAI.
-                     // Nên ta so sánh qIndex cục bộ với server.
-                     if (matchData.qIndex !== state.ui.matchQIndex) {
-                         throw "Câu hỏi này đã kết thúc!";
-                     }
+                         const matchData = matchDoc.data();
+                         const currentQIndex = matchData.qIndex || 0;
+                         const questionsLength = matchData.questions.length;
 
-                     const isP1 = matchData.player1.uid === state.user.uid;
-                     
-                     // Cộng điểm
-                     const newScore = (isP1 ? matchData.player1.score : matchData.player2.score) + 10;
-                     const nextQIndex = matchData.qIndex + 1;
-                     const questionsLength = matchData.questions.length;
+                         if (currentQIndex === state.ui.matchQIndex) {
+                             const isP1 = match.player1.uid === state.user.uid;
+                             const newScore = (isP1 ? matchData.player1.score : matchData.player2.score) + 10;
+                             const nextQIndex = currentQIndex + 1;
+                             
+                             const updateData = {};
+                             updateData[isP1 ? "player1.score" : "player2.score"] = newScore;
+                             
+                             if (nextQIndex < questionsLength) {
+                                 updateData.qIndex = nextQIndex;
+                             } else {
+                                 updateData.status = 'finished';
+                             }
+                             
+                             transaction.update(matchRef, updateData);
+                             
+                             if (updateData.status === 'finished') {
+                                 transaction.update(matchRef, {...updateData, winnerScore: newScore, finishedBy: state.user.uid});
+                             }
 
-                     const updateData = {};
-                     // Cập nhật điểm người thắng câu này
-                     updateData[isP1 ? "player1.score" : "player2.score"] = newScore;
-                     
-                     // QUAN TRỌNG: Tăng qIndex để chuyển câu hỏi cho CẢ HAI NGƯỜI
-                     if (nextQIndex < questionsLength) {
-                         updateData.qIndex = nextQIndex;
-                     } else {
-                         updateData.status = 'finished';
-                         updateData.winnerScore = newScore;
-                         updateData.finishedBy = state.user.uid;
-                     }
-                     
-                     transaction.update(matchRef, updateData);
-                 });
-                 
-                 // Hiệu ứng âm thanh hoặc toast chiến thắng câu hỏi
-                 // showToast("Chính xác! +10 điểm", "success");
+                             state.ui.matchQIndex = nextQIndex;
+                             updatePlayingUI();
+                         }
+                     });
+                 } catch (e) {
+                     console.error("Transaction failed:", e);
+                 }
 
-             } catch (e) {
-                 console.log("Transaction skipped/failed:", e);
-                 // Nếu lỗi (do người kia trả lời nhanh hơn), UI sẽ tự update qua onSnapshot
+             } else {
+                  setTimeout(() => {
+                    if (state.ui.activeMatch) {
+                        state.ui.matchQIndex = state.ui.activeMatch.qIndex || 0;
+                    }
+                    state.ui.hasAnsweredCurrentQ = false;
+                    updatePlayingUI();
+                 }, 1500); 
              }
          };
 
@@ -3759,78 +3683,6 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                     </div>
                 </div>
             `;
-        };
-   // --- GIAO DIỆN KẾT QUẢ TRẬN ĐẤU (VICTORY SCREEN) ---
-        const renderMatchResultModal = () => {
-            const res = state.ui.matchResult;
-            if (!res) return '';
-
-            // Xác định nội dung dựa trên kết quả
-            let title, colorClass, iconHtml, subText;
-            
-            if (res.result === 'win') {
-                title = "CHIẾN THẮNG!";
-                colorClass = "text-yellow-500";
-                // Icon Cúp Vàng
-                iconHtml = `
-                    <div class="relative inline-block">
-                        <div class="absolute inset-0 bg-yellow-200 blur-xl rounded-full opacity-50 animate-pulse"></div>
-                        <span class="text-8xl relative z-10 drop-shadow-lg filter">🏆</span>
-                    </div>`;
-                subText = "Xuất sắc! Bạn là người chiến thắng.";
-            } else if (res.result === 'lose') {
-                title = "THẤT BẠI";
-                colorClass = "text-slate-500";
-                iconHtml = `<span class="text-8xl grayscale opacity-80">🥀</span>`;
-                subText = "Đừng buồn, hãy cố gắng lần sau nhé!";
-            } else {
-                title = "HÒA NHAU";
-                colorClass = "text-blue-500";
-                iconHtml = `<span class="text-8xl">🤝</span>`;
-                subText = "Một trận đấu ngang tài ngang sức!";
-            }
-
-            return `
-                <div id="match-result-modal" class="fixed inset-0 bg-slate-900 bg-opacity-90 flex items-center justify-center z-[60] p-4 fade-in">
-                    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 text-center relative overflow-hidden transform transition-all scale-100 animate-bounce-in">
-                        
-                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-                        
-                        <div class="mb-6 mt-4">
-                            ${iconHtml}
-                        </div>
-                        
-                        <h2 class="text-4xl font-black ${colorClass} mb-2 uppercase tracking-wide">${title}</h2>
-                        <p class="text-slate-500 font-medium mb-8">${subText}</p>
-
-                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 mb-8 flex justify-center items-center gap-6">
-                            <div class="text-center">
-                                ${renderAvatar({name: res.myName, avatarUrl: res.myAvatar, avatarType: res.myAvatarType}, 'w-14 h-14', 'text-2xl')}
-                                <p class="text-xs font-bold text-slate-400 mt-2">BẠN</p>
-                                <p class="text-2xl font-black text-slate-800">${res.myScore}</p>
-                            </div>
-                            <div class="text-3xl font-black text-slate-300">VS</div>
-                            <div class="text-center">
-                                ${renderAvatar({name: res.oppName, avatarUrl: res.oppAvatar, avatarType: res.oppAvatarType}, 'w-14 h-14', 'text-2xl')}
-                                <p class="text-xs font-bold text-slate-400 mt-2">ĐỐI THỦ</p>
-                                <p class="text-2xl font-black text-slate-800">${res.oppScore}</p>
-                            </div>
-                        </div>
-
-                        <button onclick="closeMatchResult()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition transform hover:-translate-y-1">
-                            Quay về Sảnh
-                        </button>
-                    </div>
-                </div>
-            `;
-        };
-        
-        // Hàm đóng modal
-        window.closeMatchResult = () => {
-            state.ui.matchResult = null;
-            state.ui.competitionMode = 'lobby';
-            state.ui.hasAnsweredCurrentQ = false;
-            renderApp();
         };
 
         // --- 7. HANDLERS (Assignments, Question Bank, Competition & CLASSES) ---
@@ -5200,31 +5052,15 @@ window.addQuestion = () => {
             state.ui.competitionMode='waiting'; showToast(`Tạo phòng ${roomCode}`);
         };
 
-window.joinMatch = async () => {
+        window.joinMatch = async () => {
             const code = document.getElementById('room-code-input').value.trim().toUpperCase();
             if (code.length !== 6) return showToast("Mã phòng không hợp lệ", "error");
-            
-            // 1. Tìm phòng
             const snap = await getDocs(query(getRef('matches'), where('roomCode','==',code), where('status','==','waiting')));
             if(snap.empty) return showToast("Phòng không tồn tại hoặc đã đầy", "error");
-            
             const docRef = snap.docs[0];
-            const matchData = docRef.data();
-
-            // 2. Kiểm tra
-            if(matchData.player1.uid === state.user.uid) return showToast("Bạn đã ở trong phòng này");
-            if(matchData.player2) return showToast("Phòng đã đủ người!", "error");
-
-            // 3. Vào phòng (Chỉ cập nhật DB, KHÔNG đổi UI thủ công)
-            try {
-                await updateDoc(doc(db,getPath('matches'),docRef.id), { 
-                    player2: { uid: state.user.uid, name: state.profile.name, score: 0 } 
-                });
-                showToast("Đang vào phòng...", "success");
-                // Lưu ý: Không set competitionMode ở đây. Listener sẽ tự làm việc đó.
-            } catch (e) {
-                showToast("Lỗi vào phòng: " + e.message, "error");
-            }
+            if(docRef.data().player1.uid===state.user.uid) return showToast("Bạn đã ở trong phòng này");
+            await updateDoc(doc(db,getPath('matches'),docRef.id), { player2:{uid:state.user.uid,name:state.profile.name,score:0} });
+            state.ui.competitionMode='waiting'; showToast("Đã tham gia phòng!");
         };
 
         window.startMatch = async (mid) => updateDoc(doc(db,getPath('matches'),mid), {status:'playing', startTime: serverTimestamp()});
@@ -5998,97 +5834,7 @@ window.submitAssignment = async () => {
             const assign = state.data.assignments.find(a => a.id === state.ui.takingAssignmentId);
             if (assign) updateAssignmentQuestionUI(assign, qIdx);
         };
-// --- HÀM SỬA ĐIỂM HỌC SINH ---
-        window.handleEditStudentPoints = async (uid, name, currentPoints) => {
-            // Dùng prompt đơn giản để nhập điểm mới
-            const input = prompt(`Nhập tổng điểm MỚI cho học sinh ${name}:`, currentPoints);
-            
-            if (input === null) return; // Người dùng ấn Hủy
-            
-            const newPoints = parseInt(input);
-            
-            if (isNaN(newPoints) || newPoints < 0) {
-                showToast("Vui lòng nhập một số nguyên dương hợp lệ!", "error");
-                return;
-            }
-            
-            // Nếu điểm không đổi thì không làm gì
-            if (newPoints === currentPoints) return;
 
-            try {
-                // Cập nhật trực tiếp vào profile user
-                await updateDoc(doc(db, getPath('users'), uid), {
-                    points: newPoints
-                });
-                
-                showToast(`Đã cập nhật điểm của ${name} thành ${newPoints}`);
-                // Không cần renderApp() thủ công vì Listener User sẽ tự động cập nhật giao diện
-            } catch (e) {
-                console.error("Lỗi cập nhật điểm:", e);
-                showToast("Lỗi khi cập nhật điểm số.", "error");
-            }
-        };
-// --- TẠO PHÒNG TỪ NGÂN HÀNG ĐỀ ---
-        window.createMatchFromBank = async () => {
-            const bankId = document.getElementById('arena-bank-select').value;
-            if (!bankId) return showToast("Vui lòng chọn một bộ đề để thi đấu!", "error");
-
-            const selectedBank = state.data.questionBanks.find(b => b.id === bankId);
-            if (!selectedBank) return showToast("Không tìm thấy dữ liệu bộ đề.", "error");
-
-            // 1. Lọc ra các câu hỏi phù hợp cho Đấu trường (Chỉ lấy câu có đáp án trắc nghiệm A,B,C,D)
-            // Loại bỏ câu điền từ (fib) hoặc sắp xếp (order) vì không phù hợp với giao diện click nhanh
-            const validTypes = ['mcq', 'listen_mcq', 'listen_conversation', 'reading_comprehension', 'arena_quiz'];
-            
-            let pool = selectedBank.questions.filter(q => validTypes.includes(q.type));
-
-            if (pool.length < 5) {
-                return showToast(`Bộ đề này chỉ có ${pool.length} câu trắc nghiệm. Cần ít nhất 5 câu.`, "error");
-            }
-
-            // 2. Trộn ngẫu nhiên và lấy tối đa 15 câu
-            pool = pool.sort(() => Math.random() - 0.5).slice(0, 15);
-
-            // 3. Tạo phòng
-            const roomCode = generateRoomCode();
-            
-            try {
-                await addDoc(getRef('matches'), { 
-                    roomCode, 
-                    player1: { uid: state.user.uid, name: state.profile.name, score: 0 }, 
-                    player2: null, 
-                    status: 'waiting', 
-                    questions: pool, // Lưu bộ câu hỏi vào trận đấu
-                    bankName: selectedBank.title,
-                    qIndex: 0, 
-                    createdAt: serverTimestamp() 
-                });
-                
-                state.ui.competitionMode = 'waiting'; 
-                showToast(`Đã tạo phòng ${roomCode} từ bộ đề "${selectedBank.title}"`);
-            } catch (e) {
-                console.error("Lỗi tạo phòng:", e);
-                showToast("Lỗi khi tạo phòng đấu.", "error");
-            }
-        };
-// --- HÀM ĐÓNG MODAL KẾT QUẢ & QUAY VỀ SẢNH (FIX LỖI) ---
-        window.closeMatchResult = () => {
-            // 1. Ẩn modal kết quả
-            state.ui.matchResult = null; 
-            
-            // 2. Xóa dữ liệu trận đấu hiện tại trong bộ nhớ (Quan trọng)
-            // Để tránh việc Listener tự động đẩy lại vào màn hình chờ/kết quả
-            state.ui.activeMatch = null; 
-            state.ui.lastFinishedMatch = null;
-
-            // 3. Reset các trạng thái khác để sẵn sàng cho trận mới
-            state.ui.hasAnsweredCurrentQ = false;
-            state.ui.matchQIndex = 0;
-            
-            // 4. Chuyển về chế độ Lobby và Render lại
-            state.ui.competitionMode = 'lobby';
-            renderApp();
-        };
     </script>
 </body>
 </html>
