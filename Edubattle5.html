@@ -4846,14 +4846,13 @@ window.viewSubmissionResult = (subId) => {
                 showToast(`Mã lớp: ${text} (Hãy copy thủ công)`);
             }
         };
-window.submitAssignment = async () => {
+        window.submitAssignment = async () => {
             const assign = state.data.assignments.find(a => a.id === state.ui.takingAssignmentId);
             let score = 0;
             const totalQuestions = assign.questions.length;
             const scorePerQuestion = 100 / totalQuestions;
             const questionDataToSave = {}; 
             
-            // 1. CHẤM ĐIỂM (Giữ nguyên logic cũ)
             assign.questions.forEach((q, idx) => {
                 const userAnswer = state.ui.assignmentAnswers[idx];
                 let isCorrect = false;
@@ -4909,23 +4908,10 @@ window.submitAssignment = async () => {
             });
 
             score = Math.round(score);
-
-            // 2. TẠO NHẬN XÉT TỰ ĐỘNG (AUTO FEEDBACK)
-            let autoFeedback = "";
-            if (score > 90) {
-                autoFeedback = "Xuất sắc! Em làm bài rất tốt, hãy tiếp tục duy trì phong độ này nhé! 🌟";
-            } else if (score > 80) {
-                autoFeedback = "Rất tốt! Em đã nắm vững kiến thức, hãy cố gắng thêm chút nữa để đạt điểm tối đa nhé! 💪";
-            } else {
-                autoFeedback = "Cần cố gắng hơn! Em hãy ôn tập kỹ lại bài học và làm lại bài tập để đạt kết quả cao hơn nhé! 📚";
-            }
-
-            if (state.ui.timerInterval) {
+           if (state.ui.timerInterval) {
                 clearInterval(state.ui.timerInterval);
                 state.ui.timerInterval = null;
             }
-
-            // 3. LƯU VÀO DATABASE
             try {
                 const subRef = await addDoc(getRef('submissions'), {
                     assignmentId: assign.id,
@@ -4933,10 +4919,8 @@ window.submitAssignment = async () => {
                     score,
                     answers: state.ui.assignmentAnswers,
                     questionData: questionDataToSave, 
-                    createdAt: serverTimestamp(),
-                    teacherComment: autoFeedback // <--- Lưu lời phê tự động vào đây
+                    createdAt: serverTimestamp()
                 });
-                
                 await updateDoc(doc(db, getPath('users'), state.user.uid), {
                     points: (state.profile.points || 0) + score
                 });
@@ -4949,7 +4933,6 @@ window.submitAssignment = async () => {
                     answers: state.ui.assignmentAnswers,
                     questionData: questionDataToSave, 
                     createdAt: new Date(),
-                    teacherComment: autoFeedback, // Cập nhật cho giao diện xem ngay
                     assignment: assign 
                 };
 
@@ -4969,7 +4952,7 @@ window.submitAssignment = async () => {
             if(u) setupListeners(u.uid);
             else { state.profile = null; state.ui.authMode = 'login'; renderApp(); }
         });
-
+// --- LOGIC ĐỒNG HỒ ĐẾM NGƯỢC ---
 // --- LOGIC ĐỒNG HỒ ĐẾM NGƯỢC ---
         window.runTimer = (durationMinutes) => {
             if (!durationMinutes || durationMinutes <= 0) return;
