@@ -9,16 +9,9 @@
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Custom Scrollbar cho phần chọn Emoji */
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
         body { background-color: #f3f4f6; padding-bottom: 90px; }
         
-        .emoji-select.selected { background-color: #dbeafe; border-color: #3b82f6; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5); }
+        .emoji-select.selected { background-color: #dbeafe; border-color: #3b82f6; transform: scale(1.1); }
         
         /* Hiệu ứng lửa cháy */
         @keyframes fire-pulse {
@@ -37,9 +30,6 @@
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen bg-gray-50 border-x border-gray-200 shadow-xl relative font-sans">
-
-    <!-- CANVAS ẨN ĐỂ VẼ ẢNH (Kích thước 600x400 px) -->
-    <canvas id="shareCanvas" width="600" height="400" style="display: none;"></canvas>
 
     <!-- Top Bar -->
     <div class="bg-white px-4 py-3 flex justify-between items-center sticky top-0 z-30 shadow-sm">
@@ -246,34 +236,24 @@
 
     <!-- Profile Setup Modal -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95 opacity-0 flex flex-col max-h-[90vh]" id="modalContent">
-            <div class="text-center mb-4 flex-shrink-0">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95 opacity-0" id="modalContent">
+            <div class="text-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Hồ sơ học viên</h2>
-                <p class="text-gray-500 text-sm mt-1">Tùy chỉnh cá nhân hóa</p>
+                <p class="text-gray-500 text-sm mt-1"></p>
             </div>
             
-            <!-- Khu vực chọn Avatar có Scroll -->
-            <div class="mb-5 flex-1 min-h-0 flex flex-col">
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-2 ml-1">Chọn Avatar</label>
-                
-                <div class="overflow-y-auto custom-scrollbar p-2 bg-gray-50 border border-gray-100 rounded-2xl flex-1 max-h-60">
-                     <div class="grid grid-cols-4 gap-3 justify-items-center" id="emojiGrid"></div>
-                </div>
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-3 text-center tracking-wider">Chọn Avatar</label>
+                <div class="grid grid-cols-4 gap-3 justify-items-center" id="emojiGrid"></div>
             </div>
 
-            <div class="mb-6 flex-shrink-0">
+            <div class="mb-6">
                 <label class="block text-xs font-bold text-gray-600 uppercase mb-2 ml-1">Tên hiển thị</label>
                 <input type="text" id="nameInput" placeholder="Nhập tên của bạn..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold text-gray-700 text-center">
             </div>
 
-            <!-- Nút Save -->
-            <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition flex-shrink-0 mb-3">
+            <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition">
                 Lưu hồ sơ
-            </button>
-            
-            <!-- Nút Tải Ảnh Canvas -->
-            <button onclick="downloadProfileCard()" class="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-2.5 rounded-xl transition flex-shrink-0 text-sm flex items-center justify-center gap-2">
-                <i class="fas fa-camera text-blue-500"></i> Tải thẻ học viên
             </button>
         </div>
     </div>
@@ -284,27 +264,35 @@
             const today = new Date().toLocaleDateString('vi-VN');
             const lastStreakDate = localStorage.getItem('lastStreakDate');
             
+            // Lấy tổng số steak (điểm) và số ngày login (bộ đếm ngày)
             let totalSteaks = parseInt(localStorage.getItem('totalSteaks') || 0);
             let loginDays = parseInt(localStorage.getItem('loginDays') || 0);
 
             updateStreakUI(totalSteaks);
 
+            // Nếu hôm nay chưa nhận thưởng
             if (lastStreakDate !== today) {
+                // Tăng số ngày login
                 loginDays++;
                 localStorage.setItem('loginDays', loginDays);
                 localStorage.setItem('lastStreakDate', today);
 
+                // Tính toán phần thưởng
                 let reward = 1;
                 let isMilestone = false;
 
+                // Logic ngày thứ 7, 14, 21...
                 if (loginDays % 7 === 0) {
+                    // Công thức: (Ngày / 7) * 10. VD: Ngày 7 -> 10, Ngày 14 -> 20
                     reward = (loginDays / 7) * 10;
                     isMilestone = true;
                 }
 
+                // Cộng điểm và lưu
                 totalSteaks += reward;
                 localStorage.setItem('totalSteaks', totalSteaks);
 
+                // Hiển thị UI
                 updateStreakUI(totalSteaks);
                 showStreakModal(reward, isMilestone, loginDays);
             }
@@ -314,6 +302,7 @@
             const display = document.getElementById('streakCountText');
             display.innerText = count;
             
+            // Hiệu ứng nhẹ
             const container = document.getElementById('streakDisplay');
             if(count > 0) {
                  container.classList.add('bg-orange-100', 'border-orange-300', 'scale-110');
@@ -331,9 +320,11 @@
             const iconContainer = document.getElementById('rewardIconContainer');
             const loginDayCount = document.getElementById('loginDayCount');
 
+            // Cập nhật nội dung Modal
             loginDayCount.innerText = `Ngày đăng nhập thứ: ${currentDay}`;
 
             if (isMilestone) {
+                // Giao diện cho ngày đặc biệt (7, 14...)
                 rewardTitle.innerText = "Siêu cấp!";
                 rewardTitle.classList.add('text-purple-600');
                 rewardSubtitle.innerText = `Chúc mừng cột mốc ngày thứ ${currentDay}!`;
@@ -344,6 +335,7 @@
                 
                 iconContainer.innerHTML = '<i class="fas fa-gift text-6xl text-purple-500 drop-shadow-lg animate-bounce"></i>';
             } else {
+                // Giao diện ngày thường
                 rewardTitle.innerText = "Tuyệt vời!";
                 rewardTitle.classList.remove('text-purple-600');
                 rewardSubtitle.innerText = "Bạn đã chăm chỉ học tập hôm nay.";
@@ -355,6 +347,7 @@
                 iconContainer.innerHTML = '<i class="fas fa-fire text-6xl text-orange-500 fire-anim drop-shadow-lg"></i>';
             }
             
+            // Hiện Modal
             setTimeout(() => {
                 modal.classList.remove('hidden');
                 setTimeout(() => {
@@ -376,16 +369,9 @@
         }
 
         // --- Profile Logic ---
-        const emojis = [
-            '🐼', '🐰', '🐯', '🦁', '🦊', '🐸', '🐷', '🐨', 
-            '🐵', '🐧', '🐥', '🦉', '🦄', '🦋', '🌏', '🎯', 
-            '☃️', '🛰️', '🛸', '🍀', '🔥', '😍', '🥰', '😻',
-            '🐶', '🐺', '🐗', '🐴', '🐝', '🐛', '🐞', '🐌',
-            '🐢', '🐍', '🦎', '🦖', '🐙', '🦑', '🦐', '🦞',
-            '🐠', '🐬', '🐳', '🦈', '🐅', '🐆', '🦓', '🦍',
-            '🐘', '🦛', '🦏', '🐪', '🦒', '🦘', '🐃', '🐂',
-            '🐄', '🐎', '🐖', '🐏', '🐑', '🦙', '🐐', '🦌'
-        ];
+        const emojis = ['🐼', '🐰', '🐯', '🦁', '🦊', '🐸', '🐷', '🐨', '🐵', '🐧', 
+                                   '🐥', '🦉', '🦄', '🦋', '🌏', '🎯', '☃️','🛰️','🛸', 
+                                   '🍀', '‍🔥','😍', '🥰',  '😻'];
 
         let selectedEmoji = '🐼';
 
@@ -398,7 +384,7 @@
 
         emojis.forEach(emoji => {
             const div = document.createElement('div');
-            div.className = `emoji-select w-11 h-11 rounded-full bg-white flex items-center justify-center text-xl cursor-pointer border border-gray-200 shadow-sm transition-all hover:bg-blue-50 hover:border-blue-200 hover:scale-105 ${emoji === selectedEmoji ? 'selected' : ''}`;
+            div.className = `emoji-select w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-2xl cursor-pointer border-2 border-transparent transition hover:bg-gray-200 ${emoji === selectedEmoji ? 'selected' : ''}`;
             div.textContent = emoji;
             div.onclick = () => selectEmoji(div, emoji);
             emojiGrid.appendChild(div);
@@ -452,59 +438,6 @@
 
             if (storedName) userNameDisplay.textContent = storedName;
             if (storedAvatar) userAvatarDisplay.textContent = storedAvatar;
-        }
-
-        // --- TÍNH NĂNG VẼ VÀO CANVAS (MỚI) ---
-        function downloadProfileCard() {
-            const canvas = document.getElementById('shareCanvas');
-            const ctx = canvas.getContext('2d');
-            const name = localStorage.getItem('username') || "Học viên";
-            const avatar = localStorage.getItem('avatar') || "🐼";
-            const streak = localStorage.getItem('totalSteaks') || 0;
-
-            // 1. Vẽ nền Gradient
-            const gradient = ctx.createLinearGradient(0, 0, 600, 400);
-            gradient.addColorStop(0, '#3b82f6'); // Blue 500
-            gradient.addColorStop(1, '#6366f1'); // Indigo 500
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 600, 400);
-
-            // 2. Vẽ hình tròn nền cho Avatar
-            ctx.beginPath();
-            ctx.arc(300, 150, 80, 0, 2 * Math.PI, false); // Tâm x=300, y=150, R=80
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.fill();
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = 'white';
-            ctx.stroke();
-
-            // 3. Vẽ Avatar (Emoji)
-            ctx.font = '100px Arial'; // Emoji size
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'white';
-            ctx.fillText(avatar, 300, 155);
-
-            // 4. Vẽ Tên
-            ctx.font = 'bold 36px sans-serif';
-            ctx.fillStyle = 'white';
-            ctx.fillText(name, 300, 260);
-
-            // 5. Vẽ Streak
-            ctx.font = '24px sans-serif';
-            ctx.fillStyle = '#fef08a'; // Yellow 200
-            ctx.fillText(`🔥 Thành tích: ${streak} Steak`, 300, 310);
-
-            // 6. Vẽ Footer Text
-            ctx.font = 'italic 16px sans-serif';
-            ctx.fillStyle = 'rgba(255,255,255,0.7)';
-            ctx.fillText('Mobile App Advanced Learning', 300, 370);
-
-            // 7. Tạo link tải về
-            const link = document.createElement('a');
-            link.download = `The-Hoc-Vien-${name.replace(/\s+/g, '-')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
         }
 
         // --- Initialization ---
