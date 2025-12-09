@@ -1898,8 +1898,6 @@ const list = myBanks.map(bank => `
             { id: 'translation', label: '5. Dịch câu (Việt - Trung)', example: 'câu tiếng trung|câu tiếng việt' },
             { id: 'listen_translate', label: '6. Nghe câu dịch nghĩa (Câu)', example: 'câu tiếng trung|câu tiếng việt' },
             { id: 'listen_write', label: '7. Nghe câu viết lại (Câu)', example: 'câu tiếng trung|câu tiếng việt' },
-            { id: 'listen_conversation', label: '9. Nghe hội thoại & Trả lời (File TXT nâng cao)', example: '# Script... [HT1] Câu hỏi? [TL] A|B*|C|D' },
-            { id: 'order_sentences', label: '10. Sắp xếp câu (File TXT)', example: '#\nCâu 1\nCâu 2...' },
             // Loại 8, 9, 10... có thể thêm vào đây
         ];
         
@@ -1935,14 +1933,6 @@ const list = myBanks.map(bank => `
                  'listen_write': { 
                      instructions: 'Mỗi dòng là một cặp câu tiếng Trung - tiếng Việt. Hệ thống sẽ phát âm câu TC và yêu cầu viết lại câu TC.', 
                      structure: '我是学生|Tôi là học sinh' 
-                 },
-                 'listen_conversation': { 
-                     instructions: 'Dùng dấu # để ngăn cách các bài. Dòng [HT...] chứa tên file âm thanh và câu hỏi. Dòng [TL] chứa các đáp án ngăn cách bởi dấu |, thêm dấu * sau đáp án đúng.', 
-                     structure: '#\nA: 你好\nB: 你好\n[HT1] Câu hỏi là gì?\n[TL] Đáp án A|Đáp án B*|Đáp án C|Đáp án D' 
-                 },
-                'order_sentences': { 
-                     instructions: 'Sử dụng dấu # để ngăn cách các bài tập. Trong mỗi bài, nhập các câu theo ĐÚNG THỨ TỰ. Hệ thống sẽ tự động xáo trộn khi học sinh làm bài.', 
-                     structure: '#\nCâu thứ nhất\nCâu thứ hai\nCâu thứ ba\n#\nCâu 1 bài 2...' 
                  }
              };
              
@@ -2024,8 +2014,8 @@ const list = myBanks.map(bank => `
                 match: 'Ghép đôi', translation: 'Dịch câu',
                 listen_mcq: 'Nghe - Chọn nghĩa', listen_write: 'Nghe - Viết lại',
                 listen_translate: 'Nghe - Dịch nghĩa',
-                listen_conversation: 'Nghe hội thoại & Trả lời',
-                order_sentences: 'Sắp xếp câu'
+                // --- THÊM DÒNG NÀY ---
+                listen_conversation: 'Nghe hội thoại & Trả lời'
             };
             return labels[type] || 'Không xác định';
         };
@@ -2062,18 +2052,6 @@ const list = myBanks.map(bank => `
                     break;
                 case 'jumble':
                     content = `Câu đúng: **${q.answer.join(' ')}**`;
-                    break;
-                case 'order_sentences':
-                    const sentences = Array.isArray(q.answer) ? q.answer : [];
-                    content = `<p class="text-xs font-bold text-slate-500 mb-1">Thứ tự đúng:</p>`;
-                    content += `<div class="space-y-1">` + 
-                        sentences.map((s, i) => `
-                            <div class="p-2 bg-green-50 border border-green-200 rounded flex gap-2 text-sm">
-                                <span class="font-bold text-green-700">${i+1}.</span> 
-                                <span class="text-slate-800">${s}</span>
-                            </div>
-                        `).join('') + 
-                        `</div>`;
                     break;
                 case 'match':
                     content = 'Các cặp ghép nối:<br>' + q.pairs.map(p => `**${p.a}** -> **${p.b}**`).join('<br>');
@@ -2392,7 +2370,7 @@ const renderQuestionSelectionFromBank = () => {
             const selectedBank = myBanks.find(b => b.id === state.ui.selectedBankId);
             
             if (!selectedBank) {
-                // (Giữ nguyên phần hiển thị danh sách Bank)
+                // (Giữ nguyên phần hiển thị danh sách Bank - không thay đổi)
                 return `
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
                         <h3 class="text-xl font-bold text-yellow-600 mb-6 border-b pb-3">Chọn Ngân hàng đề nguồn</h3>
@@ -2413,7 +2391,7 @@ const renderQuestionSelectionFromBank = () => {
             const availableQuestions = selectedBank.questions || [];
             const currentAssignmentQs = state.ui.newAssignment.questions || [];
             
-            // Logic thống kê
+            // Logic thống kê (Giữ nguyên)
             const typeStats = availableQuestions.reduce((acc, q) => {
                 const label = getQuestionTypeLabel(q.type);
                 if (!acc[q.type]) acc[q.type] = { label: label, count: 0 };
@@ -2438,7 +2416,7 @@ const renderQuestionSelectionFromBank = () => {
                 `;
             }).join('');
 
-            // Logic hiển thị danh sách (CÓ THÊM ID CHO BUTTON VÀ CASE ORDER SENTENCES)
+            // Logic hiển thị danh sách (CÓ THÊM ID CHO BUTTON)
             const manualList = availableQuestions.map((q, idx) => {
                 const isSelected = currentAssignmentQs.some(existQ => 
                     JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
@@ -2448,21 +2426,10 @@ const renderQuestionSelectionFromBank = () => {
                 let previewText = '';
                 switch(q.type) {
                     case 'listen_mcq': case 'listen_write': case 'listen_translate':
-                    case 'listen_conversation': 
                         previewText = `<span class="text-purple-600 font-bold">[Audio]</span> ${q.text}`; break;
-                    
                     case 'jumble':
                         const jumbleAns = Array.isArray(q.answer) ? q.answer.join(' ') : q.answer;
                         previewText = `<span class="text-green-600 font-bold">[Câu: ${jumbleAns}]</span>`; break;
-                    
-                    // --- [MỚI] HIỂN THỊ CHI TIẾT CÁC CÂU SẮP XẾP ---
-                    case 'order_sentences':
-                        // Nối các câu lại với nhau bằng dấu gạch chéo để xem trước
-                        const orderAns = Array.isArray(q.answer) ? q.answer.join(' / ') : '...';
-                        previewText = `<span class="text-teal-600 font-bold">[Sắp xếp]</span> <span class="italic text-slate-600">${orderAns}</span>`; 
-                        break;
-                    // ----------------------------------------------
-
                     case 'match':
                         const pairsText = q.pairs ? q.pairs.map(p => `${p.a}-${p.b}`).join(', ') : '';
                         previewText = `<span class="text-orange-600 font-bold">[Cặp: ${pairsText}]</span>`; break;
@@ -2651,8 +2618,6 @@ const renderQuestionSelectionFromBank = () => {
                 headerText = `Nghe hội thoại và trả lời:<br><span class="text-blue-800 text-xl mt-2 block font-medium">${formatText(q.text)}</span>`;
             } else if (q.type === 'jumble') {
                  headerText = `Sắp xếp các từ thành câu hoàn chỉnh:`;
-            } else if (q.type === 'order_sentences') {
-                 headerText = `Sắp xếp câu theo đúng thứ tự:`;
             }
 
             let headerHtml = `
@@ -2722,39 +2687,6 @@ const renderQuestionSelectionFromBank = () => {
                                     return `<div class="relative mb-3"><select onchange="selectMatchAnswer(${qIdx}, ${aIdx}, this.value)" class="w-full p-4 border-2 rounded-xl text-base appearance-none cursor-pointer outline-none transition ${selectedBIndex !== "" ? 'border-green-500 bg-green-600 text-white font-bold shadow-md' : 'bg-white border-green-200 text-slate-600 hover:border-green-400'}"><option value="" class="bg-white text-slate-500">-- Ghép với câu ${aIdx+1} --</option>${colB.map((textB, bIdx) => `<option value="${bIdx}" class="bg-white text-slate-800" ${selectedBIndex == bIdx ? 'selected' : ''}>${String.fromCharCode(65+bIdx)}. ${textB}</option>`).join('')}</select></div>`;
                                 }).join('')}
                             </div>
-                        </div>
-                    `;
-                    break;
-case 'order_sentences':
-                    const availableSentences = q.shuffledSentences || q.answer; 
-                    const placedSentences = state.ui.assignmentAnswers[qIdx] || [];
-                    
-                    // Lọc ra các câu chưa được chọn
-                    const remainingSentences = availableSentences.filter(s => {
-                        const availableCount = availableSentences.filter(i => i === s).length;
-                        const placedCount = placedSentences.filter(i => i === s).length;
-                        return placedCount < availableCount;
-                    });
-
-                    content = `
-                        <div class="mb-6 p-4 border-2 border-dashed border-blue-400 rounded-xl bg-blue-50 min-h-[100px] flex flex-col gap-2 transition-colors">
-                            ${placedSentences.length === 0 ? '<div class="text-center text-slate-400 italic py-4">Nhấn vào các câu bên dưới để đưa vào đây</div>' : ''}
-                            ${placedSentences.map((s, sIdx) => `
-                                <button onclick="removeOrderedSentence(${qIdx}, ${sIdx})" 
-                                    class="w-full text-left p-3 bg-white border border-blue-200 rounded-lg shadow-sm hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition flex justify-between items-center group animate-in fade-in slide-in-from-bottom-2">
-                                    <span class="font-medium">${s}</span>
-                                    <i data-lucide="x" class="w-4 h-4 opacity-0 group-hover:opacity-100"></i>
-                                </button>
-                            `).join('')}
-                        </div>
-
-                        <div class="flex flex-col gap-2 p-4 bg-slate-100 rounded-xl border border-slate-200">
-                            ${remainingSentences.map(s => `
-                                <button onclick="addOrderedSentence(${qIdx}, '${s.replace(/'/g, "\\'")}')" 
-                                    class="w-full text-left p-3 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-blue-50 hover:border-blue-400 hover:text-blue-700 transition font-medium">
-                                    ${s}
-                                </button>
-                            `).join('')}
                         </div>
                     `;
                     break;
@@ -2837,12 +2769,10 @@ case 'order_sentences':
             const assign = state.data.assignments.find(a => a.id === state.ui.takingAssignmentId);
             if (!assign) return '';
             
-if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledSentences)){ 
+            if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB)) { 
                 assign.questions.forEach(q => {
                     if (q.type === 'jumble' && q.answer) {
                         q.shuffledWords = [...q.answer].sort(() => Math.random() - 0.5); 
-                    } else if (q.type === 'order_sentences' && q.answer) {
-                        q.shuffledSentences = [...q.answer].sort(() => Math.random() - 0.5);
                     } else if (q.type === 'match' && q.pairs) {
                         q.shuffledColB = q.pairs.map(p => p.b).sort(() => Math.random() - 0.5);
                     }
@@ -3037,24 +2967,6 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                         const jumbleCorrect = q.answer.join(' ');
                         isCorrect = jumbleUser === jumbleCorrect;
                         explanation = `Câu đúng: **${jumbleCorrect}**. Bạn sắp xếp: <span class="${isCorrect ? 'text-green-600' : 'text-red-600'}">${jumbleUser || 'Chưa trả xếp'}</span>`;
-                        break;
-                     case 'order_sentences':
-                        const orderUser = Array.isArray(userAnswer) ? userAnswer.join('<br>⬇️<br>') : '';
-                        const orderCorrect = q.answer.join('<br>⬇️<br>');
-                        isCorrect = JSON.stringify(userAnswer) === JSON.stringify(q.answer);
-                        
-                        explanation = `
-                            <div class="grid grid-cols-2 gap-4 mt-2">
-                                <div class="p-2 bg-green-50 rounded border border-green-200">
-                                    <p class="font-bold text-green-800 text-xs mb-1">Thứ tự đúng:</p>
-                                    <div class="text-sm font-medium text-green-900">${orderCorrect}</div>
-                                </div>
-                                <div class="p-2 ${isCorrect ? 'bg-blue-50 border-blue-200' : 'bg-red-50 border-red-200'} rounded border">
-                                    <p class="font-bold text-xs mb-1">Bạn sắp xếp:</p>
-                                    <div class="text-sm font-medium ${isCorrect ? 'text-blue-900' : 'text-red-900'}">${orderUser || 'Chưa làm'}</div>
-                                </div>
-                            </div>
-                        `;
                         break;
                         
                     case 'match':
@@ -4012,185 +3924,141 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
 // --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ CẬP NHẬT TRỘN ĐÁP ÁN NGẪU NHIÊN) ---
 // --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ SỬA: BỎ DẤU SAO **, THAY BẰNG MÀU XANH IN ĐẬM) ---
 // --- LOGIC PHÂN TÍCH FILE TEXT (ĐÃ CẬP NHẬT: THÊM DẠNG NGHĨA -> TỪ) ---
-// --- LOGIC PHÂN TÍCH FILE TEXT (PHIÊN BẢN NÂNG CẤP HỖ TRỢ HỘI THOẠI) ---
         const parseFileContent = (text, qType) => {
-            // Hàm trộn mảng (Shuffle)
+            // 1. Hàm trộn mảng
             const shuffle = (array) => {
                 let currentIndex = array.length, randomIndex;
                 while (currentIndex != 0) {
                     randomIndex = Math.floor(Math.random() * currentIndex);
                     currentIndex--;
-                    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+                    [array[currentIndex], array[randomIndex]] = [
+                        array[randomIndex], array[currentIndex]];
                 }
                 return array;
             };
 
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
             const newQuestions = [];
             
-            // --- XỬ LÝ RIÊNG CHO DẠNG HỘI THOẠI (Cấu trúc Block ngăn cách bởi dấu #) ---
-            if (qType === 'listen_conversation') {
-                // 1. Tách các bài tập theo dấu #
-                const blocks = text.split('#').map(b => b.trim()).filter(b => b.length > 0);
-                
-                // Lấy thông tin bài học để tạo đường dẫn audio
-                const lvl = document.getElementById('assign-level') ? document.getElementById('assign-level').value : 'H1';
-                const lsn = document.getElementById('assign-lesson') ? document.getElementById('assign-lesson').value : 'Bai1';
-                const folderPath = `data_Edubattle/${lvl}_${lsn}`;
-
-                blocks.forEach(block => {
-                    try {
-                        const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                        let scriptLines = [];
-                        let questionLine = null;
-                        let answerLine = null;
-
-                        // 2. Phân loại từng dòng trong block
-                        lines.forEach(line => {
-                            if (line.startsWith('[HT')) {
-                                questionLine = line;
-                            } else if (line.startsWith('[TL]')) {
-                                answerLine = line;
-                            } else {
-                                scriptLines.push(line);
-                            }
-                        });
-
-                        if (questionLine && answerLine) {
-                            // 3. Xử lý dòng Câu hỏi: [HT1] B是谁？ -> File: HT1, Text: B是谁？
-                            // Regex lấy nội dung trong [] và nội dung phía sau
-                            const qMatch = questionLine.match(/\[(.*?)\]\s*(.*)/);
-                            if (!qMatch) return;
-                            
-                            const audioFileName = qMatch[1].trim(); // VD: HT1
-                            const questionText = qMatch[2].trim();  // VD: B是谁？
-
-                            // 4. Xử lý dòng Đáp án: [TL] 老师|学生*|我|你
-                            const rawAnswers = answerLine.replace('[TL]', '').split('|').map(a => a.trim());
-                            let correctIndex = -1;
-                            
-                            // Tìm đáp án có dấu * và xóa dấu * đi
-                            const cleanOptions = rawAnswers.map((ans, idx) => {
-                                if (ans.endsWith('*')) {
-                                    correctIndex = idx;
-                                    return ans.slice(0, -1); // Cắt bỏ dấu *
-                                }
-                                return ans;
-                            });
-
-                            if (correctIndex === -1) correctIndex = 0; // Fallback nếu quên đánh dấu *
-
-                            // 5. Tạo câu hỏi hoàn chỉnh
-                            newQuestions.push({
-                                type: 'listen_conversation',
-                                audioText: audioFileName,
-                                audioUrl: `${folderPath}/${audioFileName}.mp3`,
-                                conversationContent: scriptLines.join('\n'), // Ghép script lại
-                                text: questionText,
-                                options: cleanOptions,
-                                correct: correctIndex
-                            });
-                        }
-                    } catch (e) {
-                        console.error("Lỗi parse block hội thoại:", e);
-                    }
-                });
-                
-                return newQuestions;
-            }
-            // -----------------------------------------------------------
-            // XỬ LÝ RIÊNG CHO DẠNG SẮP XẾP CÂU (Cấu trúc Block với dấu #)
-            // -----------------------------------------------------------
-             if (qType === 'order_sentences') {
-                const blocks = text.split('#').map(b => b.trim()).filter(b => b.length > 0);
-                
-                blocks.forEach(block => {
-                    try {
-                        // Tách từng dòng, mỗi dòng là một câu
-                        const sentences = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                        
-                        if (sentences.length >= 2) {
-                            newQuestions.push({
-                                type: 'order_sentences',
-                                text: "Sắp xếp thứ tự các câu cho đúng:",
-                                answer: sentences // Lưu thứ tự đúng
-                            });
-                        }
-                    } catch (e) {
-                        console.error("Lỗi parse block sắp xếp câu:", e);
-                    }
-                });
-                return newQuestions;
-            }
-
-            // --- CÁC DẠNG CŨ (XỬ LÝ THEO DÒNG) ---
-            const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-            
-            // ... (Giữ nguyên logic tạo tempVocabList và getDistractors như cũ) ...
+            // 2. ĐỌC DỮ LIỆU ĐỂ TẠO DISTRACTORS (ĐÁP ÁN NHIỄU)
             const tempVocabList = [];
             lines.forEach(line => {
                 const parts = line.split('|');
                 if (parts.length >= 3) {
-                    tempVocabList.push({ word: parts[0].trim(), pinyin: parts[1].trim(), meaning: parts[2].trim() });
+                    tempVocabList.push({
+                        word: parts[0].trim(),
+                        pinyin: parts[1].trim(),
+                        meaning: parts[2].trim()
+                    });
                 }
             });
-            while (tempVocabList.length < 4) { tempVocabList.push({ word: 'Ví dụ', pinyin: 'lìrú', meaning: 'Mẫu' }); }
+
+            // Thêm dữ liệu giả nếu file quá ít
+            while (tempVocabList.length < 4) {
+                tempVocabList.push({ word: 'Ví dụ', pinyin: 'lìrú', meaning: 'Mẫu' });
+            }
+
+            // Helper lấy đáp án sai
             const getDistractors = (correctValue, field) => {
                 const distractors = [];
                 const candidates = shuffle([...tempVocabList]); 
+                
                 for (const item of candidates) {
                     const value = item[field];
-                    if (value !== correctValue && !distractors.includes(value)) distractors.push(value);
+                    if (value !== correctValue && !distractors.includes(value)) {
+                        distractors.push(value);
+                    }
                     if (distractors.length === 3) break;
                 }
                 while (distractors.length < 3) distractors.push(`Lựa chọn ${distractors.length + 1}`);
                 return distractors;
             };
 
-            // Loop các dòng cho dạng cũ
+            // 3. TẠO CÂU HỎI
             lines.forEach(line => {
                 try {
+                    // Lấy context đường dẫn âm thanh
                     const lvl = document.getElementById('assign-level') ? document.getElementById('assign-level').value : 'H1';
                     const lsn = document.getElementById('assign-lesson') ? document.getElementById('assign-lesson').value : 'Bai1';
                     const folderPath = `data_Edubattle/${lvl}_${lsn}`;
 
                     switch (qType) {
-                        case 'vocab_mcq':
+                        case 'vocab_mcq': // Từ vựng|Pinyin|Nghĩa
                             const parts_v = line.split('|');
                             if (parts_v.length < 3) return;
                             const [word, pinyin, meaning] = parts_v.map(p => p.trim());
                             
+                            // 1. Dạng: Cho TỪ chọn NGHĨA
                             let optionsM = [meaning, ...getDistractors(meaning, 'meaning')];
                             optionsM = shuffle(optionsM); 
-                            newQuestions.push({ type: 'mcq', text: `Nghĩa của từ <span class="font-bold text-blue-600 text-xl mx-1">${word}</span> là gì?`, options: optionsM, correct: optionsM.indexOf(meaning) });
+                            newQuestions.push({
+                                type: 'mcq',
+                                text: `Nghĩa của từ <span class="font-bold text-blue-600 text-xl mx-1">${word}</span> là gì?`,
+                                options: optionsM,
+                                correct: optionsM.indexOf(meaning) 
+                            });
 
+                            // 2. Dạng: Cho TỪ chọn PINYIN
                             let optionsP = [pinyin, ...getDistractors(pinyin, 'pinyin')];
                             optionsP = shuffle(optionsP); 
-                            newQuestions.push({ type: 'mcq', text: `Pinyin của từ <span class="font-bold text-blue-600 text-xl mx-1">${word}</span> là gì?`, options: optionsP, correct: optionsP.indexOf(pinyin) });
+                            newQuestions.push({
+                                type: 'mcq',
+                                text: `Pinyin của từ <span class="font-bold text-blue-600 text-xl mx-1">${word}</span> là gì?`,
+                                options: optionsP,
+                                correct: optionsP.indexOf(pinyin)
+                            });
 
+                            // --- MỚI THÊM: 3. Dạng: Cho NGHĨA chọn TỪ ---
+                            // Lấy 3 từ tiếng Trung khác làm đáp án sai
                             let optionsW = [word, ...getDistractors(word, 'word')];
                             optionsW = shuffle(optionsW); 
-                            newQuestions.push({ type: 'mcq', text: `Từ có nghĩa là: <span class="font-bold text-blue-600 text-xl mx-1">"${meaning}"</span>?`, options: optionsW, correct: optionsW.indexOf(word) });
+                            newQuestions.push({
+                                type: 'mcq',
+                                text: `Từ có nghĩa là: <span class="font-bold text-blue-600 text-xl mx-1">"${meaning}"</span>?`,
+                                options: optionsW,
+                                correct: optionsW.indexOf(word)
+                            });
                             break;
 
-                        case 'listen_mcq':
+                        case 'listen_mcq': // Nghe từ chọn Nghĩa
                             const parts_l = line.split('|');
                             if (parts_l.length < 3) return;
                             const [word_l, pinyin_l, meaning_l] = parts_l.map(p => p.trim());
+
                             let options_l = [meaning_l, ...getDistractors(meaning_l, 'meaning')];
                             options_l = shuffle(options_l); 
-                            newQuestions.push({ type: 'listen_mcq', audioText: word_l, audioUrl: `${folderPath}/${word_l}.mp3`, text: "Nghe âm thanh và chọn nghĩa đúng:", options: options_l, correct: options_l.indexOf(meaning_l) });
+
+                            newQuestions.push({
+                                type: 'listen_mcq',
+                                audioText: word_l,
+                                audioUrl: `${folderPath}/${word_l}.mp3`, 
+                                text: "Nghe âm thanh và chọn nghĩa đúng:",
+                                options: options_l,
+                                correct: options_l.indexOf(meaning_l)
+                            });
                             break;
 
+                        // --- CÁC DẠNG KHÁC GIỮ NGUYÊN ---
                         case 'fib': 
                             const match_fib = line.match(/\|([^|]+)\|/);
                             if (match_fib) {
-                                newQuestions.push({ type: 'fib', text: line.replace(/\|[^|]+\|/, '[BLANK]').trim(), answer: match_fib[1].trim() });
+                                newQuestions.push({
+                                    type: 'fib',
+                                    text: line.replace(/\|[^|]+\|/, '[BLANK]').trim(),
+                                    answer: match_fib[1].trim()
+                                });
                             }
                             break;
 
                         case 'jumble':
                             const words = line.split(/\s+/).filter(w => w.length > 0);
-                            if (words.length >= 2) newQuestions.push({ type: 'jumble', text: "Sắp xếp các từ thành câu đúng:", answer: words });
+                            if (words.length >= 2) {
+                                newQuestions.push({
+                                    type: 'jumble',
+                                    text: "Sắp xếp các từ thành câu đúng:",
+                                    answer: words
+                                });
+                            }
                             break;
 
                         case 'translation':
@@ -4200,9 +4068,14 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                             if (parts_common.length >= 2) {
                                 const [tc, tv] = parts_common.map(p => p.trim());
                                 const audioCommon = `${folderPath}/${tc}.mp3`;
-                                if (qType === 'translation') newQuestions.push({ type: 'translation', vietnamese: tv, chinese: tc, text: tv });
-                                else if (qType === 'listen_translate') newQuestions.push({ type: 'listen_translate', audioText: tc, audioUrl: audioCommon, answer: tv, text: "Nghe câu và dịch nghĩa sang tiếng Việt." });
-                                else newQuestions.push({ type: 'listen_write', audioText: tc, audioUrl: audioCommon, answer: tc, text: "Nghe câu và viết lại." });
+
+                                if (qType === 'translation') {
+                                    newQuestions.push({ type: 'translation', vietnamese: tv, chinese: tc, text: tv });
+                                } else if (qType === 'listen_translate') {
+                                    newQuestions.push({ type: 'listen_translate', audioText: tc, audioUrl: audioCommon, answer: tv, text: "Nghe câu và dịch nghĩa sang tiếng Việt." });
+                                } else {
+                                    newQuestions.push({ type: 'listen_write', audioText: tc, audioUrl: audioCommon, answer: tc, text: "Nghe câu và viết lại." });
+                                }
                             }
                             break;
                     }
@@ -4976,8 +4849,6 @@ window.viewSubmissionResult = (subId) => {
                             newQ.shuffledWords = subQData.shuffledWords;
                          } else if (q.type === 'match' && subQData.shuffledColB) {
                             newQ.shuffledColB = subQData.shuffledColB;
-                         } else if (q.type === 'order_sentences' && subQData.shuffledSentences) {
-                            newQ.shuffledSentences = subQData.shuffledSentences;
                          }
                         return newQ;
                     });
@@ -5101,9 +4972,6 @@ window.submitAssignment = async () => {
                 } else if (q.type === 'jumble' && q.shuffledWords) {
                     shuffledWords = q.shuffledWords;
                     questionDataToSave[idx] = { shuffledWords: shuffledWords };
-                } else if (q.type === 'order_sentences') {
-                    // Lưu lại thứ tự xáo trộn để review
-                    questionDataToSave[idx] = { shuffledSentences: q.shuffledSentences };
                 }
 
                 switch(q.type) {
@@ -5126,12 +4994,6 @@ window.submitAssignment = async () => {
                     case 'jumble':
                         if (Array.isArray(userAnswer)) {
                             isCorrect = q.answer.join(' ') === userAnswer.join(' ');
-                        }
-                        break;
-                      case 'order_sentences':
-                        if (Array.isArray(userAnswer)) {
-                            // So sánh mảng người dùng xếp với mảng đáp án gốc (phải đúng thứ tự tuyệt đối)
-                            isCorrect = JSON.stringify(userAnswer) === JSON.stringify(q.answer);
                         }
                         break;
                     case 'match':
@@ -5640,25 +5502,6 @@ window.submitAssignment = async () => {
                 console.error("Error saving feedback:", e);
                 showToast(`Lỗi lưu nhận xét: ${e.message}`, "error");
             }
-        };
-// --- LOGIC CHO DẠNG BÀI ORDER SENTENCES ---
-        window.addOrderedSentence = (qIdx, sentence) => { 
-            const currentOrder = state.ui.assignmentAnswers[qIdx] || []; 
-            state.ui.assignmentAnswers[qIdx] = [...currentOrder, sentence]; 
-            
-            // Cập nhật giao diện
-            const assign = state.data.assignments.find(a => a.id === state.ui.takingAssignmentId);
-            if (assign) updateAssignmentQuestionUI(assign, qIdx);
-        };
-        
-        window.removeOrderedSentence = (qIdx, sIdx) => { 
-            const currentOrder = state.ui.assignmentAnswers[qIdx] || []; 
-            currentOrder.splice(sIdx, 1); 
-            state.ui.assignmentAnswers[qIdx] = currentOrder; 
-            
-            // Cập nhật giao diện
-            const assign = state.data.assignments.find(a => a.id === state.ui.takingAssignmentId);
-            if (assign) updateAssignmentQuestionUI(assign, qIdx);
         };
 
     </script>
