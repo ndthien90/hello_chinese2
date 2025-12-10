@@ -3632,91 +3632,40 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         };
         // COMPETITION RENDERERS (Cập nhật Responsive)
 
-// --- GIAO DIỆN LOBBY (ĐÃ NÂNG CẤP: HIỆN DANH SÁCH PHÒNG CHỜ) ---
+// --- GIAO DIỆN LOBBY (CHỌN BANK ĐỂ ĐẤU) ---
         const renderCompetitionLobby = () => {
+            // Lấy danh sách Bank (Của mình tạo hoặc Public)
+            // Ở đây lấy tất cả bank có trong state (do listener tải về)
             const banks = state.data.questionBanks || [];
+
             const bankOptions = banks.map(b => 
                 `<option value="${b.id}">${b.title} (${b.questions.length} câu)</option>`
             ).join('');
 
-            // [LOGIC MỚI] Lọc ra các phòng đang chờ (Status = waiting) và chưa đủ người
-            // Loại bỏ phòng do chính mình tạo (để tránh tự đấu với mình hoặc lỗi hiển thị)
-            const availableMatches = (state.data.matches || []).filter(m => 
-                m.status === 'waiting' && 
-                !m.player2 && // Chưa có người chơi 2
-                m.player1.uid !== state.user.uid // Không phải phòng của mình
-            );
-
-            // Render danh sách phòng
-            const roomListHtml = availableMatches.length === 0 
-                ? `<div class="text-center py-8 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                     Hiện chưa có phòng nào đang chờ. Hãy tạo phòng mới!
-                   </div>`
-                : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    ${availableMatches.map(m => `
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-purple-100 hover:shadow-md hover:border-purple-300 transition group relative overflow-hidden">
-                            <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-bl-lg">
-                                CHỜ ĐỐI THỦ
-                            </div>
-                            
-                            <div class="flex items-center gap-3 mb-2">
-                                ${renderAvatar(state.data.users.find(u => u.uid === m.player1.uid), 'w-10 h-10', 'text-sm')}
-                                <div>
-                                    <p class="font-bold text-slate-700 text-sm">${m.player1.name}</p>
-                                    <p class="text-xs text-slate-500">Mã: <span class="font-mono font-bold text-purple-600">${m.roomCode}</span></p>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <p class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded inline-block truncate max-w-full">
-                                    📚 ${m.bankName || 'Bộ đề ngẫu nhiên'}
-                                </p>
-                            </div>
-
-                            <button onclick="joinPublicMatch('${m.id}')" class="w-full bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white py-2 rounded-lg font-bold text-sm transition flex items-center justify-center gap-2">
-                                <i data-lucide="swords" size="16"></i> Vào thách đấu
-                            </button>
-                        </div>
-                    `).join('')}
-                   </div>`;
-
             return `
-             <div class="max-w-4xl mx-auto fade-in pb-10">
-                <div class="text-center py-8 bg-white rounded-3xl shadow-xl mb-8">
-                    <div class="inline-block p-4 bg-purple-100 rounded-full mb-4">
-                        <i data-lucide="swords" class="w-12 h-12 text-purple-600"></i>
-                    </div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Đấu trường Trực tuyến</h2>
-                    <p class="text-slate-500 mb-6">Thi đấu tốc độ 1vs1 theo thời gian thực</p>
-                    
-                    <div class="max-w-md mx-auto px-6 text-left">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Chọn bộ đề thi đấu:</label>
-                        <select id="arena-bank-select" class="w-full p-3 border-2 border-purple-200 rounded-xl mb-4 focus:border-purple-500 font-bold text-slate-700 bg-purple-50">
-                            <option value="" disabled selected>-- Chọn Ngân hàng đề --</option>
-                            ${bankOptions}
-                        </select>
-                        ${banks.length === 0 ? '<p class="text-red-500 text-xs mb-4">Chưa có ngân hàng đề nào. Hãy tạo ở mục "Ngân hàng đề".</p>' : ''}
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row justify-center gap-4 px-4 mt-2">
-                        <button onclick="createMatchFromBank()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
-                            <i data-lucide="plus-circle" size="20"></i> Tạo Phòng
-                        </button>
-                        <button onclick="setCompetitionMode('join')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
-                            <i data-lucide="log-in" size="20"></i> Nhập Mã
-                        </button>
-                    </div>
+             <div class="text-center py-8 md:py-12 bg-white rounded-3xl shadow-xl max-w-2xl mx-auto fade-in">
+                <div class="inline-block p-4 md:p-6 bg-purple-100 rounded-full mb-4 md:mb-6">
+                    <i data-lucide="swords" class="w-12 h-12 md:w-16 md:h-16 text-purple-600"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Đấu trường Trực tuyến</h2>
+                <p class="text-slate-500 mb-8">Thi đấu tốc độ 1vs1 theo thời gian thực</p>
+                
+                <div class="max-w-md mx-auto px-6 text-left">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Chọn bộ đề thi đấu:</label>
+                    <select id="arena-bank-select" class="w-full p-3 border-2 border-purple-200 rounded-xl mb-4 focus:border-purple-500 font-bold text-slate-700 bg-purple-50">
+                        <option value="" disabled selected>-- Chọn Ngân hàng đề --</option>
+                        ${bankOptions}
+                    </select>
+                    ${banks.length === 0 ? '<p class="text-red-500 text-xs mb-4">Chưa có ngân hàng đề nào. Hãy tạo ở mục "Ngân hàng đề".</p>' : ''}
                 </div>
 
-                <div>
-                    <h3 class="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2">
-                        <span class="relative flex h-3 w-3">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                        </span>
-                        Sảnh chờ thách đấu (${availableMatches.length})
-                    </h3>
-                    ${roomListHtml}
+                <div class="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 px-4 mt-4">
+                    <button onclick="createMatchFromBank()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
+                        <i data-lucide="plus-circle" size="20"></i> Tạo Phòng
+                    </button>
+                    <button onclick="setCompetitionMode('join')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-in" size="20"></i> Nhập Mã Phòng
+                    </button>
                 </div>
             </div>
             `;
@@ -7688,37 +7637,6 @@ window.playLuckyDraw = async () => {
             } catch (e) {
                 console.error("Lỗi mở khóa avatar:", e);
                 return null;
-            }
-        };
-// --- HÀM MỚI: THAM GIA PHÒNG CÔNG KHAI TỪ DANH SÁCH ---
-        window.joinPublicMatch = async (matchId) => {
-            if (!confirm("Bạn muốn tham gia trận đấu này?")) return;
-
-            try {
-                // Kiểm tra lại xem phòng còn trống không (đề phòng người khác vào trước)
-                const matchRef = doc(db, getPath('matches'), matchId);
-                
-                await runTransaction(db, async (transaction) => {
-                    const matchDoc = await transaction.get(matchRef);
-                    if (!matchDoc.exists()) throw "Phòng không tồn tại!";
-                    
-                    const matchData = matchDoc.data();
-                    if (matchData.player2) throw "Phòng đã đủ người!";
-                    if (matchData.status !== 'waiting') throw "Trận đấu đã bắt đầu hoặc kết thúc!";
-
-                    // Cập nhật mình là Player 2
-                    transaction.update(matchRef, {
-                        player2: { uid: state.user.uid, name: state.profile.name, score: 0 }
-                    });
-                });
-
-                showToast("Đang vào phòng...", "success");
-                // Không cần set UI thủ công, Listener sẽ tự động chuyển sang màn hình chờ khi thấy data thay đổi
-            } catch (e) {
-                console.error("Join Public Match Error:", e);
-                // Xử lý thông báo lỗi đẹp hơn nếu là string custom
-                const msg = typeof e === 'string' ? e : e.message;
-                showToast("Lỗi vào phòng: " + msg, "error");
             }
         };
     </script>
