@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="开心中文">
+    <title>Mobile App Advanced Streak (Theme Match Banner)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- CSS Variables cho Theme --- */
+        :root {
+            --primary: #2563eb;       /* blue-600 */
+            --primary-light: #dbeafe; /* blue-100 */
+            --bg-body: #f3f4f6;       /* gray-100 */
+            --bg-card: #ffffff;       /* white */
+            --text-main: #1f2937;     /* gray-800 */
+            --text-sub: #6b7280;      /* gray-500 */
+            --shadow-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Scrollbar ẩn */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Custom Scrollbar đẹp */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main);
+            padding-bottom: 90px; 
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Các class sử dụng biến CSS để đổi màu động */
+        .theme-bg-primary { background-color: var(--primary) !important; }
+        .theme-text-primary { color: var(--primary) !important; }
+        .theme-bg-light { background-color: var(--primary-light) !important; }
+        .theme-border-primary { border-color: var(--primary) !important; }
+        .theme-shadow { box-shadow: 0 10px 15px -3px var(--shadow-color) !important; }
+
+        .emoji-select.selected { 
+            background-color: var(--primary-light); 
+            border-color: var(--primary); 
+            transform: scale(1.1); 
+            box-shadow: 0 4px 6px -1px var(--shadow-color); 
+        }
+
+        .theme-option { transition: all 0.3s; }
+        .theme-option.active { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 0 0 2px var(--primary); }
+        .theme-option.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
+        
+        /* Animation */
+        @keyframes fire-pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0)); }
+            50% { transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.5)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0)); }
+        }
+        .fire-anim { animation: fire-pulse 2s infinite; }
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        .shake-anim { animation: shake 0.5s ease-in-out infinite; }
+        
+        /* Hiệu ứng Shine cho thẻ HSK */
+        .shine-effect {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* Banner Style Dynamic */
+        .theme-banner {
+            background-color: var(--primary);
+            /* Tạo gradient tự động: Bên trái là màu gốc, bên phải tối hơn 1 chút (đen 10%) */
+            background-image: linear-gradient(110deg, transparent 0%, rgba(0,0,0,0.15) 100%);
+            box-shadow: 0 10px 25px -5px var(--shadow-color);
+            transition: all 0.5s ease;
+        }
+        .theme-banner:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+    </style>
+<script>
+        // Tạo nội dung Manifest
+        const manifestData = {
+            "name": "开心中文 - Tiếng Trung Khai Tâm ",
+            "short_name": "开心中文",
+            "start_url": ".",
+            "display": "standalone", /* QUAN TRỌNG: Dòng này giúp ẩn thanh địa chỉ */
+            "background_color": "#f8fafc",
+            "theme_color": "#2563eb",
+            "orientation": "portrait",
+            "icons": [
+                {
+                    "src": "https://cdn-icons-png.flaticon.com/128/4812/4812107.png", /* Icon ví dụ */
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": "https://cdn-icons-png.flaticon.com/128/4812/4812107.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        };
+
+        // Chuyển đổi thành Blob URL và chèn vào thẻ <head>
+        const stringManifest = JSON.stringify(manifestData);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestURL;
+        document.head.appendChild(link);
+    </script>
+</head>
+<body class="max-w-md mx-auto min-h-screen border-x border-gray-200 shadow-xl relative font-sans">
+
+    <!-- CANVAS ẨN ĐỂ VẼ ẢNH -->
+    <canvas id="shareCanvas" width="600" height="400" style="display: none;"></canvas>
+
+    <!-- Top Bar -->
+    <div class="bg-white px-4 py-3 flex justify-between items-center sticky top-0 z-30 shadow-sm transition-colors duration-500" style="background-color: var(--bg-card);">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="openProfileModal()">
+            <div id="userAvatarDisplay" class="w-10 h-10 rounded-full theme-bg-light flex items-center justify-center text-2xl border-2 border-white shadow-sm">
+                🐼
+            </div>
+            <div>
+                <h2 class="text-xs font-medium opacity-70">Xin chào,</h2>
+                <h3 id="userNameDisplay" class="font-bold text-sm truncate max-w-[120px]">Học viên mới</h3>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <!-- Streak Display -->
+            <div id="streakDisplay" class="px-2 py-1 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-1 text-xs font-bold text-orange-700 transition-all duration-300">
+                <i class="fas fa-fire text-orange-500"></i> <span id="streakCountText">0</span>
+            </div>
+            
+            <div class="w-9 h-9 rounded-full flex items-center justify-center relative hover:bg-gray-100 transition theme-bg-light theme-text-primary">
+                <i class="fas fa-bell"></i>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="p-4 space-y-6">
+        
+        <!-- Featured Banner (ĐÃ SỬA: DÙNG CLASS .theme-banner ĐỂ ĐỔI MÀU THEO THEME) -->
+        <a href="voca_hsk.html" class="block group relative overflow-hidden rounded-2xl p-5 theme-banner">
+            
+            <!-- Họa tiết trang trí nền -->
+            <div class="absolute right-0 top-0 h-full w-32 bg-white/10 skew-x-12 transform translate-x-10 group-hover:translate-x-5 transition duration-500"></div>
+            <div class="shine-effect"></div>
+
+            <div class="relative z-10 flex justify-between items-center">
+                <div class="flex flex-col items-start">
+                    <!-- Tag HOT: Nền trắng chữ đỏ để nổi bật trên mọi màu nền -->
+                    <span class="bg-white text-red-600 text-[10px] px-2.5 py-1 rounded-md font-bold mb-3 inline-block uppercase tracking-wider shadow-sm">HOT</span>
+                    
+                    <h3 class="font-bold text-xl text-white tracking-tight">Luyện thi HSK</h3>
+                    <p class="text-white/90 text-xs mt-1.5 font-medium">Bộ đề chuẩn & Từ vựng</p>
+                </div>
+                <!-- Icon Cúp Vàng -->
+                <div class="text-5xl drop-shadow-md transform group-hover:scale-110 transition duration-300 group-hover:rotate-6">🏆</div>
+            </div>
+        </a>
+
+        <!-- Section 1: Học tập -->
+        <div>
+            <div class="flex justify-between items-end mb-3 px-1">
+                <h3 class="font-bold">📚 Góc Học Tập</h3>
+                <span class="theme-text-primary text-xs font-semibold">Cốt lõi</span>
+            </div>
+            <div class="flex gap-4 overflow-x-auto no-scrollbar pb-2 px-1">
+                <a href="Edubattle.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition theme-border-primary" style="background-color: var(--bg-card);">📜</div>
+                    <span class="text-xs font-medium opacity-80">Kiểm tra</span>
+                </a>
+                <a href="study.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-md text-white group-hover:scale-105 transition theme-shadow theme-bg-primary">📚</div>
+                    <span class="text-xs font-bold theme-text-primary">Bài học</span>
+                </a>
+                <a href="phatam1.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition theme-border-primary" style="background-color: var(--bg-card);">🗣️</div>
+                    <span class="text-xs font-medium opacity-80">Phát âm</span>
+                </a>
+                <a href="pinyin_practice.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition theme-border-primary" style="background-color: var(--bg-card);">ā</div>
+                    <span class="text-xs font-medium opacity-80">Pinyin</span>
+                </a>
+                <a href="chineseStroke_micSpace.html" class="flex-shrink-0 flex flex-col items-center gap-2 group">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-gray-100 group-hover:scale-105 transition theme-border-primary" style="background-color: var(--bg-card);">✍️</div>
+                    <span class="text-xs font-medium opacity-80">Luyện viết</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Section 2: Kỹ năng bổ trợ -->
+        <div>
+            <h3 class="font-bold mb-3 px-1">🛠️ Kỹ Năng Bổ Trợ</h3>
+            <div class="space-y-3">
+                <a href="SpeakingPro3.html" class="p-3 rounded-xl shadow-sm flex items-center gap-4 hover:brightness-95 transition border border-transparent" style="background-color: var(--bg-card);">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-2xl">🎤</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm">Luyện nói AI Pro</h4>
+                        <p class="opacity-60 text-[10px] mt-0.5">Công nghệ nhận diện giọng nói</p>
+                    </div>
+                    <i class="fas fa-chevron-right opacity-30 text-xs"></i>
+                </a>
+                <a href="Conversation1.html" class="p-3 rounded-xl shadow-sm flex items-center gap-4 hover:brightness-95 transition border border-transparent" style="background-color: var(--bg-card);">
+                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl">🎯</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm">Hội thoại mẫu</h4>
+                        <p class="opacity-60 text-[10px] mt-0.5">Giao tiếp thực tế hàng ngày</p>
+                    </div>
+                    <i class="fas fa-chevron-right opacity-30 text-xs"></i>
+                </a>
+                <a href="FlashCard_new1.html" class="p-3 rounded-xl shadow-sm flex items-center gap-4 hover:brightness-95 transition border border-transparent" style="background-color: var(--bg-card);">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center text-2xl">📖</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm">Flashcard Từ vựng</h4>
+                        <p class="opacity-60 text-[10px] mt-0.5">Phương pháp ghi nhớ nhanh</p>
+                    </div>
+                    <i class="fas fa-chevron-right opacity-30 text-xs"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Section 3: Game Arcade -->
+         <div id="games">
+            <h3 class="font-bold mb-3 px-1 flex items-center gap-2">
+                🎮 Phòng Trò Chơi
+                <span class="theme-bg-light theme-text-primary text-[10px] px-2 py-0.5 rounded-full">9 Games</span>
+            </h3>
+            <div class="grid grid-cols-3 gap-3">
+                 <!-- Các ô Game được style bằng background color card -->
+                 <a href="voca_MatchingGame1.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🧩</div>
+                    <p class="text-[10px] font-bold opacity-70">Ghép từ</p>
+                 </a>
+                 <a href="voca_FillBlankGame1.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">📝</div>
+                    <p class="text-[10px] font-bold opacity-70">Điền từ</p>
+                 </a>
+                 <a href="wordGame2.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🔠</div>
+                    <p class="text-[10px] font-bold opacity-70">Xếp từ</p>
+                 </a>
+                 <a href="timso1.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🥇</div>
+                    <p class="text-[10px] font-bold opacity-70">Tìm số</p>
+                 </a>
+                 <a href="timchu1.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🀄</div>
+                    <p class="text-[10px] font-bold opacity-70">Tìm chữ</p>
+                 </a>
+                 <a href="gheptu_Final.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🈴</div>
+                    <p class="text-[10px] font-bold opacity-70">Ghép Hán</p>
+                 </a>
+                 <a href="Hanzi_matchGame1.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🎳</div>
+                    <p class="text-[10px] font-bold opacity-70">Ghép đôi</p>
+                 </a>
+                 <a href="2048_hanzi.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🔢</div>
+                    <p class="text-[10px] font-bold opacity-70">2048</p>
+                 </a>
+                 <a href="img_practice1.html" class="p-2 py-4 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition" style="background-color: var(--bg-card);">
+                    <div class="text-2xl mb-1">🖼️</div>
+                    <p class="text-[10px] font-bold opacity-70">Hình ảnh</p>
+                 </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3 transition-colors duration-500" style="background-color: var(--bg-card);">
+        <a href="#" class="flex flex-col items-center gap-1 w-16 theme-text-primary">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="study.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-book-open text-xl"></i>
+            <span class="text-[10px] font-medium">Học</span>
+        </a>
+        <a href="#games" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="javascript:void(0)" onclick="openProfileModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <!-- STREAK REWARD MODAL -->
+    <div id="streakModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div id="streakContent" class="bg-white rounded-3xl w-full max-w-xs p-8 shadow-2xl text-center transform transition-all scale-95 opacity-0 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-yellow-50 to-white -z-10"></div>
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200 rounded-full opacity-50 blur-xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-200 rounded-full opacity-50 blur-xl"></div>
+
+            <div class="mb-4 relative">
+                <div id="rewardIconContainer">
+                    <i class="fas fa-fire text-6xl text-orange-500 fire-anim drop-shadow-lg"></i>
+                </div>
+            </div>
+
+            <h2 id="rewardTitle" class="text-2xl font-extrabold text-gray-800 mb-2">Tuyệt vời!</h2>
+            <p id="rewardSubtitle" class="text-gray-600 text-sm mb-6">Bạn đã chăm chỉ học tập hôm nay.</p>
+
+            <div id="rewardBox" class="bg-orange-50 border border-orange-100 rounded-xl p-3 mb-6 transition-all duration-300">
+                <p id="rewardValue" class="text-orange-800 font-bold text-lg flex items-center justify-center gap-2">
+                    +1 <i class="fas fa-fire"></i> Steak
+                </p>
+            </div>
+            
+            <p id="loginDayCount" class="text-xs text-gray-400 mb-4 font-medium">Ngày liên tiếp: 1</p>
+
+            <button onclick="closeStreakModal()" class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-orange-200 active:scale-95 transition">
+                Tiếp tục học
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Setup Modal -->
+    <div id="profileModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="rounded-3xl w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95 opacity-0 flex flex-col max-h-[90vh]" id="modalContent" style="background-color: var(--bg-card); color: var(--text-main);">
+            <div class="text-center mb-4 flex-shrink-0">
+                <h2 class="text-2xl font-bold">Hồ sơ học viên</h2>
+                <p class="opacity-60 text-sm mt-1">Tùy chỉnh cá nhân hóa</p>
+            </div>
+            
+            <div class="flex-1 min-h-0 flex flex-col overflow-y-auto custom-scrollbar pr-1">
+                <!-- Chọn Avatar -->
+                <div class="mb-5 flex-shrink-0">
+                    <label class="block text-xs font-bold opacity-60 uppercase mb-2 ml-1">Chọn Avatar</label>
+                    <div class="overflow-y-auto custom-scrollbar p-2 border border-gray-100 rounded-2xl max-h-40" style="background-color: var(--bg-body);">
+                        <div class="grid grid-cols-4 gap-3 justify-items-center" id="emojiGrid"></div>
+                    </div>
+                </div>
+
+                <!-- Tên -->
+                <div class="mb-5 flex-shrink-0">
+                    <label class="block text-xs font-bold opacity-60 uppercase mb-2 ml-1">Tên hiển thị</label>
+                    <input type="text" id="nameInput" placeholder="Nhập tên..." class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold text-center" style="background-color: var(--bg-body); color: var(--text-main);">
+                </div>
+
+                <!-- CHỌN THEME (MỚI) -->
+                <div class="mb-5 flex-shrink-0">
+                    <label class="block text-xs font-bold opacity-60 uppercase mb-2 ml-1 flex justify-between">
+                        <span>Giao diện (Theme)</span>
+                        <span class="text-[10px] theme-text-primary"><i class="fas fa-fire"></i> Điểm Steak mở khóa</span>
+                    </label>
+                    <div class="flex gap-3 overflow-x-auto custom-scrollbar pb-2" id="themeListContainer">
+                        <!-- Theme items will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút Action -->
+            <div class="mt-4 flex flex-col gap-3 flex-shrink-0">
+                <button onclick="saveProfile()" class="w-full theme-bg-primary text-white font-bold py-3.5 rounded-xl shadow-lg theme-shadow active:scale-95 transition">
+                    Lưu hồ sơ
+                </button>
+                
+                <button onclick="downloadProfileCard()" class="w-full border border-gray-200 hover:brightness-95 font-bold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2" style="background-color: var(--bg-card); color: var(--text-main);">
+                    <i class="fas fa-camera theme-text-primary"></i> Tải thẻ học viên
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Cấu hình Themes (ĐÃ CẬP NHẬT UNLOCK POINTS) ---
+        const THEMES = [
+            { id: 'default', name: 'Mặc định', unlockAt: 0, colors: { primary: '#2563eb', primaryLight: '#dbeafe', bgBody: '#f3f4f6', bgCard: '#ffffff', textMain: '#1f2937', shadow: 'rgba(59, 130, 246, 0.3)' } },
+            { id: 'sunset', name: 'Hoàng hôn', unlockAt: 0, colors: { primary: '#f97316', primaryLight: '#ffedd5', bgBody: '#fff7ed', bgCard: '#ffffff', textMain: '#431407', shadow: 'rgba(249, 115, 22, 0.3)' } },
+            { id: 'nature', name: 'Rừng xanh', unlockAt: 0, colors: { primary: '#16a34a', primaryLight: '#dcfce7', bgBody: '#f0fdf4', bgCard: '#ffffff', textMain: '#14532d', shadow: 'rgba(22, 163, 74, 0.3)' } },
+            { id: 'ocean', name: 'Đại dương', unlockAt: 0, colors: { primary: '#0891b2', primaryLight: '#cffafe', bgBody: '#ecfeff', bgCard: '#ffffff', textMain: '#164e63', shadow: 'rgba(8, 145, 178, 0.3)' } },
+            { id: 'dark', name: 'Bóng đêm', unlockAt: 0, colors: { primary: '#8b5cf6', primaryLight: '#2e1065', bgBody: '#111827', bgCard: '#1f2937', textMain: '#f3f4f6', shadow: 'rgba(139, 92, 246, 0.3)' } },
+            { id: 'candy', name: 'Kẹo ngọt', unlockAt: 0, colors: { primary: '#ec4899', primaryLight: '#fce7f3', bgBody: '#fdf2f8', bgCard: '#ffffff', textMain: '#831843', shadow: 'rgba(236, 72, 153, 0.3)' } },
+            { id: 'lavender', name: 'Oải hương', unlockAt: 0, colors: { primary: '#a855f7', primaryLight: '#f3e8ff', bgBody: '#faf5ff', bgCard: '#ffffff', textMain: '#581c87', shadow: 'rgba(168, 85, 247, 0.3)' } },
+            { id: 'mint', name: 'Bạc hà', unlockAt: 0, colors: { primary: '#14b8a6', primaryLight: '#ccfbf1', bgBody: '#f0fdfa', bgCard: '#ffffff', textMain: '#134e4a', shadow: 'rgba(20, 184, 166, 0.3)' } },
+            { id: 'luxury', name: 'Sang trọng', unlockAt: 0, colors: { primary: '#eab308', primaryLight: '#fef9c3', bgBody: '#fffbeb', bgCard: '#ffffff', textMain: '#422006', shadow: 'rgba(234, 179, 8, 0.3)' } },
+            { id: 'rose', name: 'Hoa hồng', unlockAt: 0, colors: { primary: '#f43f5e', primaryLight: '#ffe4e6', bgBody: '#fff1f2', bgCard: '#ffffff', textMain: '#881337', shadow: 'rgba(244, 63, 94, 0.3)' } },
+            { id: 'coffee', name: 'Cà phê', unlockAt: 0, colors: { primary: '#78350f', primaryLight: '#fef3c7', bgBody: '#fffbeb', bgCard: '#ffffff', textMain: '#451a03', shadow: 'rgba(120, 53, 15, 0.3)' } },
+            { id: 'galaxy', name: 'Vũ trụ', unlockAt: 0, colors: { primary: '#6366f1', primaryLight: '#312e81', bgBody: '#0f172a', bgCard: '#1e293b', textMain: '#e2e8f0', shadow: 'rgba(99, 102, 241, 0.3)' } },
+            { id: 'lime', name: 'Chanh tươi', unlockAt: 0, colors: { primary: '#84cc16', primaryLight: '#ecfccb', bgBody: '#f7fee7', bgCard: '#ffffff', textMain: '#365314', shadow: 'rgba(132, 204, 22, 0.3)' } },
+            { id: 'coral', name: 'San hô', unlockAt: 0, colors: { primary: '#fb7185', primaryLight: '#ffe4e6', bgBody: '#fff1f2', bgCard: '#ffffff', textMain: '#9f1239', shadow: 'rgba(251, 113, 133, 0.3)' } },
+            { id: 'minimal', name: 'Tối giản', unlockAt: 0, colors: { primary: '#6b7280', primaryLight: '#e5e7eb', bgBody: '#f9fafb', bgCard: '#ffffff', textMain: '#111827', shadow: 'rgba(107, 114, 128, 0.3)' } }
+        ];
+
+        let currentTheme = 'default';
+
+        // --- Logic Streak ---
+        function checkDailyStreak() {
+            const today = new Date().toLocaleDateString('vi-VN');
+            const lastStreakDate = localStorage.getItem('lastStreakDate');
+            let totalSteaks = parseInt(localStorage.getItem('totalSteaks') || 0);
+            let loginDays = parseInt(localStorage.getItem('loginDays') || 0);
+
+            // Cập nhật điểm hiển thị
+            updateStreakUI(totalSteaks);
+
+            if (lastStreakDate !== today) {
+                loginDays++;
+                localStorage.setItem('loginDays', loginDays);
+                localStorage.setItem('lastStreakDate', today);
+
+                let reward = 1;
+                let isMilestone = false;
+
+                if (loginDays % 7 === 0) {
+                    reward = (loginDays / 7) * 10;
+                    isMilestone = true;
+                }
+
+                totalSteaks += reward;
+                localStorage.setItem('totalSteaks', totalSteaks);
+
+                updateStreakUI(totalSteaks);
+                showStreakModal(reward, isMilestone, loginDays);
+            }
+        }
+
+        function updateStreakUI(count) {
+            document.getElementById('streakCountText').innerText = count;
+        }
+
+        function showStreakModal(rewardAmount, isMilestone, currentDay) {
+            const modal = document.getElementById('streakModal');
+            const content = document.getElementById('streakContent');
+            const rewardBox = document.getElementById('rewardBox');
+            const rewardTitle = document.getElementById('rewardTitle');
+            const rewardSubtitle = document.getElementById('rewardSubtitle');
+            const rewardValue = document.getElementById('rewardValue');
+            const iconContainer = document.getElementById('rewardIconContainer');
+            const loginDayCount = document.getElementById('loginDayCount');
+
+            loginDayCount.innerText = `Ngày đăng nhập thứ: ${currentDay}`;
+
+            if (isMilestone) {
+                rewardTitle.innerText = "Siêu cấp!";
+                rewardTitle.classList.add('text-purple-600');
+                rewardSubtitle.innerText = `Chúc mừng cột mốc ngày thứ ${currentDay}!`;
+                rewardValue.innerHTML = `+${rewardAmount} <i class="fas fa-gem text-purple-500"></i> STEAK`;
+                rewardBox.classList.remove('bg-orange-50', 'border-orange-100');
+                rewardBox.classList.add('bg-purple-50', 'border-purple-200', 'shake-anim', 'scale-110');
+                iconContainer.innerHTML = '<i class="fas fa-gift text-6xl text-purple-500 drop-shadow-lg animate-bounce"></i>';
+            } else {
+                rewardTitle.innerText = "Tuyệt vời!";
+                rewardTitle.classList.remove('text-purple-600');
+                rewardSubtitle.innerText = "Bạn đã chăm chỉ học tập hôm nay.";
+                rewardValue.innerHTML = `+${rewardAmount} <i class="fas fa-fire text-orange-500"></i> Steak`;
+                rewardBox.classList.add('bg-orange-50', 'border-orange-100');
+                rewardBox.classList.remove('bg-purple-50', 'border-purple-200', 'shake-anim', 'scale-110');
+                iconContainer.innerHTML = '<i class="fas fa-fire text-6xl text-orange-500 fire-anim drop-shadow-lg"></i>';
+            }
+            
+            setTimeout(() => {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 100);
+            }, 1000);
+        }
+
+        function closeStreakModal() {
+            const modal = document.getElementById('streakModal');
+            const content = document.getElementById('streakContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // --- Profile & Theme Logic ---
+        const emojis = [
+            '🐼', '🐰', '🐯', '🦁', '🦊', '🐸', '🐷', '🐨', 
+            '🐵', '🐧', '🐥', '🦉', '🦄', '🦋', '🐙', '🐬', 
+            '🐳', '🦖', '🐞', '🐢', '🐝', '🐌', '🐘', '🦒',
+            '🦔', '🐿️', '🦥', '🦦', '🦇', '🐹', '🐭', '🐱',
+            '🐕', '🐩', '🐈', '🐀', '🦝', '🐪', '🦓', '🦍',
+            '🦏', '🦛', '🦃', '🐓', '🐣', '🦢', '🦜', '🦩',
+            '🦚', '🐊', '🦎', '🐍', '🦈', '🐠', '🐡', '🦞',
+            '🦐', '🦑', '🦕', '🦌', '🐐', '🐏', '🐑', '🐎',
+            '🐖', '🐄', '🐂', '🐃', '🦘',
+            '🤪', '🥳', '😎', '🤓', '🤠', '👻', '👽', '🤖',
+            '👾', '💩', '🤡', '👺', '👹', '👿', '💀', '☠️',
+            '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿',
+            '😾', '🙈', '🙉', '🙊', '🥺', '🥴', '🤯', '🥶',
+            '🍔', '🍕', '🍟', '🌭', '🍿', '🍩', '🍪', '🎂',
+            '🧁', '🍦', '🍧', '🍡', '🍭', '🍬', '🍫', '🥑',
+            '🍓', '🍒', '🍑', '🍍', '🥥', '🥝', '🍉', '🍄',
+            '🎈', '🎁', '🎀', '🎉', '🎊', '🧸', '🪁', '🔮',
+            '🎨', '🚀', '🛸', '⭐', '🌟', '✨', '🌈', '🍀',
+            '⚽', '🏀', '🎮', '🎲', '🎯', '🏆', '🥇', '💎',
+            '🏈', '🎾', '🏐', '🏉', '🎱', '🏓', '🏸', '🏒',
+            '🥊', '🥋', '🎣', '🏋️', '🚴', '🤸', '⛹️', '🤺',
+            '🌵', '🌲', '🌳', '🌴', '🌹', '🌻', '🌼', '🌷',
+            '🍁', '🍂', '🍄', '🌍', '🌕', '🌙', '🌊', '🌋',
+            '🚗', '🚕', '🚙', '🚌', '🚓', '🚑', '🚒', '🚲',
+            '🛵', '🏍️', '🚂', '✈️', '🚤', '🚁', '🚜', '🛳️',
+            '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍',
+            '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖',
+            '👮', '🕵️', '💂', '👷', '🤴', '👸', '👳', '👲',
+            '🦸', '🦹', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞',
+            '🧟', '💆', '💇', '🚶', '🏃', '💃', '🕺', '👯',
+            '🎸', '🎹', '🎺', '🎻', '🥁', '🎷', '🎤', '🎧',
+            '🎨', '🎬', '🎭', '💻', '📱', '📷', '⌚', '💡',
+            '📚', '✏️', '💼', '👓', '🕶️', '🔭', '🔬', '💊'
+        ];
+
+        let selectedEmoji = '🐼';
+
+        const modal = document.getElementById('profileModal');
+        const modalContent = document.getElementById('modalContent');
+        const emojiGrid = document.getElementById('emojiGrid');
+        const nameInput = document.getElementById('nameInput');
+        const userAvatarDisplay = document.getElementById('userAvatarDisplay');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const themeListContainer = document.getElementById('themeListContainer');
+
+        // Render Emoji Grid
+        emojis.forEach(emoji => {
+            const div = document.createElement('div');
+            div.className = `emoji-select w-11 h-11 rounded-full bg-white flex items-center justify-center text-xl cursor-pointer border border-gray-200 shadow-sm transition-all hover:scale-105 ${emoji === selectedEmoji ? 'selected' : ''}`;
+            div.textContent = emoji;
+            div.onclick = () => selectEmoji(div, emoji);
+            emojiGrid.appendChild(div);
+        });
+
+        function selectEmoji(element, emoji) {
+            document.querySelectorAll('.emoji-select').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedEmoji = emoji;
+        }
+
+        // --- Apply Theme ---
+        function applyTheme(themeId) {
+            const theme = THEMES.find(t => t.id === themeId);
+            if (!theme) return;
+            
+            const root = document.documentElement;
+            root.style.setProperty('--primary', theme.colors.primary);
+            root.style.setProperty('--primary-light', theme.colors.primaryLight);
+            root.style.setProperty('--bg-body', theme.colors.bgBody);
+            root.style.setProperty('--bg-card', theme.colors.bgCard);
+            root.style.setProperty('--text-main', theme.colors.textMain);
+            root.style.setProperty('--shadow-color', theme.colors.shadow);
+
+            currentTheme = themeId;
+        }
+
+        // --- Render Theme List ---
+        function renderThemes() {
+            const currentSteaks = parseInt(localStorage.getItem('totalSteaks') || 0);
+            themeListContainer.innerHTML = '';
+
+            THEMES.forEach(theme => {
+                const isUnlocked = currentSteaks >= theme.unlockAt;
+                const isSelected = currentTheme === theme.id;
+                
+                const div = document.createElement('div');
+                div.className = `theme-option relative w-20 h-24 rounded-xl flex flex-col items-center justify-between p-2 cursor-pointer border-2 ${isSelected ? 'active border-blue-500' : 'border-transparent'} ${!isUnlocked ? 'locked bg-gray-200' : 'bg-white'}`;
+                
+                // Demo màu của theme trong card nhỏ
+                div.innerHTML = `
+                    <div class="w-full h-10 rounded-lg mb-1 flex items-center justify-center shadow-sm" style="background-color: ${theme.colors.bgBody}">
+                        <div class="w-4 h-4 rounded-full" style="background-color: ${theme.colors.primary}"></div>
+                    </div>
+                    <span class="text-[10px] font-bold text-center leading-tight truncate w-full" style="color: ${theme.colors.textMain}">${theme.name}</span>
+                `;
+
+                // Lock overlay
+                if (!isUnlocked) {
+                    div.innerHTML += `
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/10 rounded-xl">
+                            <div class="bg-white/80 rounded-full w-6 h-6 flex items-center justify-center shadow-sm">
+                                <i class="fas fa-lock text-[10px] text-gray-600"></i>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-2 bg-gray-800 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">
+                            ${theme.unlockAt}🔥
+                        </div>
+                    `;
+                    div.onclick = () => alert(`Bạn cần đạt ${theme.unlockAt} Steak để mở khóa giao diện này!`);
+                } else {
+                    div.onclick = () => {
+                        applyTheme(theme.id);
+                        renderThemes(); // Re-render to update active state
+                    };
+                }
+                
+                themeListContainer.appendChild(div);
+            });
+        }
+
+        function openProfileModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            
+            const storedName = localStorage.getItem('username');
+            const storedAvatar = localStorage.getItem('avatar');
+            if (storedName) nameInput.value = storedName;
+            if (storedAvatar) {
+                selectedEmoji = storedAvatar;
+                const items = document.querySelectorAll('.emoji-select');
+                items.forEach(el => {
+                    el.classList.remove('selected');
+                    if (el.textContent === storedAvatar) el.classList.add('selected');
+                });
+            }
+            renderThemes(); // Render themes when opening modal
+        }
+
+        function closeProfileModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function saveProfile() {
+            const name = nameInput.value.trim() || "Học viên";
+            localStorage.setItem('username', name);
+            localStorage.setItem('avatar', selectedEmoji);
+            localStorage.setItem('theme', currentTheme); // Save theme
+            updateUI();
+            closeProfileModal();
+        }
+
+        function updateUI() {
+            const storedName = localStorage.getItem('username');
+            const storedAvatar = localStorage.getItem('avatar');
+            if (storedName) userNameDisplay.textContent = storedName;
+            if (storedAvatar) userAvatarDisplay.textContent = storedAvatar;
+        }
+
+        function downloadProfileCard() {
+            const canvas = document.getElementById('shareCanvas');
+            const ctx = canvas.getContext('2d');
+            const name = localStorage.getItem('username') || "Học viên";
+            const avatar = localStorage.getItem('avatar') || "🐼";
+            const streak = localStorage.getItem('totalSteaks') || 0;
+            
+            // Lấy màu hiện tại của theme
+            const rootStyle = getComputedStyle(document.documentElement);
+            const primaryColor = rootStyle.getPropertyValue('--primary').trim();
+            const primaryLight = rootStyle.getPropertyValue('--primary-light').trim();
+            const bgBody = rootStyle.getPropertyValue('--bg-body').trim();
+
+            // 1. Vẽ nền Gradient theo Theme
+            const gradient = ctx.createLinearGradient(0, 0, 600, 400);
+            gradient.addColorStop(0, primaryColor);
+            gradient.addColorStop(1, '#6366f1'); // Keep slightly purplish end for depth, or use variant
+            
+            // Xóa canvas
+            ctx.clearRect(0,0, 600, 400);
+
+            // Vẽ Background
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 600, 400);
+
+            // Vẽ Họa tiết mờ (Circles)
+            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.beginPath(); ctx.arc(50, 50, 100, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(550, 350, 150, 0, Math.PI*2); ctx.fill();
+
+            // 2. Vẽ hình tròn nền cho Avatar
+            ctx.beginPath();
+            ctx.arc(300, 150, 80, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.fill();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+            ctx.stroke();
+
+            // 3. Vẽ Avatar
+            ctx.font = '100px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'white';
+            ctx.fillText(avatar, 300, 155);
+
+            // 4. Vẽ Tên
+            ctx.font = 'bold 36px sans-serif';
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = "rgba(0,0,0,0.2)";
+            ctx.shadowBlur = 10;
+            ctx.fillText(name, 300, 260);
+            ctx.shadowBlur = 0; // Reset shadow
+
+            // 5. Vẽ Streak
+            ctx.font = '24px sans-serif';
+            ctx.fillStyle = '#fef08a';
+            ctx.fillText(`🔥 Thành tích: ${streak} Steak`, 300, 310);
+
+            // 6. Footer
+            ctx.font = 'italic 16px sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.fillText('Mobile App Advanced Learning', 300, 370);
+
+            // 7. Tải về
+            const link = document.createElement('a');
+            link.download = `The-Hoc-Vien-${name.replace(/\s+/g, '-')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // --- Init ---
+        window.addEventListener('load', () => {
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme) applyTheme(storedTheme);
+
+            if (!localStorage.getItem('username')) {
+                setTimeout(openProfileModal, 500);
+            } else {
+                updateUI();
+                checkDailyStreak(); 
+            }
+        });
+
+        const originalSaveProfile = saveProfile;
+        saveProfile = function() {
+            originalSaveProfile();
+            checkDailyStreak();
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeProfileModal();
+        });
+    </script>
+</body>
+</html>
