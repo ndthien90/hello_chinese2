@@ -3632,162 +3632,93 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         };
         // COMPETITION RENDERERS (Cập nhật Responsive)
 
-// --- GIAO DIỆN LOBBY (ĐÃ NÂNG CẤP: DASHBOARD THÀNH TÍCH HỌC SINH) ---
+// --- GIAO DIỆN LOBBY (ĐÃ NÂNG CẤP: HIỆN DANH SÁCH PHÒNG CHỜ) ---
         const renderCompetitionLobby = () => {
-            const uid = state.user.uid;
-            
-            // 1. TÍNH TOÁN THÀNH TÍCH CÁ NHÂN
-            const allMatches = state.data.matches || [];
-            // Lọc ra các trận đã kết thúc mà mình có tham gia
-            const myFinishedMatches = allMatches.filter(m => 
-                m.status === 'finished' && 
-                (m.player1.uid === uid || (m.player2 && m.player2.uid === uid))
-            ).sort((a,b) => b.createdAt - a.createdAt); // Sắp xếp mới nhất lên đầu
-
-            const totalPlayed = myFinishedMatches.length;
-            const wins = myFinishedMatches.filter(m => {
-                const isP1 = m.player1.uid === uid;
-                const p1Score = m.player1.score;
-                const p2Score = m.player2 ? m.player2.score : 0;
-                return isP1 ? p1Score > p2Score : p2Score > p1Score;
-            }).length;
-            
-            const winRate = totalPlayed > 0 ? Math.round((wins / totalPlayed) * 100) : 0;
-
-            // 2. RENDER LỊCH SỬ ĐẤU (5 trận gần nhất)
-            const historyList = myFinishedMatches.slice(0, 5).map(m => {
-                const isP1 = m.player1.uid === uid;
-                const myScore = isP1 ? m.player1.score : (m.player2?.score || 0);
-                const oppName = isP1 ? (m.player2?.name || 'Bot') : m.player1.name;
-                const oppScore = isP1 ? (m.player2?.score || 0) : m.player1.score;
-                
-                let result = 'Hòa';
-                let resultColor = 'text-slate-600 bg-slate-100';
-                if (myScore > oppScore) { result = 'Thắng'; resultColor = 'text-green-700 bg-green-100'; }
-                else if (myScore < oppScore) { result = 'Thua'; resultColor = 'text-red-700 bg-red-100'; }
-
-                return `
-                    <div class="flex justify-between items-center p-3 border-b last:border-0 hover:bg-slate-50 transition">
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider ${resultColor}">${result}</span>
-                            <div>
-                                <p class="text-sm font-bold text-slate-700 flex items-center gap-1">
-                                    <span class="text-slate-400 font-normal">vs</span> ${oppName}
-                                </p>
-                                <p class="text-[10px] text-slate-400">${m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleDateString('vi-VN') : ''}</p>
-                            </div>
-                        </div>
-                        <div class="text-right font-mono text-sm">
-                            <span class="font-bold text-blue-600">${myScore}</span>
-                            <span class="text-slate-300 mx-1">-</span>
-                            <span class="font-bold text-red-600">${oppScore}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            // 3. LOGIC TÌM PHÒNG CHỜ (GIỮ NGUYÊN)
             const banks = state.data.questionBanks || [];
             const bankOptions = banks.map(b => 
                 `<option value="${b.id}">${b.title} (${b.questions.length} câu)</option>`
             ).join('');
 
-            const availableMatches = allMatches.filter(m => 
+            // [LOGIC MỚI] Lọc ra các phòng đang chờ (Status = waiting) và chưa đủ người
+            // Loại bỏ phòng do chính mình tạo (để tránh tự đấu với mình hoặc lỗi hiển thị)
+            const availableMatches = (state.data.matches || []).filter(m => 
                 m.status === 'waiting' && 
-                !m.player2 && 
-                m.player1.uid !== uid
+                !m.player2 && // Chưa có người chơi 2
+                m.player1.uid !== state.user.uid // Không phải phòng của mình
             );
 
-            return `
-                <div class="max-w-6xl mx-auto fade-in pb-10 space-y-6">
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-blue-100 flex items-center gap-4 transition hover:-translate-y-1">
-                            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="swords" size="24"></i></div>
-                            <div><p class="text-slate-500 text-xs uppercase font-bold">Đã đấu</p><p class="text-3xl font-black text-slate-800">${totalPlayed}</p></div>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-green-100 flex items-center gap-4 transition hover:-translate-y-1">
-                            <div class="p-3 bg-green-50 text-green-600 rounded-xl"><i data-lucide="trophy" size="24"></i></div>
-                            <div><p class="text-slate-500 text-xs uppercase font-bold">Chiến thắng</p><p class="text-3xl font-black text-slate-800">${wins}</p></div>
-                        </div>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-yellow-100 flex items-center gap-4 transition hover:-translate-y-1">
-                            <div class="p-3 bg-yellow-50 text-yellow-600 rounded-xl"><i data-lucide="percent" size="24"></i></div>
-                            <div><p class="text-slate-500 text-xs uppercase font-bold">Tỉ lệ thắng</p><p class="text-3xl font-black text-slate-800">${winRate}%</p></div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        
-                        <div class="lg:col-span-2 space-y-6">
-                            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl p-6 text-white shadow-lg text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
-                                <div class="relative z-10">
-                                    <h3 class="text-2xl font-bold mb-1 flex items-center gap-2"><i data-lucide="gamepad-2"></i> Đấu trường Trực tuyến</h3>
-                                    <p class="text-purple-100 text-sm">Thách đấu 1vs1 - Nhận điểm thưởng</p>
-                                </div>
-                                <div class="flex gap-3 relative z-10">
-                                    <button onclick="createMatchFromBank()" class="bg-white text-purple-700 hover:bg-purple-50 px-5 py-3 rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm">
-                                        <i data-lucide="plus-circle" size="18"></i> Tạo Phòng
-                                    </button>
-                                    <button onclick="setCompetitionMode('join')" class="bg-indigo-800 bg-opacity-50 hover:bg-opacity-70 text-white px-5 py-3 rounded-xl font-bold shadow-md transition flex items-center gap-2 text-sm backdrop-blur-sm">
-                                        <i data-lucide="log-in" size="18"></i> Nhập Mã
-                                    </button>
-                                </div>
-                                <i data-lucide="swords" class="absolute -bottom-4 -right-4 w-32 h-32 text-white opacity-10 rotate-12"></i>
+            // Render danh sách phòng
+            const roomListHtml = availableMatches.length === 0 
+                ? `<div class="text-center py-8 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                     Hiện chưa có phòng nào đang chờ. Hãy tạo phòng mới!
+                   </div>`
+                : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${availableMatches.map(m => `
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-purple-100 hover:shadow-md hover:border-purple-300 transition group relative overflow-hidden">
+                            <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                                CHỜ ĐỐI THỦ
                             </div>
                             
-                            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                                <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Bộ đề thi đấu (Dành cho Tạo phòng):</label>
-                                <select id="arena-bank-select" class="w-full p-2 border rounded-lg text-sm bg-slate-50 font-medium text-slate-700 focus:border-purple-500 outline-none">
-                                    <option value="" disabled selected>-- Chọn Ngân hàng đề --</option>
-                                    ${bankOptions}
-                                </select>
-                            </div>
-
-                            <div>
-                                <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
-                                    <span class="relative flex h-3 w-3">
-                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                    </span>
-                                    Sảnh chờ thách đấu (${availableMatches.length})
-                                </h3>
-                                ${availableMatches.length === 0 
-                                    ? `<div class="p-8 text-center bg-white rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 text-sm">Chưa có ai tạo phòng. Bạn hãy là người đầu tiên!</div>` 
-                                    : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        ${availableMatches.map(m => `
-                                            <div class="bg-white p-4 rounded-xl shadow-sm border border-purple-100 hover:shadow-md hover:border-purple-300 transition group relative">
-                                                <div class="flex items-center gap-3 mb-3">
-                                                    ${renderAvatar(state.data.users.find(u => u.uid === m.player1.uid), 'w-10 h-10', 'text-sm')}
-                                                    <div class="overflow-hidden">
-                                                        <p class="font-bold text-slate-700 text-sm truncate">${m.player1.name}</p>
-                                                        <p class="text-xs text-slate-500">Mã: <span class="font-mono font-bold text-purple-600">${m.roomCode}</span></p>
-                                                    </div>
-                                                </div>
-                                                <button onclick="joinPublicMatch('${m.id}')" class="w-full bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white py-2 rounded-lg font-bold text-sm transition flex items-center justify-center gap-2">
-                                                    <i data-lucide="swords" size="14"></i> Chiến ngay
-                                                </button>
-                                            </div>
-                                        `).join('')}
-                                       </div>`
-                                }
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                                <div class="p-4 bg-slate-50 border-b border-slate-200">
-                                    <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm uppercase tracking-wider">
-                                        <i data-lucide="history" size="16"></i> Lịch sử đấu gần đây
-                                    </h3>
-                                </div>
-                                <div class="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
-                                    ${historyList || `<div class="p-8 text-center text-slate-400 text-sm italic">Bạn chưa đấu trận nào.</div>`}
+                            <div class="flex items-center gap-3 mb-2">
+                                ${renderAvatar(state.data.users.find(u => u.uid === m.player1.uid), 'w-10 h-10', 'text-sm')}
+                                <div>
+                                    <p class="font-bold text-slate-700 text-sm">${m.player1.name}</p>
+                                    <p class="text-xs text-slate-500">Mã: <span class="font-mono font-bold text-purple-600">${m.roomCode}</span></p>
                                 </div>
                             </div>
-                        </div>
+                            
+                            <div class="mb-3">
+                                <p class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded inline-block truncate max-w-full">
+                                    📚 ${m.bankName || 'Bộ đề ngẫu nhiên'}
+                                </p>
+                            </div>
 
+                            <button onclick="joinPublicMatch('${m.id}')" class="w-full bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white py-2 rounded-lg font-bold text-sm transition flex items-center justify-center gap-2">
+                                <i data-lucide="swords" size="16"></i> Vào thách đấu
+                            </button>
+                        </div>
+                    `).join('')}
+                   </div>`;
+
+            return `
+             <div class="max-w-4xl mx-auto fade-in pb-10">
+                <div class="text-center py-8 bg-white rounded-3xl shadow-xl mb-8">
+                    <div class="inline-block p-4 bg-purple-100 rounded-full mb-4">
+                        <i data-lucide="swords" class="w-12 h-12 text-purple-600"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Đấu trường Trực tuyến</h2>
+                    <p class="text-slate-500 mb-6">Thi đấu tốc độ 1vs1 theo thời gian thực</p>
+                    
+                    <div class="max-w-md mx-auto px-6 text-left">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Chọn bộ đề thi đấu:</label>
+                        <select id="arena-bank-select" class="w-full p-3 border-2 border-purple-200 rounded-xl mb-4 focus:border-purple-500 font-bold text-slate-700 bg-purple-50">
+                            <option value="" disabled selected>-- Chọn Ngân hàng đề --</option>
+                            ${bankOptions}
+                        </select>
+                        ${banks.length === 0 ? '<p class="text-red-500 text-xs mb-4">Chưa có ngân hàng đề nào. Hãy tạo ở mục "Ngân hàng đề".</p>' : ''}
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 px-4 mt-2">
+                        <button onclick="createMatchFromBank()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus-circle" size="20"></i> Tạo Phòng
+                        </button>
+                        <button onclick="setCompetitionMode('join')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center justify-center gap-2">
+                            <i data-lucide="log-in" size="20"></i> Nhập Mã
+                        </button>
                     </div>
                 </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        Sảnh chờ thách đấu (${availableMatches.length})
+                    </h3>
+                    ${roomListHtml}
+                </div>
+            </div>
             `;
         };
 
