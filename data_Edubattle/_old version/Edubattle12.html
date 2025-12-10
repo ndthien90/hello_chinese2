@@ -231,7 +231,6 @@
                 vocabulary: [], // Store loaded vocabulary here
                 questionBanks: [], // Ngân hàng đề
                 classes: [], // Danh sách lớp học
-                challenges: [], // [MỚI] Danh sách thử thách
             },
             ui: {
                 isCreatingAssignment: false,
@@ -276,10 +275,6 @@
                 isBulkModalOpen: false,
                 isBulkCreating: false,
                 matchResult: null,
-                challengeMode: 'list', // list, create, edit, do
-                activeChallenge: null, // Thử thách đang xem/làm
-                challengeAnswers: {}, // Câu trả lời tạm thời
-                isSubmittingChallenge: false,
             },
             isAuthReady: false,
             initialAuthToken: typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null,
@@ -632,14 +627,10 @@ window.addEventListener('resize', () => {
                 }
             });
             
-// 2. Users (Rank, Students list)
+            // 2. Users (Rank, Students list)
             onSnapshot(getRef('users'), (snap) => {
                 state.data.users = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                
-                // [ĐÃ SỬA] Thêm điều kiện 'challenges' để cập nhật giao diện khi điểm thay đổi
-                if(!state.ui.isProcessingStudentCreation && (state.view === 'ranking' || state.ui.viewClassId || state.ui.viewMyClassId || state.view === 'challenges')) {
-                    renderApp();
-                }
+                if(!state.ui.isProcessingStudentCreation && (state.view === 'ranking' || state.ui.viewClassId || state.ui.viewMyClassId)) renderApp();
             });
             
             // 3. Question Banks
@@ -672,117 +663,91 @@ window.addEventListener('resize', () => {
                  if(state.view === 'classes' || state.ui.viewClassId || state.view === 'my_classes') renderApp();
             });
             
-         // 5. Match Listener (CẬP NHẬT: CỘNG 50 ĐIỂM CHO NGƯỜI THẮNG)
+// 5. Match Listener (FINAL FIX: HỦY PHÒNG & VÀO PHÒNG)
             onSnapshot(getRef('matches'), (snap) => {
                 state.data.matches = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 const uid = state.user?.uid;
                 
-                // A. XỬ LÝ CHO KHÁN GIẢ (Giữ nguyên logic cũ)
-                if (state.ui.competitionMode === 'spectating' && state.ui.activeMatch) {
-                    const watchingMatch = state.data.matches.find(m => m.id === state.ui.activeMatch.id);
-                    if (watchingMatch) {
-                        state.ui.activeMatch = watchingMatch;
-                    } else {
-                        state.ui.activeMatch = null;
-                        state.ui.competitionMode = 'lobby';
-                        showToast("Trận đấu đã kết thúc hoặc bị hủy.", "info");
-                    }
-                } 
-                // B. XỬ LÝ CHO NGƯỜI CHƠI
-                else {
-                    const newActiveMatch = state.data.matches.find(m => 
-                        (m.player1?.uid === uid || m.player2?.uid === uid) && m.status !== 'finished'
-                    );
+                // 1. Tìm trận đấu của mình
+                const newActiveMatch = state.data.matches.find(m => 
+                    (m.player1?.uid === uid || m.player2?.uid === uid) && m.status !== 'finished'
+                );
 
-                    // --- LOGIC KHI TRẬN ĐẤU KẾT THÚC (QUAN TRỌNG: CỘNG ĐIỂM TẠI ĐÂY) ---
-                    if (state.ui.activeMatch && !newActiveMatch) {
-                         const justFinished = state.data.matches.find(m => m.id === state.ui.activeMatch.id && m.status === 'finished');
-                         const finalMatchData = state.ui.lastFinishedMatch || justFinished;
+                // 2. Xử lý Logic Kết thúc trận (Nếu trước đó có trận, giờ không thấy nữa và không phải do mình tự thoát)
+                // Logic: Kiểm tra xem trận đấu vừa biến mất có phải là finished không
+if (state.ui.activeMatch && !newActiveMatch) {
+                     const justFinished = state.data.matches.find(m => m.id === state.ui.activeMatch.id && m.status === 'finished');
+                     const finalMatchData = state.ui.lastFinishedMatch || justFinished;
 
-                         if (finalMatchData) {
-                            const isP1 = finalMatchData.player1.uid === uid;
-                            const myScore = isP1 ? finalMatchData.player1.score : finalMatchData.player2.score;
-                            const opponentScore = isP1 ? finalMatchData.player2.score : finalMatchData.player1.score;
-                            
-                            const p1Profile = state.data.users.find(u => u.uid === finalMatchData.player1.uid);
-                            const p2Profile = state.data.users.find(u => u.uid === finalMatchData.player2?.uid);
-                            const myInfo = isP1 ? p1Profile : p2Profile;
-                            const oppInfo = isP1 ? p2Profile : p1Profile;
+                     if (finalMatchData) {
+                        const isP1 = finalMatchData.player1.uid === uid;
+                        const myScore = isP1 ? finalMatchData.player1.score : finalMatchData.player2.score;
+                        const opponentScore = isP1 ? finalMatchData.player2.score : finalMatchData.player1.score;
+                        
+                        // Lấy thông tin đối thủ để hiển thị avatar
+                        const p1Profile = state.data.users.find(u => u.uid === finalMatchData.player1.uid);
+                        const p2Profile = state.data.users.find(u => u.uid === finalMatchData.player2.uid);
+                        
+                        const myInfo = isP1 ? p1Profile : p2Profile;
+                        const oppInfo = isP1 ? p2Profile : p1Profile;
 
-                            let resultType = 'draw';
-                            let bonusPoints = 0;
-
-                            // 1. Xác định thắng thua và cộng điểm
-                            if (myScore > opponentScore) {
-                                resultType = 'win';
-                                bonusPoints = 20;
-                                
-                                // --- CỘNG ĐIỂM THƯỞNG VÀO DATABASE ---
-                                updateDoc(doc(db, getPath('users'), uid), {
-                                    points: increment(20)
-                                }).catch(e => console.error("Lỗi cộng điểm:", e));
-                                // --------------------------------------
-
-                            } else if (myScore < opponentScore) {
-                                resultType = 'lose';
-                            }
-
-                            // 2. Hiển thị Modal Kết quả
-                            if (state.ui.competitionMode === 'playing') {
-                                state.ui.matchResult = {
-                                    result: resultType,
-                                    myScore: myScore,
-                                    oppScore: opponentScore,
-                                    bonus: bonusPoints, // Truyền điểm thưởng vào modal
-                                    myName: myInfo?.name || 'Bạn',
-                                    myAvatar: myInfo?.avatarUrl,
-                                    myAvatarType: myInfo?.avatarType,
-                                    oppName: oppInfo?.name || 'Đối thủ',
-                                    oppAvatar: oppInfo?.avatarUrl,
-                                    oppAvatarType: oppInfo?.avatarType
-                                };
-                            }
-                         }
-                    }
-
-                    state.ui.activeMatch = newActiveMatch;
-
-                    if (state.ui.activeMatch) {
-                        const serverStatus = state.ui.activeMatch.status;
-                        state.ui.competitionMode = serverStatus === 'playing' ? 'playing' : 'waiting';
-                    } else {
-                        if (state.ui.competitionMode === 'waiting' || state.ui.competitionMode === 'playing') {
-                            state.ui.competitionMode = 'lobby';
+                        let resultType = 'draw';
+                        if (myScore > opponentScore) resultType = 'win';
+                        else if (myScore < opponentScore) resultType = 'lose';
+                        
+                        // [THAY ĐỔI Ở ĐÂY] Thay vì showToast, ta set state để hiện Modal
+                        if (state.ui.competitionMode === 'playing') {
+                            state.ui.matchResult = {
+                                result: resultType,
+                                myScore: myScore,
+                                oppScore: opponentScore,
+                                myName: myInfo?.name || 'Bạn',
+                                myAvatar: myInfo?.avatarUrl,
+                                myAvatarType: myInfo?.avatarType,
+                                oppName: oppInfo?.name || 'Đối thủ',
+                                oppAvatar: oppInfo?.avatarUrl,
+                                oppAvatarType: oppInfo?.avatarType
+                            };
                         }
+                        
+                        // Clean up (Giữ nguyên)
+                        if (isP1 && justFinished) { deleteDoc(doc(db, getPath('matches'), justFinished.id)).catch(()=>{}); }
+                     }
+                }
+
+                // 3. Cập nhật State
+                state.ui.activeMatch = newActiveMatch;
+
+                // 4. QUAN TRỌNG: Điều hướng màn hình tự động
+                if (state.ui.activeMatch) {
+                    // A. Nếu tìm thấy trận đấu -> Bắt buộc chuyển vào màn hình tương ứng
+                    const serverStatus = state.ui.activeMatch.status;
+                    state.ui.competitionMode = serverStatus === 'playing' ? 'playing' : 'waiting';
+                    
+                    // Nếu đang chơi, update UI thời gian thực
+                    if (serverStatus === 'playing' && document.getElementById('match-playing-container')) {
+                        updatePlayingUI();
+                    }
+                } else {
+                    // B. Nếu KHÔNG tìm thấy trận đấu
+                    // Chỉ đá về Lobby nếu đang ở màn hình Chờ hoặc Chơi (nghĩa là trận bị hủy/xóa)
+                    // Nếu đang ở 'join' (nhập mã) hoặc 'create' (đang bấm nút) thì GIỮ NGUYÊN để không bị bật input
+                    if (state.ui.competitionMode === 'waiting' || state.ui.competitionMode === 'playing') {
+                        state.ui.competitionMode = 'lobby';
+                        showToast("Phòng đã bị hủy hoặc trận đấu kết thúc.", "info");
                     }
                 }
 
-                // C. RENDER
+                // 5. Render lại nếu cần (Chỉ khi view đang là competition)
                 if (state.view === 'competition') {
-                    const container = document.getElementById('match-playing-container');
-                    if ((state.ui.competitionMode === 'playing' || state.ui.competitionMode === 'spectating') && container) {
-                         if (state.ui.activeMatch?.status === 'finished') {
-                             renderApp();
-                         } else {
-                             updatePlayingUI();
-                         }
-                    } else {
+                    // Tránh render lại toàn bộ nếu đang chơi để không mất animation
+                    if (state.ui.competitionMode !== 'playing' || !document.getElementById('match-playing-container')) {
                         renderApp();
                     }
                 }
             });
-      
-       // 6. Challenges Listener (MỚI)
-            onSnapshot(getRef('challenges'), (snap) => {
-                // Sắp xếp theo thứ tự (order)
-                state.data.challenges = snap.docs
-                    .map(d => ({id: d.id, ...d.data()}))
-                    .sort((a,b) => (a.order || 0) - (b.order || 0));
-                
-                if(state.view === 'challenges') renderApp();
-            });
         };
-
+        
         // --- Smart UI Update (Cho lỗi Scroll Jump) ---
         const updateMainContent = () => {
             const mainEl = document.querySelector('main');
@@ -808,14 +773,11 @@ const renderApp = () => {
             const modalEl = document.getElementById('avatar-modal-container');
             const overlayEl = document.getElementById('mobile-overlay');
 
-            // --- [FIX QUAN TRỌNG: LUÔN XÓA MODAL CŨ TRƯỚC] ---
-            // Phải xóa vô điều kiện trước khi quyết định có vẽ lại hay không
+            // --- [FIX LỖI QUAN TRỌNG] Xóa Modal kết quả cũ nếu nó đang tồn tại ---
+            // Điều này đảm bảo khi bạn bấm "Quay về sảnh", modal sẽ biến mất
             const oldMatchModal = document.getElementById('match-result-modal');
             if (oldMatchModal) oldMatchModal.remove();
-
-            const oldChalModal = document.getElementById('challenge-result-modal');
-            if (oldChalModal) oldChalModal.remove();
-            // --------------------------------------------------
+            // ---------------------------------------------------------------------
             
             if (state.ui.isProcessingStudentCreation) {
                  appEl.innerHTML = `
@@ -851,11 +813,6 @@ const renderApp = () => {
                 if (headerScoreEl && state.profile) {
                      headerScoreEl.textContent = state.profile.points;
                 }
-                // Update Streak on Header
-                const headerStreakEl = document.getElementById('header-streak');
-                if (headerStreakEl && state.profile) {
-                     headerStreakEl.textContent = state.profile.streak || 0;
-                }
                 
                 updateMainContent();
             }
@@ -873,225 +830,10 @@ const renderApp = () => {
                 appEl.insertAdjacentHTML('beforeend', renderMatchResultModal());
                 renderIcons();
             }
-            
-            // Render Challenge Result Modal (Nếu có kết quả)
-            if (state.ui.challengeResult) {
-                appEl.insertAdjacentHTML('beforeend', renderChallengeResultModal());
-                renderIcons();
-            }
-           const oldStatsModal = document.getElementById('challenge-stats-modal');
-            if (oldStatsModal) oldStatsModal.remove();
-
-            // 2. Chỉ vẽ lại nếu đang có trạng thái xem (viewingChallengeStats)
-            if (state.ui.viewingChallengeStats) {
-                appEl.insertAdjacentHTML('beforeend', renderChallengeStatsModal());
-                renderIcons();
-            }
         };
         
         // --- 6. RENDERERS ---
-// --- DASHBOARD ĐẤU TRƯỜNG DÀNH CHO GIÁO VIÊN (ĐẦY ĐỦ TÍNH NĂNG) ---
-        const renderTeacherArenaDashboard = () => {
-            // Lấy dữ liệu matches từ state
-            const allMatches = state.data.matches || [];
-            
-            // Phân loại: Đang diễn ra vs Đã kết thúc
-            const activeMatches = allMatches.filter(m => m.status === 'waiting' || m.status === 'playing');
-            const finishedMatches = allMatches.filter(m => m.status === 'finished').sort((a,b) => b.createdAt - a.createdAt);
 
-            // 1. Render danh sách ĐANG ĐẤU
-            const activeHtml = activeMatches.length === 0 
-                ? `<div class="p-8 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-300">Hiện không có trận đấu nào đang diễn ra.</div>`
-                : activeMatches.map(m => {
-                    const isPlaying = m.status === 'playing';
-                    return `
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-l-4 ${isPlaying ? 'border-l-green-500 border-slate-200' : 'border-l-yellow-500 border-slate-200'} flex flex-col sm:flex-row justify-between items-center mb-3 gap-3">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold px-2 py-0.5 rounded text-white ${isPlaying ? 'bg-green-600' : 'bg-yellow-500'}">
-                                    ${isPlaying ? 'ĐANG ĐẤU' : 'ĐANG CHỜ'}
-                                </span>
-                                <span class="font-mono font-bold text-slate-700">Phòng: ${m.roomCode}</span>
-                            </div>
-                            <div class="text-sm">
-                                <span class="text-blue-600 font-bold">${m.player1.name}</span> 
-                                <span class="text-slate-400 mx-1">vs</span> 
-                                <span class="text-red-600 font-bold">${m.player2 ? m.player2.name : '???'}</span>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="watchMatch('${m.id}')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1" title="Xem trận đấu">
-                                <i data-lucide="eye" size="16"></i> Xem
-                            </button>
-                            <button onclick="forceEndMatch('${m.id}', '${m.roomCode}')" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1" title="Buộc kết thúc">
-                                <i data-lucide="square" size="16" class="fill-current"></i> Kết thúc
-                            </button>
-                        </div>
-                    </div>`;
-                }).join('');
-
-            // 2. Render LỊCH SỬ
-            const historyHtml = finishedMatches.length === 0
-                ? `<div class="text-center text-slate-400 text-sm mt-4 p-4">Chưa có dữ liệu lịch sử.</div>`
-                : finishedMatches.map(m => {
-                    const p1Win = m.player1.score > (m.player2 ? m.player2.score : 0);
-                    const p2Win = m.player2 && m.player2.score > m.player1.score;
-                    
-                    return `
-                    <tr class="border-b last:border-0 hover:bg-slate-50 group">
-                        <td class="py-3 pl-4 font-mono text-slate-500 text-xs">${m.roomCode}</td>
-                        <td class="py-3">
-                            <div class="flex items-center gap-2 text-sm">
-                                <span class="${p1Win ? 'font-bold text-blue-700' : 'text-slate-600'}">${m.player1.name}</span>
-                                <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player1.score}</span>
-                            </div>
-                        </td>
-                        <td class="py-3 font-bold text-slate-300 text-xs text-center">VS</td>
-                        <td class="py-3">
-                            <div class="flex items-center gap-2 text-sm">
-                                <span class="${p2Win ? 'font-bold text-red-700' : 'text-slate-600'}">${m.player2 ? m.player2.name : 'N/A'}</span>
-                                <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player2 ? m.player2.score : 0}</span>
-                            </div>
-                        </td>
-                        <td class="py-3 text-right pr-2 text-xs text-slate-400 w-24">
-                             ${m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'}) : ''}
-                        </td>
-                        <td class="py-3 text-right pr-4 w-10">
-                            <button onclick="confirmDeleteMatchHistory('${m.id}')" class="text-slate-300 hover:text-red-500 transition p-1 rounded-md hover:bg-red-50" title="Xóa bản ghi này">
-                                <i data-lucide="trash-2" size="16"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-                }).join('');
-
-            return `
-                <div class="max-w-6xl mx-auto space-y-8 fade-in">
-                    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-6 text-white shadow-lg flex justify-between items-center">
-                        <div>
-                            <h2 class="text-2xl font-bold flex items-center gap-2"><i data-lucide="monitor" class="w-6 h-6"></i> Trung Tâm Giám Sát</h2>
-                            <p class="text-purple-100 text-sm mt-1">Theo dõi và quản lý các trận đấu</p>
-                        </div>
-                        <button onclick="createMatchFromBank()" class="bg-white text-purple-700 px-4 py-2 rounded-xl font-bold text-sm shadow-md hover:bg-purple-50 transition flex items-center gap-2">
-                            <i data-lucide="plus-circle" size="16"></i> Tạo Phòng Mới
-                        </button>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <span class="relative flex h-3 w-3">
-                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                              <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                            </span>
-                            Đang diễn ra (${activeMatches.length})
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${activeHtml}
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
-                        <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
-                            <h3 class="font-bold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="history" size="18"></i> Kết quả gần đây
-                            </h3>
-                            
-                            <div class="flex gap-2">
-                                <button onclick="deleteAllMatchHistory()" 
-                                        class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg font-bold text-xs transition flex items-center gap-1"
-                                        ${finishedMatches.length === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
-                                    <i data-lucide="trash-2" size="14"></i> Xóa tất cả
-                                </button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto max-h-96">
-                            <table class="w-full">
-                                <thead class="bg-slate-100 text-xs text-slate-500 uppercase sticky top-0">
-                                    <tr>
-                                        <th class="py-3 pl-4 text-left w-20">Mã</th>
-                                        <th class="py-3 text-left">Player 1</th>
-                                        <th class="py-3 text-center w-10"></th>
-                                        <th class="py-3 text-left">Player 2</th>
-                                        <th class="py-3 pr-4 text-right">Thời gian</th>
-                                        <th class="py-3 pr-4 text-right"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${historyHtml}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-// --- GIAO DIỆN KHÁN GIẢ (CHỈ XEM) ---
-// --- GIAO DIỆN KHÁN GIẢ (CHỈ XEM) - ĐÃ FIX ID ĐỂ CẬP NHẬT ---
-        const renderSpectatorView = (match) => {
-            if (!match) return `<div class="text-center mt-10">Đang kết nối...</div>`;
-            const p1 = match.player1;
-            const p2 = match.player2 || { name: 'Đang chờ...', score: 0 };
-            const totalQ = match.questions ? match.questions.length : 10;
-            const currentQ = (match.qIndex || 0) + 1;
-
-            const maxScore = totalQ * 10;
-            const p1Percent = Math.min((p1.score / maxScore) * 100, 100);
-            const p2Percent = Math.min((p2.score / maxScore) * 100, 100);
-
-            return `
-                <div id="match-playing-container" class="max-w-5xl mx-auto fade-in">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider animate-pulse">
-                            🔴 Live Spectator Mode
-                        </div>
-                        <button onclick="stopSpectating()" class="bg-slate-200 hover:bg-red-100 text-slate-600 hover:text-red-600 px-4 py-2 rounded-lg font-bold text-sm transition flex items-center gap-2">
-                            <i data-lucide="log-out" size="16"></i> Thoát
-                        </button>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-3xl shadow-lg mb-6 border-b-4 border-slate-200">
-                        <div class="flex justify-between items-end mb-2 px-4">
-                            <div class="text-left">
-                                <p id="spec-p1-score" class="text-2xl font-black text-blue-600">${p1.score}</p>
-                                <p class="text-sm font-bold text-slate-500">${p1.name}</p>
-                            </div>
-                            <div class="text-4xl font-black text-slate-200 italic">VS</div>
-                            <div class="text-right">
-                                <p id="spec-p2-score" class="text-2xl font-black text-red-600">${p2.score}</p>
-                                <p class="text-sm font-bold text-slate-500">${p2.name}</p>
-                            </div>
-                        </div>
-                        <div class="relative h-4 bg-slate-100 rounded-full overflow-hidden flex">
-                            <div class="bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-500" style="width: ${p1Percent}%"></div>
-                            <div class="absolute top-0 right-0 h-full bg-gradient-to-l from-red-400 to-red-600 transition-all duration-500" style="width: ${p2Percent}%"></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center relative overflow-hidden">
-                        <div class="absolute top-4 right-4 text-slate-300">
-                            <i data-lucide="monitor" size="48"></i>
-                        </div>
-                        
-                        <span id="q-counter" class="inline-block bg-slate-100 text-slate-600 px-3 py-1 rounded-lg text-xs font-bold mb-4">
-                            Câu hỏi ${currentQ} / ${totalQ}
-                        </span>
-
-                        <h2 id="q-text" class="text-2xl md:text-3xl font-bold text-slate-800 mb-8 leading-relaxed">
-                            ${match.status === 'waiting' ? 'Đang chờ người chơi thứ 2...' : (match.questions[match.qIndex]?.text || 'Đang tải...')}
-                        </h2>
-
-                        <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-80 pointer-events-none" data-qid="-1">
-                             ${match.status === 'playing' ? match.questions[match.qIndex].options.map((opt, i) => `
-                                <div class="p-4 border-2 border-slate-100 rounded-xl text-lg font-medium text-slate-600 bg-slate-50">
-                                    ${opt}
-                                </div>
-                             `).join('') : ''}
-                        </div>
-                        
-                        <div id="audio-container" class="mt-6 opacity-0 h-0"></div>
-                    </div>
-                </div>
-            `;
-        };
 const renderAuthScreen = () => {
             const isRegister = state.ui.authMode === 'register';
             // Lấy role hiện tại để giữ trạng thái khi render lại
@@ -1238,7 +980,6 @@ ${state.ui.isBulkModalOpen ? `
                             ${renderNavItem('assignments', 'book-open', 'Bài tập', isCollapsed)}
                             ${state.profile.role === 'teacher' ? renderNavItem('question_bank', 'library', 'Ngân hàng đề', isCollapsed) : ''}
                             ${renderNavItem('competition', 'swords', 'Đấu trường', isCollapsed)}
-                            ${renderNavItem('challenges', 'mountain-snow', 'Thử thách', isCollapsed)}
                             ${renderNavItem('ranking', 'trophy', 'Xếp hạng', isCollapsed)}
                         </nav>
                         <div class="p-4 border-t border-slate-800">
@@ -1258,33 +999,25 @@ ${state.ui.isBulkModalOpen ? `
 
                     <div class="flex-1 flex flex-col min-w-0">
                         <!-- Header (Responsive) -->
-<header class="bg-white shadow-md lg:shadow-sm px-4 lg:px-8 py-3 lg:py-4 flex justify-between items-center z-10">
-                        <button onclick="toggleSidebar(true)" class="lg:hidden text-slate-700 hover:text-blue-600 mr-3">
-                            <i data-lucide="menu" size="24"></i>
-                        </button>
-                        <h2 class="text-xl md:text-2xl font-bold text-slate-800 capitalize truncate">
-                            ${state.view === 'dashboard' ? 'Tổng quan' : 
-                              state.view === 'classes' ? 'Quản lý Lớp học' : 
-                              state.view === 'my_classes' ? 'Lớp của tôi' : 
-                              state.view === 'assignments' ? 'Bài tập về nhà' :
-                              state.view === 'question_bank' ? 'Ngân hàng đề' :
-                              state.view === 'competition' ? 'Đấu trường trực tuyến' : 
-                              state.view === 'challenges' ? 'Chinh phục Thử thách' : 'Bảng xếp hạng'}
-                        </h2>
-                        
-                        <div class="flex items-center gap-3">
-                            <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm">
-                                <i data-lucide="trophy" size="14"></i> 
-                                <span class="hidden md:inline">Điểm:</span> 
-                                <span id="header-points">${state.profile.points}</span>
-                            </div>
-                            <div class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm" title="Chuỗi ngày liên tục">
-                                <i data-lucide="flame" size="14" class="fill-orange-500"></i> 
-                                <span class="hidden md:inline">Streak:</span> 
-                                <span id="header-streak">${state.profile.streak || 0}</span>
-                            </div>
-                        </div>
-                    </header>
+                        <header class="bg-white shadow-md lg:shadow-sm px-4 lg:px-8 py-3 lg:py-4 flex justify-between items-center z-10">
+                            <!-- Mobile menu button -->
+                            <button onclick="toggleSidebar(true)" class="lg:hidden text-slate-700 hover:text-blue-600 mr-3">
+                                <i data-lucide="menu" size="24"></i>
+                            </button>
+                            <h2 class="text-xl md:text-2xl font-bold text-slate-800 capitalize truncate">
+                                ${state.view === 'dashboard' ? 'Tổng quan' : 
+                                  state.view === 'classes' ? 'Quản lý Lớp học' : 
+                                  state.view === 'my_classes' ? 'Lớp của tôi' : 
+                                  state.view === 'assignments' ? 'Bài tập về nhà' :
+                                  state.view === 'question_bank' ? 'Ngân hàng đề' :
+                                  state.view === 'competition' ? 'Đấu trường trực tuyến' : 'Bảng xếp hạng'}
+                            </h2>
+	        <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold flex items-center gap-1.5 ml-auto">
+    		<i data-lucide="trophy" size="14"></i> 
+    		<span class="hidden md:inline">Điểm:</span> 
+    		<span id="header-points">${state.profile.points}</span>
+	        </div>
+                        </header>
                         
                         <!-- Main Content -->
                         <main class="flex-1 overflow-y-auto p-4 lg:p-8 pb-16 lg:pb-8 fade-in">
@@ -1331,13 +1064,12 @@ ${state.ui.isBulkModalOpen ? `
                 case 'assignments': return renderAssignments();
                 case 'question_bank': return renderQuestionBank();
                 case 'competition': return renderCompetition();
-                case 'challenges': return renderChallenges(); // [MỚI]
                 case 'ranking': return renderRanking();
                 default: return '';
             }
         };
         
-// DASHBOARD (Cập nhật: Thêm nút Thử thách bên cạnh Đấu trường)
+        // DASHBOARD (Cập nhật Responsive)
         const renderDashboard = () => {
             const mySubmissions = state.data.submissions.filter(s => s.studentId === state.user.uid);
             const myAssignments = state.data.assignments;
@@ -1361,30 +1093,22 @@ ${state.ui.isBulkModalOpen ? `
                         <div><p class="text-slate-500 text-sm">Bài tập chờ</p><p class="text-xl md:text-2xl font-bold text-slate-800">${Math.max(0, pending)}</p></div>
                     </div>
                 </div>
-
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 md:p-8 text-white shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between relative overflow-hidden">
-                    <div class="lg:max-w-2xl relative z-10">
-                        <h3 class="text-xl md:text-3xl font-bold mb-2">Xin chào, ${state.profile.name}!</h3>
-                        <p class="text-blue-100 text-sm md:text-base mb-6">
-                            ${state.profile.role === 'student' ? 'Hôm nay bạn muốn chinh phục kiến thức nào?' : 'Quản lý lớp học và tạo bài tập mới.'}
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 md:p-8 text-white shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between">
+                    <div class="lg:max-w-xl">
+                        <h3 class="text-xl md:text-2xl font-bold mb-2">Chào mừng trở lại, ${state.profile.name}!</h3>
+                        <p class="text-blue-100 text-sm md:text-base mb-4 lg:mb-6">
+                            ${state.profile.role === 'student' ? 'Bạn đã sẵn sàng để chinh phục các thử thách hôm nay chưa?' : 'Quản lý lớp học và tạo bài tập mới.'}
                         </p>
-                        
                         <div class="flex flex-wrap gap-3">
-                            <button onclick="changeView('assignments')" class="bg-white text-blue-700 px-5 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition text-sm shadow-md">
-                                ${state.profile.role === 'student' ? 'Bài tập về nhà' : 'Tạo bài tập'}
+                            <button onclick="changeView('assignments')" class="bg-white text-blue-700 px-5 py-2 rounded-lg font-bold hover:bg-blue-50 transition text-sm">
+                                ${state.profile.role === 'student' ? 'Làm bài ngay' : 'Tạo bài tập'}
                             </button>
-                            
-                            <button onclick="changeView('competition')" class="bg-indigo-500 text-white border border-indigo-400 px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-600 transition flex items-center gap-2 text-sm shadow-md">
-                                <i data-lucide="swords" size="18"></i> Đấu trường
-                            </button>
-
-                            <button onclick="changeView('challenges')" class="bg-orange-500 text-white border border-orange-400 px-5 py-2.5 rounded-xl font-bold hover:bg-orange-600 transition flex items-center gap-2 text-sm shadow-md ">
-                                <i data-lucide="mountain-snow" size="18"></i> Thử thách
+                            <button onclick="changeView('competition')" class="bg-blue-800 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-900 transition flex items-center gap-2 text-sm">
+                                <i data-lucide="swords" size="16"></i> Đấu trường
                             </button>
                         </div>
                     </div>
-                    
-                    <i data-lucide="trophy" class="w-32 h-32 text-white opacity-10 absolute -bottom-4 -right-4 lg:static lg:opacity-20 lg:block flex-shrink-0"></i>
+                    <i data-lucide="trophy" class="w-20 h-20 lg:w-32 lg:h-32 opacity-20 mt-4 lg:mt-0 lg:block flex-shrink-0"></i>
                 </div>
             `;
         };
@@ -2390,8 +2114,11 @@ const renderQuestionDisplay = (q, qIdx) => {
                     ).join('') + `</div>`;
                     break;
 
+                // --- [MỚI] HIỂN THỊ ĐỌC HIỂU VĂN BẢN ---
                 case 'reading_comprehension':
                     mainText = `[Câu hỏi] ${q.text}`;
+                    
+                    // Hiển thị đoạn văn trong khung trang trọng
                     if (q.conversationContent) {
                          content += `
                             <div class="mb-3 p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 whitespace-pre-line shadow-sm leading-relaxed font-serif">
@@ -2399,12 +2126,14 @@ const renderQuestionDisplay = (q, qIdx) => {
                             </div>
                          `;
                     }
+                    
                     const correctReadingOption = q.options[q.correct];
                     content += `Đáp án đúng: <span class="font-bold text-green-700">(${correctReadingOption})</span>`;
                     content += `<div class="mt-2 space-y-1 text-xs">` + q.options.map((opt, i) => 
                         `<p class="${i === q.correct ? 'text-green-600 font-bold' : 'text-slate-500'}">${String.fromCharCode(65+i)}. ${opt}</p>`
                     ).join('') + `</div>`;
                     break;
+                // ----------------------------------------
 
                 case 'fib':
                     content = `Câu: ${q.text.replace('[BLANK]', '<span class="text-blue-600 font-bold">______</span>')}<br>Đáp án: **${q.answer}**`;
@@ -2440,13 +2169,7 @@ const renderQuestionDisplay = (q, qIdx) => {
                     break;
             }
 
-            // [ĐÃ SỬA] Thêm điều kiện check challengeMode
-            const isEditable = state.ui.viewAssignmentId 
-                            || state.ui.bankMode === 'view' 
-                            || state.ui.bankMode === 'create' 
-                            || state.ui.isCreatingAssignment
-                            || state.ui.challengeMode === 'create' 
-                            || state.ui.challengeMode === 'edit';
+            const isEditable = state.ui.viewAssignmentId || state.ui.bankMode === 'view' || state.ui.bankMode === 'create' || state.ui.isCreatingAssignment;
 
             return `
                 <div class="p-3 md:p-4 border border-slate-200 rounded-xl bg-white mb-2 flex justify-between items-start">
@@ -2459,7 +2182,7 @@ const renderQuestionDisplay = (q, qIdx) => {
                         </div>
                     </div>
                     ${isEditable ? `
-                        <button onclick="removeQuestionInEdit(${qIdx})" class="text-red-400 hover:text-red-600 p-2 rounded-full bg-red-50 hover:bg-red-100 transition flex-shrink-0 ml-2" title="Xóa câu hỏi này">
+                        <button onclick="removeQuestionInEdit(${qIdx})" class="text-red-400 hover:text-red-600 p-2 rounded-full bg-red-50 hover:bg-red-100 transition flex-shrink-0 ml-2">
                             <i data-lucide="minus-circle" size="18"></i>
                         </button>
                     ` : ''}
@@ -2773,6 +2496,7 @@ const renderQuestionSelectionFromBank = () => {
             const selectedBank = myBanks.find(b => b.id === state.ui.selectedBankId);
             
             if (!selectedBank) {
+                // (Giữ nguyên phần hiển thị danh sách Bank)
                 return `
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
                         <h3 class="text-xl font-bold text-yellow-600 mb-6 border-b pb-3">Chọn Ngân hàng đề nguồn</h3>
@@ -2791,14 +2515,7 @@ const renderQuestionSelectionFromBank = () => {
             }
 
             const availableQuestions = selectedBank.questions || [];
-            
-            // [FIX LỖI LẶP BIẾN TẠI ĐÂY] Chỉ khai báo 1 lần
-            let currentAssignmentQs = [];
-            if (state.view === 'challenges') {
-                currentAssignmentQs = state.ui.activeChallenge.questions || [];
-            } else {
-                currentAssignmentQs = state.ui.newAssignment.questions || [];
-            }
+            const currentAssignmentQs = state.ui.newAssignment.questions || [];
             
             // Logic thống kê
             const typeStats = availableQuestions.reduce((acc, q) => {
@@ -2825,7 +2542,7 @@ const renderQuestionSelectionFromBank = () => {
                 `;
             }).join('');
 
-            // Logic hiển thị danh sách
+            // Logic hiển thị danh sách (CÓ THÊM ID CHO BUTTON VÀ CASE ORDER SENTENCES)
             const manualList = availableQuestions.map((q, idx) => {
                 const isSelected = currentAssignmentQs.some(existQ => 
                     JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
@@ -2837,13 +2554,18 @@ const renderQuestionSelectionFromBank = () => {
                     case 'listen_mcq': case 'listen_write': case 'listen_translate':
                     case 'listen_conversation': 
                         previewText = `<span class="text-purple-600 font-bold">[Audio]</span> ${q.text}`; break;
+                    
                     case 'jumble':
                         const jumbleAns = Array.isArray(q.answer) ? q.answer.join(' ') : q.answer;
                         previewText = `<span class="text-green-600 font-bold">[Câu: ${jumbleAns}]</span>`; break;
+                    
+                    // --- [MỚI] HIỂN THỊ CHI TIẾT CÁC CÂU SẮP XẾP ---
                     case 'order_sentences':
+                        // Nối các câu lại với nhau bằng dấu gạch chéo để xem trước
                         const orderAns = Array.isArray(q.answer) ? q.answer.join(' / ') : '...';
                         previewText = `<span class="text-teal-600 font-bold">[Sắp xếp]</span> <span class="italic text-slate-600">${orderAns}</span>`; 
                         break;
+                    // ----------------------------------------------
                      case 'reading_comprehension':
                         previewText = `<span class="text-teal-700 font-bold">[Đọc hiểu]</span> ${q.text}`; 
                         break;
@@ -2886,6 +2608,7 @@ const renderQuestionSelectionFromBank = () => {
                     </div>
                     
                     <div class="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
                         <div class="lg:col-span-1 flex flex-col overflow-y-auto pr-1">
                             <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-4 shadow-sm">
                                 <h4 class="font-bold text-blue-800 mb-3 text-sm uppercase flex items-center gap-2"><i data-lucide="shuffle" class="w-4 h-4"></i> 1. Lấy Ngẫu nhiên</h4>
@@ -3704,16 +3427,16 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         // Hàm Update thông minh (chạy mỗi khi có dữ liệu mới)
 // --- CẬP NHẬT UI KHI DATA THAY ĐỔI ---
 // --- CẬP NHẬT UI KHI DATA THAY ĐỔI (ĐÃ FIX: ƯU TIÊN AUDIO GỐC) ---
-// --- CẬP NHẬT UI KHI DATA THAY ĐỔI (ĐÃ FIX: CẬP NHẬT SỐ CÂU & ĐIỂM SỐ TEXT) ---
         window.updatePlayingUI = () => {
             const match = state.ui.activeMatch;
             const container = document.getElementById('match-playing-container');
             if (!match || !container) return;
 
+            // 1. Cập nhật thông tin cơ bản
             const qIndex = match.qIndex || 0;
             const q = match.questions[qIndex];
             
-            // 1. Cập nhật Thanh Máu (Progress Bar)
+            // Cập nhật Thanh Máu (Progress Bar)
             const maxScore = match.questions.length * 10;
             const p1Percent = Math.min((match.player1.score / maxScore) * 100, 100);
             const p2Percent = Math.min((match.player2.score / maxScore) * 100, 100);
@@ -3722,20 +3445,6 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
             const p2Bar = container.querySelector('.bg-gradient-to-l');
             if(p1Bar) p1Bar.style.width = `${p1Percent}%`;
             if(p2Bar) p2Bar.style.width = `${p2Percent}%`;
-
-            // --- [FIX QUAN TRỌNG] Cập nhật TEXT điểm số và số câu (Cho chế độ Khán giả) ---
-            const specP1 = document.getElementById('spec-p1-score');
-            const specP2 = document.getElementById('spec-p2-score');
-            if (specP1) specP1.textContent = match.player1.score;
-            if (specP2) specP2.textContent = match.player2.score;
-            
-            const counterEl = document.getElementById('q-counter');
-            if (counterEl) {
-                // Kiểm tra xem đang ở chế độ player hay spectator để format đúng
-                const prefix = state.ui.competitionMode === 'spectating' ? 'Câu hỏi ' : 'Q';
-                counterEl.textContent = `${prefix}${qIndex + 1}/${match.questions.length}`;
-            }
-            // --------------------------------------------------------------------------
 
             // 2. Render nội dung câu hỏi (Chỉ khi chuyển câu mới)
             const grid = document.getElementById('options-grid');
@@ -3757,12 +3466,13 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                 void qTextEl.offsetWidth; 
                 qTextEl.classList.add('fade-in');
 
-                // --- AUDIO ---
+                // --- [PHẦN SỬA ĐỔI QUAN TRỌNG: AUDIO] ---
                 const audioContainer = document.getElementById('audio-container');
-                const audioUrl = q.audioUrl;
-                const audioText = q.audioWord || q.audioSentence || q.audioText;
+                const audioUrl = q.audioUrl; // Link file gốc (data_Edubattle/H1_Bai1/...)
+                const audioText = q.audioWord || q.audioSentence || q.audioText; // Text để máy đọc
                 
                 if (audioUrl) {
+                    // TRƯỜNG HỢP 1: CÓ FILE GỐC -> Dùng playCustomAudio
                     const audioId = `arena-audio-${qIndex}`;
                     audioContainer.innerHTML = `
                         <audio id="${audioId}" src="${audioUrl}" style="display:none"></audio>
@@ -3770,41 +3480,37 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                             class="flex items-center gap-2 bg-purple-100 text-purple-700 px-5 py-2 rounded-full font-bold hover:bg-purple-200 transition shadow-sm animate-bounce-in ring-2 ring-purple-200">
                             <i data-lucide="volume-2" size="20"></i> Nghe Audio Gốc
                         </button>`;
+                    
+                    // Tự động phát âm thanh gốc sau 0.5s cho kịch tính (nếu muốn)
                     setTimeout(() => {
                         const btn = document.getElementById('btn-play-audio');
                         if(btn) playCustomAudio(audioId, btn);
                     }, 500);
 
                 } else if (audioText) {
+                    // TRƯỜNG HỢP 2: KHÔNG CÓ FILE -> Dùng Máy đọc (TTS)
                     audioContainer.innerHTML = `
                         <button onclick="speakWord('${audioText.replace(/'/g, "\\'")}', 'zh-CN')" 
                             class="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold hover:bg-yellow-200 transition shadow-sm animate-bounce-in">
                             <i data-lucide="volume-2" size="20"></i> Nghe câu hỏi (Máy đọc)
                         </button>`;
+                    // Tự động đọc
                     setTimeout(() => speakWord(audioText, 'zh-CN'), 500);
                 } else {
                     audioContainer.innerHTML = '';
                 }
+                // ----------------------------------------
 
                 // Render Options (Đáp án)
-                // Logic cho Spectator (Chỉ hiện text) vs Player (Hiện nút bấm)
-                if (state.ui.competitionMode === 'spectating') {
-                     grid.innerHTML = q.options.map((opt) => `
-                        <div class="p-4 border-2 border-slate-100 rounded-xl text-lg font-medium text-slate-600 bg-slate-50">
-                            ${opt}
-                        </div>
-                     `).join('');
-                } else {
-                    grid.innerHTML = q.options.map((opt, idx) => `
-                        <button id="opt-btn-${idx}" onclick="handleAnswerAttempt(${idx === q.correct}, '${match.id}', ${idx})" 
-                            class="group relative p-4 md:p-6 bg-white border-2 border-slate-200 rounded-2xl text-lg md:text-xl font-bold text-slate-700 transition-all hover:border-blue-400 hover:shadow-md active:scale-95 flex items-center justify-center text-center">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-xs flex items-center justify-center font-black group-hover:bg-blue-100 group-hover:text-blue-600 transition">
-                                ${String.fromCharCode(65 + idx)}
-                            </span>
-                            ${opt}
-                        </button>
-                    `).join('');
-                }
+                grid.innerHTML = q.options.map((opt, idx) => `
+                    <button id="opt-btn-${idx}" onclick="handleAnswerAttempt(${idx === q.correct}, '${match.id}', ${idx})" 
+                        class="group relative p-4 md:p-6 bg-white border-2 border-slate-200 rounded-2xl text-lg md:text-xl font-bold text-slate-700 transition-all hover:border-blue-400 hover:shadow-md active:scale-95 flex items-center justify-center text-center">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-xs flex items-center justify-center font-black group-hover:bg-blue-100 group-hover:text-blue-600 transition">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        ${opt}
+                    </button>
+                `).join('');
                 
                 renderIcons();
             }
@@ -3968,23 +3674,9 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
              }
          };
 
-const renderCompetition = () => {
+        const renderCompetition = () => {
             const mode = state.ui.competitionMode;
             const match = state.ui.activeMatch;
-            
-            // --- [MỚI] CHẾ ĐỘ KHÁN GIẢ (SPECTATOR) ---
-            if (mode === 'spectating') {
-                // Tự động cập nhật UI khán giả (dùng chung logic updatePlayingUI nhưng ko cho bấm)
-                setTimeout(updatePlayingUI, 50); 
-                return renderSpectatorView(match);
-            }
-
-            // --- [MỚI] NẾU LÀ GIÁO VIÊN VÀ ĐANG Ở LOBBY -> HIỆN DASHBOARD QUẢN LÝ ---
-            if (state.profile.role === 'teacher' && mode === 'lobby') {
-                return renderTeacherArenaDashboard();
-            }
-
-            // Các chế độ bình thường cho Học sinh
             switch(mode) {
                 case 'create': return renderCompetitionCreate(); 
                 case 'join': return renderCompetitionJoin();
@@ -4069,38 +3761,33 @@ const renderCompetition = () => {
             `;
         };
    // --- GIAO DIỆN KẾT QUẢ TRẬN ĐẤU (VICTORY SCREEN) ---
-// --- GIAO DIỆN KẾT QUẢ TRẬN ĐẤU (VICTORY SCREEN) - CÓ HIỂN THỊ ĐIỂM THƯỞNG ---
         const renderMatchResultModal = () => {
             const res = state.ui.matchResult;
             if (!res) return '';
 
+            // Xác định nội dung dựa trên kết quả
             let title, colorClass, iconHtml, subText;
             
             if (res.result === 'win') {
                 title = "CHIẾN THẮNG!";
                 colorClass = "text-yellow-500";
+                // Icon Cúp Vàng
                 iconHtml = `
                     <div class="relative inline-block">
                         <div class="absolute inset-0 bg-yellow-200 blur-xl rounded-full opacity-50 animate-pulse"></div>
                         <span class="text-8xl relative z-10 drop-shadow-lg filter">🏆</span>
                     </div>`;
-                // Hiển thị điểm thưởng
-                subText = `
-                    <div class="text-slate-500 font-medium mb-1">Xuất sắc! Bạn là người chiến thắng.</div>
-                    <div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full font-bold text-lg animate-bounce">
-                        +${res.bonus} điểm thưởng
-                    </div>
-                `;
+                subText = "Xuất sắc! Bạn là người chiến thắng.";
             } else if (res.result === 'lose') {
                 title = "THẤT BẠI";
                 colorClass = "text-slate-500";
                 iconHtml = `<span class="text-8xl grayscale opacity-80">🥀</span>`;
-                subText = `<div class="text-slate-500 font-medium">Đừng buồn, hãy cố gắng lần sau nhé!</div>`;
+                subText = "Đừng buồn, hãy cố gắng lần sau nhé!";
             } else {
                 title = "HÒA NHAU";
                 colorClass = "text-blue-500";
                 iconHtml = `<span class="text-8xl">🤝</span>`;
-                subText = `<div class="text-slate-500 font-medium">Một trận đấu ngang tài ngang sức!</div>`;
+                subText = "Một trận đấu ngang tài ngang sức!";
             }
 
             return `
@@ -4109,12 +3796,12 @@ const renderCompetition = () => {
                         
                         <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
                         
-                        <div class="mb-4 mt-4">
+                        <div class="mb-6 mt-4">
                             ${iconHtml}
                         </div>
                         
-                        <h2 class="text-4xl font-black ${colorClass} mb-4 uppercase tracking-wide">${title}</h2>
-                        <div class="mb-8">${subText}</div>
+                        <h2 class="text-4xl font-black ${colorClass} mb-2 uppercase tracking-wide">${title}</h2>
+                        <p class="text-slate-500 font-medium mb-8">${subText}</p>
 
                         <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 mb-8 flex justify-center items-center gap-6">
                             <div class="text-center">
@@ -4890,42 +4577,46 @@ if (qType === 'reading_comprehension') {
         }
         
 // --- HÀM CHỌN THỦ CÔNG CÂU HỎI TỪ BANK (ĐÃ FIX LỖI NHẢY SCROLL) ---
-window.selectQuestionFromBank = (qIndex) => {
+        window.selectQuestionFromBank = (qIndex) => {
+            // 1. LƯU VỊ TRÍ SCROLL HIỆN TẠI
             const scrollContainer = document.getElementById('bank-scroll-view');
             let savedScrollTop = 0;
-            if (scrollContainer) savedScrollTop = scrollContainer.scrollTop;
+            if (scrollContainer) {
+                savedScrollTop = scrollContainer.scrollTop;
+            }
 
             const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
             if (!selectedBank) return;
 
             const questionToToggle = selectedBank.questions[qIndex];
             
-            // XÁC ĐỊNH DANH SÁCH CẦN THAO TÁC
-            let currentQs;
-            if (state.view === 'challenges') {
-                if (!state.ui.activeChallenge.questions) state.ui.activeChallenge.questions = [];
-                currentQs = state.ui.activeChallenge.questions;
-            } else {
-                if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
-                currentQs = state.ui.newAssignment.questions;
-            }
+            // Đảm bảo mảng câu hỏi tồn tại
+            if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
+            const currentAssignmentQs = state.ui.newAssignment.questions;
 
-            // Logic thêm/xóa
-            const existingIndex = currentQs.findIndex(existQ => 
+            // Kiểm tra xem câu hỏi đã tồn tại chưa
+            const existingIndex = currentAssignmentQs.findIndex(existQ => 
                 JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
                 JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
             );
 
             if (existingIndex !== -1) {
-                currentQs.splice(existingIndex, 1);
+                // Đã có -> Xóa đi (Bỏ chọn)
+                state.ui.newAssignment.questions.splice(existingIndex, 1);
             } else {
-                currentQs.push(questionToToggle);
+                // Chưa có -> Thêm vào
+                state.ui.newAssignment.questions.push(questionToToggle);
             }
 
+            // 2. VẼ LẠI GIAO DIỆN
             renderApp();
 
+            // 3. KHÔI PHỤC VỊ TRÍ SCROLL
+            // Cần tìm lại element mới sau khi renderApp đã chạy
             const newScrollContainer = document.getElementById('bank-scroll-view');
-            if (newScrollContainer) newScrollContainer.scrollTop = savedScrollTop;
+            if (newScrollContainer) {
+                newScrollContainer.scrollTop = savedScrollTop;
+            }
         };
         
 window.addRandomQuestions = (bankId) => {
@@ -4933,20 +4624,10 @@ window.addRandomQuestions = (bankId) => {
             if (!selectedBank) return showToast("Lỗi: Không tìm thấy ngân hàng đề.", "error");
 
             const availableQuestions = selectedBank.questions;
-            
-            // XÁC ĐỊNH DANH SÁCH ĐÍCH (ĐÃ SỬA: targetList chính là currentAssignmentQs)
-            let targetList;
-            if (state.view === 'challenges') {
-                if (!state.ui.activeChallenge.questions) state.ui.activeChallenge.questions = [];
-                targetList = state.ui.activeChallenge.questions;
-            } else {
-                targetList = state.ui.newAssignment.questions;
-            }
-            
-            // Đặt tên biến dễ hiểu để dùng bên dưới
-            const currentAssignmentQs = targetList; 
-
             let totalAdded = 0;
+            const currentAssignmentQs = state.ui.newAssignment.questions;
+
+            // Lấy danh sách các loại câu hỏi có trong bank
             const typesInBank = [...new Set(availableQuestions.map(q => q.type))];
 
             typesInBank.forEach(type => {
@@ -4959,11 +4640,12 @@ window.addRandomQuestions = (bankId) => {
                 // 1. Lọc ra các câu hỏi thuộc loại này
                 const qsByType = availableQuestions.filter(q => q.type === type);
 
-                // 2. Lọc trùng nội dung
+                // 2. Lọc trùng nội dung (Deduplicate) - Giữ nguyên logic này vì nó tốt
                 const uniqueCandidates = [];
                 const seenContent = new Set();
 
                 qsByType.forEach(q => {
+                    // Tạo chữ ký để so sánh nội dung
                     const contentSignature = JSON.stringify({
                         text: q.text,
                         vietnamese: q.vietnamese,
@@ -4992,27 +4674,32 @@ window.addRandomQuestions = (bankId) => {
                     showToast(`Loại "${getQuestionTypeLabel(type)}" chỉ còn ${finalCandidates.length} câu chưa sử dụng.`, "warning");
                 }
 
-                // 4. Trộn ngẫu nhiên
+                // --- 4. BƯỚC QUAN TRỌNG: TRỘN NGẪU NHIÊN TRỰC TIẾP TẠI ĐÂY ---
+                // Sử dụng thuật toán Fisher-Yates Shuffle nhúng trực tiếp
+                // Tạo bản sao để không ảnh hưởng mảng gốc
                 let shuffled = [...finalCandidates]; 
                 for (let i = shuffled.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
                 }
+                // -------------------------------------------------------------
 
-                // 5. Cắt và thêm
+                // 5. Cắt lấy số lượng cần thiết từ mảng đã trộn
                 const selected = shuffled.slice(0, countNeeded);
-                targetList.push(...selected); // Thêm vào danh sách đích
+                
+                // 6. Thêm vào bài tập
+                state.ui.newAssignment.questions.push(...selected);
                 totalAdded += selected.length;
             });
 
             if (totalAdded > 0) {
                 showToast(`Đã thêm ngẫu nhiên ${totalAdded} câu hỏi!`, "success");
                 setSelectingBankQuestions(false); // Đóng modal
-                renderApp(); 
+                renderApp(); // Render lại
             } else {
                 showToast("Vui lòng nhập số lượng câu hỏi cần lấy (lớn hơn 0).", "error");
             }
-        };
+        }
 
         // --- Assignment Handlers (Giữ nguyên) ---
         window.handleClassSelection = (classId, isChecked) => {
@@ -5113,19 +4800,13 @@ window.addRandomQuestions = (bankId) => {
         };
         
 
-       window.removeQuestionInEdit = (qIdx) => {
-            if (state.view === 'challenges') {
-                if (state.ui.activeChallenge && state.ui.activeChallenge.questions) {
-                    state.ui.activeChallenge.questions.splice(qIdx, 1);
-                    renderApp();
-                }
-            } else {
-                if (state.ui.newAssignment && state.ui.newAssignment.questions) {
-                    state.ui.newAssignment.questions.splice(qIdx, 1);
-                    renderApp();
-                }
+        window.removeQuestionInEdit = (qIdx) => {
+            if (state.ui.newAssignment && state.ui.newAssignment.questions) {
+                state.ui.newAssignment.questions.splice(qIdx, 1);
+                renderApp();
             }
         };
+
         window.saveAssignmentChanges = async (id) => {
             const newTitle = document.getElementById('edit-assign-title').value;
             const timeLimit = parseInt(document.getElementById('edit-assign-time').value) || 0;
@@ -5339,7 +5020,7 @@ window.addQuestion = () => {
 
                         newQ = { 
                             ...newQ, 
-                            text: "Sắp xếp các câu sau cho đúng:", 
+                            text: "Sắp xếp các câu sau thành đoạn văn/hội thoại hợp lý:", 
                             answer: sentences // Lưu mảng câu đúng thứ tự
                         };
                         isValid = true;
@@ -5375,16 +5056,8 @@ window.addQuestion = () => {
                 return showToast(e.message, "error");
             }
             if (isValid) {
-	// KIỂM TRA NGỮ CẢNH ĐỂ PUSH VÀO ĐÚNG MẢNG
-                if (state.view === 'challenges') {
-                    // Nếu đang ở màn hình Thử thách
-                    if (!state.ui.activeChallenge.questions) state.ui.activeChallenge.questions = [];
-                    state.ui.activeChallenge.questions.push(newQ);
-                } else {
-                    // Nếu đang ở màn hình Bài tập hoặc Ngân hàng đề
-                    state.ui.newAssignment.questions.push(newQ);
-                }
-                renderApp();
+                state.ui.newAssignment.questions.push(newQ);
+                renderApp(); 
             }
         };
 
@@ -6415,903 +6088,6 @@ window.submitAssignment = async () => {
             // 4. Chuyển về chế độ Lobby và Render lại
             state.ui.competitionMode = 'lobby';
             renderApp();
-        };
-// --- LOGIC CHO GIÁO VIÊN XEM TRẬN ĐẤU ---
-        window.watchMatch = (matchId) => {
-            // Tìm match trong data hiện có
-            const match = state.data.matches.find(m => m.id === matchId);
-            if (match) {
-                state.ui.activeMatch = match;
-                state.ui.competitionMode = 'spectating';
-                renderApp();
-            } else {
-                showToast("Không tìm thấy trận đấu này.", "error");
-            }
-        };
-
-        window.stopSpectating = () => {
-            state.ui.activeMatch = null;
-            state.ui.competitionMode = 'lobby'; // Quay về dashboard giáo viên
-            renderApp();
-        };
-// --- HÀM GIÁO VIÊN: BUỘC KẾT THÚC TRẬN ĐẤU ---
-        window.forceEndMatch = async (matchId, roomCode) => {
-            if (!confirm(`Bạn có chắc chắn muốn kết thúc ngay trận đấu phòng ${roomCode}?`)) return;
-
-            try {
-                // Cập nhật trạng thái sang finished để đẩy vào lịch sử
-                await updateDoc(doc(db, getPath('matches'), matchId), {
-                    status: 'finished',
-                    finishedBy: state.user.uid // Ghi dấu ấn là do giáo viên kết thúc
-                });
-                showToast("Đã kết thúc trận đấu!", "success");
-            } catch (e) {
-                console.error("Lỗi kết thúc trận:", e);
-                showToast("Không thể kết thúc trận đấu (Lỗi quyền hoặc mạng).", "error");
-            }
-        };
-
-        // --- HÀM GIÁO VIÊN: XÓA LỊCH SỬ TRẬN ĐẤU ---
-        window.confirmDeleteMatchHistory = (matchId) => {
-             // Tạo modal xác nhận nhanh hoặc dùng confirm
-            const confirmModal = document.createElement('div');
-            confirmModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[70] p-4 fade-in';
-            confirmModal.innerHTML = `
-                <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center">
-                    <p class="font-bold text-lg mb-2 text-slate-800">Xóa lịch sử trận đấu?</p>
-                    <p class="text-slate-500 mb-6 text-sm">Dữ liệu kết quả của trận này sẽ bị xóa vĩnh viễn.</p>
-                    <div class="flex justify-center gap-3">
-                        <button id="cancel-del-match" class="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg font-bold hover:bg-slate-200">Hủy</button>
-                        <button id="confirm-del-match" class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700">Xóa vĩnh viễn</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(confirmModal);
-            
-            document.getElementById('cancel-del-match').onclick = () => confirmModal.remove();
-            document.getElementById('confirm-del-match').onclick = async () => {
-                confirmModal.remove();
-                try {
-                    await deleteDoc(doc(db, getPath('matches'), matchId));
-                    showToast("Đã xóa lịch sử trận đấu.");
-                } catch (e) {
-                    console.error("Delete error:", e);
-                    showToast("Lỗi xóa: " + e.message, "error");
-                }
-            };
-        };
-// --- HÀM GIÁO VIÊN: XÓA TẤT CẢ LỊCH SỬ ---
-        window.deleteAllMatchHistory = async () => {
-            // 1. Lọc ra tất cả các trận đấu đã kết thúc
-            const finishedMatches = state.data.matches.filter(m => m.status === 'finished');
-
-            if (finishedMatches.length === 0) {
-                return showToast("Không có lịch sử nào để xóa.", "info");
-            }
-
-            // 2. Hỏi xác nhận
-            if (!confirm(`CẢNH BÁO: Bạn có chắc chắn muốn xóa toàn bộ ${finishedMatches.length} trận đấu trong lịch sử? Hành động này không thể hoàn tác.`)) {
-                return;
-            }
-
-            // 3. Thực hiện xóa
-            try {
-                // Tạo một mảng các Promise để xóa song song (nhanh hơn)
-                const deletePromises = finishedMatches.map(m => deleteDoc(doc(db, getPath('matches'), m.id)));
-                
-                await Promise.all(deletePromises);
-                
-                showToast(`Đã xóa sạch ${finishedMatches.length} bản ghi lịch sử!`);
-            } catch (e) {
-                console.error("Bulk delete error:", e);
-                showToast("Lỗi khi xóa dữ liệu: " + e.message, "error");
-            }
-        };
-// ============================================================
-        // === MODULE: CHINH PHỤC THỬ THÁCH (CHALLENGES) ===
-        // ============================================================
-
-// --- 1. ĐIỀU HƯỚNG CHÍNH MODULE THỬ THÁCH ---
-        const renderChallenges = () => {
-            // Nếu đang chọn câu hỏi từ ngân hàng đề (tái sử dụng giao diện)
-            if (state.ui.isSelectingBankQuestions) {
-                return renderQuestionSelectionFromBank();
-            }
-            if (state.ui.challengeMode === 'create' || state.ui.challengeMode === 'edit') {
-                return renderChallengeForm();
-            }
-            if (state.ui.challengeMode === 'do') {
-                return renderDoingChallenge();
-            }
-            // Mặc định: Xem danh sách
-            return state.profile.role === 'teacher' ? renderTeacherChallenges() : renderStudentChallenges();
-        };
-
-// --- 2. GIAO DIỆN GIÁO VIÊN (QUẢN LÝ) - ĐÃ TỐI ƯU BỐ CỤC CARD ---
-        const renderTeacherChallenges = () => {
-            const list = state.data.challenges.map(c => `
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition relative group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shadow-sm border border-orange-200">
-                            ${c.order || '#'}
-                        </div>
-                        
-                        <div class="flex gap-1">
-                            <button onclick="viewChallengeStats('${c.id}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 rounded-lg transition" title="Xem Thống kê">
-                                <i data-lucide="users" size="18"></i>
-                            </button>
-                            <button onclick="editChallenge('${c.id}')" class="p-2 text-slate-500 bg-slate-50 hover:bg-yellow-100 hover:text-yellow-600 rounded-lg transition" title="Chỉnh sửa">
-                                <i data-lucide="edit" size="18"></i>
-                            </button>
-                            <button onclick="deleteChallenge('${c.id}')" class="p-2 text-slate-500 bg-slate-50 hover:bg-red-100 hover:text-red-600 rounded-lg transition" title="Xóa">
-                                <i data-lucide="trash-2" size="18"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold text-slate-800 text-lg mb-2 line-clamp-2" title="${c.title}">
-                            ${c.title}
-                        </h4>
-                        
-                        <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                            <div class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-md border border-slate-200">
-                                <i data-lucide="list-checks" size="14"></i> ${c.questions.length} câu
-                            </div>
-                            <div class="flex items-center gap-1">
-                                <i data-lucide="calendar" size="14"></i> ${c.createdAt ? new Date(c.createdAt.seconds*1000).toLocaleDateString('vi-VN') : 'N/A'}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            return `
-                <div class="max-w-6xl mx-auto fade-in">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                        <div>
-                            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
-                                <div class="p-2 bg-orange-500 rounded-xl text-white shadow-lg shadow-orange-200">
-                                    <i data-lucide="mountain-snow" size="28"></i>
-                                </div>
-                                Quản lý Thử thách
-                            </h2>
-                            <p class="text-slate-500 mt-1 ml-1">Tạo và quản lý lộ trình học tập cho học sinh</p>
-                        </div>
-                        <button onclick="initCreateChallenge()" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg flex items-center gap-2 transition transform hover:-translate-y-0.5">
-                            <i data-lucide="plus-circle" size="20"></i> Tạo Thử thách Mới
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                        ${list || `<div class="col-span-full text-center text-slate-400 py-12 bg-white rounded-2xl border-2 border-dashed border-slate-200">Chưa có thử thách nào. Hãy tạo mới!</div>`}
-                    </div>
-                    
-                    <div class="mt-10 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2 text-lg"><i data-lucide="shield-alert" class="text-red-500"></i> Quản trị viên</h3>
-                        <div class="flex flex-col md:flex-row gap-3">
-                            <input id="reset-student-email" type="text" class="border-2 border-slate-200 p-3 rounded-xl flex-1 focus:border-red-400 outline-none" placeholder="Nhập email học sinh cần reset tiến độ...">
-                            <button onclick="resetStudentProgress()" class="bg-red-50 text-red-600 border border-red-200 px-6 py-3 rounded-xl font-bold hover:bg-red-100 transition whitespace-nowrap">
-                                Reset Tiến độ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-
- // --- 3. FORM TẠO/SỬA THỬ THÁCH (ĐÃ THÊM NÚT LƯU TRÊN ĐẦU) ---
-        const renderChallengeForm = () => {
-            const isEdit = !!state.ui.activeChallenge.id;
-            const qList = state.ui.activeChallenge.questions.map((q, idx) => renderQuestionDisplay(q, idx)).join('');
-            const myBanks = state.data.questionBanks.filter(b => b.createdBy === state.user.uid);
-            
-            return `
-                <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg fade-in">
-                    <div class="flex justify-between items-center mb-6 border-b pb-4 sticky top-0 bg-white z-10">
-                        <h3 class="text-2xl font-bold text-orange-600">${isEdit ? 'Chỉnh sửa Thử thách' : 'Tạo Thử thách Mới'}</h3>
-                        
-                        <div class="flex items-center gap-3">
-                            <button onclick="saveChallenge()" class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-xl font-bold shadow-md flex items-center gap-2 transition transform hover:-translate-y-0.5">
-                                <i data-lucide="save" size="20"></i>
-                            </button>
-                            <button onclick="closeChallengeForm()" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100 transition">
-                                <i data-lucide="x" size="28"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">Tên Thử thách</label>
-                            <input id="chal-title" value="${state.ui.activeChallenge.title || ''}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:border-orange-500 outline-none font-bold" placeholder="VD: Thử thách Tuần 1...">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">Thứ tự (Order)</label>
-                            <input id="chal-order" type="number" value="${state.ui.activeChallenge.order || (state.data.challenges.length + 1)}" class="w-full p-3 border-2 border-slate-200 rounded-xl focus:border-orange-500 outline-none font-bold">
-                            <p class="text-xs text-slate-500 mt-1">Học sinh phải hoàn thành bài 1 mới mở được bài 2.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-end mb-2">
-                        <h4 class="text-lg font-bold text-slate-800">Danh sách câu hỏi (${state.ui.activeChallenge.questions.length})</h4>
-                    </div>
-                    
-                    <div id="questions-preview" class="space-y-4 border-2 border-slate-100 p-4 rounded-xl bg-slate-50 max-h-96 overflow-y-auto mb-6">
-                        ${qList || '<p class="text-slate-400 text-center italic py-8">Chưa có câu hỏi nào.</p>'}
-                    </div>
-
-                    <div class="mb-8 space-y-4">
-                        <button onclick="setSelectingBankQuestions(true)" ${myBanks.length === 0 ? 'disabled' : ''} class="w-full bg-yellow-100 text-yellow-700 py-3 rounded-xl font-bold border border-yellow-300 hover:bg-yellow-200 transition flex items-center justify-center gap-2 ${myBanks.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
-                            <i data-lucide="plus-square" size="18"></i> Chọn câu hỏi từ Ngân hàng đề
-                        </button>
-                        ${myBanks.length === 0 ? '<p class="text-xs text-center text-red-500">Chưa có ngân hàng đề nào.</p>' : ''}
-                    </div>
-
-                    ${renderQuestionInputSection(true)}
-
-                    <div class="flex gap-3 mt-8 pt-6 border-t">
-                        <button onclick="closeChallengeForm()" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-200">Hủy</button>
-                        <button onclick="saveChallenge()" class="flex-1 bg-orange-600 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-orange-700">Lưu Thử thách</button>
-                    </div>
-                </div>
-            `;
-        };
-
-        // --- 4. GIAO DIỆN HỌC SINH (LỘ TRÌNH) ---
-        const renderStudentChallenges = () => {
-            const challenges = state.data.challenges;
-            const myCompleted = state.profile.completedChallenges || []; // Mảng chứa ID các challenge đã qua
-            const myStreak = state.profile.streak || 0;
-
-            // Xác định challenge nào đang mở
-            // Logic: Challenge đầu tiên luôn mở. Challenge sau mở khi challenge liền trước đã nằm trong myCompleted.
-            
-            const listHtml = challenges.map((c, idx) => {
-                const isCompleted = myCompleted.includes(c.id);
-                // Mở khóa nếu là bài đầu tiên HOẶC bài trước đó đã hoàn thành
-                const prevChallenge = challenges[idx - 1];
-                const isLocked = idx > 0 && (!prevChallenge || !myCompleted.includes(prevChallenge.id));
-                
-                let statusIcon = isLocked ? '<i data-lucide="lock" class="text-slate-400"></i>' 
-                               : isCompleted ? '<i data-lucide="check-circle" class="text-green-500 fill-green-100 w-8 h-8"></i>'
-                               : '<i data-lucide="play-circle" class="text-orange-500 w-8 h-8"></i>';
-                
-                let cardClass = isLocked ? 'bg-slate-100 border-slate-200 opacity-70 grayscale' 
-                              : isCompleted ? 'bg-green-50 border-green-200' 
-                              : 'bg-white border-orange-200 shadow-md transform hover:-translate-y-1';
-
-                return `
-                    <div onclick="${isLocked ? '' : `initDoChallenge('${c.id}')`}" 
-                         class="relative p-6 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-4 ${cardClass}">
-                        
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center font-black text-xl ${isLocked ? 'bg-slate-200 text-slate-500' : 'bg-white shadow-sm text-orange-600'}">
-                                ${c.order}
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-lg ${isLocked ? 'text-slate-500' : 'text-slate-800'}">${c.title}</h4>
-                                <p class="text-sm ${isLocked ? 'text-slate-400' : 'text-slate-600'}">20 câu hỏi • Mục tiêu: 80 điểm</p>
-                            </div>
-                        </div>
-
-                        <div>${statusIcon}</div>
-                        
-                        ${isCompleted ? '<div class="absolute top-2 right-2 text-[10px] bg-green-200 text-green-800 px-2 py-0.5 rounded-full font-bold">Đã qua</div>' : ''}
-                    </div>
-                `;
-            }).join('');
-
-            return `
-                <div class="max-w-3xl mx-auto fade-in pb-10">
-                    <div class="text-center mb-8">
-                        <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-6 py-2 rounded-full font-bold text-lg shadow-sm mb-4">
-                            <i data-lucide="flame" class="fill-orange-500"></i> Chuỗi Streak: ${myStreak} ngày
-                        </div>
-                        <h2 class="text-3xl font-black text-slate-800">Con đường Chinh phục</h2>
-                        <p class="text-slate-500">Hoàn thành từng thử thách để mở khóa bài tiếp theo!</p>
-                    </div>
-
-                    <div class="space-y-4 relative">
-                        <div class="absolute left-10 top-0 bottom-0 w-1 bg-slate-200 -z-10"></div>
-                        ${listHtml}
-                    </div>
-                </div>
-            `;
-        };
-
-// --- 5. GIAO DIỆN LÀM BÀI THỬ THÁCH (ĐÃ SỬA: ẨN SCRIPT BÀI NGHE) ---
-        const renderDoingChallenge = () => {
-            const c = state.ui.activeChallenge;
-            if (!c) return '';
-            
-            const total = c.questions.length;
-            const currentIdx = state.ui.challengeQIndex;
-            const q = c.questions[currentIdx];
-            const userAns = state.ui.challengeAnswers[currentIdx];
-            
-            // --- XỬ LÝ ÂM THANH ---
-            const audioText = q.audioText || q.audioWord;
-            const audioUrl = q.audioUrl; 
-            const audioId = `chal-audio-${currentIdx}`; 
-            let audioButtonHtml = '';
-            
-            if (audioUrl) {
-                audioButtonHtml = `<audio id="${audioId}" src="${audioUrl}" style="display:none"></audio>
-                    <button onclick="playCustomAudio('${audioId}', this)" class="w-14 h-14 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center hover:bg-purple-200 shadow-md border-2 border-purple-200 animate-bounce-in"><i data-lucide="volume-2" size="28"></i></button>`;
-            } else if (audioText) {
-                audioButtonHtml = `<button onclick="speakWord('${audioText.replace(/'/g, "\\'")}', 'zh-CN')" class="w-14 h-14 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center hover:bg-purple-200 shadow-md border-2 border-purple-200 animate-bounce-in"><i data-lucide="volume-2" size="28"></i></button>`;
-            }
-
-            // --- XỬ LÝ ĐOẠN VĂN (SỬA TẠI ĐÂY) ---
-            let extraContent = '';
-            
-            // [QUAN TRỌNG] Chỉ hiện đoạn văn nếu là bài ĐỌC HIỂU. 
-            // Bài NGHE HỘI THOẠI sẽ ẩn script đi để học sinh phải nghe.
-            if (q.type === 'reading_comprehension' && q.conversationContent) {
-                extraContent = `<div class="mb-4 p-4 bg-slate-50 border-2 border-slate-200 rounded-xl text-left text-slate-700 whitespace-pre-line font-medium text-sm leading-relaxed">${formatText(q.conversationContent)}</div>`;
-            }
-
-            let questionText = formatText(q.text || q.vietnamese || '');
-            if (q.type === 'fib') questionText = questionText.replace('[BLANK]', '______');
-
-            // --- RENDER VÙNG TƯƠNG TÁC ---
-            let interactionHtml = '';
-
-            if (q.options && q.options.length > 0) {
-                interactionHtml = q.options.map((opt, idx) => `
-                    <button onclick="selectChallengeAnswer(${currentIdx}, ${idx})" 
-                        class="w-full text-left p-4 rounded-xl border-2 transition font-medium mb-3 flex items-center gap-3 relative overflow-hidden
-                        ${userAns === idx ? 'bg-orange-50 border-orange-500 text-orange-700 shadow-md' : 'bg-white border-slate-200 hover:border-orange-300 hover:bg-orange-50'}">
-                        <span class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center font-bold text-sm text-slate-600 flex-shrink-0 z-10 
-                            ${userAns === idx ? 'bg-orange-500 text-white border-orange-500' : ''}">${String.fromCharCode(65+idx)}</span>
-                        <span class="z-10">${opt}</span>
-                    </button>
-                `).join('');
-            } else if (q.type === 'jumble' || q.type === 'order_sentences') {
-                const correctArr = q.answer || [];
-                const currentPlaced = userAns || []; 
-                let remaining = [...correctArr];
-                currentPlaced.forEach(placedItem => {
-                    const idx = remaining.indexOf(placedItem);
-                    if (idx > -1) remaining.splice(idx, 1);
-                });
-                remaining.sort(() => Math.random() - 0.5);
-                const itemClass = q.type === 'jumble' ? 'inline-block' : 'block w-full text-left';
-
-                interactionHtml = `
-                    <div class="min-h-[60px] p-4 bg-blue-50 border-2 border-dashed border-blue-300 rounded-xl mb-4 flex flex-wrap gap-2 justify-center items-center">
-                        ${currentPlaced.length === 0 ? '<span class="text-slate-400 text-sm italic">Chọn từ bên dưới...</span>' : ''}
-                        ${currentPlaced.map((item, idx) => `
-                            <button onclick="removeChallengeJumbleWord(${currentIdx}, ${idx})" class="${itemClass} bg-blue-600 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-blue-700 animate-in fade-in zoom-in duration-200">
-                                ${item} <i data-lucide="x" class="inline w-3 h-3 ml-1 opacity-70"></i>
-                            </button>
-                        `).join('')}
-                    </div>
-                    <div class="flex flex-wrap gap-2 justify-center p-4 bg-slate-100 rounded-xl border border-slate-200">
-                        ${remaining.map(item => `
-                            <button onclick="addChallengeJumbleWord(${currentIdx}, '${item.replace(/'/g, "\\'")}')" class="${itemClass} bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg font-medium shadow-sm hover:border-blue-500 hover:text-blue-600 transition">
-                                ${item}
-                            </button>
-                        `).join('')}
-                    </div>
-                `;
-            } else if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
-                const val = userAns || '';
-                interactionHtml = `
-                    <div class="mt-4">
-                        <input type="text" value="${val}" oninput="captureChallengeInput(${currentIdx}, this.value)" 
-                            class="w-full p-4 border-2 border-slate-300 rounded-xl focus:border-orange-500 outline-none text-lg text-center font-bold"
-                            placeholder="Nhập câu trả lời của bạn..." />
-                    </div>`;
-            } else {
-                interactionHtml = `<div class="p-4 bg-yellow-50 text-yellow-700 rounded-xl border border-yellow-200">⚠️ Dạng câu hỏi này (${q.type}) sẽ được tính điểm miễn phí.</div>`;
-            }
-
-            const isLast = currentIdx === total - 1;
-
-            return `
-                <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-3xl shadow-xl fade-in mt-4 relative">
-                    <div class="flex justify-between items-center mb-6 border-b pb-4">
-                        <div class="flex-1">
-                            <div class="flex justify-between text-xs text-slate-500 font-bold mb-1">
-                                <span>Tiến độ</span> <span>${currentIdx + 1}/${total}</span>
-                            </div>
-                            <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-orange-400 to-red-500 transition-all duration-300" style="width: ${((currentIdx+1)/total)*100}%"></div>
-                            </div>
-                        </div>
-                        
-                        <button onclick="exitDoingChallenge()" class="ml-4 text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100">
-                            <i data-lucide="x" size="24"></i>
-                        </button>
-                    </div>
-
-                    <div class="mb-8 text-center">
-                        <div class="flex items-center justify-center gap-4 mb-6">${audioButtonHtml}</div>
-                        ${extraContent}
-                        <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-6 leading-relaxed">${questionText}</h2>
-                        <div>${interactionHtml}</div>
-                    </div>
-
-                    <div class="flex justify-between pt-4 border-t">
-                        <button onclick="navChallenge(-1)" class="px-6 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 ${currentIdx===0 ? 'invisible':''}">
-                            <i data-lucide="arrow-left" size="18"></i> Lùi
-                        </button>
-                        ${isLast ? 
-                            `<button onclick="submitChallengeResult()" class="px-8 py-3 rounded-xl font-bold bg-green-600 text-white hover:bg-green-700 shadow-lg animate-bounce flex items-center gap-2"><i data-lucide="flag" size="18"></i> Nộp Bài</button>` : 
-                            `<button onclick="navChallenge(1)" class="px-8 py-3 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-lg flex items-center gap-2">Tiếp <i data-lucide="arrow-right" size="18"></i></button>`
-                        }
-                    </div>
-                </div>
-            `;
-        };
-        // --- HANDLERS ---
-
-        window.initCreateChallenge = () => {
-            state.ui.activeChallenge = { title: '', order: state.data.challenges.length + 1, questions: [] };
-            state.ui.challengeMode = 'create';
-            renderApp();
-        };
-
-        window.editChallenge = (id) => {
-            const c = state.data.challenges.find(i => i.id === id);
-            if(c) {
-                state.ui.activeChallenge = {...c};
-                state.ui.challengeMode = 'edit';
-                renderApp();
-            }
-        };
-
-window.saveChallenge = async () => {
-            const title = document.getElementById('chal-title').value;
-            const order = parseInt(document.getElementById('chal-order').value) || 1;
-
-            if (!title) return showToast("Thiếu tên thử thách!", "error");
-            
-            try {
-                // [ĐÃ SỬA] Lấy trực tiếp danh sách câu hỏi đã chọn thủ công
-                let questions = state.ui.activeChallenge.questions || [];
-
-                if (questions.length === 0) return showToast("Thử thách cần có ít nhất 1 câu hỏi!", "error");
-
-                const payload = {
-                    title, order, questions,
-                    updatedAt: serverTimestamp()
-                };
-
-                if (state.ui.challengeMode === 'create') {
-                    payload.createdAt = serverTimestamp();
-                    payload.createdBy = state.user.uid;
-                    await addDoc(getRef('challenges'), payload);
-                } else {
-                    await updateDoc(doc(db, getPath('challenges'), state.ui.activeChallenge.id), payload);
-                }
-
-                showToast("Đã lưu Thử thách!");
-                state.ui.challengeMode = 'list';
-                renderApp();
-            } catch (e) {
-                console.error(e);
-                showToast("Lỗi lưu: " + e.message, "error");
-            }
-        };
-
-        window.deleteChallenge = async (id) => {
-            if(confirm("Bạn chắc chắn muốn xóa thử thách này?")) {
-                await deleteDoc(doc(db, getPath('challenges'), id));
-                showToast("Đã xóa!");
-            }
-        };
-
-        // --- HANDLERS HỌC SINH ---
-        
-        window.initDoChallenge = (id) => {
-            const c = state.data.challenges.find(i => i.id === id);
-            if(!c) return;
-            
-            // Reset trạng thái làm bài
-            state.ui.activeChallenge = c;
-            state.ui.challengeAnswers = {};
-            state.ui.challengeQIndex = 0;
-            state.ui.challengeMode = 'do';
-            renderApp();
-        };
-
-        window.selectChallengeAnswer = (qIdx, ansIdx) => {
-            state.ui.challengeAnswers[qIdx] = ansIdx;
-            renderApp();
-        };
-
-        window.navChallenge = (delta) => {
-            state.ui.challengeQIndex += delta;
-            renderApp();
-        };
-
-// --- NỘP BÀI THỬ THÁCH (ĐÃ SỬA LỖI LƯU ĐIỂM SỐ VÀ CÁC TRƯỜNG HỢP KHÁC) ---
-        window.submitChallengeResult = async () => {
-            if(!confirm("Nộp bài ngay?")) return;
-            
-            const c = state.ui.activeChallenge;
-            let correctCount = 0;
-            
-            // 1. Logic Chấm điểm
-            c.questions.forEach((q, idx) => {
-                const userAns = state.ui.challengeAnswers[idx];
-                
-                if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
-                    if (userAns) {
-                        const expected = (q.type === 'translation' ? q.chinese : q.answer).trim().toLowerCase();
-                        if (userAns.trim().toLowerCase() === expected) correctCount++;
-                    }
-                } else if (q.type === 'jumble' || q.type === 'order_sentences') {
-                    if (Array.isArray(userAns) && Array.isArray(q.answer)) {
-                        if (userAns.join(' ').trim() === q.answer.join(' ').trim()) correctCount++;
-                    }
-                } else {
-                    if(userAns === q.correct) correctCount++;
-                }
-            });
-
-            const score = Math.round((correctCount / c.questions.length) * 100);
-            const isPassed = score >= 80;
-            let isFirstTime = false;
-            
-            // 2. Lưu kết quả vào Database
-            if (isPassed) {
-                const userRef = doc(db, getPath('users'), state.user.uid);
-                const completed = state.profile.completedChallenges || [];
-                isFirstTime = !completed.includes(c.id);
-                
-                // Chuẩn bị dữ liệu: Dùng cấu trúc lồng nhau để setDoc với merge: true hoạt động
-                const updateData = {
-                    challengeScores: {
-                        [c.id]: score // LƯU ĐIỂM BÀI THI CỤ THỂ
-                    }
-                };
-
-                // Nếu là lần đầu vượt qua -> Cộng điểm, Streak và thêm vào completedChallenges
-                if (isFirstTime) {
-                    updateData.points = increment(50);
-                    updateData.streak = increment(1);
-                    updateData.completedChallenges = arrayUnion(c.id);
-                }
-
-                try {
-                    // Sử dụng setDoc với merge: true để đảm bảo tạo trường challengeScores nếu chưa có
-                    await setDoc(userRef, updateData, { merge: true });
-                } catch(e) { 
-                    console.error("Lỗi lưu điểm:", e);
-                    showToast("Lỗi kết nối khi lưu điểm. (Kiểm tra Firebase Rules)", "error");
-                }
-            }
-            
-            // 3. Hiển thị Modal Kết quả
-            state.ui.challengeResult = {
-                challengeId: c.id,
-                score: score,
-                correctCount: correctCount,
-                totalQuestions: c.questions.length,
-                passed: isPassed,
-                isFirstTime: isFirstTime
-            };
-            
-            renderApp();
-        };
-        // --- HANDLER QUẢN TRỊ (RESET) ---
-        window.resetStudentProgress = async () => {
-            const email = document.getElementById('reset-student-email').value.trim();
-            if(!email) return showToast("Nhập email học sinh", "error");
-            
-            // 1. Tìm user id theo email (Cần query, nhưng ở đây ta loop local users data cho nhanh nếu đã load)
-            const targetUser = state.data.users.find(u => u.email === email);
-            
-            if (!targetUser) return showToast("Không tìm thấy học sinh này trong hệ thống", "error");
-            
-            if(confirm(`Reset toàn bộ tiến độ Thử thách của ${targetUser.name}?`)) {
-                try {
-                    await updateDoc(doc(db, getPath('users'), targetUser.uid), {
-                        streak: 0,
-                        completedChallenges: []
-                    });
-                    showToast("Đã reset thành công!");
-                } catch(e) {
-                    showToast("Lỗi: " + e.message, "error");
-                }
-            }
-        };
-        
-       window.viewChallengeStats = (id) => {
-             state.ui.viewingChallengeStats = id;
-             renderApp();
-        };
-
-        window.closeChallengeStats = () => {
-            state.ui.viewingChallengeStats = null;
-            renderApp();
-        };
-// --- GIAO DIỆN KẾT QUẢ THỬ THÁCH (CHALLENGE RESULT MODAL) ---
-        const renderChallengeResultModal = () => {
-            const res = state.ui.challengeResult;
-            if (!res) return '';
-
-            const isPassed = res.passed;
-            const scoreColor = isPassed ? 'text-green-600' : 'text-red-600';
-            const iconHtml = isPassed 
-                ? `<div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"><span class="text-6xl">🏆</span></div>`
-                : `<div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-6xl">😢</span></div>`;
-            
-            const title = isPassed ? "HOÀN THÀNH!" : "CHƯA ĐẠT";
-            const subText = isPassed 
-                ? "Xuất sắc! Bạn đã chứng minh được năng lực của mình." 
-                : "Đừng nản lòng! Hãy ôn tập lại và thử sức lần nữa nhé.";
-
-            return `
-                <div id="challenge-result-modal" class="fixed inset-0 bg-slate-900 bg-opacity-90 flex items-center justify-center z-[70] p-4 fade-in">
-                    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 text-center relative overflow-hidden transform transition-all scale-100 animate-bounce-in">
-                        
-                        <div class="absolute top-0 left-0 w-full h-3 ${isPassed ? 'bg-gradient-to-r from-green-400 to-blue-500' : 'bg-gradient-to-r from-red-500 to-orange-500'}"></div>
-                        
-                        <div class="mt-4">
-                            ${iconHtml}
-                            <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2 uppercase">${title}</h2>
-                            <p class="text-slate-500 text-sm mb-6">${subText}</p>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-6">
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Điểm số của bạn</p>
-                            <div class="text-5xl font-black ${scoreColor} mb-2">${res.score}</div>
-                            <p class="text-sm font-bold text-slate-600">Kết quả: ${res.correctCount}/${res.totalQuestions} câu đúng</p>
-                            ${!isPassed ? `<p class="text-xs text-red-500 mt-2 font-medium"><i data-lucide="alert-circle" size="12" class="inline"></i> Cần đạt tối thiểu 80 điểm để qua màn</p>` : ''}
-                        </div>
-
-                        ${isPassed && res.isFirstTime ? `
-                        <div class="flex justify-center gap-4 mb-8">
-                            <div class="px-4 py-2 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg text-sm font-bold flex items-center gap-1">
-                                <i data-lucide="zap" size="16" class="fill-yellow-500 text-yellow-500"></i> +1 Streak
-                            </div>
-                            <div class="px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-sm font-bold flex items-center gap-1">
-                                <i data-lucide="star" size="16" class="fill-blue-500 text-blue-500"></i> +50 Điểm
-                            </div>
-                        </div>` : ''}
-
-                        <div class="flex flex-col gap-3">
-                            ${!isPassed ? `
-                                <button onclick="closeChallengeResult(); initDoChallenge('${res.challengeId}')" 
-                                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-bold text-lg shadow-lg transition">
-                                    <i data-lucide="rotate-ccw" class="inline-block mr-2" size="20"></i> Làm lại ngay
-                                </button>
-                            ` : ''}
-                            <button onclick="closeChallengeResult()" 
-                                class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold text-lg transition">
-                                Quay về Danh sách
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-        
-        window.closeChallengeResult = () => {
-            state.ui.challengeResult = null;
-            state.ui.challengeMode = 'list';
-            renderApp();
-        };
-// --- HÀM MỚI: LƯU INPUT CHO THỬ THÁCH ---
-        window.captureChallengeInput = (qIdx, value) => {
-            state.ui.challengeAnswers[qIdx] = value;
-            // Không cần renderApp() mỗi lần gõ để tránh mất focus, chỉ lưu state
-        };
-// --- HANDLERS CHO THỬ THÁCH (ĐÃ CẬP NHẬT) ---
-
-        // 1. Thêm từ vào ô trả lời (cho Jumble/Order)
-        window.addChallengeJumbleWord = (qIdx, word) => {
-            const currentArr = state.ui.challengeAnswers[qIdx] || [];
-            state.ui.challengeAnswers[qIdx] = [...currentArr, word];
-            renderApp(); // Render lại để cập nhật UI
-        };
-
-        // 2. Xóa từ khỏi ô trả lời
-        window.removeChallengeJumbleWord = (qIdx, idxToRemove) => {
-            const currentArr = state.ui.challengeAnswers[qIdx] || [];
-            currentArr.splice(idxToRemove, 1);
-            state.ui.challengeAnswers[qIdx] = currentArr;
-            renderApp();
-        };
-
-// --- NỘP BÀI THỬ THÁCH (PHIÊN BẢN CHUẨN: LƯU ĐIỂM CHI TIẾT) ---
-        window.submitChallengeResult = async () => {
-            if(!confirm("Nộp bài ngay?")) return;
-            
-            const c = state.ui.activeChallenge;
-            let correctCount = 0;
-            
-            // 1. Chấm điểm
-            c.questions.forEach((q, idx) => {
-                const userAns = state.ui.challengeAnswers[idx];
-                
-                if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
-                    if (userAns) {
-                        const expected = (q.type === 'translation' ? q.chinese : q.answer).trim().toLowerCase();
-                        if (userAns.trim().toLowerCase() === expected) correctCount++;
-                    }
-                } else if (q.type === 'jumble' || q.type === 'order_sentences') {
-                    if (Array.isArray(userAns) && Array.isArray(q.answer)) {
-                        if (userAns.join(' ').trim() === q.answer.join(' ').trim()) correctCount++;
-                    }
-                } else {
-                    if(userAns === q.correct) correctCount++;
-                }
-            });
-
-            const score = Math.round((correctCount / c.questions.length) * 100);
-            const isPassed = score >= 80;
-            let isFirstTime = false;
-            
-            // 2. Lưu vào Database (SỬA LỖI TẠI ĐÂY)
-            if (isPassed) {
-                const userRef = doc(db, getPath('users'), state.user.uid);
-                const completed = state.profile.completedChallenges || [];
-                isFirstTime = !completed.includes(c.id);
-                
-                // Dữ liệu cần cập nhật: Luôn cập nhật điểm số mới nhất của bài thi này
-                const updateData = {
-                    challengeScores: {
-                        [c.id]: score 
-                    }
-                };
-
-                // Nếu là lần đầu tiên vượt qua -> Cộng điểm tổng và Streak
-                if (isFirstTime) {
-                    updateData.points = increment(50);
-                    updateData.streak = increment(1);
-                    updateData.completedChallenges = arrayUnion(c.id);
-                }
-
-                try {
-                    // Dùng setDoc với { merge: true } để đảm bảo không bị lỗi nếu trường challengeScores chưa có
-                    await setDoc(userRef, updateData, { merge: true });
-                } catch(e) { 
-                    console.error("Lỗi lưu điểm:", e);
-                    showToast("Lỗi lưu điểm (Kiểm tra kết nối/Rule).", "error");
-                }
-            }
-            
-            state.ui.challengeResult = {
-                challengeId: c.id,
-                score: score,
-                correctCount: correctCount,
-                totalQuestions: c.questions.length,
-                passed: isPassed,
-                isFirstTime: isFirstTime
-            };
-            
-            renderApp();
-        };
-// --- GIAO DIỆN MODAL THỐNG KÊ THỬ THÁCH (ĐÃ SỬA: TÊN LỚP & ĐIỂM BÀI THI) ---
-        const renderChallengeStatsModal = () => {
-            const challengeId = state.ui.viewingChallengeStats;
-            if (!challengeId) return '';
-
-            const challenge = state.data.challenges.find(c => c.id === challengeId);
-            if (!challenge) return '';
-
-            // Lọc học sinh đã hoàn thành
-            const passedStudents = state.data.users.filter(u => (u.completedChallenges || []).includes(challengeId));
-            
-            // Helper lấy điểm bài thi này (Lấy từ challengeScores trong profile user)
-            const getChalScore = (u) => (u.challengeScores && u.challengeScores[challengeId]) ? u.challengeScores[challengeId] : 0;
-
-            // Sắp xếp: Điểm bài thi cao xếp trước
-            passedStudents.sort((a, b) => {
-                const scoreA = getChalScore(a);
-                const scoreB = getChalScore(b);
-                if (scoreB !== scoreA) return scoreB - scoreA;
-                return a.name.localeCompare(b.name);
-            });
-
-            const rows = passedStudents.map((u, idx) => {
-                let rankColor = 'bg-slate-100 text-slate-600';
-                let rankIcon = `#${idx + 1}`;
-                if (idx === 0) { rankColor = 'bg-yellow-100 text-yellow-700 border-yellow-200'; rankIcon = '🥇'; }
-                if (idx === 1) { rankColor = 'bg-slate-200 text-slate-700 border-slate-300'; rankIcon = '🥈'; }
-                if (idx === 2) { rankColor = 'bg-orange-100 text-orange-800 border-orange-200'; rankIcon = '🥉'; }
-
-                // --- [LOGIC MỚI] TÌM TÊN LỚP ---
-                const userClass = state.data.classes.find(c => (c.studentIds || []).includes(u.uid));
-                const className = userClass ? userClass.title : 'Chưa vào lớp';
-                // ------------------------------
-
-                const score = getChalScore(u);
-
-                return `
-                    <tr class="border-b last:border-0 hover:bg-slate-50 transition">
-                        <td class="py-3 pl-4 w-16 text-center">
-                            <div class="w-8 h-8 rounded-full ${rankColor} border flex items-center justify-center font-bold text-sm mx-auto">
-                                ${rankIcon}
-                            </div>
-                        </td>
-                        <td class="py-3">
-                            <div class="flex items-center gap-3">
-                                ${renderAvatar(u, 'w-8 h-8', 'text-xs')}
-                                <div>
-                                    <p class="font-bold text-slate-700 text-sm">${u.name}</p>
-                                    <p class="text-xs text-blue-600 font-medium flex items-center gap-1 mt-0.5">
-                                        <i data-lucide="graduation-cap" size="12"></i> ${className}
-                                    </p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-3 pr-6 text-right">
-                            <span class="font-mono font-bold ${score >= 80 ? 'text-green-600 bg-green-50' : 'text-orange-600 bg-orange-50'} px-2 py-1 rounded text-sm">
-                                ${score} điểm
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            return `
-                <div id="challenge-stats-modal" class="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center z-[80] p-4 fade-in">
-                    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                        <div class="p-5 border-b bg-slate-50 flex justify-between items-center sticky top-0 z-10">
-                            <div>
-                                <h3 class="text-lg font-bold text-slate-800">Thống kê: ${challenge.title}</h3>
-                                <p class="text-xs text-slate-500 mt-1">Đã có <span class="font-bold text-green-600">${passedStudents.length}</span> học sinh vượt qua</p>
-                            </div>
-                            <button onclick="closeChallengeStats()" class="p-2 bg-white border border-slate-200 rounded-full hover:bg-red-50 hover:text-red-500 transition shadow-sm">
-                                <i data-lucide="x" size="20"></i>
-                            </button>
-                        </div>
-                        <div class="overflow-y-auto flex-1 p-0">
-                            <table class="w-full">
-                                <thead class="bg-slate-100 text-xs text-slate-500 uppercase font-bold sticky top-0 shadow-sm">
-                                    <tr>
-                                        <th class="py-3 pl-4 text-center">Hạng</th>
-                                        <th class="py-3 text-left">Học sinh</th>
-                                        <th class="py-3 pr-6 text-right">Điểm số</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${rows || `<tr><td colspan="3" class="text-center py-10 text-slate-400 italic">Chưa có học sinh nào vượt qua thử thách này.</td></tr>`}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="p-4 border-t bg-slate-50 text-right">
-                            <button onclick="closeChallengeStats()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2 rounded-lg font-bold text-sm transition">Đóng</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-// --- HÀM MỚI: ĐÓNG FORM TẠO/SỬA THỬ THÁCH (FIX LỖI NÚT ĐÓNG) ---
-        window.closeChallengeForm = () => {
-            state.ui.challengeMode = 'list';
-            // Không cần reset activeChallenge ngay để tránh lỗi render, chỉ cần chuyển mode
-            renderApp();
-        };
-
-        // --- HÀM MỚI: THOÁT KHỎI CHẾ ĐỘ LÀM BÀI (FIX LỖI NÚT THOÁT) ---
-        window.exitDoingChallenge = () => {
-            if (confirm('Thoát sẽ mất toàn bộ tiến độ bài này. Chắc chắn thoát?')) {
-                state.ui.challengeMode = 'list';
-                state.ui.activeChallenge = null;
-                state.ui.challengeAnswers = {};
-                renderApp();
-            }
-        };
-// --- HÀM MỚI: THOÁT KHỎI CHẾ ĐỘ LÀM BÀI (GẮN VÀO WINDOW) ---
-        window.exitDoingChallenge = () => {
-            if (confirm('Thoát sẽ mất toàn bộ tiến độ bài này. Chắc chắn thoát?')) {
-                // Reset trạng thái làm bài
-                state.ui.activeChallenge = null;
-                state.ui.challengeAnswers = {};
-                state.ui.challengeQIndex = 0;
-                
-                // Quay về danh sách
-                state.ui.challengeMode = 'list';
-                renderApp();
-            }
         };
     </script>
 </body>

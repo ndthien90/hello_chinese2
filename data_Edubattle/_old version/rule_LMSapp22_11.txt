@@ -1,0 +1,145 @@
+rules_version = '2';
+service cloud.firestore {
+  // Thay thế $(appId) bằng ID của ứng dụng hiện tại.
+  match /databases/{database}/documents/artifacts/{appId}/public/data {
+
+    // Hàm tiện ích để kiểm tra vai trò người dùng (Giáo viên)
+    function isTeacher() {
+      let profile = get(/databases/$(database)/documents/artifacts/$(appId)/public/data/users/$(request.auth.uid));
+      return profile.data.role == 'teacher';
+    }
+    
+    // Hàm tiện ích để kiểm tra xem người dùng có hồ sơ không
+    function hasNoProfile() {
+        return !exists(/databases/$(database)/documents/artifacts/$(appId)/public/data/users/$(request.auth.uid));
+    }
+
+    // 1. USERS: Hồ sơ người dùng
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    && hasNoProfile();
+      allow update: if request.auth != null 
+                    && request.auth.uid == userId;
+      allow delete: if false; 
+    }
+
+    // 2. ASSIGNMENTS: Bài tập
+    match /assignments/{assignmentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && isTeacher();
+      allow update, delete: if request.auth != null
+                          && isTeacher()
+                          && resource.data.createdBy == request.auth.uid;
+    }
+
+    // 3. SUBMISSIONS: Kết quả nộp bài (ĐÃ SỬA)
+    match /submissions/{submissionId} {
+      allow read: if request.auth != null;
+      // Học sinh nộp bài (tạo mới)
+      allow create: if request.auth != null && request.resource.data.studentId == request.auth.uid;
+      
+      // --- [QUAN TRỌNG] CHO PHÉP GIÁO VIÊN SỬA (ĐỂ LƯU NHẬN XÉT) ---
+      allow update: if request.auth != null && isTeacher();
+      
+      allow delete: if false;
+    }
+
+    // 4. MATCHES: Đấu trường
+    match /matches/{matchId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.player1.uid == request.auth.uid;
+      allow update: if request.auth != null && (
+        resource.data.player1.uid == request.auth.uid ||
+        (resource.data.player2 != null && resource.data.player2.uid == request.auth.uid)
+      );
+      allow delete: if false;
+    }
+
+    // 5. CLASSES: Quản lý Lớp học
+    match /classes/{classId} {
+        allow read: if request.auth != null; 
+        allow create: if request.auth != null && isTeacher();
+        allow update: if request.auth != null && (
+            (isTeacher() && resource.data.teacherId == request.auth.uid) || 
+            (request.resource.data.studentIds is list 
+             && request.resource.data.studentIds.size() == resource.data.studentIds.size() + 1 
+             && request.resource.data.studentIds.removeAll(resource.data.studentIds).size() == 1 
+            )
+        );
+        allow delete: if request.auth != null
+                      && isTeacher()
+                      && resource.data.teacherId == request.auth.uid;
+    }
+    
+    // 6. QUESTION_BANKS: Ngân hàng đề
+    match /question_banks/{bankId} {
+      allow read: if request.auth != null; 
+      allow create: if request.auth != null && isTeacher();
+      allow update, delete: if request.auth != null
+                          && isTeacher()
+                          && resource.data.createdBy == request.auth.uid;
+    }
+    // 1. USERS: Hồ sơ người dùng
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      
+      // Tạo mới: Chỉ được tạo cho chính mình và chưa có hồ sơ
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    && hasNoProfile();
+      
+      // Cập nhật: Chính mình HOẶC Giáo viên (để sửa điểm) [ĐÃ SỬA]
+      allow update: if request.auth != null 
+                    && (request.auth.uid == userId || isTeacher());
+                    
+      allow delete: if false; 
+    }
+// 4. MATCHES: Đấu trường
+    match /matches/{matchId} {
+      allow read: if request.auth != null;
+      
+      allow create: if request.auth != null;
+      
+      // Update: Cho phép nếu là người chơi HOẶC LÀ GIÁO VIÊN
+      allow update: if request.auth != null && (
+        resource.data.player1.uid == request.auth.uid ||
+        resource.data.player2.uid == request.auth.uid ||
+        resource.data.player2 == null ||
+        isTeacher() // <--- THÊM DÒNG NÀY (Giáo viên được quyền can thiệp)
+      );
+      
+      // Delete: Chủ phòng HOẶC GIÁO VIÊN
+      allow delete: if request.auth != null && (
+        resource.data.player1.uid == request.auth.uid || 
+        isTeacher() // <--- THÊM DÒNG NÀY (Giáo viên được quyền xóa)
+      );
+    }
+    // 7. CHALLENGES: Thử thách
+    match /challenges/{id} {
+      allow read: if request.auth != null;
+      // Chỉ giáo viên được tạo, sửa, xóa
+      allow write: if request.auth != null && isTeacher();
+    }
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId && hasNoProfile();
+      // Cho phép chính chủ hoặc Giáo viên update (để GV reset streak)
+      allow update: if request.auth != null && (request.auth.uid == userId || isTeacher()); 
+      allow delete: if false;
+    }
+        match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    && hasNoProfile();
+      
+      // [FIX QUAN TRỌNG]: Cho phép người dùng tự cập nhật hồ sơ của mình
+      allow update: if request.auth != null 
+                    && request.auth.uid == userId;
+                    
+      allow delete: if false; 
+    }
+  }
+}
