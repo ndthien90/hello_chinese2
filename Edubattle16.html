@@ -6820,21 +6820,21 @@ window.viewSubmissionResult = (subId) => {
             `;
         };
 
-// --- 4. GIAO DIỆN HỌC SINH (LỘ TRÌNH) - ĐÃ CÓ NÚT XEM BXH ---
+        // --- 4. GIAO DIỆN HỌC SINH (LỘ TRÌNH) ---
         const renderStudentChallenges = () => {
             const challenges = state.data.challenges;
-            const myCompleted = state.profile.completedChallenges || [];
+            const myCompleted = state.profile.completedChallenges || []; // Mảng chứa ID các challenge đã qua
             const myStreak = state.profile.streak || 0;
 
+            // Xác định challenge nào đang mở
+            // Logic: Challenge đầu tiên luôn mở. Challenge sau mở khi challenge liền trước đã nằm trong myCompleted.
+            
             const listHtml = challenges.map((c, idx) => {
                 const isCompleted = myCompleted.includes(c.id);
-                // Logic khóa: Mở nếu là bài 1 HOẶC bài trước đã xong
+                // Mở khóa nếu là bài đầu tiên HOẶC bài trước đó đã hoàn thành
                 const prevChallenge = challenges[idx - 1];
                 const isLocked = idx > 0 && (!prevChallenge || !myCompleted.includes(prevChallenge.id));
                 
-                // Đếm số người đã qua để hiển thị trên nút
-                const passCount = state.data.users.filter(u => (u.completedChallenges || []).includes(c.id)).length;
-
                 let statusIcon = isLocked ? '<i data-lucide="lock" class="text-slate-400"></i>' 
                                : isCompleted ? '<i data-lucide="check-circle" class="text-green-500 fill-green-100 w-8 h-8"></i>'
                                : '<i data-lucide="play-circle" class="text-orange-500 w-8 h-8"></i>';
@@ -6845,32 +6845,21 @@ window.viewSubmissionResult = (subId) => {
 
                 return `
                     <div onclick="${isLocked ? '' : `initDoChallenge('${c.id}')`}" 
-                         class="relative p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col gap-3 ${cardClass}">
+                         class="relative p-6 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-4 ${cardClass}">
                         
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full flex items-center justify-center font-black text-xl ${isLocked ? 'bg-slate-200 text-slate-500' : 'bg-white shadow-sm text-orange-600'}">
-                                    ${c.order}
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-lg ${isLocked ? 'text-slate-500' : 'text-slate-800'}">${c.title}</h4>
-                                    <p class="text-sm ${isLocked ? 'text-slate-400' : 'text-slate-600'}">${c.questions.length} câu • Mục tiêu: 80đ</p>
-                                </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center font-black text-xl ${isLocked ? 'bg-slate-200 text-slate-500' : 'bg-white shadow-sm text-orange-600'}">
+                                ${c.order}
                             </div>
-                            <div>${statusIcon}</div>
+                            <div>
+                                <h4 class="font-bold text-lg ${isLocked ? 'text-slate-500' : 'text-slate-800'}">${c.title}</h4>
+                                <p class="text-sm ${isLocked ? 'text-slate-400' : 'text-slate-600'}">20 câu hỏi • Mục tiêu: 80 điểm</p>
+                            </div>
                         </div>
 
-                        <div class="flex justify-between items-center pt-3 border-t ${isLocked ? 'border-slate-200' : 'border-black/5'}">
-                            <div class="flex items-center gap-2">
-                                <button onclick="event.stopPropagation(); viewChallengeStats('${c.id}')" 
-                                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition hover:bg-white/50 ${isLocked ? 'text-slate-400 pointer-events-none' : 'text-blue-600 hover:bg-blue-50'}">
-                                    <i data-lucide="trophy" size="14"></i>
-                                    <span>${passCount} người đã qua</span>
-                                </button>
-                            </div>
-                            
-                            ${isCompleted ? '<span class="text-[10px] bg-green-200 text-green-800 px-2 py-0.5 rounded-full font-bold">Đã hoàn thành</span>' : ''}
-                        </div>
+                        <div>${statusIcon}</div>
+                        
+                        ${isCompleted ? '<div class="absolute top-2 right-2 text-[10px] bg-green-200 text-green-800 px-2 py-0.5 rounded-full font-bold">Đã qua</div>' : ''}
                     </div>
                 `;
             }).join('');
@@ -6886,7 +6875,7 @@ window.viewSubmissionResult = (subId) => {
                     </div>
 
                     <div class="space-y-4 relative">
-                        <div class="absolute left-[2.25rem] top-0 bottom-0 w-1 bg-slate-200 -z-10"></div>
+                        <div class="absolute left-10 top-0 bottom-0 w-1 bg-slate-200 -z-10"></div>
                         ${listHtml}
                     </div>
                 </div>
@@ -7361,7 +7350,7 @@ window.saveChallenge = async () => {
             
             renderApp();
         };
-// --- GIAO DIỆN MODAL THỐNG KÊ THỬ THÁCH (ĐÃ SỬA: HIGHLIGHT BẢN THÂN) ---
+// --- GIAO DIỆN MODAL THỐNG KÊ THỬ THÁCH (ĐÃ SỬA: TÊN LỚP & ĐIỂM BÀI THI) ---
         const renderChallengeStatsModal = () => {
             const challengeId = state.ui.viewingChallengeStats;
             if (!challengeId) return '';
@@ -7372,6 +7361,7 @@ window.saveChallenge = async () => {
             // Lọc học sinh đã hoàn thành
             const passedStudents = state.data.users.filter(u => (u.completedChallenges || []).includes(challengeId));
             
+            // Helper lấy điểm bài thi này (Lấy từ challengeScores trong profile user)
             const getChalScore = (u) => (u.challengeScores && u.challengeScores[challengeId]) ? u.challengeScores[challengeId] : 0;
 
             // Sắp xếp: Điểm bài thi cao xếp trước
@@ -7389,16 +7379,15 @@ window.saveChallenge = async () => {
                 if (idx === 1) { rankColor = 'bg-slate-200 text-slate-700 border-slate-300'; rankIcon = '🥈'; }
                 if (idx === 2) { rankColor = 'bg-orange-100 text-orange-800 border-orange-200'; rankIcon = '🥉'; }
 
+                // --- [LOGIC MỚI] TÌM TÊN LỚP ---
                 const userClass = state.data.classes.find(c => (c.studentIds || []).includes(u.uid));
                 const className = userClass ? userClass.title : 'Chưa vào lớp';
+                // ------------------------------
+
                 const score = getChalScore(u);
-                
-                // [MỚI] Kiểm tra xem có phải là chính mình không
-                const isMe = u.uid === state.user.uid;
-                const rowHighlight = isMe ? 'bg-blue-50 border-2 border-blue-200 shadow-sm' : 'border-b hover:bg-slate-50';
 
                 return `
-                    <tr class="${rowHighlight} transition">
+                    <tr class="border-b last:border-0 hover:bg-slate-50 transition">
                         <td class="py-3 pl-4 w-16 text-center">
                             <div class="w-8 h-8 rounded-full ${rankColor} border flex items-center justify-center font-bold text-sm mx-auto">
                                 ${rankIcon}
@@ -7408,11 +7397,9 @@ window.saveChallenge = async () => {
                             <div class="flex items-center gap-3">
                                 ${renderAvatar(u, 'w-8 h-8', 'text-xs')}
                                 <div>
-                                    <p class="font-bold ${isMe ? 'text-blue-700' : 'text-slate-700'} text-sm">
-                                        ${u.name} ${isMe ? '(Bạn)' : ''}
-                                    </p>
-                                    <p class="text-xs text-slate-500 font-medium flex items-center gap-1 mt-0.5">
-                                        <i data-lucide="graduation-cap" size="10"></i> ${className}
+                                    <p class="font-bold text-slate-700 text-sm">${u.name}</p>
+                                    <p class="text-xs text-blue-600 font-medium flex items-center gap-1 mt-0.5">
+                                        <i data-lucide="graduation-cap" size="12"></i> ${className}
                                     </p>
                                 </div>
                             </div>
@@ -7431,11 +7418,8 @@ window.saveChallenge = async () => {
                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div class="p-5 border-b bg-slate-50 flex justify-between items-center sticky top-0 z-10">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                    <i data-lucide="trophy" class="text-yellow-500"></i>
-                                    BXH: ${challenge.title}
-                                </h3>
-                                <p class="text-xs text-slate-500 mt-1">Đã có <span class="font-bold text-green-600">${passedStudents.length}</span> chiến binh vượt qua</p>
+                                <h3 class="text-lg font-bold text-slate-800">Thống kê: ${challenge.title}</h3>
+                                <p class="text-xs text-slate-500 mt-1">Đã có <span class="font-bold text-green-600">${passedStudents.length}</span> học sinh vượt qua</p>
                             </div>
                             <button onclick="closeChallengeStats()" class="p-2 bg-white border border-slate-200 rounded-full hover:bg-red-50 hover:text-red-500 transition shadow-sm">
                                 <i data-lucide="x" size="20"></i>
@@ -7451,7 +7435,7 @@ window.saveChallenge = async () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${rows || `<tr><td colspan="3" class="text-center py-10 text-slate-400 italic">Chưa có ai vượt qua thử thách này. Hãy là người đầu tiên!</td></tr>`}
+                                    ${rows || `<tr><td colspan="3" class="text-center py-10 text-slate-400 italic">Chưa có học sinh nào vượt qua thử thách này.</td></tr>`}
                                 </tbody>
                             </table>
                         </div>
