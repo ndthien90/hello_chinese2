@@ -205,65 +205,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app); // KHỞI TẠO STORAGE
-// --- GAME CONFIGURATION (ĐÃ CẬP NHẬT: NHIỀU HUY HIỆU & ITEM HƠN) ---
-        const GAME_CONFIG = {
-            LEVELS: [
-                { name: 'Học viên Mới', min: 0, color: 'text-slate-500', icon: '🌱' },
-                { name: 'Đồng', min: 200, color: 'text-orange-700', icon: '🥉' },
-                { name: 'Bạc', min: 500, color: 'text-slate-400', icon: '🥈' },
-                { name: 'Vàng', min: 1000, color: 'text-yellow-500', icon: '🥇' },
-                { name: 'Bạch Kim', min: 2000, color: 'text-cyan-500', icon: '💠' }, // Thêm cấp
-                { name: 'Kim Cương', min: 4000, color: 'text-blue-600', icon: '💎' },
-                { name: 'Thách Đấu', min: 8000, color: 'text-purple-600', icon: '👑' },
-                { name: 'Huyền Thoại', min: 15000, color: 'text-red-600', icon: '🔥' } // Cấp cao nhất
-            ],
-            BADGES: [
-                // --- NHÓM 1: CHUỖI NGÀY (STREAK) ---
-                { id: 'streak_3', name: 'Khởi động', desc: 'Đạt chuỗi 3 ngày liên tục', icon: '👟', condition: (p) => (p.streak || 0) >= 3 },
-                { id: 'streak_7', name: 'Bền bỉ', desc: 'Đạt chuỗi 7 ngày (1 tuần)', icon: '🔥', condition: (p) => (p.streak || 0) >= 7 },
-                { id: 'streak_14', name: 'Chiến binh', desc: 'Đạt chuỗi 14 ngày', icon: '⚔️', condition: (p) => (p.streak || 0) >= 14 },
-                { id: 'streak_30', name: 'Thượng thừa', desc: 'Đạt chuỗi 30 ngày (1 tháng)', icon: '🧘', condition: (p) => (p.streak || 0) >= 30 },
-
-                // --- NHÓM 2: TÍCH LŨY ĐIỂM (WEALTH) ---
-                { id: 'rich_1k', name: 'Đại gia', desc: 'Tích lũy 1.000 điểm', icon: '💰', condition: (p) => (p.points || 0) >= 1000 },
-                { id: 'rich_5k', name: 'Triệu phú', desc: 'Tích lũy 5.000 điểm', icon: '💎', condition: (p) => (p.points || 0) >= 5000 },
-                { id: 'rich_10k', name: 'Tỷ phú Edu', desc: 'Tích lũy 10.000 điểm', icon: '🏦', condition: (p) => (p.points || 0) >= 10000 },
-
-                // --- NHÓM 3: ĐIỂM TUYỆT ĐỐI (PERFECT SCORE) ---
-                { id: 'perfect_1', name: 'Xạ thủ', desc: 'Đạt 1 lần 100 điểm', icon: '🎯', condition: (p) => (p.perfectScores || 0) >= 1 },
-                { id: 'perfect_5', name: 'Thần tiễn', desc: 'Đạt 5 lần 100 điểm', icon: '🏹', condition: (p) => (p.perfectScores || 0) >= 5 },
-                { id: 'perfect_10', name: 'Bách phát bách trúng', desc: 'Đạt 10 lần 100 điểm', icon: '🌟', condition: (p) => (p.perfectScores || 0) >= 10 },
-
-                // --- NHÓM 4: CHINH PHỤC THỬ THÁCH (CHALLENGES) ---
-                { id: 'chal_1', name: 'Người mở đường', desc: 'Hoàn thành 1 thử thách', icon: '🚩', condition: (p) => (p.completedChallenges?.length || 0) >= 1 },
-                { id: 'chal_5', name: 'Nhà thám hiểm', desc: 'Hoàn thành 5 thử thách', icon: '🧭', condition: (p) => (p.completedChallenges?.length || 0) >= 5 },
-                { id: 'chal_10', name: 'Nhà chinh phạt', desc: 'Hoàn thành 10 thử thách', icon: '⛰️', condition: (p) => (p.completedChallenges?.length || 0) >= 10 },
-
-                // --- NHÓM 5: MUA SẮM (SHOPPING) ---
-                { id: 'shop_1', name: 'Dân chơi', desc: 'Mua món đồ đầu tiên', icon: '🛍️', condition: (p) => (p.inventory?.length || 0) >= 1 },
-                { id: 'shop_5', name: 'Nhà sưu tập', desc: 'Sở hữu 5 vật phẩm', icon: '🎒', condition: (p) => (p.inventory?.length || 0) >= 5 }
-            ],
-            SHOP_ITEMS: [
-                { id: 'frame_gold', name: 'Khung Avatar Vàng', price: 500, type: 'frame', icon: '🖼️' },
-                { id: 'frame_fire', name: 'Hiệu ứng Lửa', price: 1000, type: 'frame', icon: '🔥' },
-                { id: 'frame_neon', name: 'Khung Neon', price: 2000, type: 'frame', icon: '🌈' },
-                { id: 'frame_royal', name: 'Vương miện Hoàng gia', price: 5000, type: 'frame', icon: '👑' },
-                { id: 'ticket_x1', name: '1 Vé Quay', price: 50, type: 'ticket', amount: 1, icon: '🎫' },
-                { id: 'ticket_x5', name: '5 Vé Quay (Giảm giá)', price: 200, type: 'ticket', amount: 5, icon: '🎟️' }
-            ],
-                ALL_AVATARS: ['🐼','🙎‍♂️','🌋','💂','🙍','🦸','🐯','🐘','🐢','🐝', '🎅', '🧙', '🐶', '🐮', '🐰', 
-                                               '🐋', '🐵', '☃️', '🦋', '🤹‍♂️', '🐓', '🐬', '🐷', '🌎', '🎯','🎓', '😺', '🚀', '💡',
-                                                '🕵️', '🧠', '🦉', '🦊', '🐻', '🐼', '💻', '🧑‍🎓', '👨‍🏫', '🏆', '🥇', '🥈', '🥉',
-                                                '🐲', '🦄', '🤖'],
-            
-            // 5 Avatar mặc định ban đầu
-            INITIAL_AVATARS: ['🐶', '😺', '🐼', '🐰', '🦊']
-        };
-
-        // Helper: Tính Level hiện tại
-        const getUserLevel = (points) => {
-            return GAME_CONFIG.LEVELS.slice().reverse().find(l => points >= l.min) || GAME_CONFIG.LEVELS[0];
-        };
         
         // Helper Paths
         const getPath = (col) => `artifacts/${appId}/public/data/${col}`;
@@ -276,7 +217,6 @@
             // return text.replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-600 font-bold">$1</span>');
              return text.replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-600 font-bold text-lg mx-1">$1</span>');
         };
-
 
         // --- 2. STATE MANAGEMENT ---
         const state = {
@@ -1275,16 +1215,14 @@ ${state.ui.isBulkModalOpen ? `
             `;
         };
 
-const renderMainLayout = () => {
+        const renderMainLayout = () => {
             const isDesktop = window.innerWidth >= 1024;
             const isCollapsed = state.ui.isSidebarCollapsed && isDesktop;
-            
-            // [MỚI] Tính cấp độ hiện tại của User
-            const currentLevel = getUserLevel(state.profile.points || 0);
 
             return `
                 <div id="main-layout-wrapper" class="flex h-screen bg-slate-50 overflow-hidden">
                     
+                    <!-- Sidebar (Desktop/Mobile Menu) -->
                     <div id="sidebar-desktop" class="bg-slate-900 text-slate-300 flex flex-col shadow-xl flex-shrink-0 lg:w-64 transition-all duration-300 ${state.ui.isSidebarOpen ? 'open' : ''} ${isCollapsed ? 'collapsed' : ''}">
                         <div class="p-4 lg:p-6 border-b border-slate-800 flex items-center gap-3">
                             <div class="bg-blue-600 p-2 rounded-lg"><i data-lucide="book-open" class="text-white w-5 h-5"></i></div>
@@ -1301,16 +1239,13 @@ const renderMainLayout = () => {
                             ${state.profile.role === 'teacher' ? renderNavItem('question_bank', 'library', 'Ngân hàng đề', isCollapsed) : ''}
                             ${renderNavItem('competition', 'swords', 'Đấu trường', isCollapsed)}
                             ${renderNavItem('challenges', 'mountain-snow', 'Thử thách', isCollapsed)}
-                            ${renderNavItem('game_center', 'gamepad-2', 'Giải trí & Quà', isCollapsed)}
                             ${renderNavItem('ranking', 'trophy', 'Xếp hạng', isCollapsed)}
                         </nav>
                         <div class="p-4 border-t border-slate-800">
                             <div class="flex items-center gap-3 mb-4 px-2 group cursor-pointer profile-wrapper" onclick="toggleAvatarModal(true)">
                                 ${renderAvatar(state.profile, 'w-10 h-10', 'text-base')}
                                 <div class="overflow-hidden profile-details">
-                                    <p class="text-sm font-medium text-white truncate group-hover:text-blue-400 transition">
-                                        ${state.profile.name} <span title="${currentLevel.name}">${currentLevel.icon}</span>
-                                    </p>
+                                    <p class="text-sm font-medium text-white truncate group-hover:text-blue-400 transition">${state.profile.name}</p>
                                     <p class="text-xs text-slate-400 capitalize">${state.profile.role === 'teacher' ? 'Giáo viên' : 'Học sinh'}</p>
                                 </div>
                                 <i data-lucide="pencil" size="16" class="text-slate-500 group-hover:text-blue-400 transition ml-auto profile-details"></i>
@@ -1322,44 +1257,42 @@ const renderMainLayout = () => {
                     </div>
 
                     <div class="flex-1 flex flex-col min-w-0">
-                        <header class="bg-white shadow-md lg:shadow-sm px-4 lg:px-8 py-3 lg:py-4 flex justify-between items-center z-10">
-                            <button onclick="toggleSidebar(true)" class="lg:hidden text-slate-700 hover:text-blue-600 mr-3">
-                                <i data-lucide="menu" size="24"></i>
-                            </button>
-                            <h2 class="text-xl md:text-2xl font-bold text-slate-800 capitalize truncate">
-                                ${state.view === 'dashboard' ? 'Tổng quan' : 
-                                  state.view === 'classes' ? 'Quản lý Lớp học' : 
-                                  state.view === 'my_classes' ? 'Lớp của tôi' : 
-                                  state.view === 'assignments' ? 'Bài tập về nhà' :
-                                  state.view === 'question_bank' ? 'Ngân hàng đề' :
-                                  state.view === 'competition' ? 'Đấu trường trực tuyến' : 
-                                  state.view === 'challenges' ? 'Chinh phục Thử thách' : 
-                                  state.view === 'game_center' ? 'Trung tâm Giải trí' : 'Bảng xếp hạng'}
-                            </h2>
-                            
-                            <div class="flex items-center gap-2 md:gap-3">
-                                <div class="hidden md:flex px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-full text-sm font-bold items-center gap-1.5 shadow-sm" title="Cấp độ: ${currentLevel.name}">
-                                    <span class="text-lg">${currentLevel.icon}</span> 
-                                    <span class="hidden lg:inline">${currentLevel.name}</span>
-                                </div>
-
-                                <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm">
-                                    <i data-lucide="trophy" size="14"></i> 
-                                    <span class="hidden md:inline">Điểm:</span> 
-                                    <span id="header-points">${state.profile.points}</span>
-                                </div>
-                                <div class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm" title="Chuỗi ngày liên tục">
-                                    <i data-lucide="flame" size="14" class="fill-orange-500"></i> 
-                                    <span class="hidden md:inline">Streak:</span> 
-                                    <span id="header-streak">${state.profile.streak || 0}</span>
-                                </div>
-                            </div>
-                        </header>
+                        <!-- Header (Responsive) -->
+<header class="bg-white shadow-md lg:shadow-sm px-4 lg:px-8 py-3 lg:py-4 flex justify-between items-center z-10">
+                        <button onclick="toggleSidebar(true)" class="lg:hidden text-slate-700 hover:text-blue-600 mr-3">
+                            <i data-lucide="menu" size="24"></i>
+                        </button>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-800 capitalize truncate">
+                            ${state.view === 'dashboard' ? 'Tổng quan' : 
+                              state.view === 'classes' ? 'Quản lý Lớp học' : 
+                              state.view === 'my_classes' ? 'Lớp của tôi' : 
+                              state.view === 'assignments' ? 'Bài tập về nhà' :
+                              state.view === 'question_bank' ? 'Ngân hàng đề' :
+                              state.view === 'competition' ? 'Đấu trường trực tuyến' : 
+                              state.view === 'challenges' ? 'Chinh phục Thử thách' : 'Bảng xếp hạng'}
+                        </h2>
                         
+                        <div class="flex items-center gap-3">
+                            <div class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm">
+                                <i data-lucide="trophy" size="14"></i> 
+                                <span class="hidden md:inline">Điểm:</span> 
+                                <span id="header-points">${state.profile.points}</span>
+                            </div>
+                            <div class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm" title="Chuỗi ngày liên tục">
+                                <i data-lucide="flame" size="14" class="fill-orange-500"></i> 
+                                <span class="hidden md:inline">Streak:</span> 
+                                <span id="header-streak">${state.profile.streak || 0}</span>
+                            </div>
+                        </div>
+                    </header>
+                        
+                        <!-- Main Content -->
                         <main class="flex-1 overflow-y-auto p-4 lg:p-8 pb-16 lg:pb-8 fade-in">
                             ${renderViewContent()}
                         </main>
                         
+                        <!-- MỚI: Mobile Bottom Navigation -->
+                        <!-- FIX: Đảm bảo z-index cao và chiều cao cố định -->
                         <nav id="mobile-bottom-nav" class="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-slate-200 shadow-2xl z-20 h-16">
                             <div class="flex justify-around items-center h-full">
                                 ${renderMobileNavItem('dashboard', 'layout-dashboard', 'Tổng quan')}
@@ -1367,7 +1300,7 @@ const renderMainLayout = () => {
                                 ${state.profile.role === 'student' ? renderMobileNavItem('my_classes', 'graduation-cap', 'Lớp của tôi') : ''}
                                 ${renderMobileNavItem('assignments', 'book-open', 'Bài tập')}
                                 ${renderMobileNavItem('competition', 'swords', 'Đấu trường')}
-                                ${renderMobileNavItem('game_center', 'gamepad-2', 'Game')}
+                                ${renderMobileNavItem('ranking', 'trophy', 'Xếp hạng')}
                             </div>
                         </nav>
                     </div>
@@ -1400,7 +1333,6 @@ const renderMainLayout = () => {
                 case 'competition': return renderCompetition();
                 case 'challenges': return renderChallenges(); // [MỚI]
                 case 'ranking': return renderRanking();
-                case 'game_center': return renderGameCenter();
                 default: return '';
             }
         };
@@ -4064,24 +3996,36 @@ const renderCompetition = () => {
             }
         };
         
-// --- RENDER MODAL AVATAR (ĐÃ CẬP NHẬT: CHỈ HIỆN AVATAR ĐÃ MỞ KHÓA) ---
+        // MỚI: RENDER MODAL AVATAR (Giữ nguyên)
         const renderAvatarModal = () => {
             const previewUrl = state.ui.tempAvatarUrl || (state.profile.avatarType === 'url' ? state.profile.avatarUrl : null);
+            const previewEmoji = state.ui.tempAvatarType === 'emoji' ? state.ui.tempAvatarUrl : (state.profile.avatarType === 'emoji' ? state.profile.avatarUrl : null);
             
-            // Lấy danh sách avatar của người dùng (nếu chưa có thì dùng mặc định)
-            const myAvatars = state.profile.unlockedAvatars || GAME_CONFIG.INITIAL_AVATARS;
-            const totalAvatars = GAME_CONFIG.ALL_AVATARS.length;
-
-            // Tạo profile tạm để preview
+            // Tạo đối tượng profile tạm thời để render preview
             const currentAvatar = { 
                 name: state.profile.name,
                 role: state.profile.role,
-                avatarUrl: state.ui.tempAvatarType === 'emoji' ? state.ui.tempAvatarUrl : 
-                           (state.profile.avatarType === 'emoji' ? state.profile.avatarUrl : state.profile.name.charAt(0)),
-                avatarType: state.ui.tempAvatarType || state.profile.avatarType || 'text'
+                avatarUrl: state.profile.name.charAt(0), // Default fallback
+                avatarType: 'text'
             };
+            
+            // Logic ưu tiên hiển thị: 1. Temp Emoji, 2. Temp URL, 3. Profile Emoji, 4. Profile URL
+            if (state.ui.tempAvatarType === 'emoji' && state.ui.tempAvatarUrl) {
+                currentAvatar.avatarUrl = state.ui.tempAvatarUrl;
+                currentAvatar.avatarType = 'emoji';
+            } else if (state.ui.tempAvatarType === 'url' && state.ui.tempAvatarUrl) {
+                currentAvatar.avatarUrl = state.ui.tempAvatarUrl;
+                currentAvatar.avatarType = 'url';
+            } else if (state.profile.avatarType === 'emoji') {
+                 currentAvatar.avatarUrl = state.profile.avatarUrl;
+                 currentAvatar.avatarType = 'emoji';
+            } else if (state.profile.avatarType === 'url') {
+                 currentAvatar.avatarUrl = state.profile.avatarUrl;
+                 currentAvatar.avatarType = 'url';
+            }
 
-            const emojiGrid = myAvatars.map(emoji => `
+
+            const emojiGrid = EMOJI_AVATARS.map(emoji => `
                 <button onclick="selectEmojiAvatar('${emoji}')" 
                         class="p-3 text-2xl rounded-full hover:bg-slate-200 transition 
                         ${currentAvatar.avatarType === 'emoji' && currentAvatar.avatarUrl === emoji ? 'bg-blue-200 ring-2 ring-blue-500' : 'bg-slate-100'}">
@@ -4093,7 +4037,7 @@ const renderCompetition = () => {
                 <div class="fixed inset-0 bg-slate-900 bg-opacity-70 flex items-center justify-center z-50 fade-in p-4" onclick="if (event.target === this) toggleAvatarModal(false)">
                     <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all">
                         <div class="flex justify-between items-center mb-6 border-b pb-4">
-                            <h3 class="text-xl md:text-2xl font-bold text-blue-700">Bộ sưu tập Avatar</h3>
+                            <h3 class="text-xl md:text-2xl font-bold text-blue-700">Chỉnh sửa Avatar</h3>
                             <button onclick="toggleAvatarModal(false)" class="text-slate-500 hover:text-red-500"><i data-lucide="x"></i></button>
                         </div>
                         
@@ -4101,8 +4045,9 @@ const renderCompetition = () => {
                             <div class="mb-4">
                                 ${renderAvatar(currentAvatar, 'w-24 h-24', 'text-4xl')}
                             </div>
+                            
                             <div class="w-full mb-4">
-                                <label for="avatar-upload" class="block text-sm font-medium text-slate-700 mb-2">Tải ảnh riêng (URL hiện trên):</label>
+                                <label for="avatar-upload" class="block text-sm font-medium text-slate-700 mb-2">Tải ảnh lên (URL sẽ hiển thị ở trên):</label>
                                 <input type="file" id="avatar-upload" accept="image/*" onchange="handleImageUpload(event)" 
                                        class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                                 <p class="text-xs text-red-500 mt-2" id="upload-status"></p>
@@ -4110,18 +4055,10 @@ const renderCompetition = () => {
                         </div>
 
                         <div class="mb-6">
-                            <div class="flex justify-between items-center mb-3">
-                                <h4 class="font-bold text-slate-700">Avatar đã sở hữu:</h4>
-                                <span class="text-xs font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">
-                                    ${myAvatars.length} / ${totalAvatars}
-                                </span>
-                            </div>
+                            <h4 class="font-bold text-slate-700 mb-3">Hoặc chọn Emoji có sẵn:</h4>
                             <div class="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto p-2 border rounded-xl bg-slate-50">
                                 ${emojiGrid}
                             </div>
-                            <p class="text-xs text-slate-500 mt-2 italic text-center">
-                                <i data-lucide="info" size="12" class="inline"></i> Đạt >90 điểm hoặc Quay số để mở khóa thêm!
-                            </p>
                         </div>
 
                         <button onclick="handleSaveAvatar()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 flex items-center justify-center gap-2 transition">
@@ -5562,7 +5499,6 @@ window.addQuestion = () => {
                     // THÊM: Avatar mặc định
                     avatarUrl: null, 
                     avatarType: null,
-                    unlockedAvatars: GAME_CONFIG.INITIAL_AVATARS,
                     createdAt: serverTimestamp()
                 });
                 
@@ -5781,11 +5717,11 @@ window.viewSubmissionResult = (subId) => {
                 showToast(`Mã lớp: ${text} (Hãy copy thủ công)`);
             }
         };
-// --- NỘP BÀI TẬP (ĐẦY ĐỦ TÍNH NĂNG: CHẤM ĐIỂM, TẶNG VÉ & MỞ KHÓA AVATAR) ---
-        window.submitAssignment = async () => {
-            // 1. CHẶN NỘP ĐÚP & KHÓA UI
-            if (state.ui.isSubmitting) return; 
+window.submitAssignment = async () => {
+            // --- [FIX 1] CHẶN NỘP ĐÚP (QUAN TRỌNG) ---
+            if (state.ui.isSubmitting) return; // Nếu đang nộp thì chặn luôn, không cho chạy tiếp
             
+            // Kiểm tra xem đã nộp bài này chưa (tránh hack hoặc lỗi mạng)
             const assignId = state.ui.takingAssignmentId;
             const existingSub = state.data.submissions.find(s => s.assignmentId === assignId && s.studentId === state.user.uid);
             
@@ -5796,35 +5732,42 @@ window.viewSubmissionResult = (subId) => {
                 return;
             }
 
+            // Bật cờ đang xử lý để khóa các lần click tiếp theo
             state.ui.isSubmitting = true; 
+            
+            // Hiển thị trạng thái đang nộp cho người dùng biết
             const submitBtn = document.querySelector('#next-q-btn-container button');
             if(submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="animate-spin" data-lucide="loader-2"></i> Đang nộp...';
                 renderIcons();
             }
+            // ------------------------------------------
 
-            // 2. CHẤM ĐIỂM
             const assign = state.data.assignments.find(a => a.id === assignId);
             let score = 0;
             const totalQuestions = assign.questions.length;
             const scorePerQuestion = 100 / totalQuestions;
             const questionDataToSave = {}; 
             
+            // 1. CHẤM ĐIỂM
             assign.questions.forEach((q, idx) => {
                 const userAnswer = state.ui.assignmentAnswers[idx];
                 let isCorrect = false;
                 
-                // Lưu lại trạng thái ngẫu nhiên (shuffle) để lúc xem lại kết quả hiển thị đúng như lúc làm
+                let shuffledColB = null;
+                let shuffledWords = null;
+
                 if (q.type === 'match' && q.shuffledColB) {
-                    questionDataToSave[idx] = { shuffledColB: q.shuffledColB };
+                    shuffledColB = q.shuffledColB;
+                    questionDataToSave[idx] = { shuffledColB: shuffledColB };
                 } else if (q.type === 'jumble' && q.shuffledWords) {
-                    questionDataToSave[idx] = { shuffledWords: q.shuffledWords };
+                    shuffledWords = q.shuffledWords;
+                    questionDataToSave[idx] = { shuffledWords: shuffledWords };
                 } else if (q.type === 'order_sentences') {
                     questionDataToSave[idx] = { shuffledSentences: q.shuffledSentences };
                 }
 
-                // Logic so sánh đáp án từng loại câu hỏi
                 switch(q.type) {
                     case 'mcq':
                     case 'listen_mcq': 
@@ -5841,37 +5784,28 @@ window.viewSubmissionResult = (subId) => {
                             let expectedAnswer;
                             if (q.type === 'translation') expectedAnswer = q.chinese;
                             else expectedAnswer = q.answer; 
-                            // So sánh chuỗi (không phân biệt hoa thường, bỏ khoảng trắng thừa)
                             isCorrect = userAnswer.trim().toLowerCase() === expectedAnswer.trim().toLowerCase();
                         }
                         break;
-                        
                     case 'jumble':
                         if (Array.isArray(userAnswer)) {
                             isCorrect = q.answer.join(' ') === userAnswer.join(' ');
                         }
                         break;
-                        
                     case 'order_sentences':
                         if (Array.isArray(userAnswer)) {
                             isCorrect = JSON.stringify(userAnswer) === JSON.stringify(q.answer);
                         }
                         break;
-                        
                     case 'match':
                         if (userAnswer) {
                              const userMatches = userAnswer;
-                             // Lấy lại cột B đã shuffle lúc làm bài
-                             const colBToUse = q.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5); 
-                             
-                             // Kiểm tra từng cặp
+                             const colBToUse = shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5); 
                              const numCorrectMatches = q.pairs.reduce((count, p, aIdx) => {
                                  const selectedBIndex = userMatches[aIdx];
                                  const selectedB = colBToUse[selectedBIndex]; 
                                  return count + (selectedB && selectedB === p.b ? 1 : 0);
                              }, 0);
-                             
-                             // Phải đúng HẾT tất cả các cặp mới được tính điểm câu này
                              isCorrect = numCorrectMatches === q.pairs.length;
                         }
                         break;
@@ -5882,32 +5816,19 @@ window.viewSubmissionResult = (subId) => {
 
             score = Math.round(score);
 
-            // 3. XỬ LÝ PHẦN THƯỞNG (GAMIFICATION)
+            // 2. TẠO NHẬN XÉT TỰ ĐỘNG
             let autoFeedback = "";
             if (score > 90) autoFeedback = "Xuất sắc! Em làm bài rất tốt, hãy tiếp tục duy trì phong độ này nhé! 🌟";
             else if (score > 80) autoFeedback = "Rất tốt! Em đã nắm vững kiến thức, hãy cố gắng thêm chút nữa để đạt điểm tối đa nhé! 💪";
             else autoFeedback = "Cần cố gắng hơn! Em hãy ôn tập kỹ lại bài học và làm lại bài tập để đạt kết quả cao hơn nhé! 📚";
-
-            // Kiểm tra điều kiện nhận thưởng (Điểm >= 90)
-            let earnedTicket = false;
-            let unlockedNewAvatar = null; // Biến lưu avatar mới mở khóa
-
-            if (score >= 90) {
-                earnedTicket = true;
-                // Gọi hàm mở khóa Avatar (Hàm này đã thêm ở bước trước)
-                if (typeof window.unlockRandomAvatar === 'function') {
-                    unlockedNewAvatar = await window.unlockRandomAvatar();
-                }
-            }
 
             if (state.ui.timerInterval) {
                 clearInterval(state.ui.timerInterval);
                 state.ui.timerInterval = null;
             }
 
-            // 4. LƯU VÀO DATABASE
+            // 3. LƯU VÀO DATABASE
             try {
-                // 4a. Lưu kết quả bài làm (Submissions)
                 const subRef = await addDoc(getRef('submissions'), {
                     assignmentId: assign.id,
                     studentId: state.user.uid,
@@ -5918,28 +5839,13 @@ window.viewSubmissionResult = (subId) => {
                     teacherComment: autoFeedback
                 });
                 
-                // 4b. Cập nhật Hồ sơ người dùng (Điểm, Vé, Thành tích)
-                const userRef = doc(db, getPath('users'), state.user.uid);
-                const updatePayload = {
-                    points: increment(score) // Cộng điểm tích lũy
-                };
-
-                // Cộng vé quay số nếu đạt điều kiện
-                if (earnedTicket) {
-                    updatePayload.luckyTickets = increment(1);
-                }
+                // --- [FIX 2] DÙNG INCREMENT ĐỂ CỘNG ĐIỂM AN TOÀN ---
+                // increment(score) đảm bảo database tự cộng, không phụ thuộc vào state cũ
+                await updateDoc(doc(db, getPath('users'), state.user.uid), {
+                    points: increment(score) 
+                });
+                // ----------------------------------------------------
                 
-                // Ghi nhận số lần đạt điểm tuyệt đối (để tính huy hiệu)
-                if (score === 100) {
-                    updatePayload.perfectScores = increment(1);
-                }
-                
-                // Lưu ý: unlockedAvatars đã được cập nhật bên trong hàm unlockRandomAvatar() rồi
-                // nên ta không cần add vào updatePayload này nữa để tránh xung đột dữ liệu.
-
-                await updateDoc(userRef, updatePayload);
-                
-                // 5. CẬP NHẬT GIAO DIỆN SAU KHI NỘP
                 state.ui.viewSubmission = {
                     id: subRef.id,
                     assignmentId: assign.id,
@@ -5953,23 +5859,13 @@ window.viewSubmissionResult = (subId) => {
                 };
 
                 state.ui.takingAssignmentId = null;
-                
-                // Tạo thông báo chúc mừng chi tiết
-                let toastMsg = `Nộp bài thành công! +${score} điểm`;
-                if (earnedTicket) toastMsg += ` & +1 🎟️ Vé quay!`;
-                
-                showToast(toastMsg, "success");
-                
-                // Nếu mở được Avatar mới thì báo riêng cho hoành tráng
-                if (unlockedNewAvatar) {
-                    setTimeout(() => showToast(`🔓 MỞ KHÓA AVATAR MỚI: ${unlockedNewAvatar}`, 'success'), 1500);
-                }
-
+                showToast(`Nộp bài thành công! +${score} điểm`);
                 renderApp(); 
             } catch(e) { 
                 console.error("Lỗi nộp bài:", e);
                 showToast("Lỗi nộp bài: " + e.message, "error"); 
             } finally {
+                // Mở khóa sau khi xử lý xong (dù thành công hay thất bại)
                 state.ui.isSubmitting = false;
             }
         };
@@ -6631,12 +6527,9 @@ window.viewSubmissionResult = (subId) => {
             return state.profile.role === 'teacher' ? renderTeacherChallenges() : renderStudentChallenges();
         };
 
-// --- 2. GIAO DIỆN GIÁO VIÊN (QUẢN LÝ) - ĐÃ BỎ NÚT THỐNG KÊ RIÊNG ---
+// --- 2. GIAO DIỆN GIÁO VIÊN (QUẢN LÝ) - ĐÃ TỐI ƯU BỐ CỤC CARD ---
         const renderTeacherChallenges = () => {
-            const list = state.data.challenges.map(c => {
-                const passCount = state.data.users.filter(u => (u.completedChallenges || []).includes(c.id)).length;
-
-                return `
+            const list = state.data.challenges.map(c => `
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition relative group">
                     <div class="flex justify-between items-start mb-3">
                         <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shadow-sm border border-orange-200">
@@ -6644,6 +6537,9 @@ window.viewSubmissionResult = (subId) => {
                         </div>
                         
                         <div class="flex gap-1">
+                            <button onclick="viewChallengeStats('${c.id}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 rounded-lg transition" title="Xem Thống kê">
+                                <i data-lucide="users" size="18"></i>
+                            </button>
                             <button onclick="editChallenge('${c.id}')" class="p-2 text-slate-500 bg-slate-50 hover:bg-yellow-100 hover:text-yellow-600 rounded-lg transition" title="Chỉnh sửa">
                                 <i data-lucide="edit" size="18"></i>
                             </button>
@@ -6658,24 +6554,17 @@ window.viewSubmissionResult = (subId) => {
                             ${c.title}
                         </h4>
                         
-                        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-medium">
+                        <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
                             <div class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-md border border-slate-200">
                                 <i data-lucide="list-checks" size="14"></i> ${c.questions.length} câu
                             </div>
-                            
-                            <button onclick="viewChallengeStats('${c.id}')" 
-                                    class="flex items-center gap-1 bg-green-50 hover:bg-green-100 px-2 py-1 rounded-md border border-green-200 text-green-700 font-bold transition cursor-pointer shadow-sm"
-                                    title="Nhấn để xem danh sách học sinh đã vượt qua">
-                                <i data-lucide="check-circle" size="14"></i> ${passCount} đã qua
-                            </button>
-
-                            <div class="flex items-center gap-1 ml-auto text-slate-400">
-                                ${c.createdAt ? new Date(c.createdAt.seconds*1000).toLocaleDateString('vi-VN') : ''}
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="calendar" size="14"></i> ${c.createdAt ? new Date(c.createdAt.seconds*1000).toLocaleDateString('vi-VN') : 'N/A'}
                             </div>
                         </div>
                     </div>
                 </div>
-            `}).join('');
+            `).join('');
 
             return `
                 <div class="max-w-6xl mx-auto fade-in">
@@ -7422,221 +7311,6 @@ window.saveChallenge = async () => {
                 // Quay về danh sách
                 state.ui.challengeMode = 'list';
                 renderApp();
-            }
-        };
-// --- GIAO DIỆN CỬA HÀNG & GAME ---
-        const renderGameCenter = () => {
-            const userLvl = getUserLevel(state.profile.points || 0);
-            const myBadges = GAME_CONFIG.BADGES.filter(b => b.condition(state.profile));
-            const inventory = state.profile.inventory || [];
-
-            // Render Shop Items
-            const shopHtml = GAME_CONFIG.SHOP_ITEMS.map(item => {
-                const canAfford = (state.profile.points || 0) >= item.price;
-                const isOwned = inventory.includes(item.id) && item.type !== 'ticket'; // Vé mua được nhiều lần
-                
-                return `
-                <div class="bg-white p-4 rounded-xl shadow border border-slate-200 flex flex-col items-center text-center">
-                    <div class="text-4xl mb-2">${item.icon}</div>
-                    <h4 class="font-bold text-slate-700">${item.name}</h4>
-                    <p class="text-yellow-600 font-bold mb-3">${item.price} điểm</p>
-                    <button onclick="${isOwned ? '' : `buyItem('${item.id}')`}" 
-                        class="w-full py-2 rounded-lg font-bold text-sm transition ${isOwned ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : canAfford ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}"
-                        ${!canAfford || isOwned ? 'disabled' : ''}>
-                        ${isOwned ? 'Đã sở hữu' : 'Mua ngay'}
-                    </button>
-                </div>`;
-            }).join('');
-
-            return `
-                <div class="max-w-5xl mx-auto fade-in pb-10">
-                    <div class="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-6 md:p-10 text-white mb-8 shadow-xl relative overflow-hidden">
-                        <div class="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                            <div class="relative">
-                                ${renderAvatar(state.profile, 'w-24 h-24', 'text-4xl')}
-                                <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow border-2 border-white">
-                                    Lv. ${userLvl.name}
-                                </div>
-                            </div>
-                            <div class="text-center md:text-left flex-1">
-                                <h2 class="text-3xl font-bold">${state.profile.name}</h2>
-                                <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
-                                    <span class="bg-white/20 px-3 py-1 rounded-lg text-sm flex items-center gap-2"><i data-lucide="trophy"></i> ${state.profile.points || 0} Điểm</span>
-                                    <span class="bg-white/20 px-3 py-1 rounded-lg text-sm flex items-center gap-2"><i data-lucide="ticket"></i> ${state.profile.luckyTickets || 0} Vé quay</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-6 pt-6 border-t border-white/20">
-                            <p class="text-sm opacity-80 mb-2 font-bold uppercase tracking-wider">Bộ sưu tập huy hiệu</p>
-                            <div class="flex gap-2 flex-wrap">
-                                ${myBadges.length > 0 ? myBadges.map(b => `
-                                    <div class="bg-white/10 px-3 py-2 rounded-lg flex items-center gap-2" title="${b.desc}">
-                                        <span class="text-xl">${b.icon}</span> <span class="text-sm font-bold">${b.name}</span>
-                                    </div>
-                                `).join('') : '<span class="text-sm italic opacity-70">Chưa có huy hiệu nào. Hãy tích cực hoạt động!</span>'}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-purple-100">
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i data-lucide="gift" class="text-purple-600"></i> Vòng quay May mắn</h3>
-                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">Vé của bạn: ${state.profile.luckyTickets || 0}</span>
-                            </div>
-                            
-                            <div class="text-center py-8 bg-purple-50 rounded-xl mb-4 relative">
-                                <div id="lucky-wheel-icon" class="text-6xl mb-2 transition-transform duration-1000">🎡</div>
-                                <p class="text-slate-600">Tốn 1 Vé / Lần quay</p>
-                                <p id="lucky-result" class="font-bold text-lg h-6 mt-2 text-purple-600"></p>
-                            </div>
-                            
-                            <button onclick="playLuckyDraw()" ${(state.profile.luckyTickets || 0) < 1 ? 'disabled' : ''} class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                                Quay ngay!
-                            </button>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-orange-100">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-orange-600"></i> Cửa hàng đổi điểm</h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                ${shopHtml}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-// --- HANDLERS GAME CENTER ---
-        
-        window.buyItem = async (itemId) => {
-            const item = GAME_CONFIG.SHOP_ITEMS.find(i => i.id === itemId);
-            if (!item) return;
-            
-            const myPoints = state.profile.points || 0;
-            if (myPoints < item.price) return showToast("Bạn không đủ điểm!", "error");
-            
-            if (!confirm(`Bạn muốn mua "${item.name}" với giá ${item.price} điểm?`)) return;
-
-            try {
-                const updatePayload = {
-                    points: increment(-item.price)
-                };
-                
-                if (item.type === 'ticket') {
-                    updatePayload.luckyTickets = increment(item.amount);
-                } else {
-                    updatePayload.inventory = arrayUnion(itemId);
-                }
-
-                await updateDoc(doc(db, getPath('users'), state.user.uid), updatePayload);
-                showToast(`Đã mua thành công: ${item.name}`);
-                // Listener sẽ tự render lại
-            } catch (e) {
-                showToast("Lỗi giao dịch: " + e.message, "error");
-            }
-        };
-
-window.playLuckyDraw = async () => {
-            const tickets = state.profile.luckyTickets || 0;
-            if (tickets < 1) return showToast("Bạn hết vé rồi! Hãy làm bài tập đạt 90đ để nhận thêm.", "error");
-
-            const wheel = document.getElementById('lucky-wheel-icon');
-            const resultText = document.getElementById('lucky-result');
-            
-            // 1. Reset trạng thái vòng quay để đảm bảo nó luôn quay được
-            if (wheel) {
-                // Tắt hiệu ứng chuyển động để reset về 0 ngay lập tức
-                wheel.style.transition = 'none';
-                wheel.style.transform = 'rotate(0deg)';
-                
-                // Buộc trình duyệt cập nhật lại giao diện (Reflow)
-                void wheel.offsetWidth;
-                
-                // Bật lại hiệu ứng và quay
-                wheel.style.transition = "transform 2.5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                wheel.style.transform = "rotate(1080deg)"; // Quay 3 vòng (360 * 3)
-            }
-            
-            if (resultText) resultText.textContent = "Đang quay... 🤞";
-
-            // Random phần thưởng
-            const rewards = [
-                { type: 'point', val: 20, msg: '20 Điểm' },
-                { type: 'point', val: 50, msg: '50 Điểm' },
-                { type: 'point', val: 100, msg: '100 Điểm (May mắn!)' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'ticket', val: 1, msg: '1 Vé quay nữa' }
-            ];
-            const result = rewards[Math.floor(Math.random() * rewards.length)];
-
-            // --- [QUAN TRỌNG] Đợi 2.5 giây cho quay xong mới xử lý Database ---
-            setTimeout(async () => {
-                try {
-                    // Mở khóa Avatar (Chuyển vào đây để không làm gián đoạn lúc quay)
-                    let newAvatar = null;
-                    if (typeof window.unlockRandomAvatar === 'function') {
-                         newAvatar = await window.unlockRandomAvatar();
-                    }
-
-                    // Cập nhật Vé và Điểm
-                    const updatePayload = {
-                        luckyTickets: increment(-1) 
-                    };
-                    
-                    if (result.type === 'point' && result.val > 0) {
-                        updatePayload.points = increment(result.val);
-                    } else if (result.type === 'ticket') {
-                        updatePayload.luckyTickets = increment(0); 
-                    }
-
-                    await updateDoc(doc(db, getPath('users'), state.user.uid), updatePayload);
-                    
-                    // Hiển thị kết quả
-                    let msg = `🎉 Kết quả: ${result.msg}`;
-                    if (newAvatar) {
-                        msg += ` + 🔓 Avatar mới: ${newAvatar}`;
-                        setTimeout(() => showToast(`🔓 MỞ KHÓA: ${newAvatar}`, "success"), 500);
-                    } else if (result.val === 0) {
-                        msg = `😅 ${result.msg}`;
-                    }
-
-                    if (resultText) resultText.textContent = msg;
-                    showToast(msg);
-                    
-                    // Reset vòng quay về vị trí ban đầu (không hiệu ứng) để lần sau quay tiếp
-                    if (wheel) {
-                        wheel.style.transition = 'none';
-                        wheel.style.transform = "rotate(0deg)";
-                    }
-                    
-                } catch(e) {
-                    console.error("Lucky Draw Error:", e);
-                    showToast("Lỗi: " + e.message, "error");
-                }
-            }, 2500);
-        };
-// --- HÀM HỖ TRỢ: MỞ KHÓA AVATAR NGẪU NHIÊN ---
-        window.unlockRandomAvatar = async () => {
-            const myAvatars = state.profile.unlockedAvatars || GAME_CONFIG.INITIAL_AVATARS;
-            
-            // Tìm các avatar chưa sở hữu
-            const locked = GAME_CONFIG.ALL_AVATARS.filter(a => !myAvatars.includes(a));
-            
-            if (locked.length === 0) return null; // Đã sưu tập đủ bộ
-            
-            // Chọn ngẫu nhiên 1 cái
-            const newAvatar = locked[Math.floor(Math.random() * locked.length)];
-            
-            try {
-                // Cập nhật Database
-                await updateDoc(doc(db, getPath('users'), state.user.uid), {
-                    unlockedAvatars: arrayUnion(newAvatar)
-                });
-                return newAvatar;
-            } catch (e) {
-                console.error("Lỗi mở khóa avatar:", e);
-                return null;
             }
         };
     </script>
