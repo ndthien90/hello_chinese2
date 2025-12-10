@@ -399,20 +399,20 @@
         // --- 1. Cấu hình Themes (ĐÃ CẬP NHẬT UNLOCK POINTS) ---
         const THEMES = [
             { id: 'default', name: 'Mặc định', unlockAt: 0, colors: { primary: '#2563eb', primaryLight: '#dbeafe', bgBody: '#f3f4f6', bgCard: '#ffffff', textMain: '#1f2937', shadow: 'rgba(59, 130, 246, 0.3)' } },
-            { id: 'sunset', name: 'Hoàng hôn', unlockAt: 0, colors: { primary: '#f97316', primaryLight: '#ffedd5', bgBody: '#fff7ed', bgCard: '#ffffff', textMain: '#431407', shadow: 'rgba(249, 115, 22, 0.3)' } },
-            { id: 'nature', name: 'Rừng xanh', unlockAt: 0, colors: { primary: '#16a34a', primaryLight: '#dcfce7', bgBody: '#f0fdf4', bgCard: '#ffffff', textMain: '#14532d', shadow: 'rgba(22, 163, 74, 0.3)' } },
-            { id: 'ocean', name: 'Đại dương', unlockAt: 0, colors: { primary: '#0891b2', primaryLight: '#cffafe', bgBody: '#ecfeff', bgCard: '#ffffff', textMain: '#164e63', shadow: 'rgba(8, 145, 178, 0.3)' } },
-            { id: 'dark', name: 'Bóng đêm', unlockAt: 0, colors: { primary: '#8b5cf6', primaryLight: '#2e1065', bgBody: '#111827', bgCard: '#1f2937', textMain: '#f3f4f6', shadow: 'rgba(139, 92, 246, 0.3)' } },
-            { id: 'candy', name: 'Kẹo ngọt', unlockAt: 0, colors: { primary: '#ec4899', primaryLight: '#fce7f3', bgBody: '#fdf2f8', bgCard: '#ffffff', textMain: '#831843', shadow: 'rgba(236, 72, 153, 0.3)' } },
-            { id: 'lavender', name: 'Oải hương', unlockAt: 0, colors: { primary: '#a855f7', primaryLight: '#f3e8ff', bgBody: '#faf5ff', bgCard: '#ffffff', textMain: '#581c87', shadow: 'rgba(168, 85, 247, 0.3)' } },
-            { id: 'mint', name: 'Bạc hà', unlockAt: 0, colors: { primary: '#14b8a6', primaryLight: '#ccfbf1', bgBody: '#f0fdfa', bgCard: '#ffffff', textMain: '#134e4a', shadow: 'rgba(20, 184, 166, 0.3)' } },
-            { id: 'luxury', name: 'Sang trọng', unlockAt: 0, colors: { primary: '#eab308', primaryLight: '#fef9c3', bgBody: '#fffbeb', bgCard: '#ffffff', textMain: '#422006', shadow: 'rgba(234, 179, 8, 0.3)' } },
-            { id: 'rose', name: 'Hoa hồng', unlockAt: 0, colors: { primary: '#f43f5e', primaryLight: '#ffe4e6', bgBody: '#fff1f2', bgCard: '#ffffff', textMain: '#881337', shadow: 'rgba(244, 63, 94, 0.3)' } },
-            { id: 'coffee', name: 'Cà phê', unlockAt: 0, colors: { primary: '#78350f', primaryLight: '#fef3c7', bgBody: '#fffbeb', bgCard: '#ffffff', textMain: '#451a03', shadow: 'rgba(120, 53, 15, 0.3)' } },
-            { id: 'galaxy', name: 'Vũ trụ', unlockAt: 0, colors: { primary: '#6366f1', primaryLight: '#312e81', bgBody: '#0f172a', bgCard: '#1e293b', textMain: '#e2e8f0', shadow: 'rgba(99, 102, 241, 0.3)' } },
-            { id: 'lime', name: 'Chanh tươi', unlockAt: 0, colors: { primary: '#84cc16', primaryLight: '#ecfccb', bgBody: '#f7fee7', bgCard: '#ffffff', textMain: '#365314', shadow: 'rgba(132, 204, 22, 0.3)' } },
-            { id: 'coral', name: 'San hô', unlockAt: 0, colors: { primary: '#fb7185', primaryLight: '#ffe4e6', bgBody: '#fff1f2', bgCard: '#ffffff', textMain: '#9f1239', shadow: 'rgba(251, 113, 133, 0.3)' } },
-            { id: 'minimal', name: 'Tối giản', unlockAt: 0, colors: { primary: '#6b7280', primaryLight: '#e5e7eb', bgBody: '#f9fafb', bgCard: '#ffffff', textMain: '#111827', shadow: 'rgba(107, 114, 128, 0.3)' } }
+            { id: 'sunset', name: 'Hoàng hôn', unlockAt: 5, colors: { primary: '#f97316', primaryLight: '#ffedd5', bgBody: '#fff7ed', bgCard: '#ffffff', textMain: '#431407', shadow: 'rgba(249, 115, 22, 0.3)' } },
+            { id: 'nature', name: 'Rừng xanh', unlockAt: 10, colors: { primary: '#16a34a', primaryLight: '#dcfce7', bgBody: '#f0fdf4', bgCard: '#ffffff', textMain: '#14532d', shadow: 'rgba(22, 163, 74, 0.3)' } },
+            { id: 'ocean', name: 'Đại dương', unlockAt: 15, colors: { primary: '#0891b2', primaryLight: '#cffafe', bgBody: '#ecfeff', bgCard: '#ffffff', textMain: '#164e63', shadow: 'rgba(8, 145, 178, 0.3)' } },
+            { id: 'dark', name: 'Bóng đêm', unlockAt: 20, colors: { primary: '#8b5cf6', primaryLight: '#2e1065', bgBody: '#111827', bgCard: '#1f2937', textMain: '#f3f4f6', shadow: 'rgba(139, 92, 246, 0.3)' } },
+            { id: 'candy', name: 'Kẹo ngọt', unlockAt: 25, colors: { primary: '#ec4899', primaryLight: '#fce7f3', bgBody: '#fdf2f8', bgCard: '#ffffff', textMain: '#831843', shadow: 'rgba(236, 72, 153, 0.3)' } },
+            { id: 'lavender', name: 'Oải hương', unlockAt: 30, colors: { primary: '#a855f7', primaryLight: '#f3e8ff', bgBody: '#faf5ff', bgCard: '#ffffff', textMain: '#581c87', shadow: 'rgba(168, 85, 247, 0.3)' } },
+            { id: 'mint', name: 'Bạc hà', unlockAt: 40, colors: { primary: '#14b8a6', primaryLight: '#ccfbf1', bgBody: '#f0fdfa', bgCard: '#ffffff', textMain: '#134e4a', shadow: 'rgba(20, 184, 166, 0.3)' } },
+            { id: 'luxury', name: 'Sang trọng', unlockAt: 50, colors: { primary: '#eab308', primaryLight: '#fef9c3', bgBody: '#fffbeb', bgCard: '#ffffff', textMain: '#422006', shadow: 'rgba(234, 179, 8, 0.3)' } },
+            { id: 'rose', name: 'Hoa hồng', unlockAt: 60, colors: { primary: '#f43f5e', primaryLight: '#ffe4e6', bgBody: '#fff1f2', bgCard: '#ffffff', textMain: '#881337', shadow: 'rgba(244, 63, 94, 0.3)' } },
+            { id: 'coffee', name: 'Cà phê', unlockAt: 70, colors: { primary: '#78350f', primaryLight: '#fef3c7', bgBody: '#fffbeb', bgCard: '#ffffff', textMain: '#451a03', shadow: 'rgba(120, 53, 15, 0.3)' } },
+            { id: 'galaxy', name: 'Vũ trụ', unlockAt: 80, colors: { primary: '#6366f1', primaryLight: '#312e81', bgBody: '#0f172a', bgCard: '#1e293b', textMain: '#e2e8f0', shadow: 'rgba(99, 102, 241, 0.3)' } },
+            { id: 'lime', name: 'Chanh tươi', unlockAt: 90, colors: { primary: '#84cc16', primaryLight: '#ecfccb', bgBody: '#f7fee7', bgCard: '#ffffff', textMain: '#365314', shadow: 'rgba(132, 204, 22, 0.3)' } },
+            { id: 'coral', name: 'San hô', unlockAt: 100, colors: { primary: '#fb7185', primaryLight: '#ffe4e6', bgBody: '#fff1f2', bgCard: '#ffffff', textMain: '#9f1239', shadow: 'rgba(251, 113, 133, 0.3)' } },
+            { id: 'minimal', name: 'Tối giản', unlockAt: 150, colors: { primary: '#6b7280', primaryLight: '#e5e7eb', bgBody: '#f9fafb', bgCard: '#ffffff', textMain: '#111827', shadow: 'rgba(107, 114, 128, 0.3)' } }
         ];
 
         let currentTheme = 'default';
