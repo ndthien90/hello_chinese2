@@ -2,12 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="EduBattle">
-    
-    <meta name="theme-color" content="#2563eb">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduBattle - Nền tảng học tập & Thi đấu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -162,40 +157,6 @@
             }
         }
     </style>
-<script>
-        // Tạo nội dung Manifest
-        const manifestData = {
-            "name": "EduBattle - Học tập & Thi đấu",
-            "short_name": "EduBattle",
-            "start_url": ".",
-            "display": "standalone", /* QUAN TRỌNG: Dòng này giúp ẩn thanh địa chỉ */
-            "background_color": "#f8fafc",
-            "theme_color": "#2563eb",
-            "orientation": "portrait",
-            "icons": [
-                {
-                    "src": "https://cdn-icons-png.flaticon.com/512/2997/2997326.png", /* Icon ví dụ */
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": "https://cdn-icons-png.flaticon.com/512/2997/2997326.png",
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }
-            ]
-        };
-
-        // Chuyển đổi thành Blob URL và chèn vào thẻ <head>
-        const stringManifest = JSON.stringify(manifestData);
-        const blob = new Blob([stringManifest], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(blob);
-        
-        const link = document.createElement('link');
-        link.rel = 'manifest';
-        link.href = manifestURL;
-        document.head.appendChild(link);
-    </script>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans h-screen overflow-hidden">
 
@@ -1406,7 +1367,7 @@ const renderMainLayout = () => {
                                 ${state.profile.role === 'student' ? renderMobileNavItem('my_classes', 'graduation-cap', 'Lớp của tôi') : ''}
                                 ${renderMobileNavItem('assignments', 'book-open', 'Bài tập')}
                                 ${renderMobileNavItem('competition', 'swords', 'Đấu trường')}
-                                ${renderMobileNavItem('game_center', 'trophy', 'Thành tích')}
+                                ${renderMobileNavItem('game_center', 'gamepad-2', 'Game')}
                             </div>
                         </nav>
                     </div>
@@ -2438,9 +2399,7 @@ const list = myBanks.map(bank => `
                         <option value="listen_conversation" ${state.ui.newQuestionType === 'listen_conversation' ? 'selected' : ''}>9. Nghe hội thoại & Trả lời</option>
                        <option value="order_sentences" ${state.ui.newQuestionType === 'order_sentences' ? 'selected' : ''}>10. Sắp xếp câu thành đoạn văn</option>
                        <option value="reading_comprehension" ${state.ui.newQuestionType === 'reading_comprehension' ? 'selected' : ''}>11. Đọc và trả lời câu hỏi</option>
-                   <option value="make_sentence" ${state.ui.newQuestionType === 'make_sentence' ? 'selected' : ''}>12. Đặt câu với từ cho trước (Tự luận)</option>
-    <option value="image_describe" ${state.ui.newQuestionType === 'image_describe' ? 'selected' : ''}>13. Nhìn hình đặt câu (Tự luận)</option>
- </select>
+                    </select>
                 </div>
 
                 ${renderQuestionInputForm()}
@@ -2750,28 +2709,6 @@ const renderQuestionInputForm = () => {
                         </div>
                     `;
                     break;
-// TÌM HÀM renderQuestionInputForm VÀ THÊM VÀO SWITCH CASE:
-
-case 'make_sentence':
-    inputs = `
-        <label class="block text-sm font-bold text-slate-700 mb-1">Các từ gợi ý (ngăn cách bằng dấu phẩy)</label>
-        <input id="prompt-words" class="w-full p-2 border rounded-lg mb-3" placeholder="Ví dụ: gia đình, hạnh phúc, chủ nhật">
-        <label class="block text-sm font-bold text-slate-700 mb-1">Gợi ý đáp án (Dành cho GV tham khảo khi chấm)</label>
-        <input id="suggested-answer" class="w-full p-2 border rounded-lg mb-3" placeholder="Ví dụ: Gia đình tôi rất hạnh phúc vào ngày chủ nhật.">
-    `;
-    break;
-
-case 'image_describe':
-    inputs = `
-        <label class="block text-sm font-bold text-slate-700 mb-1">URL Hình ảnh</label>
-        <input id="image-url" class="w-full p-2 border rounded-lg mb-2" placeholder="https://example.com/image.jpg">
-        <p class="text-xs text-slate-500 mb-3">Copy link ảnh từ internet và dán vào đây.</p>
-        <label class="block text-sm font-bold text-slate-700 mb-1">Yêu cầu / Câu hỏi</label>
-        <input id="q-text" class="w-full p-2 border rounded-lg mb-3" placeholder="Ví dụ: Hãy đặt một câu miêu tả bức tranh này.">
-        <label class="block text-sm font-bold text-slate-700 mb-1">Gợi ý đáp án (Tham khảo)</label>
-        <input id="suggested-answer" class="w-full p-2 border rounded-lg mb-3" placeholder="Đáp án mẫu...">
-    `;
-    break;
             }
             return inputs;
         };
@@ -2845,18 +2782,11 @@ const renderCreateAssignmentForm = () => {
             `;
 
             return `
-          <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
-            <div class="flex justify-between items-center mb-4 md:mb-6 border-b pb-3">
-                <h3 class="text-xl font-bold">Tạo bài tập mới</h3>
-                <div class="flex items-center gap-2">
-                    <button onclick="publishAssignment()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-md flex items-center gap-2 transition transform hover:-translate-y-0.5">
-                        <i data-lucide="save" size="18"></i>
-                    </button>
-                    <button onclick="${isClassContext ? `toggleCreate(false); viewClass('${contextClass.id}')` : `toggleCreate(false)`}" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100 transition">
-                        <i data-lucide="x" size="24"></i>
-                    </button>
-                </div>
-            </div>
+                <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg fade-in max-w-4xl mx-auto">
+                    <div class="flex justify-between mb-4 md:mb-6 border-b pb-3">
+                        <h3 class="text-xl font-bold">Tạo bài tập mới</h3>
+                        <button onclick="${isClassContext ? `toggleCreate(false); viewClass('${contextClass.id}')` : `toggleCreate(false)`}" class="text-slate-500 hover:text-red-500"><i data-lucide="x"></i></button>
+                    </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
@@ -3308,25 +3238,6 @@ case 'reading_comprehension': // <--- THÊM VÀO ĐÂY
                     
                     content = `<div class="mt-2 max-w-3xl mx-auto grid gap-2">${extraContent}${optionsHtml}</div>`;
                     break;
-case 'make_sentence':
-    content = `
- 
-        <textarea id="${inputId}" oninput="captureInputAnswer(${qIdx}, this.value)" 
-            class="w-full p-4 border-2 border-slate-300 rounded-xl focus:border-blue-500 outline-none text-lg min-h-[100px]" 
-            placeholder="Nhập câu trả lời của bạn vào đây..." >${userAnswer || ''}</textarea>
-    `;
-    break;
-
-case 'image_describe':
-    content = `
-        <div class="mb-4 flex justify-center">
-            <img src="${q.imageUrl}" alt="Question Image" class="max-w-full max-h-64 rounded-xl shadow-md object-contain border border-slate-200">
-        </div>
-        <textarea id="${inputId}" oninput="captureInputAnswer(${qIdx}, this.value)" 
-            class="w-full p-4 border-2 border-slate-300 rounded-xl focus:border-blue-500 outline-none text-lg min-h-[100px]" 
-            placeholder="Miêu tả bức tranh hoặc trả lời câu hỏi..." >${userAnswer || ''}</textarea>
-    `;
-    break;
             }
             
             // Input Text (Điền từ, Dịch, Viết lại)
@@ -3481,252 +3392,193 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
         // MỚI: RENDER KẾT QUẢ BÀI NỘP (Cập nhật Responsive)
 // --- HÀM RENDER KẾT QUẢ BÀI NỘP (FULL TÍNH NĂNG: TÊN HS, ĐIỂM, FEEDBACK) ---
 // --- HÀM RENDER KẾT QUẢ BÀI NỘP (CẬP NHẬT FIX LỖI XEM KẾT QUẢ) ---
- // --- HÀM RENDER KẾT QUẢ BÀI NỘP (CẬP NHẬT: XỬ LÝ TRẠNG THÁI PENDING) ---
-const renderSubmissionResult = () => {
-    const freshSub = state.data.submissions.find(s => s.id === state.ui.viewSubmission.id);
-    const sub = { ...state.ui.viewSubmission, ...freshSub };
-    const assign = state.data.assignments.find(a => a.id === sub.assignmentId);
-    if (!assign) return `<p class="text-red-500">Không tìm thấy bài tập gốc.</p>`;
+        const renderSubmissionResult = () => {
+            // 1. LẤY DỮ LIỆU
+            const freshSub = state.data.submissions.find(s => s.id === state.ui.viewSubmission.id);
+            const sub = { ...state.ui.viewSubmission, ...freshSub };
+            const assign = state.data.assignments.find(a => a.id === sub.assignmentId);
+            if (!assign) return `<p class="text-red-500">Không tìm thấy bài tập gốc.</p>`;
 
-    const studentProfile = state.data.users.find(u => u.uid === sub.studentId);
-    const studentName = studentProfile ? studentProfile.name : 'Học sinh';
-    const isTeacher = state.profile.role === 'teacher'; 
+            const studentProfile = state.data.users.find(u => u.uid === sub.studentId);
+            const studentName = studentProfile ? studentProfile.name : 'Học sinh';
+            const isTeacher = state.profile.role === 'teacher'; 
 
-    // Kiểm tra xem bài có câu hỏi nào chưa được chấm không
-    const hasPendingQuestions = assign.questions.some((q, idx) => {
-        const isManual = ['make_sentence', 'image_describe'].includes(q.type);
-        const isGraded = sub.manualGrades && sub.manualGrades[idx] !== undefined;
-        return isManual && !isGraded;
-    });
+            // 2. TÍNH SỐ CÂU ĐÚNG (Cập nhật logic cho Đọc hiểu & Hội thoại)
+            let correctCount = 0;
+            assign.questions.forEach((q, idx) => {
+                const uAns = sub.answers[idx];
+                let isRight = false;
+                
+                // --- [FIX 1] Thêm listen_conversation và reading_comprehension vào logic tính điểm hiển thị ---
+                if (q.type === 'mcq' || q.type === 'listen_mcq' || q.type === 'listen_conversation' || q.type === 'reading_comprehension') {
+                    isRight = uAns === q.correct;
+                } else if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
+                    if (uAns) {
+                        const expected = (q.type === 'translation' ? q.chinese : q.answer).trim().toLowerCase();
+                        isRight = uAns.trim().toLowerCase() === expected;
+                    }
+                } else if (q.type === 'jumble') {
+                    if (Array.isArray(uAns)) isRight = uAns.join(' ') === q.answer.join(' ');
+                } else if (q.type === 'order_sentences') {
+                    if (Array.isArray(uAns)) isRight = JSON.stringify(uAns) === JSON.stringify(q.answer);
+                } else if (q.type === 'match') {
+                    if (uAns) {
+                        const subQData = sub.questionData?.[idx] || {};
+                        const colB = subQData.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5);
+                        const pairsCorrect = q.pairs.every((p, aIdx) => {
+                            const bIdx = uAns[aIdx];
+                            return colB[bIdx] === p.b;
+                        });
+                        isRight = pairsCorrect;
+                    }
+                }
+                if (isRight) correctCount++;
+            });
 
-    let correctCount = 0;
-    assign.questions.forEach((q, idx) => {
-        const uAns = sub.answers[idx];
-        let isRight = false;
-        
-        // Logic tính đúng sai cho hiển thị
-        if (['make_sentence', 'image_describe'].includes(q.type)) {
-            // Với câu tự luận, nếu đã chấm và điểm > 0 thì coi là đúng (tương đối)
-            // Hoặc có thể đặt ngưỡng > 50% điểm tối đa của câu đó
-            const maxPoints = 100 / assign.questions.length;
-            const earned = sub.manualGrades ? (sub.manualGrades[idx] || 0) : 0;
-            if (earned >= (maxPoints / 2)) isRight = true; 
-        } else if (q.type === 'mcq' || q.type === 'listen_mcq' || q.type === 'listen_conversation' || q.type === 'reading_comprehension') {
-            isRight = uAns === q.correct;
-        } else if (['fib', 'translation', 'listen_write', 'listen_translate'].includes(q.type)) {
-            if (uAns) {
-                const expected = (q.type === 'translation' ? q.chinese : q.answer).trim().toLowerCase();
-                isRight = uAns.trim().toLowerCase() === expected;
-            }
-        } else if (q.type === 'jumble') {
-            if (Array.isArray(uAns)) isRight = uAns.join(' ') === q.answer.join(' ');
-        } else if (q.type === 'order_sentences') {
-            if (Array.isArray(uAns)) isRight = JSON.stringify(uAns) === JSON.stringify(q.answer);
-        } else if (q.type === 'match') {
-            // (Logic match giữ nguyên như cũ)
-            if (uAns) {
-                const subQData = sub.questionData?.[idx] || {};
-                const colB = subQData.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5);
-                const pairsCorrect = q.pairs.every((p, aIdx) => {
-                    const bIdx = uAns[aIdx];
-                    return colB[bIdx] === p.b;
-                });
-                isRight = pairsCorrect;
-            }
-        }
-        if (isRight) correctCount++;
-    });
-
-    // --- RENDER CHI TIẾT TỪNG CÂU ---
-    const renderQuestionReview = (q, qIdx) => {
-        const userAnswer = sub.answers[qIdx];
-        const type = q.type;
-        const subQData = sub.questionData?.[qIdx] || {};
-        let explanation = '';
-        let scriptHtml = ''; 
-        let gradingControl = '';
-        let bgColor = '';
-        let icon = '';
-
-        const manualGrade = sub.manualGrades ? sub.manualGrades[qIdx] : undefined;
-        const isManualType = ['make_sentence', 'image_describe'].includes(type);
-
-        // --- GIAO DIỆN HIỂN THỊ ĐÁP ÁN (Giữ nguyên logic cũ cho các loại tự động) ---
-        // (Tôi rút gọn phần này, bạn giữ nguyên logic switch case cũ cho các loại câu hỏi tự động)
-        // ... (Code hiển thị đáp án giống phiên bản trước) ...
-        
-        // CHỈ SỬA PHẦN LOGIC HIỂN THỊ TỰ LUẬN DƯỚI ĐÂY:
-        if (isManualType) {
-            // Nội dung học sinh trả lời
-            let contentDisplay = `<div class="p-3 bg-slate-50 border rounded text-slate-800 italic mb-2">${userAnswer || 'Chưa trả lời'}</div>`;
-            if (type === 'image_describe') contentDisplay = `<div class="mb-2"><img src="${q.imageUrl}" class="h-32 rounded shadow-sm object-contain border bg-slate-100"></div>` + contentDisplay;
-            else contentDisplay = `<div class="mb-1"><strong>Từ gợi ý:</strong> <span class="text-orange-600 font-bold">${q.promptWords}</span></div>` + contentDisplay;
-
-            explanation = `${contentDisplay}<div class="text-xs text-slate-500"><em>Gợi ý đáp án: ${q.answer}</em></div>`;
-
-            // Trạng thái chấm điểm
-            const maxPointsForQ = Math.round(100 / assign.questions.length); 
-            
-            if (manualGrade === undefined) {
-                // CHƯA CHẤM
-                bgColor = 'bg-orange-50 border-orange-200';
-                icon = '<div class="flex items-center gap-1 text-orange-600 bg-orange-100 px-2 py-1 rounded-full animate-pulse"><i data-lucide="clock" class="w-4 h-4"></i> <span class="font-bold text-xs">Đợi chấm</span></div>';
-            } else {
-                // ĐÃ CHẤM
-                const isGood = manualGrade >= (maxPointsForQ / 2);
-                bgColor = isGood ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-                icon = `<div class="flex items-center gap-1 ${isGood ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'} px-2 py-1 rounded-full"><span class="font-bold text-xs">${manualGrade}/${maxPointsForQ}đ</span></div>`;
-            }
-
-            // Control Chấm điểm (Chỉ hiện cho GV)
+            // 3. GIAO DIỆN FEEDBACK (Giữ nguyên)
+            let feedbackHtml = '';
             if (isTeacher) {
-                const currentScore = manualGrade !== undefined ? manualGrade : 0;
-                gradingControl = `
-                    <div class="mt-3 pt-3 border-t border-slate-200 bg-white p-3 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="edit-3" class="text-blue-600 w-4 h-4"></i>
-                            <span class="font-bold text-slate-700 text-sm">Điểm (Max: ${maxPointsForQ})</span>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <input type="number" id="manual-score-${qIdx}" value="${currentScore}" min="0" max="${maxPointsForQ}" 
-                                   class="w-20 p-2 border border-blue-300 rounded text-center font-bold text-blue-800 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="0">
-                            <button onclick="saveManualGrade('${sub.id}', ${qIdx}, ${maxPointsForQ})" 
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-xs hover:bg-blue-700 transition shadow-sm whitespace-nowrap">
-                                Lưu
+                feedbackHtml = `
+                    <div class="bg-purple-50 p-5 rounded-2xl border border-purple-200 mb-8 shadow-sm">
+                        <label class="block font-bold text-purple-800 mb-2 flex items-center gap-2 text-lg">
+                            <i data-lucide="message-square-plus"></i> Nhận xét / Góp ý
+                        </label>
+                        <textarea id="teacher-comment-input" rows="3" 
+                            class="w-full p-4 border border-purple-300 rounded-xl outline-none bg-white text-slate-700"
+                            placeholder="Nhập lời phê bình...">${sub.teacherComment || ''}</textarea>
+                        <div class="mt-3 text-right">
+                            <button onclick="saveTeacherFeedback('${sub.id}')" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 ml-auto">
+                                <i data-lucide="save" size="18"></i> Lưu Nhận Xét
                             </button>
                         </div>
+                    </div>`;
+            } else if (sub.teacherComment) {
+                feedbackHtml = `
+                    <div class="bg-yellow-50 p-6 rounded-2xl border border-yellow-200 mb-8 shadow-md relative overflow-hidden">
+                        <h4 class="font-bold text-yellow-800 mb-3 flex items-center gap-2 text-lg"><i data-lucide="message-circle"></i> Lời phê của Giáo viên:</h4>
+                        <p class="text-slate-800 italic text-lg pl-2">"${formatText(sub.teacherComment)}"</p>
+                    </div>`;
+            }
+
+            // 4. CHI TIẾT CÂU HỎI (RenderQuestionReview - FIX LỖI TẠI ĐÂY)
+            const renderQuestionReview = (q, qIdx) => {
+                const userAnswer = sub.answers[qIdx];
+                const type = q.type;
+                let isCorrect = false;
+                let explanation = '';
+                const subQData = sub.questionData?.[qIdx] || {};
+                let scriptHtml = ''; // Biến chứa script hội thoại/đoạn văn
+
+                switch(type) {
+                    // --- [FIX 2] Gộp chung logic hiển thị kết quả Trắc nghiệm cho các loại mới ---
+                    case 'mcq':
+                    case 'listen_mcq':
+                    case 'listen_conversation': 
+                    case 'reading_comprehension':   
+                        isCorrect = userAnswer === q.correct;
+                        const correctText = q.options[q.correct];
+                        const userText = q.options[userAnswer] || 'Chưa trả lời';
+                        explanation = `Đáp án đúng: <span class="font-bold text-green-600">${correctText}</span>. Bạn chọn: <span class="${isCorrect ? 'text-green-600' : 'text-red-600'}">${userText}</span>`;
+                        break;
+                    // ---------------------------------------------------------
+                    
+                    case 'fib':
+                    case 'translation':
+                    case 'listen_write':
+                    case 'listen_translate':
+                        if (userAnswer) {
+                            let expectedAnswer = (type === 'translation' ? q.chinese : q.answer);
+                            isCorrect = userAnswer.trim().toLowerCase() === expectedAnswer.trim().toLowerCase();
+                            explanation = `Đáp án đúng: **${expectedAnswer}**. Bạn trả lời: <span class="${isCorrect ? 'text-green-600' : 'text-red-600'}">${userAnswer}</span>`;
+                        } else {
+                            explanation = `Đáp án đúng: **${q.answer || q.chinese}**. Bạn chưa trả lời.`;
+                        }
+                        break;
+                    case 'jumble':
+                        const jumbleCorrect = q.answer.join(' ');
+                        const jumbleUser = Array.isArray(userAnswer) ? userAnswer.join(' ') : '';
+                        isCorrect = jumbleUser === jumbleCorrect;
+                        explanation = `Câu đúng: **${jumbleCorrect}**. Bạn xếp: <span class="${isCorrect ? 'text-green-600' : 'text-red-600'}">${jumbleUser || 'Chưa xếp'}</span>`;
+                        break;
+                    case 'order_sentences':
+                        isCorrect = JSON.stringify(userAnswer) === JSON.stringify(q.answer);
+                        explanation = `Thứ tự đúng: <br><b>${q.answer.join('<br>⬇️<br>')}</b>`;
+                        break;
+                    case 'match':
+                        if (userAnswer) {
+                             const shuffledColB = subQData.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5); 
+                             const numCorrectMatches = q.pairs.reduce((count, p, aIdx) => {
+                                 const selectedBIndex = userAnswer[aIdx];
+                                 return count + (shuffledColB[selectedBIndex] === p.b ? 1 : 0);
+                             }, 0);
+                             isCorrect = numCorrectMatches === q.pairs.length;
+                             explanation = `Bạn ghép đúng: ${numCorrectMatches}/${q.pairs.length} cặp.`;
+                        } else explanation = 'Chưa làm bài.';
+                        break;
+                }
+
+                // --- [FIX 3] Hiển thị Script/Đoạn văn trong phần xem lại ---
+                if ((q.type === 'listen_conversation' || q.type === 'reading_comprehension') && q.conversationContent) {
+                    const label = q.type === 'reading_comprehension' ? 'Văn bản:' : 'Nội dung hội thoại:';
+                    scriptHtml = `
+                        <div class="mt-3 p-3 bg-slate-100 rounded-lg text-xs md:text-sm text-slate-600 border border-slate-200">
+                            <p class="font-bold text-slate-700 mb-1 flex items-center gap-1"><i data-lucide="file-text" size="14"></i> ${label}</p>
+                            <div class="italic whitespace-pre-line leading-relaxed pl-2 border-l-2 border-slate-300">${formatText(q.conversationContent)}</div>
+                        </div>
+                    `;
+                }
+
+                const icon = isCorrect ? '<i data-lucide="check-circle" class="text-green-500 w-5 h-5"></i>' : '<i data-lucide="x-circle" class="text-red-500 w-5 h-5"></i>';
+                const bgColor = isCorrect ? 'bg-green-50' : 'bg-red-50';
+                
+                let questionText = q.type === 'translation' ? q.vietnamese : (q.audioText ? `[Nghe] ${q.audioText}` : q.text);
+                if(typeof formatText === 'function') questionText = formatText(questionText);
+
+                return `
+                    <div class="p-3 md:p-4 rounded-xl border mb-4 ${bgColor}">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="font-bold text-slate-800 text-sm md:text-base pr-2"><span class="text-blue-600">Câu ${qIdx+1}:</span> ${questionText}</div>
+                            <div class="flex items-center gap-2 font-medium text-sm flex-shrink-0">${icon} <span class="hidden sm:inline">${isCorrect ? 'Đúng' : 'Sai'}</span></div>
+                        </div>
+                        <div class="text-sm text-slate-700 mt-1 pl-2 border-l-4 ${isCorrect ? 'border-green-300' : 'border-red-300'}">${explanation}</div>
+                        ${scriptHtml}
                     </div>
                 `;
-            } else {
-                // Học sinh xem điểm
-                gradingControl = manualGrade !== undefined 
-                    ? `<div class="mt-2 text-right text-sm font-bold text-blue-600">Giáo viên đã chấm: ${manualGrade} điểm</div>`
-                    : `<div class="mt-2 text-right text-sm italic text-orange-500">Giáo viên đang xem xét bài làm...</div>`;
-            }
-        } else {
-            // (Giữ nguyên logic render cho câu tự động)
-            let isQCorrect = false;
-            // ... (Copy lại logic check đúng sai từ hàm cũ cho các loại mcq, fib...)
-            // Để ngắn gọn, tôi giả định bạn dùng lại đoạn switch case check isCorrect ở trên
-            if(q.type === 'mcq' || q.type === 'listen_mcq' || q.type === 'reading_comprehension' || q.type === 'listen_conversation') isQCorrect = userAnswer === q.correct;
-            else if(['fib','translation','listen_write','listen_translate'].includes(q.type) && userAnswer) isQCorrect = userAnswer.trim().toLowerCase() === (q.type==='translation'?q.chinese:q.answer).trim().toLowerCase();
-            else if(q.type==='jumble' && Array.isArray(userAnswer)) isQCorrect = userAnswer.join(' ') === q.answer.join(' ');
-            else if(q.type==='match' && userAnswer) { /* Logic match */ isQCorrect = sub.answers[qIdx] && /*...*/ true; } // Giản lược cho ví dụ
-            
-            // Note: Cần copy lại logic check chính xác từ hàm cũ để biến isQCorrect đúng giá trị
-            // Ở đây tôi dùng lại biến icon/bgcolor logic cũ:
-            
-            // Logic hiển thị lời giải cho câu tự động
-            let correctText = '';
-            if(q.type==='mcq') correctText = q.options[q.correct];
-            else if(q.type==='fib' || q.type==='listen_write') correctText = q.answer;
-            // ...
-            explanation = `Đáp án đúng: <span class="font-bold text-green-600">${correctText || '...'}</span>`;
-            
-            // Dùng lại icon check/x
-            // Lưu ý: Logic check isCorrect cần chi tiết như hàm cũ
-            // Tạm thời set icon/color dựa vào logic đơn giản
-            const tempIsRight = (sub.score / 100) * assign.questions.length > qIdx; // Hack tạm, hãy dùng logic thật
-            
-            // FIX: Bạn hãy dùng lại đoạn switch case cũ để xác định isCorrect cho phần này nhé.
-            // Đoạn dưới là ví dụ render:
-            if(q.type !== 'make_sentence' && q.type !== 'image_describe') {
-               // ... Logic cũ của bạn ...
-               // Chèn lại đoạn renderQuestionReview cũ cho các case không phải manual
-               // Ở đây tôi trả về giao diện chuẩn đã có
-               const correctText = q.options ? q.options[q.correct] : (q.answer || q.chinese);
-               // Check đúng sai lại cho chắc
-               let autoRight = false;
-               if(q.type === 'mcq') autoRight = userAnswer === q.correct;
-               // ... các loại khác
-               
-               icon = autoRight 
-                    ? '<div class="flex items-center gap-1 text-green-600 bg-green-100 px-2 py-1 rounded-full"><i data-lucide="check-circle" class="w-4 h-4"></i> <span class="font-bold text-xs">Đúng</span></div>' 
-                    : '<div class="flex items-center gap-1 text-red-600 bg-red-100 px-2 py-1 rounded-full"><i data-lucide="x-circle" class="w-4 h-4"></i> <span class="font-bold text-xs">Sai</span></div>';
-               bgColor = autoRight ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-               explanation = `Đáp án đúng: <strong>${correctText}</strong>`;
-            }
-        }
+            };
 
-        // Render đoạn văn / Audio text
-        let questionText = q.type === 'translation' ? q.vietnamese : (q.audioText ? `[Nghe] ${q.audioText}` : q.text);
-        if(typeof formatText === 'function') questionText = formatText(questionText);
+            const qHtml = assign.questions.map(renderQuestionReview).join('');
+            const isPassed = sub.score >= 50;
 
-        return `
-            <div class="p-4 rounded-xl border mb-4 ${bgColor} shadow-sm transition hover:shadow-md">
-                <div class="flex items-start justify-between mb-3">
-                    <div class="font-bold text-slate-800 text-sm md:text-base pr-2 leading-relaxed">
-                        <span class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded mr-1">Câu ${qIdx+1}</span> 
-                        ${questionText}
+            return `
+                <div class="max-w-4xl mx-auto bg-white p-4 md:p-8 rounded-2xl shadow-lg fade-in">
+                    <div class="flex justify-between items-start mb-6 pb-4 border-b">
+                        <div>
+                            <h3 class="text-xl md:text-2xl font-bold truncate text-slate-800">Kết quả: ${assign.title}</h3>
+                            <p class="text-slate-500 mt-1 font-medium text-base">Bài làm của: <span class="text-blue-600 font-bold text-lg">${studentName}</span></p>
+                        </div>
+                        <button onclick="viewSubmissionResult(null)" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100 transition"><i data-lucide="x" size="28"></i></button>
                     </div>
-                    <div class="flex-shrink-0 ml-2">${icon}</div>
-                </div>
-                <div class="text-sm text-slate-700 mt-2 pl-3 border-l-4 border-slate-300/50">${explanation}</div>
-                ${scriptHtml}
-                ${gradingControl}
-            </div>
-        `;
-    };
 
-    const qHtml = assign.questions.map(renderQuestionReview).join('');
-    
-    // Header hiển thị điểm
-    let statusHeader = '';
-    let scoreDisplay = '';
-    
-    if (hasPendingQuestions) {
-        statusHeader = `<div class="inline-block bg-orange-100 text-orange-700 px-4 py-1 rounded-full font-bold text-sm mb-2 animate-pulse">⏳ Đang chờ giáo viên chấm</div>`;
-        scoreDisplay = `<div class="text-6xl font-black my-2 text-orange-600">${sub.score}<span class="text-2xl text-slate-400 font-normal">/100</span></div>
-                        <p class="text-sm text-slate-500 font-bold">(Điểm tạm tính)</p>`;
-    } else {
-        const isPassed = sub.score >= 50;
-        statusHeader = `<div class="inline-block ${isPassed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-4 py-1 rounded-full font-bold text-sm mb-2">${isPassed ? '🎉 Đạt yêu cầu' : '😢 Cần cố gắng'}</div>`;
-        scoreDisplay = `<div class="text-6xl font-black my-2 ${isPassed ? 'text-green-600' : 'text-red-600'}">${sub.score}</div>`;
-    }
-
-    // Feedback (Giữ nguyên)
-    let feedbackHtml = '';
-    if (isTeacher) {
-        feedbackHtml = `
-            <div class="bg-purple-50 p-5 rounded-2xl border border-purple-200 mb-8 shadow-sm">
-                <label class="block font-bold text-purple-800 mb-2 flex items-center gap-2 text-lg"><i data-lucide="message-square-plus"></i> Nhận xét / Góp ý</label>
-                <textarea id="teacher-comment-input" rows="3" class="w-full p-4 border border-purple-300 rounded-xl outline-none bg-white text-slate-700" placeholder="Nhập lời phê bình...">${sub.teacherComment || ''}</textarea>
-                <div class="mt-3 text-right"><button onclick="saveTeacherFeedback('${sub.id}')" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2 ml-auto"><i data-lucide="save" size="18"></i> Lưu Nhận Xét</button></div>
-            </div>`;
-    } else if (sub.teacherComment) {
-        feedbackHtml = `<div class="bg-yellow-50 p-6 rounded-2xl border border-yellow-200 mb-8 shadow-md"><h4 class="font-bold text-yellow-800 mb-3 flex items-center gap-2 text-lg"><i data-lucide="message-circle"></i> Lời phê của Giáo viên:</h4><p class="text-slate-800 italic text-lg pl-2">"${formatText(sub.teacherComment)}"</p></div>`;
-    }
-
-    return `
-        <div class="max-w-4xl mx-auto bg-white p-4 md:p-8 rounded-2xl shadow-lg fade-in">
-            <div class="flex justify-between items-start mb-6 pb-4 border-b">
-                <div>
-                    <h3 class="text-xl md:text-2xl font-bold truncate text-slate-800">Kết quả: ${assign.title}</h3>
-                    <p class="text-slate-500 mt-1 font-medium text-base">Bài làm của: <span class="text-blue-600 font-bold text-lg">${studentName}</span></p>
+                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                        <div class="flex-1 text-center p-6 rounded-2xl ${isPassed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} flex flex-col justify-center items-center shadow-inner">
+                            <p class="text-sm font-bold uppercase tracking-wider opacity-70">Tổng điểm</p>
+                            <div class="text-6xl font-black my-2">${sub.score}</div>
+                            <p class="text-lg font-bold">${isPassed ? '🎉 Đạt yêu cầu' : '😢 Cần cố gắng'}</p>
+                        </div>
+                        <div class="flex-1 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                            <h4 class="font-bold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="info" size="18"></i> Thông tin chi tiết</h4>
+                            <ul class="space-y-3 text-sm text-slate-600">
+                                <li class="flex justify-between"><span>Ngày nộp:</span> <span class="font-medium text-slate-800">${sub.createdAt ? new Date(sub.createdAt.seconds * 1000).toLocaleString('vi-VN') : 'N/A'}</span></li>
+                                <li class="flex justify-between"><span>Số câu đúng:</span> <span class="font-bold text-green-600 text-lg">${correctCount} / ${assign.questions.length}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    ${feedbackHtml}
+                    <h4 class="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="list-checks" size="24" class="text-blue-500"></i> Chi tiết bài làm</h4>
+                    <div class="space-y-4">${qHtml}</div>
                 </div>
-                <button onclick="viewSubmissionResult(null)" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-slate-100 transition"><i data-lucide="x" size="28"></i></button>
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-4 mb-6">
-                <div class="flex-1 text-center p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-center items-center shadow-inner">
-                    ${statusHeader}
-                    ${scoreDisplay}
-                </div>
-                <div class="flex-1 bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                    <h4 class="font-bold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="info" size="18"></i> Thông tin chi tiết</h4>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex justify-between"><span>Ngày nộp:</span> <span class="font-medium text-slate-800">${sub.createdAt ? new Date(sub.createdAt.seconds * 1000).toLocaleString('vi-VN') : 'N/A'}</span></li>
-                        <li class="flex justify-between"><span>Tiến độ chấm:</span> <span class="font-bold ${hasPendingQuestions ? 'text-orange-600' : 'text-green-600'} text-lg">${hasPendingQuestions ? 'Đang chấm...' : 'Hoàn tất'}</span></li>
-                        <li class="flex justify-between"><span>Số câu đạt:</span> <span class="font-bold text-blue-600 text-lg">${correctCount} / ${assign.questions.length}</span></li>
-                    </ul>
-                </div>
-            </div>
-            ${feedbackHtml}
-            <h4 class="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="list-checks" size="24" class="text-blue-500"></i> Chi tiết bài làm</h4>
-            <div class="space-y-4">${qHtml}</div>
-        </div>
-    `;
-};
+            `;
+        };
         // RANKING (Cập nhật Responsive)
         const renderRanking = () => {
             const sorted = [...state.data.users].sort((a,b) => (b.points||0) - (a.points||0));
@@ -5220,70 +5072,44 @@ if (qType === 'reading_comprehension') {
             renderApp();
         }
         
-// --- HÀM CHỌN THỦ CÔNG (LOGIC MỚI: KHÔNG RESET GIAO DIỆN - ĐÃ FIX CHO THỬ THÁCH) ---
+// --- HÀM CHỌN THỦ CÔNG CÂU HỎI TỪ BANK (ĐÃ FIX LỖI NHẢY SCROLL) ---
 window.selectQuestionFromBank = (qIndex) => {
-    const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
-    if (!selectedBank) return;
+            const scrollContainer = document.getElementById('bank-scroll-view');
+            let savedScrollTop = 0;
+            if (scrollContainer) savedScrollTop = scrollContainer.scrollTop;
 
-    const questionToToggle = selectedBank.questions[qIndex];
-    
-    // --- FIX: Xác định danh sách đích dựa trên view hiện tại (Thử thách hay Bài tập) ---
-    let currentQs;
-    if (state.view === 'challenges') {
-        if (!state.ui.activeChallenge.questions) state.ui.activeChallenge.questions = [];
-        currentQs = state.ui.activeChallenge.questions;
-    } else {
-        if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
-        currentQs = state.ui.newAssignment.questions;
-    }
-    // --------------------------------------------------------------------------------
+            const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
+            if (!selectedBank) return;
 
-    // Kiểm tra xem câu hỏi này đã có trong danh sách chưa
-    const existingIndex = currentQs.findIndex(existQ => 
-        JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
-        JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
-    );
+            const questionToToggle = selectedBank.questions[qIndex];
+            
+            // XÁC ĐỊNH DANH SÁCH CẦN THAO TÁC
+            let currentQs;
+            if (state.view === 'challenges') {
+                if (!state.ui.activeChallenge.questions) state.ui.activeChallenge.questions = [];
+                currentQs = state.ui.activeChallenge.questions;
+            } else {
+                if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
+                currentQs = state.ui.newAssignment.questions;
+            }
 
-    let isSelectedNow = false;
+            // Logic thêm/xóa
+            const existingIndex = currentQs.findIndex(existQ => 
+                JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
+                JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
+            );
 
-    // Cập nhật dữ liệu (Thêm hoặc Xóa)
-    if (existingIndex !== -1) {
-        currentQs.splice(existingIndex, 1);
-        isSelectedNow = false;
-    } else {
-        currentQs.push(questionToToggle);
-        isSelectedNow = true;
-    }
+            if (existingIndex !== -1) {
+                currentQs.splice(existingIndex, 1);
+            } else {
+                currentQs.push(questionToToggle);
+            }
 
-    // --- CẬP NHẬT GIAO DIỆN TRỰC TIẾP ---
-    
-    // 1. Cập nhật nút bấm tương ứng
-    const btn = document.getElementById(`btn-select-${qIndex}`);
-    if (btn) {
-        if (isSelectedNow) {
-            btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-red-100 text-red-600 hover:bg-red-200 border border-red-200";
-            btn.innerHTML = '<i data-lucide="minus" class="w-3 h-3"></i> Bỏ';
-        } else {
-            btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-blue-600 text-white hover:bg-blue-700";
-            btn.innerHTML = '<i data-lucide="plus" class="w-3 h-3"></i> Chọn';
-        }
-        renderIcons();
-    }
+            renderApp();
 
-    // 2. Cập nhật con số tổng đếm trên Header
-    const countEl = document.getElementById('total-selected-count');
-    if (countEl) {
-        countEl.textContent = currentQs.length; // Hiển thị số lượng của danh sách đúng
-        
-        // Hiệu ứng nháy nhẹ
-        countEl.classList.remove('text-blue-600');
-        countEl.classList.add('text-green-600', 'scale-110');
-        setTimeout(() => {
-            countEl.classList.remove('text-green-600', 'scale-110');
-            countEl.classList.add('text-blue-600');
-        }, 200);
-    }
-};
+            const newScrollContainer = document.getElementById('bank-scroll-view');
+            if (newScrollContainer) newScrollContainer.scrollTop = savedScrollTop;
+        };
         
 window.addRandomQuestions = (bankId) => {
             const selectedBank = state.data.questionBanks.find(b => b.id === bankId);
@@ -5727,45 +5553,6 @@ window.addQuestion = () => {
                         };
                         isValid = true;
                         break;
-// TÌM HÀM addQuestion VÀ THÊM VÀO SWITCH CASE:
-//Có vấn đề
-// ĐOẠN MÃ ĐÚNG CẦN THAY THẾ
-case 'make_sentence':
-    // 1. Lấy giá trị từ ô input (dựa trên ID đã định nghĩa trong renderQuestionInputForm)
-    const prompts = document.getElementById('prompt-words').value.trim();
-    const suggested = document.getElementById('suggested-answer').value.trim();
-    
-    // 2. Kiểm tra dữ liệu
-    if (!prompts) throw new Error("Vui lòng nhập các từ gợi ý.");
-
-    // 3. Tạo object câu hỏi mới
-    newQ = { 
-        ...newQ, 
-        type: 'make_sentence',
-        promptWords: prompts,   // Lưu từ gợi ý
-        answer: suggested,      // Lưu đáp án tham khảo
-        text: `Đặt câu với từ: ${prompts}` // Text hiển thị tóm tắt
-    };
-    isValid = true;
-    break;
-
-case 'image_describe':
-    const imgUrl = document.getElementById('image-url').value.trim();
-    const imgText = document.getElementById('q-text').value.trim();
-    const suggestImg = document.getElementById('suggested-answer').value.trim();
-    
-    if (!imgUrl) throw new Error("Vui lòng nhập URL hình ảnh.");
-    if (!imgText) throw new Error("Vui lòng nhập yêu cầu.");
-
-    newQ = { 
-        ...newQ, 
-        type: 'image_describe',
-        imageUrl: imgUrl,
-        answer: suggestImg,
-        text: imgText 
-    };
-    isValid = true;
-    break;
                 }
             } catch (e) {
                 return showToast(e.message, "error");
@@ -6115,245 +5902,197 @@ window.viewSubmissionResult = (subId) => {
             }
         };
 // --- NỘP BÀI TẬP (ĐẦY ĐỦ TÍNH NĂNG: CHẤM ĐIỂM, TẶNG VÉ & MỞ KHÓA AVATAR) ---
- // --- CẬP NHẬT: NỘP BÀI (HỖ TRỢ TRẠNG THÁI CHỜ CHẤM) ---
-window.submitAssignment = async () => {
-    if (state.ui.isSubmitting) return; 
-    
-    const assignId = state.ui.takingAssignmentId;
-    const existingSub = state.data.submissions.find(s => s.assignmentId === assignId && s.studentId === state.user.uid);
-    
-    if (existingSub) {
-        showToast("Bạn đã nộp bài tập này rồi!", "error");
-        state.ui.takingAssignmentId = null;
-        renderApp();
-        return;
-    }
-
-    state.ui.isSubmitting = true; 
-    const submitBtn = document.querySelector('#next-q-btn-container button');
-    if(submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="animate-spin" data-lucide="loader-2"></i> Đang nộp...';
-        renderIcons();
-    }
-
-    const assign = state.data.assignments.find(a => a.id === assignId);
-    let score = 0;
-    const totalQuestions = assign.questions.length;
-    const scorePerQuestion = 100 / totalQuestions;
-    const questionDataToSave = {}; 
-    
-    // Cờ kiểm tra xem bài làm có chứa câu hỏi cần chấm tay không
-    let hasManualQuestions = false;
-
-    assign.questions.forEach((q, idx) => {
-        const userAnswer = state.ui.assignmentAnswers[idx];
-        let isCorrect = false;
-        
-        // Lưu metadata cho các câu hỏi ngẫu nhiên
-        if (q.type === 'match' && q.shuffledColB) questionDataToSave[idx] = { shuffledColB: q.shuffledColB };
-        else if (q.type === 'jumble' && q.shuffledWords) questionDataToSave[idx] = { shuffledWords: q.shuffledWords };
-        else if (q.type === 'order_sentences') questionDataToSave[idx] = { shuffledSentences: q.shuffledSentences };
-
-        switch(q.type) {
-            case 'make_sentence':
-            case 'image_describe':
-                // QUAN TRỌNG: Đánh dấu là cần chấm tay, không tính điểm ngay
-                hasManualQuestions = true;
-                isCorrect = false; 
-                questionDataToSave[idx] = { ...questionDataToSave[idx], status: 'pending' };
-                break;
-
-            case 'mcq':
-            case 'listen_mcq': 
-            case 'listen_conversation':
-            case 'reading_comprehension':
-                isCorrect = userAnswer === q.correct;
-                break;
-
-            case 'fib':
-            case 'translation':
-            case 'listen_write': 
-            case 'listen_translate': 
-                if (userAnswer) {
-                    let expectedAnswer = (q.type === 'translation' ? q.chinese : q.answer); 
-                    isCorrect = userAnswer.trim().toLowerCase() === expectedAnswer.trim().toLowerCase();
-                }
-                break;
-                
-            case 'jumble':
-                if (Array.isArray(userAnswer)) isCorrect = q.answer.join(' ') === userAnswer.join(' ');
-                break;
-                
-            case 'order_sentences':
-                if (Array.isArray(userAnswer)) isCorrect = JSON.stringify(userAnswer) === JSON.stringify(q.answer);
-                break;
-                
-            case 'match':
-                if (userAnswer) {
-                     const userMatches = userAnswer;
-                     const colBToUse = q.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5); 
-                     const numCorrectMatches = q.pairs.reduce((count, p, aIdx) => {
-                         const selectedBIndex = userMatches[aIdx];
-                         const selectedB = colBToUse[selectedBIndex]; 
-                         return count + (selectedB && selectedB === p.b ? 1 : 0);
-                     }, 0);
-                     isCorrect = numCorrectMatches === q.pairs.length;
-                }
-                break;
-        }
-        
-        if (isCorrect) score += scorePerQuestion; 
-    });
-
-    score = Math.round(score);
-
-    // Xử lý thông báo phản hồi (Feedback)
-    let autoFeedback = "";
-    if (hasManualQuestions) {
-        autoFeedback = "Bài làm đã được ghi nhận! Giáo viên sẽ chấm các câu tự luận và cập nhật điểm số sau. ⏳";
-    } else {
-        if (score > 90) autoFeedback = "Xuất sắc! Em làm bài rất tốt, hãy tiếp tục duy trì phong độ này nhé! 🌟";
-        else if (score > 80) autoFeedback = "Rất tốt! Em đã nắm vững kiến thức, hãy cố gắng thêm chút nữa để đạt điểm tối đa nhé! 💪";
-        else autoFeedback = "Cần cố gắng hơn! Em hãy ôn tập kỹ lại bài học và làm lại bài tập để đạt kết quả cao hơn nhé! 📚";
-    }
-
-    if (state.ui.timerInterval) {
-        clearInterval(state.ui.timerInterval);
-        state.ui.timerInterval = null;
-    }
-
-    try {
-        // Lưu Submissions
-        const subRef = await addDoc(getRef('submissions'), {
-            assignmentId: assign.id,
-            studentId: state.user.uid,
-            score, // Đây là điểm tạm tính (chỉ bao gồm trắc nghiệm)
-            answers: state.ui.assignmentAnswers,
-            questionData: questionDataToSave, 
-            createdAt: serverTimestamp(),
-            teacherComment: autoFeedback,
-            hasPendingManual: hasManualQuestions // Cờ để nhận biết bài cần chấm
-        });
-        
-        // Cập nhật User Profile (Cộng điểm tạm tính trước)
-        const userRef = doc(db, getPath('users'), state.user.uid);
-        const updatePayload = { points: increment(score) };
-        
-        // Chỉ tặng vé/huy hiệu NGAY LẬP TỨC nếu KHÔNG CÓ câu hỏi chờ chấm
-        // Nếu có câu hỏi chờ, việc tặng quà sẽ xử lý ở hàm chấm điểm của GV (saveManualGrade)
-        if (!hasManualQuestions && score >= 90) {
-            updatePayload.luckyTickets = increment(1);
-            if (score === 100) updatePayload.perfectScores = increment(1);
-        }
-
-        await updateDoc(userRef, updatePayload);
-        
-        state.ui.viewSubmission = {
-            id: subRef.id,
-            assignmentId: assign.id,
-            studentId: state.user.uid,
-            score,
-            answers: state.ui.assignmentAnswers,
-            questionData: questionDataToSave, 
-            createdAt: new Date(),
-            teacherComment: autoFeedback,
-            assignment: assign,
-            hasPendingManual: hasManualQuestions
-        };
-
-        state.ui.takingAssignmentId = null;
-        
-        if (hasManualQuestions) {
-            showToast(`Nộp bài thành công! Điểm tạm tính: ${score}. Đang chờ giáo viên chấm tiếp...`, "info");
-        } else {
-            showToast(`Nộp bài thành công! +${score} điểm`, "success");
-        }
-
-        renderApp(); 
-    } catch(e) { 
-        console.error("Lỗi nộp bài:", e);
-        showToast("Lỗi nộp bài: " + e.message, "error"); 
-    } finally {
-        state.ui.isSubmitting = false;
-    }
-};
-
-// --- CẬP NHẬT: LƯU ĐIỂM THỦ CÔNG & TÍNH TỔNG ---
-// --- CẬP NHẬT: LƯU ĐIỂM THỦ CÔNG & TỰ ĐỘNG CẬP NHẬT LỜI PHÊ ---
-window.saveManualGrade = async (subId, qIdx, maxPoints) => {
-    const inputEl = document.getElementById(`manual-score-${qIdx}`);
-    let newScore = parseFloat(inputEl.value);
-
-    if (isNaN(newScore) || newScore < 0 || newScore > maxPoints) {
-        return showToast(`Điểm phải từ 0 đến ${maxPoints}`, "error");
-    }
-
-    try {
-        // Biến lưu lời phê mới để update UI ngay lập tức
-        let newFeedbackText = "";
-
-        await runTransaction(db, async (transaction) => {
-            const subRef = doc(db, getPath('submissions'), subId);
-            const subDoc = await transaction.get(subRef);
-            if (!subDoc.exists()) throw "Bài nộp không tồn tại";
-
-            const data = subDoc.data();
-            const manualGrades = data.manualGrades || {};
+        window.submitAssignment = async () => {
+            // 1. CHẶN NỘP ĐÚP & KHÓA UI
+            if (state.ui.isSubmitting) return; 
             
-            // 1. Cập nhật điểm câu hỏi này
-            const oldQuestionScore = manualGrades[qIdx] || 0;
-            manualGrades[qIdx] = newScore;
-
-            // 2. Tính toán lại TỔNG ĐIỂM
-            let newTotalScore = data.score - oldQuestionScore + newScore;
-            newTotalScore = Math.min(100, Math.max(0, newTotalScore));
-            newTotalScore = Math.round(newTotalScore * 10) / 10;
-
-            // 3. TẠO LỜI PHÊ MỚI DỰA TRÊN ĐIỂM TỔNG
-            // Kiểm tra xem còn câu nào chưa chấm không? (Nếu muốn kỹ hơn)
-            // Ở đây ta cứ cập nhật lời phê theo điểm số hiện tại
-            if (newTotalScore >= 90) newFeedbackText = "Xuất sắc! Em làm bài rất tốt, hãy tiếp tục duy trì phong độ này nhé! 🌟";
-            else if (newTotalScore >= 80) newFeedbackText = "Rất tốt! Em đã nắm vững kiến thức, hãy cố gắng thêm chút nữa để đạt điểm tối đa nhé! 💪";
-            else newFeedbackText = "Cần cố gắng hơn! Em hãy ôn tập kỹ lại bài học và làm lại bài tập để đạt kết quả cao hơn nhé! 📚";
-
-            // 4. Cập nhật User Profile (Cộng bù phần chênh lệch điểm)
-            const userRef = doc(db, getPath('users'), data.studentId);
-            const scoreDiff = Math.round(newTotalScore) - Math.round(data.score);
+            const assignId = state.ui.takingAssignmentId;
+            const existingSub = state.data.submissions.find(s => s.assignmentId === assignId && s.studentId === state.user.uid);
             
-            if (scoreDiff !== 0) {
-                 transaction.update(userRef, { points: increment(scoreDiff) });
+            if (existingSub) {
+                showToast("Bạn đã nộp bài tập này rồi!", "error");
+                state.ui.takingAssignmentId = null;
+                renderApp();
+                return;
             }
 
-            // 5. Update Submission (Gồm cả điểm và lời phê)
-            transaction.update(subRef, {
-                manualGrades: manualGrades,
-                score: newTotalScore,
-                teacherComment: newFeedbackText, // <--- CẬP NHẬT LỜI PHÊ TẠI ĐÂY
-                hasPendingManual: false // Đánh dấu là đã được tác động (có thể bỏ flag chờ nếu muốn)
+            state.ui.isSubmitting = true; 
+            const submitBtn = document.querySelector('#next-q-btn-container button');
+            if(submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="animate-spin" data-lucide="loader-2"></i> Đang nộp...';
+                renderIcons();
+            }
+
+            // 2. CHẤM ĐIỂM
+            const assign = state.data.assignments.find(a => a.id === assignId);
+            let score = 0;
+            const totalQuestions = assign.questions.length;
+            const scorePerQuestion = 100 / totalQuestions;
+            const questionDataToSave = {}; 
+            
+            assign.questions.forEach((q, idx) => {
+                const userAnswer = state.ui.assignmentAnswers[idx];
+                let isCorrect = false;
+                
+                // Lưu lại trạng thái ngẫu nhiên (shuffle) để lúc xem lại kết quả hiển thị đúng như lúc làm
+                if (q.type === 'match' && q.shuffledColB) {
+                    questionDataToSave[idx] = { shuffledColB: q.shuffledColB };
+                } else if (q.type === 'jumble' && q.shuffledWords) {
+                    questionDataToSave[idx] = { shuffledWords: q.shuffledWords };
+                } else if (q.type === 'order_sentences') {
+                    questionDataToSave[idx] = { shuffledSentences: q.shuffledSentences };
+                }
+
+                // Logic so sánh đáp án từng loại câu hỏi
+                switch(q.type) {
+                    case 'mcq':
+                    case 'listen_mcq': 
+                    case 'listen_conversation':
+                    case 'reading_comprehension':
+                        isCorrect = userAnswer === q.correct;
+                        break;
+
+                    case 'fib':
+                    case 'translation':
+                    case 'listen_write': 
+                    case 'listen_translate': 
+                        if (userAnswer) {
+                            let expectedAnswer;
+                            if (q.type === 'translation') expectedAnswer = q.chinese;
+                            else expectedAnswer = q.answer; 
+                            // So sánh chuỗi (không phân biệt hoa thường, bỏ khoảng trắng thừa)
+                            isCorrect = userAnswer.trim().toLowerCase() === expectedAnswer.trim().toLowerCase();
+                        }
+                        break;
+                        
+                    case 'jumble':
+                        if (Array.isArray(userAnswer)) {
+                            isCorrect = q.answer.join(' ') === userAnswer.join(' ');
+                        }
+                        break;
+                        
+                    case 'order_sentences':
+                        if (Array.isArray(userAnswer)) {
+                            isCorrect = JSON.stringify(userAnswer) === JSON.stringify(q.answer);
+                        }
+                        break;
+                        
+                    case 'match':
+                        if (userAnswer) {
+                             const userMatches = userAnswer;
+                             // Lấy lại cột B đã shuffle lúc làm bài
+                             const colBToUse = q.shuffledColB || q.pairs.map(p => p.b).sort(() => Math.random() - 0.5); 
+                             
+                             // Kiểm tra từng cặp
+                             const numCorrectMatches = q.pairs.reduce((count, p, aIdx) => {
+                                 const selectedBIndex = userMatches[aIdx];
+                                 const selectedB = colBToUse[selectedBIndex]; 
+                                 return count + (selectedB && selectedB === p.b ? 1 : 0);
+                             }, 0);
+                             
+                             // Phải đúng HẾT tất cả các cặp mới được tính điểm câu này
+                             isCorrect = numCorrectMatches === q.pairs.length;
+                        }
+                        break;
+                }
+                
+                if (isCorrect) score += scorePerQuestion; 
             });
-        });
 
-        showToast("Đã lưu điểm và cập nhật lời phê!", "success");
-        
-        // 6. Cập nhật giao diện ngay lập tức (Không cần reload)
-        if (state.ui.viewSubmission) {
-            // Update điểm câu hỏi
-            if (!state.ui.viewSubmission.manualGrades) state.ui.viewSubmission.manualGrades = {};
-            state.ui.viewSubmission.manualGrades[qIdx] = newScore;
-            
-            // Update lời phê hiển thị
-            state.ui.viewSubmission.teacherComment = newFeedbackText;
-            
-            // Reload lại modal sau 0.5s để tính toán lại các con số tổng thể chính xác từ server
-            setTimeout(() => viewSubmissionResult(subId), 500); 
-        }
+            score = Math.round(score);
 
-    } catch (e) {
-        console.error("Lỗi lưu điểm:", e);
-        showToast("Lỗi khi lưu điểm: " + e.message, "error");
-    }
-};
+            // 3. XỬ LÝ PHẦN THƯỞNG (GAMIFICATION)
+            let autoFeedback = "";
+            if (score > 90) autoFeedback = "Xuất sắc! Em làm bài rất tốt, hãy tiếp tục duy trì phong độ này nhé! 🌟";
+            else if (score > 80) autoFeedback = "Rất tốt! Em đã nắm vững kiến thức, hãy cố gắng thêm chút nữa để đạt điểm tối đa nhé! 💪";
+            else autoFeedback = "Cần cố gắng hơn! Em hãy ôn tập kỹ lại bài học và làm lại bài tập để đạt kết quả cao hơn nhé! 📚";
+
+            // Kiểm tra điều kiện nhận thưởng (Điểm >= 90)
+            let earnedTicket = false;
+            let unlockedNewAvatar = null; // Biến lưu avatar mới mở khóa
+
+            if (score >= 90) {
+                earnedTicket = true;
+                // Gọi hàm mở khóa Avatar (Hàm này đã thêm ở bước trước)
+                if (typeof window.unlockRandomAvatar === 'function') {
+                    unlockedNewAvatar = await window.unlockRandomAvatar();
+                }
+            }
+
+            if (state.ui.timerInterval) {
+                clearInterval(state.ui.timerInterval);
+                state.ui.timerInterval = null;
+            }
+
+            // 4. LƯU VÀO DATABASE
+            try {
+                // 4a. Lưu kết quả bài làm (Submissions)
+                const subRef = await addDoc(getRef('submissions'), {
+                    assignmentId: assign.id,
+                    studentId: state.user.uid,
+                    score,
+                    answers: state.ui.assignmentAnswers,
+                    questionData: questionDataToSave, 
+                    createdAt: serverTimestamp(),
+                    teacherComment: autoFeedback
+                });
+                
+                // 4b. Cập nhật Hồ sơ người dùng (Điểm, Vé, Thành tích)
+                const userRef = doc(db, getPath('users'), state.user.uid);
+                const updatePayload = {
+                    points: increment(score) // Cộng điểm tích lũy
+                };
+
+                // Cộng vé quay số nếu đạt điều kiện
+                if (earnedTicket) {
+                    updatePayload.luckyTickets = increment(1);
+                }
+                
+                // Ghi nhận số lần đạt điểm tuyệt đối (để tính huy hiệu)
+                if (score === 100) {
+                    updatePayload.perfectScores = increment(1);
+                }
+                
+                // Lưu ý: unlockedAvatars đã được cập nhật bên trong hàm unlockRandomAvatar() rồi
+                // nên ta không cần add vào updatePayload này nữa để tránh xung đột dữ liệu.
+
+                await updateDoc(userRef, updatePayload);
+                
+                // 5. CẬP NHẬT GIAO DIỆN SAU KHI NỘP
+                state.ui.viewSubmission = {
+                    id: subRef.id,
+                    assignmentId: assign.id,
+                    studentId: state.user.uid,
+                    score,
+                    answers: state.ui.assignmentAnswers,
+                    questionData: questionDataToSave, 
+                    createdAt: new Date(),
+                    teacherComment: autoFeedback,
+                    assignment: assign 
+                };
+
+                state.ui.takingAssignmentId = null;
+                
+                // Tạo thông báo chúc mừng chi tiết
+                let toastMsg = `Nộp bài thành công! +${score} điểm`;
+                if (earnedTicket) toastMsg += ` & +1 🎟️ Vé quay!`;
+                
+                showToast(toastMsg, "success");
+                
+                // Nếu mở được Avatar mới thì báo riêng cho hoành tráng
+                if (unlockedNewAvatar) {
+                    setTimeout(() => showToast(`🔓 MỞ KHÓA AVATAR MỚI: ${unlockedNewAvatar}`, 'success'), 1500);
+                }
+
+                renderApp(); 
+            } catch(e) { 
+                console.error("Lỗi nộp bài:", e);
+                showToast("Lỗi nộp bài: " + e.message, "error"); 
+            } finally {
+                state.ui.isSubmitting = false;
+            }
+        };
 
         // Bootstrap
         onAuthStateChanged(auth, (u) => {
@@ -6706,71 +6445,65 @@ window.saveManualGrade = async (subId, qIdx, maxPoints) => {
                 btnElement.classList.remove('bg-green-100', 'text-green-600', 'ring-2', 'ring-green-400', 'animate-pulse');
             }
         };
-// --- HÀM CHỌN THỦ CÔNG CÂU HỎI TỪ BANK (ĐÃ SỬA LỖI CHO THỬ THÁCH) ---
-window.selectQuestionFromBank = (qIndex) => {
-    // 1. Xác định Bank đang chọn
-    const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
-    if (!selectedBank) return;
+// --- HÀM CHỌN THỦ CÔNG (LOGIC MỚI: KHÔNG RESET GIAO DIỆN) ---
+        window.selectQuestionFromBank = (qIndex) => {
+            const selectedBank = state.data.questionBanks.find(b => b.id === state.ui.selectedBankId);
+            if (!selectedBank) return;
 
-    const questionToToggle = selectedBank.questions[qIndex];
-    
-    // --- [FIX QUAN TRỌNG] XÁC ĐỊNH ĐÚNG DANH SÁCH CẦN LƯU ---
-    let currentQs;
-    if (state.view === 'challenges') {
-        // Nếu đang ở màn hình Thử thách -> Lưu vào activeChallenge
-        if (!state.ui.activeChallenge.questions) state.ui.activeChallenge.questions = [];
-        currentQs = state.ui.activeChallenge.questions;
-    } else {
-        // Nếu đang ở màn hình khác (Bài tập/Bank) -> Lưu vào newAssignment
-        if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
-        currentQs = state.ui.newAssignment.questions;
-    }
-    // ---------------------------------------------------------
+            const questionToToggle = selectedBank.questions[qIndex];
+            if (!state.ui.newAssignment.questions) state.ui.newAssignment.questions = [];
+            const currentAssignmentQs = state.ui.newAssignment.questions;
 
-    // 2. Kiểm tra xem câu hỏi này đã có chưa (để thêm hoặc xóa)
-    const existingIndex = currentQs.findIndex(existQ => 
-        JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
-        JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
-    );
+            // Kiểm tra xem đã có chưa
+            const existingIndex = currentAssignmentQs.findIndex(existQ => 
+                JSON.stringify({t: existQ.text, o: existQ.options, a: existQ.answer}) === 
+                JSON.stringify({t: questionToToggle.text, o: questionToToggle.options, a: questionToToggle.answer})
+            );
 
-    let isSelectedNow = false;
+            let isSelectedNow = false;
 
-    if (existingIndex !== -1) {
-        // Đã có -> Xóa đi
-        currentQs.splice(existingIndex, 1);
-        isSelectedNow = false;
-    } else {
-        // Chưa có -> Thêm vào
-        currentQs.push(questionToToggle);
-        isSelectedNow = true;
-    }
+            // Cập nhật State (Dữ liệu)
+            if (existingIndex !== -1) {
+                // Đã có -> Xóa đi
+                state.ui.newAssignment.questions.splice(existingIndex, 1);
+                isSelectedNow = false;
+            } else {
+                // Chưa có -> Thêm vào
+                state.ui.newAssignment.questions.push(questionToToggle);
+                isSelectedNow = true;
+            }
 
-    // 3. Cập nhật giao diện nút bấm ngay lập tức (không cần render lại cả trang)
-    const btn = document.getElementById(`btn-select-${qIndex}`);
-    if (btn) {
-        if (isSelectedNow) {
-            btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-red-100 text-red-600 hover:bg-red-200 border border-red-200";
-            btn.innerHTML = '<i data-lucide="minus" class="w-3 h-3"></i> Bỏ';
-        } else {
-            btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-blue-600 text-white hover:bg-blue-700";
-            btn.innerHTML = '<i data-lucide="plus" class="w-3 h-3"></i> Chọn';
-        }
-        renderIcons(); // Vẽ lại icon
-    }
+            // --- CẬP NHẬT GIAO DIỆN TRỰC TIẾP (KHÔNG DÙNG renderApp) ---
+            
+            // 1. Cập nhật nút bấm
+            const btn = document.getElementById(`btn-select-${qIndex}`);
+            if (btn) {
+                if (isSelectedNow) {
+                    // Đổi sang trạng thái "Đã chọn" (Màu đỏ, chữ Bỏ)
+                    btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-red-100 text-red-600 hover:bg-red-200 border border-red-200";
+                    btn.innerHTML = '<i data-lucide="minus" class="w-3 h-3"></i> Bỏ';
+                } else {
+                    // Đổi sang trạng thái "Chưa chọn" (Màu xanh, chữ Chọn)
+                    btn.className = "flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm w-20 justify-center bg-blue-600 text-white hover:bg-blue-700";
+                    btn.innerHTML = '<i data-lucide="plus" class="w-3 h-3"></i> Chọn';
+                }
+                // Render lại icon vừa thêm vào nút
+                renderIcons();
+            }
 
-    // 4. Cập nhật số lượng đã chọn trên Header modal
-    const countEl = document.getElementById('total-selected-count');
-    if (countEl) {
-        countEl.textContent = currentQs.length;
-        // Hiệu ứng nháy nhẹ
-        countEl.classList.remove('text-blue-600');
-        countEl.classList.add('text-green-600', 'scale-110');
-        setTimeout(() => {
-            countEl.classList.remove('text-green-600', 'scale-110');
-            countEl.classList.add('text-blue-600');
-        }, 200);
-    }
-};
+            // 2. Cập nhật con số tổng đếm trên Header
+            const countEl = document.getElementById('total-selected-count');
+            if (countEl) {
+                countEl.textContent = currentAssignmentQs.length;
+                // Hiệu ứng nháy nhẹ để báo hiệu
+                countEl.classList.remove('text-blue-600');
+                countEl.classList.add('text-green-600', 'scale-110');
+                setTimeout(() => {
+                    countEl.classList.remove('text-green-600', 'scale-110');
+                    countEl.classList.add('text-blue-600');
+                }, 200);
+            }
+        };
 // --- HÀM LƯU NHẬN XÉT CỦA GIÁO VIÊN ---
         window.saveTeacherFeedback = async (subId) => {
             const comment = document.getElementById('teacher-comment-input').value.trim();
