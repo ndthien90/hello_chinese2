@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện từ vựng HSK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Font chữ Hán viết tay */
+        @font-face {
+            font-family: 'Kaiti';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body { 
+            background-color: #f3f4f6; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 90px;
+        }
+
+        /* Ẩn thanh cuộn nhưng vẫn cuộn được */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Hiệu ứng lật thẻ 3D */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        
+        .card-container {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-container.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Hiệu ứng nút bấm */
+        .btn-press:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen bg-gray-50 border-x border-gray-200 shadow-2xl relative">
+
+    <!-- Top Bar -->
+    <div class="bg-white px-4 py-3 flex justify-between items-center sticky top-0 z-30 shadow-sm">
+        <a href="index.html" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <h1 class="font-bold text-gray-800 text-lg">Luyện thi HSK</h1>
+        <div class="w-10 h-10"></div> <!-- Spacer để căn giữa tiêu đề -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="p-5 flex flex-col items-center justify-center min-h-[80vh]">
+        
+        <!-- Level Selector -->
+        <div class="w-full mb-6 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-layer-group text-blue-500"></i>
+            </div>
+            <select class="hsk-select w-full bg-white border border-gray-200 text-gray-700 font-bold py-3 pl-10 pr-8 rounded-2xl shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer transition">
+                <option value="HSK1">HSK 1 - Cơ bản</option>
+                <option value="HSK2">HSK 2 - Sơ cấp</option>
+                <option value="HSK3">HSK 3 - Trung cấp</option>
+                <option value="HSK4">HSK 4 - Trung cao</option>
+                <option value="HSK5">HSK 5 - Cao cấp</option>
+                <option value="HSK6">HSK 6 - Thượng thừa</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <i class="fas fa-chevron-down text-gray-400"></i>
+            </div>
+        </div>
+
+        <!-- Flashcard Area -->
+        <div class="relative w-full aspect-[4/5] perspective-1000 mb-6 group cursor-pointer" onclick="flipCard()">
+            <div class="card-inner card-container w-full h-full relative transform-style-3d shadow-2xl shadow-blue-100 rounded-3xl">
+                
+                <!-- Mặt trước (Front) -->
+                <div class="card-face absolute w-full h-full backface-hidden bg-white rounded-3xl flex flex-col items-center justify-center border-2 border-gray-50 overflow-hidden">
+                    <!-- Decor -->
+                    <div class="absolute top-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+                    <div class="absolute top-4 right-4 text-gray-300 text-6xl opacity-10">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    
+                    <div class="text-center z-10">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Hán tự</span>
+                        <div class="card-front font-['Kaiti','Noto_Sans_SC'] text-9xl text-gray-800 leading-tight drop-shadow-sm select-none">
+                            爱
+                        </div>
+                        <p class="text-sm text-gray-400 mt-4 animate-pulse">Chạm để xem nghĩa</p>
+                    </div>
+                </div>
+
+                <!-- Mặt sau (Back) -->
+                <div class="card-face absolute w-full h-full backface-hidden bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl flex flex-col items-center justify-center rotate-y-180 text-white border-2 border-blue-500">
+                    <div class="text-center p-6">
+                        <span class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4 block">Pinyin & Nghĩa</span>
+                        
+                        <div class="pinyin text-4xl font-bold mb-4 font-sans tracking-wide text-yellow-300">
+                            ài
+                        </div>
+                        
+                        <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+                        
+                        <div class="meaning text-2xl font-medium leading-relaxed">
+                            yêu
+                        </div>
+                    </div>
+                    <!-- Icon trang trí -->
+                    <div class="absolute bottom-4 text-white/20 text-xs">
+                        Mobile App Advanced Learning
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Info -->
+        <div class="w-full flex justify-between items-center px-2 mb-6">
+            <div class="text-xs font-bold text-gray-400 uppercase">Tiến độ</div>
+            <div class="word-count bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                1 / 10
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="grid grid-cols-3 gap-4 w-full">
+            <button class="prev-button btn-press bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 h-14 rounded-2xl shadow-sm flex items-center justify-center transition text-xl">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <button class="random-button btn-press bg-gradient-to-r from-orange-500 to-red-500 text-white h-14 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center transition font-bold gap-2 text-sm hover:brightness-110">
+                <i class="fas fa-random"></i> Ngẫu nhiên
+            </button>
+            
+            <button class="next-button btn-press bg-blue-600 text-white hover:bg-blue-700 h-14 rounded-2xl shadow-lg shadow-blue-200 flex items-center justify-center transition text-xl">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar (Giống Index) -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="study.html" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-book-open text-xl"></i>
+            <span class="text-[10px] font-medium">Học</span>
+        </a>
+        <a href="#games" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-gamepad text-xl"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <script>
+        const vocabularyData = {
+            HSK1: [
+                { "hanzi": "爱", "pinyin": "ài", "meaning": "yêu" },
+                { "hanzi": "八", "pinyin": "bā", "meaning": "tám" },
+                { "hanzi": "爸爸", "pinyin": "bà ba", "meaning": "bố" },
+                { "hanzi": "杯子", "pinyin": "bēi zi", "meaning": "cốc, chén, ly, tách" },
+                { "hanzi": "北京", "pinyin": "Běi jīng", "meaning": "Bắc Kinh" },
+                { "hanzi": "本", "pinyin": "běn", "meaning": "quyển, gốc, vốn, thân" },
+                { "hanzi": "不客气", "pinyin": "bú kè qi", "meaning": "không có gì" },
+                { "hanzi": "不", "pinyin": "bù", "meaning": "không, chưa" },
+                { "hanzi": "菜", "pinyin": "cài", "meaning": "món ăn, thức ăn" },
+                { "hanzi": "茶", "pinyin": "chá", "meaning": "trà" },
+            ],
+            HSK2: [
+                { "hanzi": "吧", "pinyin": "ba", "meaning": "nhé, nha (trợ từ)" },
+                { "hanzi": "白", "pinyin": "bái", "meaning": "trắng" },
+                { "hanzi": "百", "pinyin": "bǎi", "meaning": "trăm" },
+            ],
+            // Thêm dữ liệu mẫu để test select box
+            HSK3: [{ "hanzi": "阿姨", "pinyin": "ā yí", "meaning": "cô, dì" }],
+            HSK4: [{ "hanzi": "爱情", "pinyin": "ài qíng", "meaning": "tình yêu" }],
+            HSK5: [{ "hanzi": "爱惜", "pinyin": "ài xī", "meaning": "trân trọng" }],
+            HSK6: [{ "hanzi": "暧昧", "pinyin": "ài mèi", "meaning": "mập mờ" }]
+        };
+
+        const cardContainer = document.querySelector('.card-container');
+        const hskSelect = document.querySelector('.hsk-select');
+        const randomButton = document.querySelector('.random-button');
+        const prevButton = document.querySelector('.prev-button');
+        const nextButton = document.querySelector('.next-button');
+        const wordCountDisplay = document.querySelector('.word-count');
+        const cardFront = document.querySelector('.card-front');
+        const cardBackPinyin = document.querySelector('.pinyin');
+        const cardBackMeaning = document.querySelector('.meaning');
+        
+        let currentLevel = 'HSK1';
+        let currentIndex = 0;
+        let flipBackTimer;
+        let currentVocabulary = vocabularyData[currentLevel];
+
+        function flipCard() {
+            cardContainer.classList.toggle('flipped');
+            clearTimeout(flipBackTimer);
+            // Tự động lật lại sau 3s nếu muốn, hiện tại để user tự lật
+            /*
+            if (cardContainer.classList.contains('flipped')) {
+                flipBackTimer = setTimeout(() => {
+                    cardContainer.classList.remove('flipped');
+                }, 3000);
+            }
+            */
+        }
+
+        function updateCard(vocabItem) {
+            // Animation fade nhẹ khi đổi từ
+            cardFront.style.opacity = 0;
+            setTimeout(() => {
+                cardFront.textContent = vocabItem.hanzi;
+                cardFront.style.opacity = 1;
+            }, 150);
+
+            cardBackPinyin.textContent = vocabItem.pinyin;
+            cardBackMeaning.textContent = vocabItem.meaning;
+            updateWordCount();
+        }
+
+        function updateWordCount() {
+            wordCountDisplay.textContent = `${currentIndex + 1} / ${currentVocabulary.length}`;
+        }
+
+        function showNextVocab() {
+            if (cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.remove('flipped');
+                setTimeout(() => {
+                    currentIndex = (currentIndex + 1) % currentVocabulary.length;
+                    updateCard(currentVocabulary[currentIndex]);
+                }, 200); // Đợi thẻ lật về trước rồi mới đổi nội dung
+            } else {
+                currentIndex = (currentIndex + 1) % currentVocabulary.length;
+                updateCard(currentVocabulary[currentIndex]);
+            }
+        }
+
+        function showPrevVocab() {
+            if (cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.remove('flipped');
+                setTimeout(() => {
+                    currentIndex = (currentIndex - 1 + currentVocabulary.length) % currentVocabulary.length;
+                    updateCard(currentVocabulary[currentIndex]);
+                }, 200);
+            } else {
+                currentIndex = (currentIndex - 1 + currentVocabulary.length) % currentVocabulary.length;
+                updateCard(currentVocabulary[currentIndex]);
+            }
+        }
+
+        function animateRandomSelection() {
+            let count = 0;
+            randomButton.disabled = true; // Chặn spam click
+            
+            // Đảm bảo thẻ ở mặt trước khi random
+            if (cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.remove('flipped');
+            }
+
+            const interval = setInterval(() => {
+                const tempIndex = Math.floor(Math.random() * currentVocabulary.length);
+                cardFront.textContent = currentVocabulary[tempIndex].hanzi;
+                count++;
+                if (count >= 10) {
+                    clearInterval(interval);
+                    currentIndex = tempIndex;
+                    updateCard(currentVocabulary[currentIndex]);
+                    randomButton.disabled = false;
+                }
+            }, 80);
+        }
+
+        function changeHSKLevel(event) {
+            currentLevel = event.target.value;
+            // Fallback nếu chưa có data cho level đó
+            currentVocabulary = vocabularyData[currentLevel] || [{ "hanzi": "...", "pinyin": "...", "meaning": "Chưa có dữ liệu" }];
+            currentIndex = 0;
+            
+            if (cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.remove('flipped');
+                setTimeout(() => {
+                    updateCard(currentVocabulary[currentIndex]);
+                }, 300);
+            } else {
+                updateCard(currentVocabulary[currentIndex]);
+            }
+        }
+
+        // Event Listeners
+        randomButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài
+            animateRandomSelection();
+        });
+        nextButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNextVocab();
+        });
+        prevButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPrevVocab();
+        });
+        hskSelect.addEventListener('change', changeHSKLevel);
+
+        // Khởi tạo
+        updateCard(currentVocabulary[0]);
+    </script>
+</body>
+</html>
