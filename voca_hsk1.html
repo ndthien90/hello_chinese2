@@ -76,20 +76,18 @@
         </div>
 
         <!-- Flashcard Area -->
-        <div class="relative w-full aspect-[4/5] perspective-1000 mb-6 group cursor-pointer" onclick="flipCard()">
+        <!-- Đã sửa: aspect-[4/3] cho tỷ lệ 4:3 (ngang hơn) -->
+        <div class="relative w-full aspect-[4/3] perspective-1000 mb-6 group cursor-pointer" onclick="flipCard()">
             <div class="card-inner card-container w-full h-full relative transform-style-3d shadow-2xl shadow-blue-100 rounded-3xl">
                 
                 <!-- Mặt trước (Front) -->
+                <!-- Đã sửa: Xóa thanh màu xanh trang trí -->
                 <div class="card-face absolute w-full h-full backface-hidden bg-white rounded-3xl flex flex-col items-center justify-center border-2 border-gray-50 overflow-hidden">
-                    <!-- Decor -->
-                    <div class="absolute top-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-                    <div class="absolute top-4 right-4 text-gray-300 text-6xl opacity-10">
-                        <i class="fas fa-language"></i>
-                    </div>
                     
                     <div class="text-center z-10">
                         <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Hán tự</span>
-                        <div class="card-front font-['Kaiti','Noto_Sans_SC'] text-9xl text-gray-800 leading-tight drop-shadow-sm select-none">
+                        <!-- Đã sửa: text-7xl để chữ nhỏ hơn -->
+                        <div class="card-front font-['Kaiti','Noto_Sans_SC'] text-7xl text-gray-800 leading-tight drop-shadow-sm select-none">
                             爱
                         </div>
                         <p class="text-sm text-gray-400 mt-4 animate-pulse">Chạm để xem nghĩa</p>
@@ -101,19 +99,15 @@
                     <div class="text-center p-6">
                         <span class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4 block">Pinyin & Nghĩa</span>
                         
-                        <div class="pinyin text-4xl font-bold mb-4 font-sans tracking-wide text-yellow-300">
+                        <div class="pinyin text-3xl font-bold mb-3 font-sans tracking-wide text-yellow-300">
                             ài
                         </div>
                         
-                        <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+                        <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-4"></div>
                         
-                        <div class="meaning text-2xl font-medium leading-relaxed">
+                        <div class="meaning text-xl font-medium leading-relaxed">
                             yêu
                         </div>
-                    </div>
-                    <!-- Icon trang trí -->
-                    <div class="absolute bottom-4 text-white/20 text-xs">
-                        Mobile App Advanced Learning
                     </div>
                 </div>
             </div>
@@ -183,7 +177,6 @@
                 { "hanzi": "白", "pinyin": "bái", "meaning": "trắng" },
                 { "hanzi": "百", "pinyin": "bǎi", "meaning": "trăm" },
             ],
-            // Thêm dữ liệu mẫu để test select box
             HSK3: [{ "hanzi": "阿姨", "pinyin": "ā yí", "meaning": "cô, dì" }],
             HSK4: [{ "hanzi": "爱情", "pinyin": "ài qíng", "meaning": "tình yêu" }],
             HSK5: [{ "hanzi": "爱惜", "pinyin": "ài xī", "meaning": "trân trọng" }],
@@ -202,20 +195,10 @@
         
         let currentLevel = 'HSK1';
         let currentIndex = 0;
-        let flipBackTimer;
         let currentVocabulary = vocabularyData[currentLevel];
 
         function flipCard() {
             cardContainer.classList.toggle('flipped');
-            clearTimeout(flipBackTimer);
-            // Tự động lật lại sau 3s nếu muốn, hiện tại để user tự lật
-            /*
-            if (cardContainer.classList.contains('flipped')) {
-                flipBackTimer = setTimeout(() => {
-                    cardContainer.classList.remove('flipped');
-                }, 3000);
-            }
-            */
         }
 
         function updateCard(vocabItem) {
@@ -241,7 +224,7 @@
                 setTimeout(() => {
                     currentIndex = (currentIndex + 1) % currentVocabulary.length;
                     updateCard(currentVocabulary[currentIndex]);
-                }, 200); // Đợi thẻ lật về trước rồi mới đổi nội dung
+                }, 200);
             } else {
                 currentIndex = (currentIndex + 1) % currentVocabulary.length;
                 updateCard(currentVocabulary[currentIndex]);
@@ -263,9 +246,8 @@
 
         function animateRandomSelection() {
             let count = 0;
-            randomButton.disabled = true; // Chặn spam click
+            randomButton.disabled = true;
             
-            // Đảm bảo thẻ ở mặt trước khi random
             if (cardContainer.classList.contains('flipped')) {
                 cardContainer.classList.remove('flipped');
             }
@@ -285,7 +267,6 @@
 
         function changeHSKLevel(event) {
             currentLevel = event.target.value;
-            // Fallback nếu chưa có data cho level đó
             currentVocabulary = vocabularyData[currentLevel] || [{ "hanzi": "...", "pinyin": "...", "meaning": "Chưa có dữ liệu" }];
             currentIndex = 0;
             
@@ -301,7 +282,7 @@
 
         // Event Listeners
         randomButton.addEventListener('click', (e) => {
-            e.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài
+            e.stopPropagation();
             animateRandomSelection();
         });
         nextButton.addEventListener('click', (e) => {
