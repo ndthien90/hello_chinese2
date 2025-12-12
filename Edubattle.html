@@ -161,6 +161,93 @@
                 background-color: #fff;
             }
         }
+/* --- CSS CHO VÒNG QUAY MAY MẮN --- */
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); /* Hiệu ứng quay giảm tốc */
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border: 8px solid white;
+        }
+        .wheel-segment {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 70%); /* Cắt hình rẻ quạt (ước lượng cho 5 ô) */
+            /* Chính xác cho 5 ô (72 độ mỗi ô): dùng conic-gradient ở dưới sẽ tốt hơn cho màu nền */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        /* Vẽ màu nền bằng Conic Gradient cho chính xác 5 phần */
+        .wheel-bg {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #FF6B6B 0deg 72deg,    /* 10 Điểm - Đỏ nhạt */
+                #4ECDC4 72deg 144deg,  /* 20 Điểm - Xanh ngọc */
+                #FFE66D 144deg 216deg, /* 100 Điểm - Vàng */
+                #95A5A6 216deg 288deg, /* Mất lượt - Xám */
+                #A855F7 288deg 360deg  /* Thêm vé - Tím */
+            );
+        }
+        /* Nhãn chữ nằm trên các ô */
+        .wheel-label {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform-origin: 50% 50%;
+            width: 0; height: 0;
+        }
+        .wheel-text {
+            position: absolute;
+            left: -50px; bottom: 60px; /* Căn chỉnh vị trí chữ ra xa tâm */
+            width: 100px;
+            text-align: center;
+            transform-origin: 50% 100%; /* Xoay quanh tâm */
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            font-size: 13px;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px; 
+            height: 40px;
+            background: #FF3B30;
+            clip-path: polygon(100% 0, 50% 100%, 0 0); /* Hình tam giác */
+            z-index: 20;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
+        .wheel-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; height: 50px;
+            background: white;
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
     </style>
 <script>
         // Tạo nội dung Manifest
@@ -3303,10 +3390,7 @@ case 'reading_comprehension': // <--- THÊM VÀO ĐÂY
                     break;
 case 'make_sentence':
     content = `
-        <div class="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-xl text-center">
-            <p class="text-sm text-slate-500 mb-2">Sử dụng các từ sau để đặt câu:</p>
-            <div class="text-xl font-bold text-orange-700">${q.promptWords}</div>
-        </div>
+ 
         <textarea id="${inputId}" oninput="captureInputAnswer(${qIdx}, this.value)" 
             class="w-full p-4 border-2 border-slate-300 rounded-xl focus:border-blue-500 outline-none text-lg min-h-[100px]" 
             placeholder="Nhập câu trả lời của bạn vào đây..." >${userAnswer || ''}</textarea>
@@ -5724,16 +5808,24 @@ window.addQuestion = () => {
                         break;
 // TÌM HÀM addQuestion VÀ THÊM VÀO SWITCH CASE:
 //Có vấn đề
+// ĐOẠN MÃ ĐÚNG CẦN THAY THẾ
 case 'make_sentence':
-    content = `
-        <div class="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-xl text-center">
-            <p class="text-sm text-slate-500 mb-2">Sử dụng các từ sau để đặt câu:</p>
-            <div class="text-xl font-bold text-orange-700">${q.promptWords}</div>
-        </div>
-        <textarea id="${inputId}" oninput="captureInputAnswer(${qIdx}, this.value)" 
-            class="w-full p-4 border-2 border-slate-300 rounded-xl focus:border-blue-500 outline-none text-lg min-h-[100px]" 
-            placeholder="Nhập câu trả lời của bạn vào đây..." >${userAnswer || ''}</textarea>
-    `;
+    // 1. Lấy giá trị từ ô input (dựa trên ID đã định nghĩa trong renderQuestionInputForm)
+    const prompts = document.getElementById('prompt-words').value.trim();
+    const suggested = document.getElementById('suggested-answer').value.trim();
+    
+    // 2. Kiểm tra dữ liệu
+    if (!prompts) throw new Error("Vui lòng nhập các từ gợi ý.");
+
+    // 3. Tạo object câu hỏi mới
+    newQ = { 
+        ...newQ, 
+        type: 'make_sentence',
+        promptWords: prompts,   // Lưu từ gợi ý
+        answer: suggested,      // Lưu đáp án tham khảo
+        text: `Đặt câu với các từ: ${prompts}` // Text hiển thị tóm tắt
+    };
+    isValid = true;
     break;
 
 case 'image_describe':
@@ -7829,17 +7921,16 @@ window.saveChallenge = async () => {
                 renderApp();
             }
         };
-// --- GIAO DIỆN CỬA HÀNG & GAME ---
+// --- GIAO DIỆN CỬA HÀNG & GAME (ĐÃ CẬP NHẬT VÒNG QUAY CODE 5 Ô) ---
         const renderGameCenter = () => {
             const userLvl = getUserLevel(state.profile.points || 0);
             const myBadges = GAME_CONFIG.BADGES.filter(b => b.condition(state.profile));
             const inventory = state.profile.inventory || [];
 
-            // Render Shop Items
+            // Shop Items (Giữ nguyên)
             const shopHtml = GAME_CONFIG.SHOP_ITEMS.map(item => {
                 const canAfford = (state.profile.points || 0) >= item.price;
-                const isOwned = inventory.includes(item.id) && item.type !== 'ticket'; // Vé mua được nhiều lần
-                
+                const isOwned = inventory.includes(item.id) && item.type !== 'ticket';
                 return `
                 <div class="bg-white p-4 rounded-xl shadow border border-slate-200 flex flex-col items-center text-center">
                     <div class="text-4xl mb-2">${item.icon}</div>
@@ -7871,15 +7962,10 @@ window.saveChallenge = async () => {
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="mt-6 pt-6 border-t border-white/20">
                             <p class="text-sm opacity-80 mb-2 font-bold uppercase tracking-wider">Bộ sưu tập huy hiệu</p>
                             <div class="flex gap-2 flex-wrap">
-                                ${myBadges.length > 0 ? myBadges.map(b => `
-                                    <div class="bg-white/10 px-3 py-2 rounded-lg flex items-center gap-2" title="${b.desc}">
-                                        <span class="text-xl">${b.icon}</span> <span class="text-sm font-bold">${b.name}</span>
-                                    </div>
-                                `).join('') : '<span class="text-sm italic opacity-70">Chưa có huy hiệu nào. Hãy tích cực hoạt động!</span>'}
+                                ${myBadges.length > 0 ? myBadges.map(b => `<div class="bg-white/10 px-3 py-2 rounded-lg flex items-center gap-2" title="${b.desc}"><span class="text-xl">${b.icon}</span> <span class="text-sm font-bold">${b.name}</span></div>`).join('') : '<span class="text-sm italic opacity-70">Chưa có huy hiệu nào.</span>'}
                             </div>
                         </div>
                     </div>
@@ -7888,17 +7974,32 @@ window.saveChallenge = async () => {
                         <div class="bg-white p-6 rounded-2xl shadow-lg border border-purple-100">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i data-lucide="gift" class="text-purple-600"></i> Vòng quay May mắn</h3>
-                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">Vé của bạn: ${state.profile.luckyTickets || 0}</span>
+                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">Vé: ${state.profile.luckyTickets || 0}</span>
                             </div>
                             
-                            <div class="text-center py-8 bg-purple-50 rounded-xl mb-4 relative">
-                                <div id="lucky-wheel-icon" class="text-6xl mb-2 transition-transform duration-1000">🎡</div>
-                                <p class="text-slate-600">Tốn 1 Vé / Lần quay</p>
-                                <p id="lucky-result" class="font-bold text-lg h-6 mt-2 text-purple-600"></p>
+                            <div class="py-4 flex justify-center mb-4 relative">
+                                <div class="wheel-container">
+                                    <div class="wheel-pointer"></div>
+                                    <div id="lucky-wheel" class="wheel">
+                                        <div class="wheel-bg"></div>
+                                        
+                                        <div class="wheel-label" style="transform: rotate(36deg) translateY(-50%);"><div class="wheel-text">10 Điểm<br>⭐️</div></div>
+                                        <div class="wheel-label" style="transform: rotate(108deg) translateY(-50%);"><div class="wheel-text">20 Điểm<br>💎</div></div>
+                                        <div class="wheel-label" style="transform: rotate(180deg) translateY(-50%);"><div class="wheel-text">100 Điểm<br>🏆</div></div>
+                                        <div class="wheel-label" style="transform: rotate(252deg) translateY(-50%);"><div class="wheel-text">Mất lượt<br>😢</div></div>
+                                        <div class="wheel-label" style="transform: rotate(324deg) translateY(-50%);"><div class="wheel-text">Thêm 1 Vé<br>🎟️</div></div>
+
+                                        <div class="wheel-center">🎯</div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <p id="lucky-result" class="text-center font-bold text-lg h-8 text-purple-600 mb-4 animate-pulse">Chúc bạn may mắn!</p>
                             
-                            <button onclick="playLuckyDraw()" ${(state.profile.luckyTickets || 0) < 1 ? 'disabled' : ''} class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                                Quay ngay!
+                            <button id="lucky-draw-btn" onclick="playLuckyDraw()" 
+                                ${(state.profile.luckyTickets || 0) < 1 ? 'disabled' : ''} 
+                                class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition disabled:from-slate-400 disabled:to-slate-500 disabled:cursor-not-allowed">
+                                Quay ngay! (1 Vé)
                             </button>
                         </div>
 
@@ -7942,68 +8043,92 @@ window.saveChallenge = async () => {
             }
         };
 
-// --- HÀM QUAY THƯỞNG (ĐÃ FIX LỖI SPAM CLICK) ---
+// --- HÀM QUAY THƯỞNG (ĐÃ SỬA LỖI GÓC QUAY CHÍNH XÁC) ---
         window.playLuckyDraw = async () => {
-            // [FIX 1] Kiểm tra xem có đang quay không. Nếu đang quay thì chặn ngay.
+            // 1. Chặn Spam & Kiểm tra vé
             if (state.ui.isSpinning) return;
-
             const tickets = state.profile.luckyTickets || 0;
             if (tickets < 1) return showToast("Bạn hết vé rồi! Hãy làm bài tập đạt 90đ để nhận thêm.", "error");
 
-            // [FIX 2] Bật cờ "Đang quay" để khóa nút bấm
+            // 2. Khóa nút
             state.ui.isSpinning = true;
+            const spinBtn = document.getElementById('lucky-draw-btn');
+            if (spinBtn) { spinBtn.disabled = true; spinBtn.textContent = "Đang quay..."; }
 
-            // Tắt nút bấm về mặt giao diện để người dùng biết là không bấm được
-            const spinBtn = document.querySelector('#lucky-draw-btn'); // Cần thêm id cho nút quay nếu chưa có, hoặc dùng event.target
-            if (spinBtn) spinBtn.disabled = true;
-
-            const wheel = document.getElementById('lucky-wheel-icon');
+            const wheel = document.getElementById('lucky-wheel');
             const resultText = document.getElementById('lucky-result');
             
-            // Logic hiệu ứng quay (Giữ nguyên)
-            let currentRotation = state.ui.currentWheelRotation || 0;
-            const nextRotation = currentRotation + 1080 + Math.floor(Math.random() * 360);
-            state.ui.currentWheelRotation = nextRotation;
-
-            if (wheel) {
-                wheel.style.transition = "transform 2.5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                wheel.style.transform = `rotate(${nextRotation}deg)`;
-            }
-            if (resultText) resultText.textContent = "Đang quay... 🤞";
-
-            // Random phần thưởng
-            const rewards = [
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 10, msg: '10 Điểm' },
-                { type: 'point', val: 20, msg: '20 Điểm' },
-                { type: 'point', val: 50, msg: '50 Điểm (May mắn!)' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'ticket', val: 1, msg: '1 Vé quay nữa' }
+            // 3. Cấu hình phần thưởng (Phải khớp thứ tự với HTML 5 ô)
+            // Index 0: 10 Điểm
+            // Index 1: 20 Điểm
+            // Index 2: 100 Điểm
+            // Index 3: Mất lượt
+            // Index 4: Thêm 1 Vé
+            const items = [
+                { id: 0, type: 'point', val: 10, msg: '10 Điểm', weight: 40 },
+                { id: 1, type: 'point', val: 20, msg: '20 Điểm', weight: 30 },
+                { id: 2, type: 'point', val: 100, msg: '100 Điểm (May mắn!)', weight: 5 },
+                { id: 3, type: 'point', val: 0, msg: 'Mất lượt (Tiếc quá!)', weight: 15 },
+                { id: 4, type: 'ticket', val: 1, msg: 'Thêm 1 Vé quay', weight: 10 }
             ];
-            const result = rewards[Math.floor(Math.random() * rewards.length)];
 
-            // Mở khóa Avatar
+            // Chọn quà ngẫu nhiên theo tỷ lệ
+            const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+            let randomNum = Math.random() * totalWeight;
+            let result = items[0];
+            for (let item of items) {
+                if (randomNum < item.weight) {
+                    result = item;
+                    break;
+                }
+                randomNum -= item.weight;
+            }
+
+            // 4. TÍNH TOÁN GÓC QUAY (SỬA LỖI TẠI ĐÂY)
+            const segmentAngle = 72; // 360 / 5
+            const targetIndex = result.id;
+            
+            // Góc lệch ngẫu nhiên trong phạm vi ô (để kim không luôn chỉ giữa ô)
+            // Giới hạn +/- 25 độ (ô rộng 72 độ) để tránh chỉ vào vạch ngăn cách
+            const randomOffset = Math.floor(Math.random() * 50) - 25; 
+            
+            // Góc tuyệt đối cần đến để ô đó nằm ở vị trí 12h (Kim chỉ)
+            // Công thức: 360 - (Góc bắt đầu của ô + Bán kính ô)
+            const targetRotationInOneCircle = 360 - (targetIndex * segmentAngle + 36);
+            
+            // Lấy góc hiện tại của vòng quay
+            let currentRotation = state.ui.currentWheelRotation || 0;
+            
+            // Tính số vòng cần quay thêm (ít nhất 5 vòng = 1800 độ)
+            // Tính toán delta để đảm bảo điểm đến chính xác tương đối với vị trí hiện tại
+            // (Target - Current % 360) + 360 (để luôn dương) + Số vòng
+            const spins = 5; 
+            const currentMod = currentRotation % 360;
+            let distance = targetRotationInOneCircle - currentMod;
+            if (distance < 0) distance += 360; // Đảm bảo luôn quay tới trước
+            
+            const finalRotation = currentRotation + distance + (spins * 360) + randomOffset;
+            
+            // Lưu lại trạng thái cho lần sau
+            state.ui.currentWheelRotation = finalRotation;
+
+            // Thực hiện quay
+            if (wheel) {
+                wheel.style.transition = "transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)"; 
+                wheel.style.transform = `rotate(${finalRotation}deg)`;
+            }
+            if (resultText) resultText.textContent = "Vận may đang đến... 🤞";
+
+            // Mở khóa Avatar (nếu có)
             let newAvatar = null;
             if (typeof window.unlockRandomAvatar === 'function') {
                  newAvatar = await window.unlockRandomAvatar();
             }
 
-            // Đợi 2.5 giây
+            // 5. Xử lý kết quả sau 4 giây
             setTimeout(async () => {
                 try {
-                    const updatePayload = {
-                        luckyTickets: increment(-1) 
-                    };
+                    const updatePayload = { luckyTickets: increment(-1) };
                     
                     if (result.type === 'point' && result.val > 0) {
                         updatePayload.points = increment(result.val);
@@ -8028,11 +8153,13 @@ window.saveChallenge = async () => {
                     console.error("Lucky Draw Error:", e);
                     showToast("Lỗi: " + e.message, "error");
                 } finally {
-                    // [FIX 3] Mở khóa để cho phép quay lần tiếp theo (dù thành công hay thất bại)
                     state.ui.isSpinning = false;
-                    if (spinBtn) spinBtn.disabled = false;
+                    if (spinBtn) {
+                        spinBtn.disabled = false;
+                        spinBtn.textContent = "Quay ngay! (1 Vé)";
+                    }
                 }
-            }, 2500);
+            }, 4000); // Khớp với transition 4s
         };
 // --- HÀM HỖ TRỢ: MỞ KHÓA AVATAR NGẪU NHIÊN ---
         window.unlockRandomAvatar = async () => {
