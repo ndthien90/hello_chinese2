@@ -7965,11 +7965,21 @@ window.playLuckyDraw = async () => {
 
             // Random phần thưởng
             const rewards = [
+                { type: 'point', val: 10, msg: '10 Điểm' },
+                { type: 'point', val: 10, msg: '10 Điểm' },
+                { type: 'point', val: 10, msg: '10 Điểm' },
+                { type: 'point', val: 10, msg: '10 Điểm' },
+                { type: 'point', val: 10, msg: '10 Điểm' },
+                { type: 'point', val: 10, msg: '10 Điểm' },
                 { type: 'point', val: 20, msg: '20 Điểm' },
-                { type: 'point', val: 50, msg: '50 Điểm' },
-                { type: 'point', val: 100, msg: '100 Điểm (May mắn!)' },
+                { type: 'point', val: 50, msg: '50 Điểm (May mắn!)' },
                 { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
-                { type: 'ticket', val: 1, msg: '1 Vé quay nữa' }
+                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
+                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
+                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
+                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
+                { type: 'point', val: 0, msg: 'Chúc may mắn lần sau' },
+                { type: 'ticket', val: 2, msg: '2 Vé quay nữa' }
             ];
             const result = rewards[Math.floor(Math.random() * rewards.length)];
 
