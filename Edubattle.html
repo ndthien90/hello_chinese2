@@ -9,6 +9,8 @@
     
     <meta name="theme-color" content="#2563eb">
     <title>EduBattle - Nền tảng học tập & Thi đấu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -7928,23 +7930,22 @@ window.saveChallenge = async () => {
                 renderApp();
             }
         };
-// --- GIAO DIỆN CỬA HÀNG & GAME (ĐÃ CẬP NHẬT VÒNG QUAY CODE 5 Ô) ---
+// --- GIAO DIỆN GAME CENTER (STYLE GIỐNG HỆT _VONGQUAY.HTML) ---
         const renderGameCenter = () => {
             const userLvl = getUserLevel(state.profile.points || 0);
-            const myBadges = GAME_CONFIG.BADGES.filter(b => b.condition(state.profile));
             const inventory = state.profile.inventory || [];
 
-            // Shop Items (Giữ nguyên)
+            // Shop Items
             const shopHtml = GAME_CONFIG.SHOP_ITEMS.map(item => {
                 const canAfford = (state.profile.points || 0) >= item.price;
                 const isOwned = inventory.includes(item.id) && item.type !== 'ticket';
                 return `
-                <div class="bg-white p-4 rounded-xl shadow border border-slate-200 flex flex-col items-center text-center">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col items-center text-center transition hover:shadow-md">
                     <div class="text-4xl mb-2">${item.icon}</div>
-                    <h4 class="font-bold text-slate-700">${item.name}</h4>
-                    <p class="text-yellow-600 font-bold mb-3">${item.price} điểm</p>
+                    <h4 class="font-bold text-slate-700 text-sm">${item.name}</h4>
+                    <p class="text-indigo-600 font-bold mb-3 text-sm">${item.price} điểm</p>
                     <button onclick="${isOwned ? '' : `buyItem('${item.id}')`}" 
-                        class="w-full py-2 rounded-lg font-bold text-sm transition ${isOwned ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : canAfford ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}"
+                        class="w-full py-2 rounded-xl font-bold text-xs transition ${isOwned ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : canAfford ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}"
                         ${!canAfford || isOwned ? 'disabled' : ''}>
                         ${isOwned ? 'Đã sở hữu' : 'Mua ngay'}
                     </button>
@@ -7952,71 +7953,100 @@ window.saveChallenge = async () => {
             }).join('');
 
             return `
-                <div class="max-w-5xl mx-auto fade-in pb-10">
-                    <div class="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-6 md:p-10 text-white mb-8 shadow-xl relative overflow-hidden">
-                        <div class="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                            <div class="relative">
-                                ${renderAvatar(state.profile, 'w-24 h-24', 'text-4xl')}
-                                <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow border-2 border-white">
-                                    Lv. ${userLvl.name}
-                                </div>
-                            </div>
-                            <div class="text-center md:text-left flex-1">
-                                <h2 class="text-3xl font-bold">${state.profile.name}</h2>
-                                <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
-                                    <span class="bg-white/20 px-3 py-1 rounded-lg text-sm flex items-center gap-2"><i data-lucide="trophy"></i> ${state.profile.points || 0} Điểm</span>
-                                    <span class="bg-white/20 px-3 py-1 rounded-lg text-sm flex items-center gap-2"><i data-lucide="ticket"></i> ${state.profile.luckyTickets || 0} Vé quay</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-6 border-t border-white/20">
-                            <p class="text-sm opacity-80 mb-2 font-bold uppercase tracking-wider">Bộ sưu tập huy hiệu</p>
-                            <div class="flex gap-2 flex-wrap">
-                                ${myBadges.length > 0 ? myBadges.map(b => `<div class="bg-white/10 px-3 py-2 rounded-lg flex items-center gap-2" title="${b.desc}"><span class="text-xl">${b.icon}</span> <span class="text-sm font-bold">${b.name}</span></div>`).join('') : '<span class="text-sm italic opacity-70">Chưa có huy hiệu nào.</span>'}
-                            </div>
-                        </div>
-                    </div>
+                <div class="max-w-5xl mx-auto fade-in pb-20 font-['Inter']">
+                    
+                    <div class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl p-6 md:p-8 text-white shadow-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                        <div class="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none"></div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-purple-100">
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i data-lucide="gift" class="text-purple-600"></i> Vòng quay May mắn</h3>
-                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">Vé: ${state.profile.luckyTickets || 0}</span>
-                            </div>
-                            
-                            <div class="py-4 flex justify-center mb-4 relative">
-                                <div class="wheel-container">
-                                    <div class="wheel-pointer"></div>
-                                    <div id="lucky-wheel" class="wheel">
-                                        <div class="wheel-bg"></div>
-                                        
-                                        <div class="wheel-label" style="transform: rotate(36deg) translateY(-50%);"><div class="wheel-text">10 Điểm<br>⭐️</div></div>
-                                        <div class="wheel-label" style="transform: rotate(108deg) translateY(-50%);"><div class="wheel-text">20 Điểm<br>💎</div></div>
-                                        <div class="wheel-label" style="transform: rotate(180deg) translateY(-50%);"><div class="wheel-text">100 Điểm<br>🏆</div></div>
-                                        <div class="wheel-label" style="transform: rotate(252deg) translateY(-50%);"><div class="wheel-text">Mất lượt<br>😢</div></div>
-                                        <div class="wheel-label" style="transform: rotate(324deg) translateY(-50%);"><div class="wheel-text">Thêm 1 Vé<br>🎟️</div></div>
-
-                                        <div class="wheel-center">🎯</div>
+                        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="flex items-center gap-5">
+                                <div class="relative">
+                                    ${renderAvatar(state.profile, 'w-20 h-20', 'text-3xl')}
+                                    <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-black px-2 py-1 rounded-lg shadow-lg border-2 border-white transform rotate-3">
+                                        LV.${userLvl.name}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="text-3xl font-black tracking-tight">${state.profile.name}</h2>
+                                    <div class="flex gap-2 mt-2">
+                                        <span class="bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold border border-white/10 flex items-center gap-1">
+                                            <i data-lucide="ticket" size="12"></i> Vé: <span id="ticket-count">${state.profile.luckyTickets || 0}</span>
+                                        </span>
+                                        <span class="bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold border border-white/10 flex items-center gap-1">
+                                            <i data-lucide="trophy" size="12"></i> Điểm: ${state.profile.points || 0}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-
-                            <p id="lucky-result" class="text-center font-bold text-lg h-8 text-purple-600 mb-4 animate-pulse">Chúc bạn may mắn!</p>
                             
-                            <button id="lucky-draw-btn" onclick="playLuckyDraw()" 
-                                ${(state.profile.luckyTickets || 0) < 1 ? 'disabled' : ''} 
-                                class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-bold shadow-lg hover:opacity-90 transition disabled:from-slate-400 disabled:to-slate-500 disabled:cursor-not-allowed">
-                                Quay ngay! (1 Vé)
+                            <button onclick="buyItem('ticket_x1')" class="bg-white text-indigo-600 px-6 py-3 rounded-2xl font-bold shadow-lg hover:bg-indigo-50 transition transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
+                                <i data-lucide="plus-circle" size="18"></i> Mua thêm vé
                             </button>
                         </div>
+                    </div>
 
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-orange-100">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="shopping-bag" class="text-orange-600"></i> Cửa hàng đổi điểm</h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                ${shopHtml}
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        
+                        <div class="lg:col-span-5">
+                            <div class="bg-white p-2 rounded-[2.5rem] shadow-2xl border border-slate-100 relative">
+                                <div class="bg-slate-50 rounded-[2rem] p-6 flex flex-col items-center justify-center min-h-[450px] relative overflow-hidden">
+                                    
+                                    <div class="absolute top-6 left-1/2 -translate-x-1/2 z-20 drop-shadow-xl">
+                                        <svg width="40" height="50" viewBox="0 0 40 50">
+                                            <path d="M20 50 L5 10 Q20 0 35 10 Z" fill="#EF4444" stroke="white" stroke-width="3"/>
+                                        </svg>
+                                    </div>
+
+                                    <div class="relative w-[320px] h-[320px] mb-8 mt-4">
+                                        <canvas id="wheel" width="640" height="640" class="w-full h-full"></canvas>
+                                        
+                                        <button id="spin-btn" onclick="playLuckyDraw()" 
+                                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white rounded-full shadow-[0_0_25px_rgba(0,0,0,0.15)] border-4 border-slate-100 flex items-center justify-center z-30 active:scale-95 hover:scale-105 transition group cursor-pointer">
+                                            <span class="font-black text-sm uppercase text-slate-800 tracking-wider group-hover:text-indigo-600 transition">QUAY</span>
+                                        </button>
+                                    </div>
+
+                                    <p class="text-slate-400 text-sm font-bold tracking-wide uppercase">Chúc bạn may mắn🍀</p>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="lg:col-span-7">
+                            <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 h-full">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="p-3 bg-orange-100 text-orange-600 rounded-2xl">
+                                        <i data-lucide="shopping-bag" size="24"></i>
+                                    </div>
+                                    <h3 class="text-xl font-black text-slate-800">Cửa hàng đổi điểm</h3>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    ${shopHtml}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <div id="result-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden opacity-0 transition-all duration-300">
+                        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center transform scale-90 transition-all duration-300 shadow-2xl relative m-4">
+                            <div class="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl shadow-inner animate-bounce" id="modal-icon">🎁</div>
+                            
+                            <h3 class="text-2xl font-black text-slate-800 mb-2">Kết Quả</h3>
+                            <p class="text-slate-500 font-medium mb-6">Bạn vừa quay vào ô:</p>
+                            
+                            <div class="py-4 px-6 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-8">
+                                <span class="text-3xl font-black text-indigo-600" id="modal-text">100 Điểm</span>
+                            </div>
+
+                            <button onclick="closeResultModal()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-slate-800 transition shadow-lg hover:shadow-xl active:scale-95">
+                                Tuyệt vời!
+                            </button>
+                        </div>
+                    </div>
+
+                    <img src="" onerror="initNewWheel()" class="hidden">
                 </div>
             `;
         };
@@ -8050,124 +8080,7 @@ window.saveChallenge = async () => {
             }
         };
 
-// --- HÀM QUAY THƯỞNG (ĐÃ SỬA LỖI GÓC QUAY CHÍNH XÁC) ---
-        window.playLuckyDraw = async () => {
-            // 1. Chặn Spam & Kiểm tra vé
-            if (state.ui.isSpinning) return;
-            const tickets = state.profile.luckyTickets || 0;
-            if (tickets < 1) return showToast("Bạn hết vé rồi! Hãy làm bài tập đạt 90đ để nhận thêm.", "error");
 
-            // 2. Khóa nút
-            state.ui.isSpinning = true;
-            const spinBtn = document.getElementById('lucky-draw-btn');
-            if (spinBtn) { spinBtn.disabled = true; spinBtn.textContent = "Đang quay..."; }
-
-            const wheel = document.getElementById('lucky-wheel');
-            const resultText = document.getElementById('lucky-result');
-            
-            // 3. Cấu hình phần thưởng (Phải khớp thứ tự với HTML 5 ô)
-            // Index 0: 10 Điểm
-            // Index 1: 20 Điểm
-            // Index 2: 100 Điểm
-            // Index 3: Mất lượt
-            // Index 4: Thêm 1 Vé
-            const items = [
-                { id: 0, type: 'point', val: 10, msg: '10 Điểm', weight: 40 },
-                { id: 1, type: 'point', val: 20, msg: '20 Điểm', weight: 30 },
-                { id: 2, type: 'point', val: 100, msg: '100 Điểm (May mắn!)', weight: 5 },
-                { id: 3, type: 'point', val: 0, msg: 'Mất lượt (Tiếc quá!)', weight: 15 },
-                { id: 4, type: 'ticket', val: 1, msg: 'Thêm 1 Vé quay', weight: 10 }
-            ];
-
-            // Chọn quà ngẫu nhiên theo tỷ lệ
-            const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-            let randomNum = Math.random() * totalWeight;
-            let result = items[0];
-            for (let item of items) {
-                if (randomNum < item.weight) {
-                    result = item;
-                    break;
-                }
-                randomNum -= item.weight;
-            }
-
-            // 4. TÍNH TOÁN GÓC QUAY (SỬA LỖI TẠI ĐÂY)
-            const segmentAngle = 72; // 360 / 5
-            const targetIndex = result.id;
-            
-            // Góc lệch ngẫu nhiên trong phạm vi ô (để kim không luôn chỉ giữa ô)
-            // Giới hạn +/- 25 độ (ô rộng 72 độ) để tránh chỉ vào vạch ngăn cách
-            const randomOffset = Math.floor(Math.random() * 50) - 25; 
-            
-            // Góc tuyệt đối cần đến để ô đó nằm ở vị trí 12h (Kim chỉ)
-            // Công thức: 360 - (Góc bắt đầu của ô + Bán kính ô)
-            const targetRotationInOneCircle = 360 - (targetIndex * segmentAngle + 36);
-            
-            // Lấy góc hiện tại của vòng quay
-            let currentRotation = state.ui.currentWheelRotation || 0;
-            
-            // Tính số vòng cần quay thêm (ít nhất 5 vòng = 1800 độ)
-            // Tính toán delta để đảm bảo điểm đến chính xác tương đối với vị trí hiện tại
-            // (Target - Current % 360) + 360 (để luôn dương) + Số vòng
-            const spins = 5; 
-            const currentMod = currentRotation % 360;
-            let distance = targetRotationInOneCircle - currentMod;
-            if (distance < 0) distance += 360; // Đảm bảo luôn quay tới trước
-            
-            const finalRotation = currentRotation + distance + (spins * 360) + randomOffset;
-            
-            // Lưu lại trạng thái cho lần sau
-            state.ui.currentWheelRotation = finalRotation;
-
-            // Thực hiện quay
-            if (wheel) {
-                wheel.style.transition = "transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)"; 
-                wheel.style.transform = `rotate(${finalRotation}deg)`;
-            }
-            if (resultText) resultText.textContent = "Vận may đang đến... 🤞";
-
-            // Mở khóa Avatar (nếu có)
-            let newAvatar = null;
-            if (typeof window.unlockRandomAvatar === 'function') {
-                 newAvatar = await window.unlockRandomAvatar();
-            }
-
-            // 5. Xử lý kết quả sau 4 giây
-            setTimeout(async () => {
-                try {
-                    const updatePayload = { luckyTickets: increment(-1) };
-                    
-                    if (result.type === 'point' && result.val > 0) {
-                        updatePayload.points = increment(result.val);
-                    } else if (result.type === 'ticket') {
-                        updatePayload.luckyTickets = increment(0); 
-                    }
-
-                    await updateDoc(doc(db, getPath('users'), state.user.uid), updatePayload);
-                    
-                    let msg = `🎉 Kết quả: ${result.msg}`;
-                    if (newAvatar) {
-                        msg += ` + 🔓 Avatar mới: ${newAvatar}`;
-                        setTimeout(() => showToast(`🔓 MỞ KHÓA: ${newAvatar}`, "success"), 500);
-                    } else if (result.val === 0) {
-                        msg = `😅 ${result.msg}`;
-                    }
-
-                    if (resultText) resultText.textContent = msg;
-                    showToast(msg);
-                    
-                } catch(e) {
-                    console.error("Lucky Draw Error:", e);
-                    showToast("Lỗi: " + e.message, "error");
-                } finally {
-                    state.ui.isSpinning = false;
-                    if (spinBtn) {
-                        spinBtn.disabled = false;
-                        spinBtn.textContent = "Quay ngay! (1 Vé)";
-                    }
-                }
-            }, 4000); // Khớp với transition 4s
-        };
 // --- HÀM HỖ TRỢ: MỞ KHÓA AVATAR NGẪU NHIÊN ---
         window.unlockRandomAvatar = async () => {
             const myAvatars = state.profile.unlockedAvatars || GAME_CONFIG.INITIAL_AVATARS;
@@ -8220,6 +8133,359 @@ window.saveChallenge = async () => {
                 // Xử lý thông báo lỗi đẹp hơn nếu là string custom
                 const msg = typeof e === 'string' ? e : e.message;
                 showToast("Lỗi vào phòng: " + msg, "error");
+            }
+        };
+// --- CẤU HÌNH VÒNG QUAY ---
+        const WHEEL_CONFIG = {
+            segments: [
+                { text: "10 🏆",  value: 10,  type: "point",  bgColor: "#FF9F43", textColor: "#FFF" }, // Cam
+                { text: "20 🏆",  value: 20,  type: "point",  bgColor: "#54a0ff", textColor: "#FFF" }, // Xanh dương
+                { text: "100 🏆", value: 100, type: "point",  bgColor: "#feca57", textColor: "#d35400" }, // Vàng (Hiếm)
+                { text: "Toang😢", value: 0,   type: "point",  bgColor: "#ee5253", textColor: "#FFF" }, // Đỏ
+                { text: "1 Vé 🎟️",  value: 1,   type: "ticket", bgColor: "#00d2d3", textColor: "#FFF" }  // Xanh ngọc
+            ],
+            currentAngle: 0, // Góc hiện tại
+            isSpinning: false
+        };
+
+        // Hàm khởi tạo và vẽ vòng quay tĩnh
+        window.initWheel = () => {
+            const canvas = document.getElementById('wheel-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const center = size / 2;
+            const radius = size / 2 - 10; // Chừa lề
+            const len = WHEEL_CONFIG.segments.length;
+            const arc = (2 * Math.PI) / len;
+
+            ctx.clearRect(0, 0, size, size);
+
+            // Vẽ từng múi
+            WHEEL_CONFIG.segments.forEach((seg, i) => {
+                const angle = WHEEL_CONFIG.currentAngle + i * arc;
+                
+                ctx.beginPath();
+                ctx.fillStyle = seg.bgColor;
+                ctx.moveTo(center, center);
+                ctx.arc(center, center, radius, angle, angle + arc);
+                ctx.lineTo(center, center);
+                ctx.fill();
+                ctx.stroke();
+
+                // Vẽ Text
+                ctx.save();
+                ctx.translate(center, center);
+                ctx.rotate(angle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = seg.textColor;
+                ctx.font = "bold 32px sans-serif";
+                ctx.fillText(seg.text, radius - 40, 10);
+                
+                // Vẽ icon nhỏ (nếu cần - ví dụ dấu chấm tròn)
+                ctx.beginPath();
+                ctx.arc(radius - 20, 0, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = "rgba(255,255,255,0.5)";
+                ctx.fill();
+
+                ctx.restore();
+            });
+            
+            // Vẽ viền ngoài cho đẹp
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, 2*Math.PI);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = "white";
+            ctx.stroke();
+            ctx.lineWidth = 1; // Reset
+        };
+        
+        // Hàm cập nhật góc quay liên tục (Animation Loop)
+        window.animateWheel = (targetAngle, duration, callback) => {
+            const startAngle = WHEEL_CONFIG.currentAngle;
+            const change = targetAngle - startAngle;
+            const startTime = performance.now();
+
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                if (elapsed < duration) {
+                    // Thuật toán Easing (Ease Out Quart) giúp quay chậm dần đều tự nhiên
+                    const t = elapsed / duration;
+                    const easeOut = 1 - Math.pow(1 - t, 4);
+                    
+                    WHEEL_CONFIG.currentAngle = startAngle + change * easeOut;
+                    window.initWheel(); // Vẽ lại khung hình mới
+                    requestAnimationFrame(animate);
+                } else {
+                    WHEEL_CONFIG.currentAngle = targetAngle % (2 * Math.PI); // Reset góc về < 360 độ
+                    window.initWheel();
+                    callback(); // Gọi hàm xử lý kết quả
+                }
+            }
+            requestAnimationFrame(animate);
+        };
+// --- LOGIC VÒNG QUAY MỚI (CANVAS API) ---
+
+        // Cấu hình màu sắc và giá trị (Lấy từ _vongquay.html)
+        const WHEEL_DATA = [
+            { label: "10 🏆",  value: 10,  type: "point",  color: "#EF4444", text: "#FFFFFF" }, // Đỏ
+            { label: "20 🏆",  value: 20,  type: "point",  color: "#F59E0B", text: "#FFFFFF" }, // Cam
+            { label: "100 🏆", value: 100, type: "point",  color: "#10B981", text: "#FFFFFF" }, // Xanh lá
+            { label: "Mất lượt", value: 0,   type: "point",  color: "#3B82F6", text: "#FFFFFF" }, // Xanh dương
+            { label: "1 Vé🎟️",  value: 1,   type: "ticket", color: "#8B5CF6", text: "#FFFFFF" }  // Tím
+        ];
+
+        // Biến toàn cục cho vòng quay
+        const wheelState = {
+            ang: 0,       // Góc hiện tại
+            isSpinning: false,
+            ctx: null
+        };
+
+        // 1. HÀM VẼ VÒNG QUAY
+        window.initNewWheel = () => {
+            const canvas = document.getElementById('wheel');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            wheelState.ctx = ctx;
+
+            const dia = canvas.width;
+            const rad = dia / 2;
+            const PI = Math.PI;
+            const TAU = 2 * PI;
+            const arc = TAU / WHEEL_DATA.length;
+
+const drawSector = (sector, i) => {
+                const ang = arc * i;
+                ctx.save();
+                
+                // Vẽ hình rẻ quạt
+                ctx.beginPath();
+                ctx.fillStyle = sector.color;
+                ctx.moveTo(rad, rad);
+                ctx.arc(rad, rad, rad, ang, ang + arc);
+                ctx.lineTo(rad, rad);
+                ctx.fill();
+
+                // Vẽ Text xoay theo hướng tâm
+                ctx.translate(rad, rad);
+                ctx.rotate(ang + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = sector.text;
+                ctx.font = "bold 40px 'Inter', sans-serif";
+                ctx.fillText(sector.label, rad - 50, 15);
+                
+                ctx.restore();
+            };
+
+            // Hàm vẽ lại từng khung hình
+            window.drawWheelFrame = () => {
+                if (!wheelState.ctx) return;
+                
+                // Xóa canvas cũ
+                wheelState.ctx.clearRect(0, 0, dia, dia);
+                
+                // Xoay toàn bộ canvas theo góc hiện tại
+                wheelState.ctx.save();
+                wheelState.ctx.translate(rad, rad);
+                wheelState.ctx.rotate(wheelState.ang);
+                wheelState.ctx.translate(-rad, -rad);
+                
+                // Vẽ từng miếng
+                WHEEL_DATA.forEach(drawSector);
+                
+                wheelState.ctx.restore();
+                
+                // Vẽ viền trắng trang trí
+                wheelState.ctx.beginPath();
+                wheelState.ctx.arc(rad, rad, rad - 10, 0, TAU);
+                wheelState.ctx.lineWidth = 15;
+                wheelState.ctx.strokeStyle = "#ffffff";
+                wheelState.ctx.stroke();
+            };
+
+            // Vẽ khung hình đầu tiên
+            window.drawWheelFrame();
+        };
+
+// --- 2. HÀM XỬ LÝ QUAY THƯỞNG (ĐÃ FIX LỖI LỆCH GÓC) ---
+        window.playLuckyDraw = async () => {
+            if (wheelState.isSpinning) return;
+
+            const tickets = state.profile.luckyTickets || 0;
+            if (tickets < 1) return showToast("Bạn cần có Vé để quay!", "error");
+
+            wheelState.isSpinning = true;
+            document.getElementById('spin-btn').classList.add('scale-90', 'opacity-80', 'cursor-not-allowed');
+
+            // A. CHỐT KẾT QUẢ (Weighted Random)
+            const weights = [40, 30, 5, 15, 10]; 
+            let random = Math.floor(Math.random() * 100);
+            let winIndex = 0;
+            for (let i = 0; i < weights.length; i++) {
+                if (random < weights[i]) { winIndex = i; break; }
+                random -= weights[i];
+            }
+
+            // B. TÍNH TOÁN GÓC QUAY CHÍNH XÁC
+            // 1. Các hằng số
+            const PI = Math.PI;
+            const TAU = 2 * PI;
+            const arc = TAU / WHEEL_DATA.length; // Góc của 1 ô
+            
+            // 2. Góc ngẫu nhiên trong ô (để kim không luôn chỉ chính giữa)
+            // Giới hạn +/- 30% độ rộng ô để tránh chỉ vào vạch
+            const randomOffset = (Math.random() - 0.5) * (arc * 0.6); 
+            
+            // 3. Tính góc cần xoay thêm (Delta)
+            // - Canvas vẽ góc 0 ở hướng 3h. Kim chỉ ở 12h (tức là 270 độ hay 1.5 * PI).
+            // - Công thức: Góc Đích = (Vị trí Kim) - (Vị trí Tâm ô trúng thưởng)
+            let targetAngle = (1.5 * PI) - (winIndex * arc + arc / 2) + randomOffset;
+            
+            // - Lấy góc hiện tại (dư của vòng tròn 2PI)
+            const currentAngle = wheelState.ang % TAU;
+            
+            // - Tính khoảng cách cần quay thêm
+            let delta = targetAngle - currentAngle;
+            
+            // - Đảm bảo quay theo chiều kim đồng hồ (số dương)
+            if (delta < 0) delta += TAU;
+            
+            // - Cộng thêm số vòng quay tối thiểu (5 vòng)
+            const spins = 5 * TAU;
+            const finalAngle = wheelState.ang + delta + spins;
+
+            // C. HIỆU ỨNG QUAY (Animation Loop)
+            const duration = 4000; // 4 giây
+            const startTime = performance.now();
+
+            const animate = (time) => {
+                const elapsed = time - startTime;
+                if (elapsed < duration) {
+                    // Easing: Cubic Ease Out (Nhanh -> Chậm dần)
+                    const t = 1 - Math.pow(1 - (elapsed / duration), 3);
+                    wheelState.ang = wheelState.ang + (finalAngle - wheelState.ang) * t;
+                    
+                    // Cập nhật góc quay hiện tại nhưng giữ nguyên giá trị tích lũy
+                    // (Lưu ý: trong hàm draw cũ, chúng ta không được đè wheelState.ang bằng logic sai)
+                    // Ở đây ta tính toán trực tiếp trên biến wheelState.ang tích lũy
+                    // Logic easing trên hơi sai nếu dùng accumulate, sửa lại:
+                    
+                    // Logic Easing chuẩn cho giá trị đích:
+                    // Start + (End - Start) * Easing
+                    // Tuy nhiên vì cần vẽ liên tục, ta tính lại startAngle tại thời điểm bắt đầu anim
+                    // Để đơn giản, ta dùng biến tạm, nhưng wheelState.ang cần lưu giá trị cuối cùng.
+                    
+                    // FIX: Tính lại vị trí dựa trên mốc ban đầu
+                    // Vì animate gọi lại closure, ta cần lưu startAngle cố định bên ngoài
+                    // Nhưng ở đây ta dùng nội suy trực tiếp:
+                    const currentStep = (finalAngle - (wheelState.ang - (wheelState.ang - wheelState.prevAng || 0))) * t; 
+                    // Cách trên phức tạp. Dùng cách cổ điển:
+                    
+                    wheelState.ang = startOfSpin + (finalAngle - startOfSpin) * t;
+                    
+                    window.drawWheelFrame();
+                    requestAnimationFrame(animate);
+                } else {
+                    // KẾT THÚC
+                    wheelState.ang = finalAngle;
+                    window.drawWheelFrame();
+                    handleSpinComplete(winIndex);
+                }
+            };
+            
+            // Lưu mốc bắt đầu quay để tính toán easing
+            const startOfSpin = wheelState.ang;
+            requestAnimationFrame(animate);
+        };
+
+        // 3. XỬ LÝ KHI QUAY XONG
+        window.handleSpinComplete = async (winIndex) => {
+            const result = WHEEL_DATA[winIndex];
+            
+            // Mở khóa Avatar (nếu may mắn)
+            let newAvatar = null;
+            if (typeof window.unlockRandomAvatar === 'function') newAvatar = await window.unlockRandomAvatar();
+
+            // Cập nhật Database
+            try {
+                const updatePayload = { luckyTickets: increment(-1) };
+                
+                if (result.type === 'point') {
+                    updatePayload.points = increment(result.value);
+                } else if (result.type === 'ticket') {
+                    updatePayload.luckyTickets = increment(0); // Trả lại vé
+                }
+
+                await updateDoc(doc(db, getPath('users'), state.user.uid), updatePayload);
+                
+                // Cập nhật UI ngay lập tức
+                const ticketEl = document.getElementById('ticket-count');
+                if(ticketEl) ticketEl.textContent = (state.profile.luckyTickets - 1) + (result.type === 'ticket' ? 1 : 0);
+
+                // Hiện Modal & Pháo hoa
+                showResultModal(result, newAvatar);
+                if (result.value > 0 || result.type === 'ticket') {
+                    triggerConfetti();
+                }
+
+            } catch (e) {
+                console.error(e);
+                showToast("Lỗi cập nhật: " + e.message, "error");
+            } finally {
+                wheelState.isSpinning = false;
+                document.getElementById('spin-btn').classList.remove('scale-90', 'opacity-80', 'cursor-not-allowed');
+            }
+        };
+
+        // 4. HELPER: HIỆN MODAL
+        window.showResultModal = (result, newAvatar) => {
+            const modal = document.getElementById('result-modal');
+            const icon = document.getElementById('modal-icon');
+            const text = document.getElementById('modal-text');
+            
+            if (result.value === 0 && result.type !== 'ticket') {
+                icon.textContent = "😢";
+                text.textContent = "Mất lượt";
+                text.className = "text-3xl font-black text-slate-400";
+            } else {
+                icon.textContent = "🎁";
+                text.textContent = result.label;
+                text.className = "text-3xl font-black text-indigo-600";
+            }
+
+            if (newAvatar) {
+                text.innerHTML += `<div class="text-sm text-green-600 mt-2 font-medium">+ 🔓 Avatar: ${newAvatar}</div>`;
+            }
+
+            modal.classList.remove('hidden');
+            // Animation fade in
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-90');
+                modal.querySelector('div').classList.add('scale-100');
+            }, 10);
+        };
+
+        // 5. HELPER: ĐÓNG MODAL
+        window.closeResultModal = () => {
+            const modal = document.getElementById('result-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.remove('scale-100');
+            modal.querySelector('div').classList.add('scale-90');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // 6. HELPER: BẮN PHÁO HOA
+        window.triggerConfetti = () => {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#EF4444', '#F59E0B', '#10B981', '#3B82F6']
+                });
             }
         };
     </script>
