@@ -270,12 +270,12 @@
             "orientation": "portrait",
             "icons": [
                 {
-                    "src": "https://i.ibb.co/QFtHYYjX/4.png", /* Icon ví dụ */
+                    "src": "https://cdn-icons-png.flaticon.com/512/2997/2997326.png", /* Icon ví dụ */
                     "sizes": "192x192",
                     "type": "image/png"
                 },
                 {
-                    "src": "https://i.ibb.co/QFtHYYjX/4.png",
+                    "src": "https://cdn-icons-png.flaticon.com/512/2997/2997326.png",
                     "sizes": "512x512",
                     "type": "image/png"
                 }
@@ -768,7 +768,7 @@ window.addEventListener('resize', () => {
             }
         };
 
-        // Hàm khởi tạo các listeners phụ thuộc vào state.profile.classIds
+  // Hàm khởi tạo các listeners phụ thuộc vào state.profile.classIds
         const initializeStudentDataListeners = (uid) => {
             if (state.areAssignmentsListenersActive) return;
 
@@ -781,9 +781,7 @@ window.addEventListener('resize', () => {
                 
                 // Lọc bài tập theo lớp
                 const filteredAssignments = allAssignments.filter(a => {
-                    // Nếu là giáo viên, thấy bài của mình
                     if (isTeacher && a.createdBy === uid) return true; 
-                    // Nếu là học sinh, thấy bài tập được giao cho bất kỳ lớp nào của họ
                     if (!isTeacher && a.classIds && Array.isArray(a.classIds)) {
                         return a.classIds.some(classId => myClassIds.includes(classId));
                     }
@@ -791,190 +789,155 @@ window.addEventListener('resize', () => {
                 });
                 
                 state.data.assignments = filteredAssignments;
-                if(state.view === 'assignments' || state.view === 'dashboard' || state.ui.viewAssignmentId || (state.ui.viewClassId && state.ui.viewClassMode !== 'students') || state.ui.viewMyClassId) renderApp();
+                
+                // [FIX LỖI NHÁY]: Chỉ render lại nếu KHÔNG ĐANG LÀM BÀI (takingAssignmentId === null)
+                // Nếu đang làm bài, việc update danh sách ngầm bên dưới là đủ, không cần vẽ lại UI
+                if (!state.ui.takingAssignmentId) {
+                    if(state.view === 'assignments' || state.view === 'dashboard' || state.ui.viewAssignmentId || (state.ui.viewClassId && state.ui.viewClassMode !== 'students') || state.ui.viewMyClassId) {
+                        renderApp();
+                    }
+                }
             });
             
             // 2. Submissions Listener
             onSnapshot(getRef('submissions'), (snap) => {
                 state.data.submissions = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                if(state.view === 'assignments' || state.view === 'dashboard' || state.ui.viewSubmission || (state.ui.viewClassId && state.ui.viewClassMode === 'stats') || state.ui.viewMyClassId) renderApp();
+                
+                // [FIX LỖI NHÁY]: Khi ai đó nộp bài, chỉ render lại nếu mình KHÔNG ĐANG LÀM BÀI
+                if (!state.ui.takingAssignmentId) {
+                    if(state.view === 'assignments' || state.view === 'dashboard' || state.ui.viewSubmission || (state.ui.viewClassId && state.ui.viewClassMode === 'stats') || state.ui.viewMyClassId) {
+                        renderApp();
+                    }
+                }
             });
 
             state.areAssignmentsListenersActive = true;
         }
 
-        const setupListeners = (uid) => {
-            // Biến để theo dõi xem profile đã được load lần đầu chưa
+const setupListeners = (uid) => {
             let isProfileLoaded = false; 
 
-            // 1. Profile Listener (QUAN TRỌNG: Phải chạy trước để lấy classIds)
+            // 1. Profile Listener
             onSnapshot(doc(db, getPath('users'), uid), (snap) => {
                 if(snap.exists()) {
                     state.profile = snap.data();
                     if (!state.ui.isProcessingStudentCreation) {
-                         renderApp();
+                         if (!state.ui.takingAssignmentId && state.ui.challengeMode !== 'do') renderApp(); 
+                         else {
+                             const hs = document.getElementById('header-points'); if(hs) hs.textContent = state.profile.points;
+                             const hstr = document.getElementById('header-streak'); if(hstr) hstr.textContent = state.profile.streak||0;
+                         }
                     }
-                    
-                    // Chỉ khởi tạo các listeners phụ thuộc khi profile được tải lần đầu hoặc thay đổi
-                    if (!isProfileLoaded && state.profile) {
-                        isProfileLoaded = true;
-                        initializeStudentDataListeners(uid);
-                    }
-
-                } else if (state.user) {
-                    state.profile = null;
-                    renderApp();
-                }
+                    if (!isProfileLoaded && state.profile) { isProfileLoaded = true; initializeStudentDataListeners(uid); }
+                } else if (state.user) { state.profile = null; renderApp(); }
             });
             
-// 2. Users (Rank, Students list)
+            // 2. Users Listener
             onSnapshot(getRef('users'), (snap) => {
                 state.data.users = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                
-                // [ĐÃ SỬA] Thêm điều kiện 'challenges' để cập nhật giao diện khi điểm thay đổi
-                if(!state.ui.isProcessingStudentCreation && (state.view === 'ranking' || state.ui.viewClassId || state.ui.viewMyClassId || state.view === 'challenges')) {
-                    renderApp();
-                }
+                const isBusy = state.ui.takingAssignmentId || state.ui.challengeMode === 'do' || state.ui.competitionMode === 'playing';
+                if(!state.ui.isProcessingStudentCreation && !isBusy && (state.view === 'ranking' || state.ui.viewClassId || state.ui.viewMyClassId || state.view === 'challenges')) renderApp();
             });
-            
             // 3. Question Banks
             onSnapshot(getRef('question_banks'), (snap) => {
                 state.data.questionBanks = snap.docs.map(d => ({id: d.id, ...d.data()}));
                 if(state.view === 'question_bank') renderApp();
             });
-            
-            // 4. Classes (Cập nhật classIds cho học sinh)
+            // 4. Classes
             onSnapshot(getRef('classes'), (snap) => {
                  const myClasses = snap.docs.map(d => ({id: d.id, ...d.data()}))
-                 
-                 if (state.profile?.role === 'teacher') {
-                     state.data.classes = myClasses.filter(c => c.teacherId === uid);
-                 } else if (state.profile?.role === 'student' && state.user) {
-                     const studentClasses = myClasses.filter(c => (c.studentIds || []).includes(uid));
-                     const studentClassIds = studentClasses.map(c => c.id);
-                     
-                     if (state.profile) {
-                         // Cập nhật classIds trong profile. Sự kiện này sẽ kích hoạt Profile Listener chạy lại.
-                         state.profile.classIds = studentClassIds; 
-                         // Kích hoạt renderApp() nếu đang ở chế độ xem lớp (hoặc Assignments nếu cần)
-                         // Tuy nhiên, việc này sẽ được xử lý bởi Profile Listener.
-                     }
-                     state.data.classes = studentClasses;
-                 } else {
-                      state.data.classes = [];
+                 if (state.profile?.role === 'teacher') state.data.classes = myClasses.filter(c => c.teacherId === uid);
+                 else if (state.profile?.role === 'student' && state.user) {
+                     const sc = myClasses.filter(c => (c.studentIds || []).includes(uid));
+                     if (state.profile) state.profile.classIds = sc.map(c => c.id); 
+                     state.data.classes = sc;
                  }
-                 
                  if(state.view === 'classes' || state.ui.viewClassId || state.view === 'my_classes') renderApp();
             });
-            
-         // 5. Match Listener (CẬP NHẬT: CỘNG 50 ĐIỂM CHO NGƯỜI THẮNG)
+
+            // 5. Match Listener (ĐÃ FIX: CHUYỂN MÀN HÌNH KHI KẾT THÚC)
             onSnapshot(getRef('matches'), (snap) => {
                 state.data.matches = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                const uid = state.user?.uid;
                 
-                // A. XỬ LÝ CHO KHÁN GIẢ (Giữ nguyên logic cũ)
-                if (state.ui.competitionMode === 'spectating' && state.ui.activeMatch) {
-                    const watchingMatch = state.data.matches.find(m => m.id === state.ui.activeMatch.id);
-                    if (watchingMatch) {
-                        state.ui.activeMatch = watchingMatch;
-                    } else {
-                        state.ui.activeMatch = null;
-                        state.ui.competitionMode = 'lobby';
-                        showToast("Trận đấu đã kết thúc hoặc bị hủy.", "info");
-                    }
-                } 
-                // B. XỬ LÝ CHO NGƯỜI CHƠI
-                else {
-                    const newActiveMatch = state.data.matches.find(m => 
-                        (m.player1?.uid === uid || m.player2?.uid === uid) && m.status !== 'finished'
-                    );
-
-                    // --- LOGIC KHI TRẬN ĐẤU KẾT THÚC (QUAN TRỌNG: CỘNG ĐIỂM TẠI ĐÂY) ---
-                    if (state.ui.activeMatch && !newActiveMatch) {
-                         const justFinished = state.data.matches.find(m => m.id === state.ui.activeMatch.id && m.status === 'finished');
-                         const finalMatchData = state.ui.lastFinishedMatch || justFinished;
-
-                         if (finalMatchData) {
-                            const isP1 = finalMatchData.player1.uid === uid;
-                            const myScore = isP1 ? finalMatchData.player1.score : finalMatchData.player2.score;
-                            const opponentScore = isP1 ? finalMatchData.player2.score : finalMatchData.player1.score;
-                            
-                            const p1Profile = state.data.users.find(u => u.uid === finalMatchData.player1.uid);
-                            const p2Profile = state.data.users.find(u => u.uid === finalMatchData.player2?.uid);
-                            const myInfo = isP1 ? p1Profile : p2Profile;
-                            const oppInfo = isP1 ? p2Profile : p1Profile;
-
-                            let resultType = 'draw';
-                            let bonusPoints = 0;
-
-                            // 1. Xác định thắng thua và cộng điểm
-                            if (myScore > opponentScore) {
-                                resultType = 'win';
-                                bonusPoints = 20;
-                                
-                                // --- CỘNG ĐIỂM THƯỞNG VÀO DATABASE ---
-                                updateDoc(doc(db, getPath('users'), uid), {
-                                    points: increment(20)
-                                }).catch(e => console.error("Lỗi cộng điểm:", e));
-                                // --------------------------------------
-
-                            } else if (myScore < opponentScore) {
-                                resultType = 'lose';
-                            }
-
-                            // 2. Hiển thị Modal Kết quả
-                            if (state.ui.competitionMode === 'playing') {
-                                state.ui.matchResult = {
-                                    result: resultType,
-                                    myScore: myScore,
-                                    oppScore: opponentScore,
-                                    bonus: bonusPoints, // Truyền điểm thưởng vào modal
-                                    myName: myInfo?.name || 'Bạn',
-                                    myAvatar: myInfo?.avatarUrl,
-                                    myAvatarType: myInfo?.avatarType,
-                                    oppName: oppInfo?.name || 'Đối thủ',
-                                    oppAvatar: oppInfo?.avatarUrl,
-                                    oppAvatarType: oppInfo?.avatarType
-                                };
-                            }
-                         }
-                    }
-
-                    state.ui.activeMatch = newActiveMatch;
-
-                    if (state.ui.activeMatch) {
-                        const serverStatus = state.ui.activeMatch.status;
-                        state.ui.competitionMode = serverStatus === 'playing' ? 'playing' : 'waiting';
-                    } else {
-                        if (state.ui.competitionMode === 'waiting' || state.ui.competitionMode === 'playing') {
-                            state.ui.competitionMode = 'lobby';
+                // Logic activeMatch (như cũ)
+                const newActiveMatch = state.data.matches.find(m => (m.player1?.uid === uid || m.player2?.uid === uid) && m.status !== 'finished');
+                
+                // Xử lý khi trận đấu vừa kết thúc
+                if (state.ui.activeMatch && !newActiveMatch) {
+                     const justFinished = state.data.matches.find(m => m.id === state.ui.activeMatch.id && m.status === 'finished');
+                     const finalMatchData = state.ui.lastFinishedMatch || justFinished;
+                     if (finalMatchData) {
+                        const isP1 = finalMatchData.player1.uid === uid;
+                        const myScore = isP1 ? finalMatchData.player1.score : finalMatchData.player2.score;
+                        const opponentScore = isP1 ? finalMatchData.player2.score : finalMatchData.player1.score;
+                        const p1Profile = state.data.users.find(u => u.uid === finalMatchData.player1.uid);
+                        const p2Profile = state.data.users.find(u => u.uid === finalMatchData.player2?.uid);
+                        const myInfo = isP1 ? p1Profile : p2Profile;
+                        const oppInfo = isP1 ? p2Profile : p1Profile;
+                        let resultType = 'draw'; let bonusPoints = 0;
+                        if (myScore > opponentScore) { resultType = 'win'; bonusPoints = 20; updateDoc(doc(db, getPath('users'), uid), { points: increment(20) }).catch(console.error); } 
+                        else if (myScore < opponentScore) { resultType = 'lose'; }
+                        
+                        // Set kết quả để hiển thị Modal
+                        if (state.ui.competitionMode === 'playing') {
+                            state.ui.matchResult = { 
+                                result: resultType, 
+                                myScore, oppScore: opponentScore, 
+                                bonus: bonusPoints, 
+                                myName: myInfo?.name||'Bạn', myAvatar: myInfo?.avatarUrl, myAvatarType: myInfo?.avatarType, 
+                                oppName: oppInfo?.name||'Đối thủ', oppAvatar: oppInfo?.avatarUrl, oppAvatarType: oppInfo?.avatarType 
+                            };
                         }
-                    }
+                     }
                 }
+                
+                state.ui.activeMatch = newActiveMatch;
+                
+                // Cập nhật trạng thái
+                if (state.ui.activeMatch) state.ui.competitionMode = state.ui.activeMatch.status === 'playing' ? 'playing' : 'waiting';
+                else if (state.ui.competitionMode === 'waiting' || state.ui.competitionMode === 'playing') state.ui.competitionMode = 'lobby';
 
-                // C. RENDER
+                // --- LOGIC UI UPDATE (ĐÃ SỬA CHỖ NÀY) ---
                 if (state.view === 'competition') {
-                    const container = document.getElementById('match-playing-container');
-                    if ((state.ui.competitionMode === 'playing' || state.ui.competitionMode === 'spectating') && container) {
-                         if (state.ui.activeMatch?.status === 'finished') {
+                    const isTeacher = state.profile.role === 'teacher';
+                    
+                    if (state.ui.competitionMode === 'lobby') {
+                        if (isTeacher) {
+                            const container = document.getElementById('teacher-active-list');
+                            if (!container) renderApp(); // Nếu chưa có Dashboard GV -> Vẽ lại
+                            else updateTeacherDashboardUI();
+                        } else {
+                            // [FIX QUAN TRỌNG]: Khi bị đá về Lobby (do hết trận), DOM hiện tại vẫn là Game.
+                            // Cần kiểm tra xem danh sách phòng (#lobby-match-list) có tồn tại không.
+                            const container = document.getElementById('lobby-match-list');
+                            if (!container) {
+                                // Nếu chưa có danh sách phòng (đang ở màn hình Game) -> VẼ LẠI TOÀN BỘ
+                                // Việc này sẽ vẽ lại Sảnh chờ VÀ hiển thị Modal kết quả (vì matchResult đã có dữ liệu)
+                                renderApp(); 
+                            } else {
+                                updateLobbyUI(); 
+                            }
+                        }
+                    } 
+                    else if (state.ui.competitionMode === 'playing' || state.ui.competitionMode === 'spectating') {
+                         if (state.ui.matchResult || state.ui.activeMatch?.status === 'finished') {
                              renderApp();
                          } else {
-                             updatePlayingUI();
+                             const container = document.getElementById('match-playing-container');
+                             if (!container) renderApp();
+                             else updatePlayingUI();
                          }
-                    } else {
+                    }
+                    else if (state.ui.competitionMode === 'waiting') {
                         renderApp();
                     }
                 }
             });
       
-       // 6. Challenges Listener (MỚI)
+            // 6. Challenges Listener
             onSnapshot(getRef('challenges'), (snap) => {
-                // Sắp xếp theo thứ tự (order)
-                state.data.challenges = snap.docs
-                    .map(d => ({id: d.id, ...d.data()}))
-                    .sort((a,b) => (a.order || 0) - (b.order || 0));
-                
-                if(state.view === 'challenges') renderApp();
+                state.data.challenges = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => (a.order||0)-(b.order||0));
+                if(state.view === 'challenges' && state.ui.challengeMode !== 'do') renderApp();
             });
         };
 
@@ -1085,79 +1048,11 @@ const renderApp = () => {
         };
         
         // --- 6. RENDERERS ---
-// --- DASHBOARD ĐẤU TRƯỜNG DÀNH CHO GIÁO VIÊN (ĐẦY ĐỦ TÍNH NĂNG) ---
+// --- DASHBOARD ĐẤU TRƯỜNG DÀNH CHO GIÁO VIÊN (ĐÃ THÊM ID ĐỂ CẬP NHẬT REALTIME) ---
         const renderTeacherArenaDashboard = () => {
-            // Lấy dữ liệu matches từ state
             const allMatches = state.data.matches || [];
-            
-            // Phân loại: Đang diễn ra vs Đã kết thúc
             const activeMatches = allMatches.filter(m => m.status === 'waiting' || m.status === 'playing');
             const finishedMatches = allMatches.filter(m => m.status === 'finished').sort((a,b) => b.createdAt - a.createdAt);
-
-            // 1. Render danh sách ĐANG ĐẤU
-            const activeHtml = activeMatches.length === 0 
-                ? `<div class="p-8 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-300">Hiện không có trận đấu nào đang diễn ra.</div>`
-                : activeMatches.map(m => {
-                    const isPlaying = m.status === 'playing';
-                    return `
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-l-4 ${isPlaying ? 'border-l-green-500 border-slate-200' : 'border-l-yellow-500 border-slate-200'} flex flex-col sm:flex-row justify-between items-center mb-3 gap-3">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold px-2 py-0.5 rounded text-white ${isPlaying ? 'bg-green-600' : 'bg-yellow-500'}">
-                                    ${isPlaying ? 'ĐANG ĐẤU' : 'ĐANG CHỜ'}
-                                </span>
-                                <span class="font-mono font-bold text-slate-700">Phòng: ${m.roomCode}</span>
-                            </div>
-                            <div class="text-sm">
-                                <span class="text-blue-600 font-bold">${m.player1.name}</span> 
-                                <span class="text-slate-400 mx-1">vs</span> 
-                                <span class="text-red-600 font-bold">${m.player2 ? m.player2.name : '???'}</span>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="watchMatch('${m.id}')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1" title="Xem trận đấu">
-                                <i data-lucide="eye" size="16"></i> Xem
-                            </button>
-                            <button onclick="forceEndMatch('${m.id}', '${m.roomCode}')" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1" title="Buộc kết thúc">
-                                <i data-lucide="square" size="16" class="fill-current"></i> Kết thúc
-                            </button>
-                        </div>
-                    </div>`;
-                }).join('');
-
-            // 2. Render LỊCH SỬ
-            const historyHtml = finishedMatches.length === 0
-                ? `<div class="text-center text-slate-400 text-sm mt-4 p-4">Chưa có dữ liệu lịch sử.</div>`
-                : finishedMatches.map(m => {
-                    const p1Win = m.player1.score > (m.player2 ? m.player2.score : 0);
-                    const p2Win = m.player2 && m.player2.score > m.player1.score;
-                    
-                    return `
-                    <tr class="border-b last:border-0 hover:bg-slate-50 group">
-                        <td class="py-3 pl-4 font-mono text-slate-500 text-xs">${m.roomCode}</td>
-                        <td class="py-3">
-                            <div class="flex items-center gap-2 text-sm">
-                                <span class="${p1Win ? 'font-bold text-blue-700' : 'text-slate-600'}">${m.player1.name}</span>
-                                <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player1.score}</span>
-                            </div>
-                        </td>
-                        <td class="py-3 font-bold text-slate-300 text-xs text-center">VS</td>
-                        <td class="py-3">
-                            <div class="flex items-center gap-2 text-sm">
-                                <span class="${p2Win ? 'font-bold text-red-700' : 'text-slate-600'}">${m.player2 ? m.player2.name : 'N/A'}</span>
-                                <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player2 ? m.player2.score : 0}</span>
-                            </div>
-                        </td>
-                        <td class="py-3 text-right pr-2 text-xs text-slate-400 w-24">
-                             ${m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'}) : ''}
-                        </td>
-                        <td class="py-3 text-right pr-4 w-10">
-                            <button onclick="confirmDeleteMatchHistory('${m.id}')" class="text-slate-300 hover:text-red-500 transition p-1 rounded-md hover:bg-red-50" title="Xóa bản ghi này">
-                                <i data-lucide="trash-2" size="16"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-                }).join('');
 
             return `
                 <div class="max-w-6xl mx-auto space-y-8 fade-in">
@@ -1177,10 +1072,39 @@ const renderApp = () => {
                               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                               <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                             </span>
-                            Đang diễn ra (${activeMatches.length})
+                            Đang diễn ra (<span id="teacher-active-count">${activeMatches.length}</span>)
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${activeHtml}
+                        <div id="teacher-active-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${activeMatches.length === 0 
+                                ? `<div class="p-8 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-300 col-span-full">Hiện không có trận đấu nào đang diễn ra.</div>`
+                                : activeMatches.map(m => {
+                                    const isPlaying = m.status === 'playing';
+                                    return `
+                                    <div class="bg-white p-4 rounded-xl shadow-sm border border-l-4 ${isPlaying ? 'border-l-green-500 border-slate-200' : 'border-l-yellow-500 border-slate-200'} flex flex-col sm:flex-row justify-between items-center gap-3 animate-in fade-in slide-in-from-bottom-2">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <span class="text-xs font-bold px-2 py-0.5 rounded text-white ${isPlaying ? 'bg-green-600' : 'bg-yellow-500'}">
+                                                    ${isPlaying ? 'ĐANG ĐẤU' : 'ĐANG CHỜ'}
+                                                </span>
+                                                <span class="font-mono font-bold text-slate-700">Phòng: ${m.roomCode}</span>
+                                            </div>
+                                            <div class="text-sm">
+                                                <span class="text-blue-600 font-bold">${m.player1.name}</span> 
+                                                <span class="text-slate-400 mx-1">vs</span> 
+                                                <span class="text-red-600 font-bold">${m.player2 ? m.player2.name : '???'}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button onclick="watchMatch('${m.id}')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1">
+                                                <i data-lucide="eye" size="16"></i> Xem
+                                            </button>
+                                            <button onclick="forceEndMatch('${m.id}', '${m.roomCode}')" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1">
+                                                <i data-lucide="square" size="16" class="fill-current"></i> Kết thúc
+                                            </button>
+                                        </div>
+                                    </div>`;
+                                }).join('')
+                            }
                         </div>
                     </div>
 
@@ -1189,14 +1113,9 @@ const renderApp = () => {
                             <h3 class="font-bold text-slate-700 flex items-center gap-2">
                                 <i data-lucide="history" size="18"></i> Kết quả gần đây
                             </h3>
-                            
-                            <div class="flex gap-2">
-                                <button onclick="deleteAllMatchHistory()" 
-                                        class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg font-bold text-xs transition flex items-center gap-1"
-                                        ${finishedMatches.length === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
-                                    <i data-lucide="trash-2" size="14"></i> Xóa tất cả
-                                </button>
-                            </div>
+                            <button onclick="deleteAllMatchHistory()" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg font-bold text-xs transition flex items-center gap-1" ${finishedMatches.length === 0 ? 'disabled style="opacity:0.5;"' : ''}>
+                                <i data-lucide="trash-2" size="14"></i> Xóa tất cả
+                            </button>
                         </div>
                         <div class="overflow-x-auto max-h-96">
                             <table class="w-full">
@@ -1210,8 +1129,39 @@ const renderApp = () => {
                                         <th class="py-3 pr-4 text-right"></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    ${historyHtml}
+                                <tbody id="teacher-history-list">
+                                    ${finishedMatches.length === 0
+                                        ? `<tr><td colspan="6" class="text-center text-slate-400 text-sm p-4">Chưa có dữ liệu lịch sử.</td></tr>`
+                                        : finishedMatches.map(m => {
+                                            const p1Win = m.player1.score > (m.player2 ? m.player2.score : 0);
+                                            const p2Win = m.player2 && m.player2.score > m.player1.score;
+                                            return `
+                                            <tr class="border-b last:border-0 hover:bg-slate-50 group animate-in fade-in">
+                                                <td class="py-3 pl-4 font-mono text-slate-500 text-xs">${m.roomCode}</td>
+                                                <td class="py-3">
+                                                    <div class="flex items-center gap-2 text-sm">
+                                                        <span class="${p1Win ? 'font-bold text-blue-700' : 'text-slate-600'}">${m.player1.name}</span>
+                                                        <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player1.score}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 font-bold text-slate-300 text-xs text-center">VS</td>
+                                                <td class="py-3">
+                                                    <div class="flex items-center gap-2 text-sm">
+                                                        <span class="${p2Win ? 'font-bold text-red-700' : 'text-slate-600'}">${m.player2 ? m.player2.name : 'N/A'}</span>
+                                                        <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player2 ? m.player2.score : 0}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 text-right pr-2 text-xs text-slate-400 w-24">
+                                                     ${m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'}) : ''}
+                                                </td>
+                                                <td class="py-3 text-right pr-4 w-10">
+                                                    <button onclick="confirmDeleteMatchHistory('${m.id}')" class="text-slate-300 hover:text-red-500 transition p-1 rounded-md hover:bg-red-50">
+                                                        <i data-lucide="trash-2" size="16"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>`;
+                                        }).join('')
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -4005,7 +3955,8 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                                 </select>
                             </div>
 
-                            <div>
+
+<div>
                                 <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
                                     <span class="relative flex h-3 w-3">
                                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -4013,11 +3964,11 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                                     </span>
                                     Sảnh chờ thách đấu (${availableMatches.length})
                                 </h3>
-                                ${availableMatches.length === 0 
-                                    ? `<div class="p-8 text-center bg-white rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 text-sm">Chưa có ai tạo phòng. Bạn hãy là người đầu tiên!</div>` 
-                                    : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        ${availableMatches.map(m => `
-                                            <div class="bg-white p-4 rounded-xl shadow-sm border border-purple-100 hover:shadow-md hover:border-purple-300 transition group relative">
+                                <div id="lobby-match-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 transition-all">
+                                    ${availableMatches.length === 0 
+                                        ? `<div class="col-span-full p-8 text-center bg-white rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 text-sm">Chưa có ai tạo phòng. Bạn hãy là người đầu tiên!</div>` 
+                                        : availableMatches.map(m => `
+                                            <div class="bg-white p-4 rounded-xl shadow-sm border border-purple-100 hover:shadow-md hover:border-purple-300 transition group relative animate-in fade-in slide-in-from-bottom-2">
                                                 <div class="flex items-center gap-3 mb-3">
                                                     ${renderAvatar(state.data.users.find(u => u.uid === m.player1.uid), 'w-10 h-10', 'text-sm')}
                                                     <div class="overflow-hidden">
@@ -4029,11 +3980,10 @@ if (!assign.questions.some(q => q.shuffledWords || q.shuffledColB || q.shuffledS
                                                     <i data-lucide="swords" size="14"></i> Chiến ngay
                                                 </button>
                                             </div>
-                                        `).join('')}
-                                       </div>`
-                                }
+                                        `).join('')
+                                    }
+                                </div>
                             </div>
-                        </div>
 
                         <div>
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
@@ -4513,8 +4463,7 @@ const renderCompetition = () => {
                 </div>
             `;
         };
-   // --- GIAO DIỆN KẾT QUẢ TRẬN ĐẤU (VICTORY SCREEN) ---
-// --- GIAO DIỆN KẾT QUẢ TRẬN ĐẤU (VICTORY SCREEN) - CÓ HIỂN THỊ ĐIỂM THƯỞNG ---
+// --- GIAO DIỆN KẾT QUẢ TRẬN ĐẤU (VICTORY SCREEN - CÓ VÉ & PHÁO HOA) ---
         const renderMatchResultModal = () => {
             const res = state.ui.matchResult;
             if (!res) return '';
@@ -4527,13 +4476,20 @@ const renderCompetition = () => {
                 iconHtml = `
                     <div class="relative inline-block">
                         <div class="absolute inset-0 bg-yellow-200 blur-xl rounded-full opacity-50 animate-pulse"></div>
-                        <span class="text-8xl relative z-10 drop-shadow-lg filter">🏆</span>
+                        <span class="text-8xl relative z-10 drop-shadow-lg filter animate-bounce">🏆</span>
                     </div>`;
-                // Hiển thị điểm thưởng
+                
+                // Text hiển thị phần thưởng
                 subText = `
-                    <div class="text-slate-500 font-medium mb-1">Xuất sắc! Bạn là người chiến thắng.</div>
-                    <div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full font-bold text-lg animate-bounce">
-                        +${res.bonus} điểm thưởng
+                    <div class="text-slate-500 font-medium mb-2">Xuất sắc! Bạn là người chiến thắng.</div>
+                    <div class="flex flex-col gap-2 items-center">
+                        <div class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-4 py-1 rounded-full font-bold text-lg shadow-sm">
+                            +${res.bonus} điểm thưởng
+                        </div>
+                        ${res.earnedTicket ? `
+                        <div class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 px-4 py-1 rounded-full font-bold text-lg shadow-sm animate-pulse">
+                            +1 Vé Quay Thưởng 🎟️
+                        </div>` : ''}
                     </div>
                 `;
             } else if (res.result === 'lose') {
@@ -8022,7 +7978,7 @@ window.saveChallenge = async () => {
                                     </div>
 
                                          <div class="relative w-full max-w-[320px] aspect-square mb-8 mt-4 mx-auto">
-                                           <canvas id="wheel" width="600" height="600" class="w-full h-full"></canvas>
+                                           <canvas id="wheel" width="640" height="640" class="w-full h-full"></canvas>
                                            <button id="spin-btn" onclick="playLuckyDraw()" 
                                             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[25%] h-[25%] bg-white rounded-full shadow-[0_0_25px_rgba(0,0,0,0.15)] border-4 border-slate-100 flex items-center justify-center z-30 active:scale-95 hover:scale-105 transition group cursor-pointer">
                                             <span class="font-black text-[clamp(10px,2vw,14px)] uppercase text-slate-800 tracking-wider group-hover:text-indigo-600 transition">QUAY</span>
@@ -8505,6 +8461,131 @@ const drawSector = (sector, i) => {
                     origin: { y: 0.6 },
                     colors: ['#EF4444', '#F59E0B', '#10B981', '#3B82F6']
                 });
+            }
+        };
+// --- HÀM CẬP NHẬT SẢNH CHỜ MÀ KHÔNG RENDER LẠI TOÀN BỘ APP ---
+        const updateLobbyUI = () => {
+            const container = document.getElementById('lobby-match-list');
+            if (!container) return; // Nếu không tìm thấy list thì thôi
+
+            const uid = state.user.uid;
+            // Lọc danh sách phòng chờ giống logic cũ
+            const availableMatches = state.data.matches.filter(m => 
+                m.status === 'waiting' && !m.player2 && m.player1.uid !== uid
+            );
+
+            // Tạo HTML mới
+            const html = availableMatches.length === 0 
+                ? `<div class="col-span-full p-8 text-center bg-white rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 text-sm">Chưa có ai tạo phòng. Bạn hãy là người đầu tiên!</div>` 
+                : availableMatches.map(m => `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-purple-100 hover:shadow-md hover:border-purple-300 transition group relative animate-in fade-in slide-in-from-bottom-2">
+                        <div class="flex items-center gap-3 mb-3">
+                            ${renderAvatar(state.data.users.find(u => u.uid === m.player1.uid), 'w-10 h-10', 'text-sm')}
+                            <div class="overflow-hidden">
+                                <p class="font-bold text-slate-700 text-sm truncate">${m.player1.name}</p>
+                                <p class="text-xs text-slate-500">Mã: <span class="font-mono font-bold text-purple-600">${m.roomCode}</span></p>
+                            </div>
+                        </div>
+                        <button onclick="joinPublicMatch('${m.id}')" class="w-full bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white py-2 rounded-lg font-bold text-sm transition flex items-center justify-center gap-2">
+                            <i data-lucide="swords" size="14"></i> Chiến ngay
+                        </button>
+                    </div>
+                `).join('');
+
+            // Chỉ thay đổi nội dung bên trong danh sách, không đụng đến phần còn lại của trang
+            if (container.innerHTML !== html) {
+                container.innerHTML = html;
+                renderIcons(); // Render lại icon lucide cho các nút mới
+            }
+        };
+// --- HÀM CẬP NHẬT DASHBOARD GIÁO VIÊN (KHÔNG RENDER LẠI TOÀN BỘ) ---
+        const updateTeacherDashboardUI = () => {
+            const activeContainer = document.getElementById('teacher-active-list');
+            const historyContainer = document.getElementById('teacher-history-list');
+            const countEl = document.getElementById('teacher-active-count');
+            
+            // Nếu không tìm thấy container (ví dụ giáo viên đang ở tab khác), thì thoát
+            if (!activeContainer || !historyContainer) return;
+
+            const allMatches = state.data.matches || [];
+            const activeMatches = allMatches.filter(m => m.status === 'waiting' || m.status === 'playing');
+            const finishedMatches = allMatches.filter(m => m.status === 'finished').sort((a,b) => b.createdAt - a.createdAt);
+
+            // 1. Cập nhật số lượng
+            if(countEl) countEl.textContent = activeMatches.length;
+
+            // 2. Tạo HTML cho danh sách Đang diễn ra
+            const activeHtml = activeMatches.length === 0 
+                ? `<div class="p-8 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-300 col-span-full">Hiện không có trận đấu nào đang diễn ra.</div>`
+                : activeMatches.map(m => {
+                    const isPlaying = m.status === 'playing';
+                    return `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-l-4 ${isPlaying ? 'border-l-green-500 border-slate-200' : 'border-l-yellow-500 border-slate-200'} flex flex-col sm:flex-row justify-between items-center gap-3 animate-in fade-in slide-in-from-bottom-2">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-xs font-bold px-2 py-0.5 rounded text-white ${isPlaying ? 'bg-green-600' : 'bg-yellow-500'}">
+                                    ${isPlaying ? 'ĐANG ĐẤU' : 'ĐANG CHỜ'}
+                                </span>
+                                <span class="font-mono font-bold text-slate-700">Phòng: ${m.roomCode}</span>
+                            </div>
+                            <div class="text-sm">
+                                <span class="text-blue-600 font-bold">${m.player1.name}</span> 
+                                <span class="text-slate-400 mx-1">vs</span> 
+                                <span class="text-red-600 font-bold">${m.player2 ? m.player2.name : '???'}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="watchMatch('${m.id}')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1">
+                                <i data-lucide="eye" size="16"></i> Xem
+                            </button>
+                            <button onclick="forceEndMatch('${m.id}', '${m.roomCode}')" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 py-2 rounded-lg font-bold text-sm transition flex items-center gap-1">
+                                <i data-lucide="square" size="16" class="fill-current"></i> Kết thúc
+                            </button>
+                        </div>
+                    </div>`;
+                }).join('');
+
+            // 3. Tạo HTML cho danh sách Lịch sử
+            const historyHtml = finishedMatches.length === 0
+                ? `<tr><td colspan="6" class="text-center text-slate-400 text-sm p-4">Chưa có dữ liệu lịch sử.</td></tr>`
+                : finishedMatches.map(m => {
+                    const p1Win = m.player1.score > (m.player2 ? m.player2.score : 0);
+                    const p2Win = m.player2 && m.player2.score > m.player1.score;
+                    return `
+                    <tr class="border-b last:border-0 hover:bg-slate-50 group animate-in fade-in">
+                        <td class="py-3 pl-4 font-mono text-slate-500 text-xs">${m.roomCode}</td>
+                        <td class="py-3">
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="${p1Win ? 'font-bold text-blue-700' : 'text-slate-600'}">${m.player1.name}</span>
+                                <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player1.score}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 font-bold text-slate-300 text-xs text-center">VS</td>
+                        <td class="py-3">
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="${p2Win ? 'font-bold text-red-700' : 'text-slate-600'}">${m.player2 ? m.player2.name : 'N/A'}</span>
+                                <span class="text-xs bg-slate-100 px-1 rounded font-mono">${m.player2 ? m.player2.score : 0}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 text-right pr-2 text-xs text-slate-400 w-24">
+                                ${m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'}) : ''}
+                        </td>
+                        <td class="py-3 text-right pr-4 w-10">
+                            <button onclick="confirmDeleteMatchHistory('${m.id}')" class="text-slate-300 hover:text-red-500 transition p-1 rounded-md hover:bg-red-50">
+                                <i data-lucide="trash-2" size="16"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+                }).join('');
+
+            // 4. Update DOM nếu có thay đổi
+            if(activeContainer.innerHTML !== activeHtml) {
+                activeContainer.innerHTML = activeHtml;
+                renderIcons(); // Render icon Lucide
+            }
+            if(historyContainer.innerHTML !== historyHtml) {
+                historyContainer.innerHTML = historyHtml;
+                renderIcons(); // Render icon Lucide
             }
         };
     </script>
