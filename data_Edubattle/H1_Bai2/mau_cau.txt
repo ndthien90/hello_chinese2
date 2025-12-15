@@ -1,0 +1,12 @@
+你好。|Xin chào.
+再见。|Tạm biệt.
+你好吗？|Bạn có khỏe không?
+这是书吗？|Đây là sách phải không?
+这不是书。|Đây không phải là sách.
+那是本子。|Kia là quyển vở.
+那是毛笔。|Kia là bút lông.
+那是陈楠。|Kia là Trần Nam.
+你是学生吗？|Bạn là học sinh phải không?
+我是老师。|Tôi là giáo viên.
+国安不是老师。|Quốc An không phải là giáo viên.
+我很好。|Tôi rất khỏe.
