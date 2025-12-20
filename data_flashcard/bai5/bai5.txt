@@ -1,0 +1,67 @@
+家|jiā|gia đình, nhà|我爱我的家。|Wǒ ài wǒ de jiā.|Tôi yêu gia đình của tôi.
+有|yǒu|có|我有一个哥哥。|Wǒ yǒu yīgè gēge.|Tôi có một người anh trai.
+没|méi|không có|我没有姐姐。|Wǒ méiyǒu jiějie.|Tôi không có chị gái.
+口|kǒu|lượng từ (khẩu/người)|你家有几口人？|Nǐ jiā yǒu jǐ kǒu rén?|Nhà bạn có mấy người?
+女儿|nǚ'ér|con gái|我女儿四岁了。|Wǒ nǚ'ér sì suì le.|Con gái tôi bốn tuổi rồi.
+儿子|érzi|con trai|他是我儿子。|Tā shì wǒ érzi.|Nó là con trai tôi.
+男生|nánshēng|nam sinh, bạn nam|他是男生。|Tā shì nánshēng.|Cậu ấy là nam sinh.
+女生|nǚshēng|nữ sinh, bạn nữ|她是女生吗？|Tā shì nǚshēng ma?|Cô ấy là nữ sinh phải không?
+班|bān|lớp|我在一年级一班。|Wǒ zài yī niánjí yī bān.|Tôi ở lớp 1 năm nhất.
+独生子|dúshēngzǐ|con một (trai)|我是独生子。|Wǒ shì dúshēngzǐ.|Tôi là con một.
+兄弟|xiōngdì|anh em|你有兄弟吗？|Nǐ yǒu xiōngdì ma?|Bạn có anh em không?
+姐妹|jiěmèi|chị em|我没有姐妹。|Wǒ méiyǒu jiěmèi.|Tôi không có chị em.
+学校|xuéxiào|trường học|我在学校看书。|Wǒ zài xuéxiào kàn shū.|Tôi xem sách ở trường.
+爱好|àihào|sở thích|我的爱好是音乐。|Wǒ de àihào shì yīnyuè.|Sở thích của tôi là âm nhạc.
+几|jǐ|mấy|你几岁了？|Nǐ jǐ suì le?|Bạn mấy tuổi rồi?
+岁|suì|tuổi|我今年二十岁。|Wǒ jīnnián èrshí suì.|Năm nay tôi 20 tuổi.
+多|duō|nhiều|这里的人很多。|Zhèlǐ de rén hěn duō.|Người ở đây rất nhiều.
+少|shǎo|ít|我的钱很少。|Wǒ de qián hěn shǎo.|Tiền của tôi rất ít.
+多少|duōshǎo|bao nhiêu|这个多少钱？|Zhège duōshǎo qián?|Cái này bao nhiêu tiền?
+只|zhǐ|chỉ|我只有一本书。|Wǒ zhǐyǒu yī běn shū.|Tôi chỉ có một quyển sách.
+了|le|rồi (trợ từ)|他回家了。|Tā huí jiā le.|Anh ấy về nhà rồi.
+年|nián|năm|一年有十二个月。|Yī nián yǒu shí'èr gè yuè.|Một năm có 12 tháng.
+今年|jīnnián|năm nay|今年是二〇二五年。|Jīnnián shì èrlíng'èr wǔ nián.|Năm nay là năm 2025.
+明年|míngnián|sang năm|明年我去中国。|Míngnián wǒ qù Zhōngguó.|Sang năm tôi đi Trung Quốc.
+去年|qùnián|năm ngoái|去年我在美国。|Qùnián wǒ zài Měiguó.|Năm ngoái tôi ở Mỹ.
+大|dà|lớn, to|这个苹果很大。|Zhège píngguǒ hěn dà.|Quả táo này rất lớn.
+小|xiǎo|nhỏ, bé|那个猫很小。|Nàge māo hěn xiǎo.|Con mèo kia rất nhỏ.
+多大|duō dà|bao nhiêu tuổi (hỏi người lớn)|你多大了？|Nǐ duō dà le?|Bạn bao nhiêu tuổi rồi?
+小孩|xiǎohái|trẻ con|他是一个小孩。|Tā shì yīgè xiǎohái.|Nó là một đứa trẻ.
+孩子|háizi|con cái, trẻ em|你有几个孩子？|Nǐ yǒu jǐ gè háizi?|Bạn có mấy đứa con?
+饭馆|fànguǎn|nhà hàng|我们在饭馆吃饭。|Wǒmen zài fànguǎn chī fàn.|Chúng tôi ăn cơm ở nhà hàng.
+商店|shāngdiàn|cửa hàng|商店里没有衣服。|Shāngdiàn lǐ méiyǒu yīfu.|Trong cửa hàng không có quần áo.
+香水|xiāngshuǐ|nước hoa|这是我的香水。|Zhè shì wǒ de xiāngshuǐ.|Đây là nước hoa của tôi.
+医院|yīyuàn|bệnh viện|他在医院工作。|Tā zài yīyuàn gōngzuò.|Anh ấy làm việc ở bệnh viện.
+公园|gōngyuán|công viên|公园很漂亮。|Gōngyuán hěn piàoliang.|Công viên rất đẹp.
+爱|ài|yêu|我爱我爸爸。|Wǒ ài wǒ bàba.|Tôi yêu bố tôi.
+早上|zǎoshang|buổi sáng sớm|早上好！|Zǎoshang hǎo!|Chào buổi sáng!
+上午|shàngwǔ|buổi sáng|上午十点我有课。|Shàngwǔ shí diǎn wǒ yǒu kè.|Mười giờ sáng tôi có tiết học.
+中午|zhōngwǔ|buổi trưa|中午我们吃饭吧。|Zhōngwǔ wǒmen chī fàn ba.|Buổi trưa chúng mình ăn cơm nhé.
+下午|xiàwǔ|buổi chiều|下午我去商店。|Xiàwǔ wǒ qù shāngdiàn.|Buổi chiều tôi đi cửa hàng.
+晚上|wǎnshang|buổi tối|晚上我在家。|Wǎnshang wǒ zài jiā.|Buổi tối tôi ở nhà.
+肉|ròu|thịt|我不吃肉。|Wǒ bù chī ròu.|Tôi không ăn thịt.
+点|diǎn|giờ|现在三点了。|Xiànzài sān diǎn le.|Bây giờ là 3 giờ rồi.
+班|bān|ca làm việc|我今天不上班。|Wǒ jīntiān bù shàngbān.|Hôm nay tôi không đi làm.
+考试|kǎoshì|thi, kiểm tra|明天我有考试。|Míngtián wǒ yǒu kǎoshì.|Ngày mai tôi có bài thi.
+放学|fàngxué|tan học|五点放学。|Wǔ diǎn fàngxué.|Năm giờ tan học.
+上课|shàngkè|vào lớp, học|老师在上课。|Lǎoshī zài shàngkè.|Thầy giáo đang giảng bài.
+下课|xiàkè|tan tiết|我们下课了。|Wǒmen xiàkè le.|Chúng tôi tan học rồi.
+图书馆|túshūguǎn|thư viện|图书馆很大。|Túshūguǎn hěn dà.|Thư viện rất lớn.
+火车|huǒchē|tàu hỏa|我要坐火车。|Wǒ yào zuò huǒchē.|Tôi muốn đi tàu hỏa.
+大巴|dàbā|xe khách/bus lớn|大巴车在那儿。|Dàbāchē zài nàr.|Xe khách ở đằng kia.
+地铁|dìtiě|tàu điện ngầm|我坐地铁去学校。|Wǒ zuò dìtiě qù xuéxiào.|Tôi đi tàu điện ngầm đến trường.
+钱包|qiánbāo|ví tiền|这是谁的钱包？|Zhè shì shéi de qiánbāo?|Đây là ví tiền của ai?
+书包|shūbāo|cặp sách|我买了一个书包。|Wǒ mǎi le yīgè shūbāo.|Tôi đã mua một cái cặp sách.
+大学|dàxué|đại học|他在中国大学。|Tā zài Zhōngguó dàxué.|Anh ấy ở trường đại học Trung Quốc.
+出租车|chūzūchē|xe taxi|我叫了一辆出租车。|Wǒ jiào le yī liàng chūzūchē.|Tôi đã gọi một chiếc taxi.
+电脑|diànnǎo|máy tính|我的电脑很小。|Wǒ de diànnǎo hěn xiǎo.|Máy tính của tôi rất nhỏ.
+公交车|gōngjiāochē|xe buýt|我会坐公交车。|Wǒ huì zuò gōngjiāochē.|Tôi biết đi xe buýt.
+酒店|jiǔdiàn|khách sạn|酒店很大吗？|Jiǔdiàn hěn dà ma?|Khách sạn có to không?
+旅游|lǚyóu|du lịch|我喜欢旅游。|Wǒ xǐhuan lǚyóu.|Tôi thích đi du lịch.
+音乐|yīnyuè|âm nhạc|我不喜欢听音乐。|Wǒ bù xǐhuan tīng yīnyuè.|Tôi không thích nghe nhạc.
+跳舞|tiàowǔ|nhảy múa|我不会跳舞。|Wǒ bù huì tiàowǔ.|Tôi không biết nhảy.
+做饭|zuò fàn|nấu ăn|我妈妈在做饭。|Wǒ māma zài zuò fàn.|Mẹ tôi đang nấu cơm.
+饺子|jiǎozi|sủi cảo|你爱吃饺子吗？|Nǐ ài chī jiǎozi ma?|Bạn thích ăn sủi cảo không?
+相机|xiàngjī|máy ảnh|我的相机很好。|Wǒ de xiàngjī hěn hǎo.|Máy ảnh của tôi rất tốt.
+果汁|guǒzhī|nước trái cây|你想喝果汁吗？|Nǐ xiǎng hē guǒzhī ma?|Bạn muốn uống nước trái cây không?
+拍照|pāizhào|chụp ảnh|我喜欢拍照。|Wǒ xǐhuan pāizhào.|Tôi thích chụp ảnh.
