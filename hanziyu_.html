@@ -313,11 +313,11 @@
                     <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Chọn Bài Học</label>
                     <select id="lessonSelector" onchange="changeLesson(this.value)" class="custom-select shadow-lg shadow-black/20">
                         <option value="default">Mặc định (Demo)</option>
-                        <option value="bai1">H1 Bài 1: 老师您好！</option>
-                        <option value="bai2">H1 Bài 2: 谢谢你！</option>
-                        <option value="bai3">H1 Bài 3: 你叫什么名字？</option>
-                        <option value="bai4">H1 Bài 4: 她是我的汉语老师。</option>
-                        <option value="bai5">H1 Bài 5: 她女儿今年八岁。</option>
+                        <option value="bai1">H1 Bài 1 老师您好！</option>
+                        <option value="bai2">Bài 2: 谢谢你！</option>
+                        <option value="bai3">Bài 3: 你叫什么名字？</option>
+                        <option value="bai4">Bài 4: 她是我的汉语老师。</option>
+                        <option value="bai5">Bài 5: 她女儿今年八岁。</option>
                     </select>
                     <div id="vocabCountBadge" class="absolute top-0 right-0 text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full">20 từ</div>
                 </div>
@@ -520,14 +520,69 @@
 
         // Themes
         const THEMES = {
-            theme1: [ "https://i.ibb.co/9mkrgxBB/1.jpg", "https://i.ibb.co/BVPSfDyd/2.jpg", "https://i.ibb.co/pBvdyqcG/3.jpg", "https://i.ibb.co/hxML5Dcs/4.jpg", "https://i.ibb.co/XqSSQPj/5.jpg", "https://i.ibb.co/LhDR011H/6.jpg", "https://i.ibb.co/jknJpX9D/7.jpg", "https://i.ibb.co/GvhfcVhL/8.jpg", "https://i.ibb.co/vxQxyggg/9.jpg", "https://i.ibb.co/N22wWH4F/10.jpg" ],
-            theme2: [ "https://i.ibb.co/jPvCgpLF/1.jpg", "https://i.ibb.co/pjGCgwWJ/2.jpg", "https://i.ibb.co/dwmD80X4/3.jpg", "https://i.ibb.co/dwNwLz5q/4.jpg", "https://i.ibb.co/zhjFjkSm/5.jpg", "https://i.ibb.co/1tKtLqLr/6.jpg", "https://i.ibb.co/Xr4dcL1X/7.jpg", "https://i.ibb.co/XkJYt9XS/8.jpg", "https://i.ibb.co/xSn62fLc/9.jpg", "https://i.ibb.co/SwGyDZgr/10.jpg" ],
-            theme3: [ "https://i.ibb.co/LX5jbTLj/1.jpg", "https://i.ibb.co/Kxf6WZJk/2.jpg", "https://i.ibb.co/Z32tPxg/3.jpg", "https://i.ibb.co/jvRmFNVh/4.jpg", "https://i.ibb.co/kCGgC6L/5.jpg", "https://i.ibb.co/Y7Wr5hY9/6.jpg", "https://i.ibb.co/k6JFPGSN/7.jpg", "https://i.ibb.co/rK1ywf7t/8.jpg", "https://i.ibb.co/dJ3GMS21/9.jpg", "https://i.ibb.co/67yNFVXs/10.jpg" ],
-            theme4: [ "https://i.ibb.co/k2gjPNBD/image-1.jpg", "https://i.ibb.co/wNz17Kr7/image-2.jpg", "https://i.ibb.co/TqqKqqkm/image-3.jpg", "https://i.ibb.co/QjdsZdKp/image-4.jpg", "https://i.ibb.co/bjLKtx08/image-5.jpg", "https://i.ibb.co/n8RpHKGZ/image-6.jpg", "https://i.ibb.co/cXbw31Rq/image-7.jpg", "https://i.ibb.co/0RR46KK0/image-8.jpg", "https://i.ibb.co/cX2Kvg5q/image-9.jpg", "https://i.ibb.co/Dg1Jt9dG/image-10.jpg" ]
+theme1: [
+                "https://i.ibb.co/9mkrgxBB/1.jpg", "https://i.ibb.co/BVPSfDyd/2.jpg", "https://i.ibb.co/pBvdyqcG/3.jpg",
+                "https://i.ibb.co/hxML5Dcs/4.jpg", "https://i.ibb.co/XqSSQPj/5.jpg", "https://i.ibb.co/LhDR011H/6.jpg",
+                "https://i.ibb.co/jknJpX9D/7.jpg", "https://i.ibb.co/GvhfcVhL/8.jpg", "https://i.ibb.co/vxQxyggg/9.jpg", "https://i.ibb.co/N22wWH4F/10.jpg"
+            ],
+            theme2: [
+                "https://i.ibb.co/jPvCgpLF/1.jpg", "https://i.ibb.co/pjGCgwWJ/2.jpg", "https://i.ibb.co/dwmD80X4/3.jpg",
+                "https://i.ibb.co/dwNwLz5q/4.jpg", "https://i.ibb.co/zhjFjkSm/5.jpg", "https://i.ibb.co/1tKtLqLr/6.jpg",
+                "https://i.ibb.co/Xr4dcL1X/7.jpg", "https://i.ibb.co/XkJYt9XS/8.jpg", "https://i.ibb.co/xSn62fLc/9.jpg", "https://i.ibb.co/SwGyDZgr/10.jpg"
+            ],
+            theme3: [
+                "https://i.ibb.co/LX5jbTLj/1.jpg", "https://i.ibb.co/Kxf6WZJk/2.jpg", "https://i.ibb.co/Z32tPxg/3.jpg",
+                "https://i.ibb.co/jvRmFNVh/4.jpg", "https://i.ibb.co/kCGgC6L/5.jpg", "https://i.ibb.co/Y7Wr5hY9/6.jpg",
+                "https://i.ibb.co/k6JFPGSN/7.jpg", "https://i.ibb.co/rK1ywf7t/8.jpg", "https://i.ibb.co/dJ3GMS21/9.jpg", "https://i.ibb.co/67yNFVXs/10.jpg"
+            ],
+            theme4: [
+                "https://i.ibb.co/k2gjPNBD/image-1.jpg", "https://i.ibb.co/wNz17Kr7/image-2.jpg", "https://i.ibb.co/TqqKqqkm/image-3.jpg",
+                "https://i.ibb.co/QjdsZdKp/image-4.jpg", "https://i.ibb.co/bjLKtx08/image-5.jpg", "https://i.ibb.co/n8RpHKGZ/image-6.jpg",
+                "https://i.ibb.co/cXbw31Rq/image-7.jpg", "https://i.ibb.co/0RR46KK0/image-8.jpg", "https://i.ibb.co/cX2Kvg5q/image-9.jpg", "https://i.ibb.co/Dg1Jt9dG/image-10.jpg"
+            ],
+            theme5: [
+                "https://i.ibb.co/jPwQDKnB/image-1.jpg", "https://i.ibb.co/V7VNkw2/image-2.jpg", "https://i.ibb.co/5qKPJZN/image-3.jpg",
+                "https://i.ibb.co/1Yz3X27t/image-4.jpg", "https://i.ibb.co/0pxjkZHh/image-5.jpg", "https://i.ibb.co/d4NrKLsX/image-6.jpg",
+                "https://i.ibb.co/chr9Q9x2/image-7.jpg", "https://i.ibb.co/jkGSMvtD/image-8.jpg", "https://i.ibb.co/KxzvR5Q7/image-9.jpg", "https://i.ibb.co/m5gyn3Hp/image-10.jpg"
+            ],
+            theme6: [
+                "https://i.ibb.co/cSVxL3dG/image-1.jpg", "https://i.ibb.co/V0H8kck1/image-2.jpg", "https://i.ibb.co/qHVCcf1/image-3.jpg",
+                "https://i.ibb.co/QF2RBP2t/image-4.jpg", "https://i.ibb.co/k2WPnpML/image-5.jpg", "https://i.ibb.co/WNQJXxQF/image-6.jpg",
+                "https://i.ibb.co/Csn2VCmF/image-7.jpg", "https://i.ibb.co/PvK7mDk6/image-8.jpg", "https://i.ibb.co/QFLXZ6V9/image-9.jpg", "https://i.ibb.co/S7QLpmTM/image-10.jpg"
+            ],
+            theme7: [
+                "https://i.ibb.co/QzVYjXw/image-1.png", "https://i.ibb.co/TBrLtR6f/image-2.png", "https://i.ibb.co/B84Tjnp/image-3.png",
+                "https://i.ibb.co/FLyMrmtz/image-4.png", "https://i.ibb.co/0yZkjNsJ/image-5.png", "https://i.ibb.co/7dBYj197/image-6.png",
+                "https://i.ibb.co/bjWmbtwd/image-7.png", "https://i.ibb.co/mCGQkXhv/image-8.png", "https://i.ibb.co/4wcsgrQT/image-9.png", "https://i.ibb.co/LDN9LK51/image-10.png"
+            ],
+            theme8: [
+                "https://i.ibb.co/0jV8gdPs/image-1.jpg", "https://i.ibb.co/1tkVV0fY/image-2.jpg", "https://i.ibb.co/27TDFtB5/image-3.jpg",
+                "https://i.ibb.co/39HVDz5h/image-4.jpg", "https://i.ibb.co/5XqWsCKH/image-5.jpg", "https://i.ibb.co/9kZ1Q5W0/image-6.jpg",
+                "https://i.ibb.co/7hRLLSp/image-7.jpg", "https://i.ibb.co/VkqvF6X/image-8.jpg", "https://i.ibb.co/ym51hxyP/image-9.jpg", "https://i.ibb.co/twPnnvHx/image-10.jpg"
+            ],
+            theme9: [
+                "https://i.ibb.co/LhRjF7ny/image-1.jpg", "https://i.ibb.co/67fzGKkB/image-2.jpg", "https://i.ibb.co/dJLkqgHt/image-3.jpg",
+                "https://i.ibb.co/SXCtqLz0/image-4.jpg", "https://i.ibb.co/5gZkpqy4/image-5.jpg", "https://i.ibb.co/8gpBDrV1/image-6.jpg",
+                "https://i.ibb.co/fYKwWN1M/image-7.jpg", "https://i.ibb.co/JWQsgRv2/image-8.jpg", "https://i.ibb.co/J92V5FJ/image-9.jpg", "https://i.ibb.co/N6qRYRFS/image-10.jpg"
+            ],
+            theme10: [
+                "https://i.ibb.co/7djQy4P3/image-1.jpg", "https://i.ibb.co/F4BCsG0d/image-2.jpg", "https://i.ibb.co/96Rxv3Z/image-3.jpg",
+                "https://i.ibb.co/zV7nMc7s/image-4.jpg", "https://i.ibb.co/Rp71q4wB/image-5.jpg", "https://i.ibb.co/VpbLr5mv/image-6.jpg",
+                "https://i.ibb.co/tTvGFf3K/image-7.jpg", "https://i.ibb.co/0pGLdJXF/image-8.jpg", "https://i.ibb.co/CKXBd0Sb/image-9.jpg", "https://i.ibb.co/CKXBd0Sb/image-9.jpg"
+            ],
+            theme11: [
+                "https://i.ibb.co/ynfzxKBs/image-1.jpg", "https://i.ibb.co/gbcMQrtL/image-2.jpg", "https://i.ibb.co/QFdPz9rt/image-3.jpg",
+                "https://i.ibb.co/sJm70X37/image-4.jpg", "https://i.ibb.co/dJ1tgCBT/image-5.jpg", "https://i.ibb.co/r2WGPSdb/image-6.jpg",
+                "https://i.ibb.co/Zqc5B6D/image-7.jpg", "https://i.ibb.co/DfGNS9D1/image-8.jpg", "https://i.ibb.co/wF0215qf/image-9.jpg", "https://i.ibb.co/fVZG4Xhk/image-10.jpg"
+            ],
+            theme12: [
+                "https://i.ibb.co/1Ggg6SH8/image-1.jpg", "https://i.ibb.co/k2QDsjz4/image-2.jpg", "https://i.ibb.co/Gf01BsWw/image-3.jpg",
+                "https://i.ibb.co/s9YXcqRv/image-4.jpg", "https://i.ibb.co/PGJgTHDq/image-5.jpg", "https://i.ibb.co/M5gsz53W/image-6.jpg",
+                "https://i.ibb.co/gMWYSV61/image-7.jpg", "https://i.ibb.co/0pJjZfNZ/image-8.jpg", "https://i.ibb.co/nMyFFTmL/image-9.jpg", "https://i.ibb.co/6J8DDJF4/image-10.jpg"
+            ]
         };
         // Added fallbacks for simplified theme structure logic if not fully expanded
-        THEMES.theme5 = THEMES.theme1; THEMES.theme6 = THEMES.theme2; THEMES.theme7 = THEMES.theme3; THEMES.theme8 = THEMES.theme4;
-        THEMES.theme9 = THEMES.theme1; THEMES.theme10 = THEMES.theme2; THEMES.theme11 = THEMES.theme3; THEMES.theme12 = THEMES.theme4;
+
 
         // --- STATE MANAGEMENT ---
         const state = {
@@ -566,43 +621,36 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        async function loadLessonProgress(lessonId) {
-            // Key lưu trữ sẽ có dạng: ht_unlocked_bai1, ht_highscore_bai1...
-            state.unlockedLevel = parseInt(localStorage.getItem(`ht_unlocked_${lessonId}`) || 1);
-            state.highScore = parseInt(localStorage.getItem(`ht_highscore_${lessonId}`) || 0);
-            state.totalScore = parseInt(localStorage.getItem(`ht_totalscore_${lessonId}`) || 0);
-            
-            // Cập nhật lại giao diện ngay lập tức
-            renderStats();
-            generateLevelGrid();
-        }
-
         async function changeLesson(lessonId) {
             state.currentLessonId = lessonId;
             
-            // 1. Tải lại tiến độ của bài học mới chọn (QUAN TRỌNG)
-            loadLessonProgress(lessonId);
-
-            // 2. Logic tải từ vựng (giữ nguyên logic cũ của bạn)
+            // Nếu chọn mặc định, reset về data gốc
             if (lessonId === 'default') {
                 VOCABULARY = [...DEFAULT_VOCAB];
                 document.getElementById('vocabCountBadge').innerText = `${VOCABULARY.length} từ`;
-                showToast("Đã về dữ liệu mặc định (Demo)");
+                showToast("Đã về dữ liệu mặc định");
                 return;
             }
 
+            // Load file text
             try {
+                // Thêm timestamp để tránh cache browser
                 const response = await fetch(`data_chineseStroke/${lessonId}.txt?t=${Date.now()}`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 const text = await response.text();
                 const lines = text.split('\n');
+                
                 const newVocab = [];
                 
                 lines.forEach(line => {
                     const cleanLine = line.trim();
                     if (cleanLine) {
                         const parts = cleanLine.split('|');
+                        // Expect format: Hanzi|Pinyin|Meaning
                         if (parts.length >= 3) {
                             newVocab.push({
                                 hanzi: parts[0].trim(),
@@ -616,16 +664,20 @@
                 if (newVocab.length > 0) {
                     VOCABULARY = newVocab;
                     document.getElementById('vocabCountBadge').innerText = `${VOCABULARY.length} từ`;
-                    showToast(`Đã tải dữ liệu: ${lessonId}`);
+                    showToast(`Đã tải ${VOCABULARY.length} từ vựng từ ${lessonId}`);
                 } else {
                     showToast("File rỗng hoặc sai định dạng!", true);
+                    // Revert UI to default if failed? Or keep previous? Keeping previous for now.
                 }
+
             } catch (error) {
                 console.error("Lỗi tải bài học:", error);
-                showToast(`Chưa có dữ liệu cho bài này, dùng tạm bài cũ`, true);
+                showToast(`Không tìm thấy file ${lessonId}.txt`, true);
+                
+                // Fallback to default if load fails significantly
+                // VOCABULARY = [...DEFAULT_VOCAB];
             }
         }
-
 
         // --- HELPER TO GET IMAGE ---
         function getLevelImage(levelId) {
@@ -908,7 +960,6 @@
 
         function initApp() {
             resizeCanvas();
-            loadLessonProgress(state.currentLessonId);
             renderStats();
             
             rainSystem = new RainSystem();
@@ -1259,161 +1310,93 @@
             }
         }
 
-   function gameOver(isWin) {
-            // 1. Cập nhật trạng thái màn hình và âm thanh
+        function gameOver(isWin) {
             state.screen = 'result';
             playSound('wrong');
+            document.getElementById('btnNextLevel').classList.add('hidden');
             
-            // Ẩn nút "Màn kế tiếp" vì game over
-            const btnNext = document.getElementById('btnNextLevel');
-            btnNext.classList.add('hidden');
-            btnNext.classList.remove('flex'); 
-
-            // 2. LƯU ĐIỂM SỐ (THEO BÀI HỌC)
-            // Cập nhật Kỷ Lục riêng cho bài học này
             if (state.score > state.highScore) {
                 state.highScore = state.score;
-                localStorage.setItem(`ht_highscore_${state.currentLessonId}`, state.highScore);
+                localStorage.setItem('ht_highscore', state.highScore);
             }
-            
-            // Cập nhật Tổng Điểm tích lũy riêng cho bài học này
             state.totalScore += state.score;
-            localStorage.setItem(`ht_totalscore_${state.currentLessonId}`, state.totalScore);
+            localStorage.setItem('ht_totalscore', state.totalScore);
 
-            // 3. Xử lý hiệu ứng giao diện (UI)
-            // Ẩn các nút điều khiển game và HUD
             document.getElementById('gameControls').classList.add('translate-y-full', 'opacity-0', 'invisible');
             document.getElementById('gameHUD').classList.add('-translate-y-full', 'opacity-0');
-            
-            // Hiện bảng kết quả
             const overlay = document.getElementById('resultOverlay');
             overlay.classList.remove('hidden');
             setTimeout(() => overlay.classList.remove('opacity-0'), 100);
 
-            // 4. Cập nhật nội dung bảng kết quả (Thất bại)
-            const titleEl = document.getElementById('resultTitle');
-            titleEl.innerText = "THẤT BẠI";
-            titleEl.className = "text-4xl md:text-5xl font-black mb-2 uppercase tracking-wide text-rose-500 drop-shadow-lg";
-            
+            document.getElementById('resultTitle').innerText = "THẤT BẠI";
+            document.getElementById('resultTitle').className = "text-4xl font-black mb-2 uppercase tracking-wide text-rose-500";
             document.getElementById('resultMsg').innerText = "Đừng nản lòng, thử lại nhé!";
             
             const scoreEl = document.getElementById('resultScore');
             scoreEl.innerText = state.score;
             scoreEl.className = "text-6xl md:text-7xl font-black font-mono text-slate-300 tracking-tighter";
             
-            // 5. Hiển thị Icon thất bại (Thay vì ngôi sao)
             document.getElementById('victoryStars').classList.add('hidden');
-            
             const failIcon = document.getElementById('failIcon');
             failIcon.classList.remove('hidden');
-            failIcon.innerHTML = `
-                <div class="w-24 h-24 rounded-full bg-rose-500/20 flex items-center justify-center animate-pulse">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
-                        <line x1="9" y1="9" x2="9.01" y2="9"/>
-                        <line x1="15" y1="9" x2="15.01" y2="9"/>
-                    </svg>
-                </div>
-            `;
+            failIcon.innerHTML = '<div class="w-24 h-24 rounded-full bg-rose-500/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>';
         }
 
-  function levelComplete() {
-            // 1. Cập nhật trạng thái và âm thanh
+        function levelComplete() {
             state.screen = 'result';
             playSound('win');
             
-            // 2. TÍNH TOÁN SỐ SAO (Dựa trên số mạng còn lại)
-            // 5 mạng = 3 sao, 3-4 mạng = 2 sao, còn lại = 1 sao
             let stars = 1;
-            if (state.lives === 5) stars = 3; 
-            else if (state.lives >= 3) stars = 2;
+            if (state.lives === 5) stars = 3; else if (state.lives >= 3) stars = 2;
 
-            // 3. LƯU TIẾN ĐỘ (QUAN TRỌNG: Kèm theo ID bài học)
-            
-            // a. Lưu Số Sao (Chỉ lưu nếu kết quả mới cao hơn kết quả cũ)
-            // Key ví dụ: ht_star_bai1_lvl_1
-            const starKey = `ht_star_${state.currentLessonId}_lvl_${state.level}`;
-            const currentSavedStars = parseInt(localStorage.getItem(starKey) || 0);
-            if (stars > currentSavedStars) {
-                localStorage.setItem(starKey, stars);
-            }
+            const currentSavedStars = parseInt(localStorage.getItem(`ht_star_lvl_${state.level}`) || 0);
+            if (stars > currentSavedStars) localStorage.setItem(`ht_star_lvl_${state.level}`, stars);
 
-            // b. Lưu Kỷ Lục (High Score) cho bài học này
             if (state.score > state.highScore) {
                 state.highScore = state.score;
-                localStorage.setItem(`ht_highscore_${state.currentLessonId}`, state.highScore);
+                localStorage.setItem('ht_highscore', state.highScore);
             }
-            
-            // c. Lưu Tổng Điểm tích lũy cho bài học này
             state.totalScore += state.score;
-            localStorage.setItem(`ht_totalscore_${state.currentLessonId}`, state.totalScore);
+            localStorage.setItem('ht_totalscore', state.totalScore);
 
-            // d. Mở khóa màn tiếp theo (Unlock Level)
-            // Chỉ mở khóa nếu đang chơi màn mới nhất được phép chơi
             if (state.mode === 'adventure' && state.level === state.unlockedLevel) {
-                // Kiểm tra xem còn màn tiếp theo không (LEVELS.length = 10)
-                if (state.level < LEVELS.length) {
-                    state.unlockedLevel++;
-                    // Key ví dụ: ht_unlocked_bai1
-                    localStorage.setItem(`ht_unlocked_${state.currentLessonId}`, state.unlockedLevel);
-                }
+                state.unlockedLevel++;
+                localStorage.setItem('ht_unlocked', state.unlockedLevel);
+                generateLevelGrid(); 
             }
-          generateLevelGrid();
-            // 4. Hiệu ứng ăn mừng
             triggerConfetti();
 
-            // 5. Xử lý giao diện (UI)
-            // Ẩn HUD và Controls
             document.getElementById('gameControls').classList.add('translate-y-full', 'opacity-0', 'invisible');
             document.getElementById('gameHUD').classList.add('-translate-y-full', 'opacity-0');
 
-            // Hiện bảng kết quả
             const overlay = document.getElementById('resultOverlay');
             overlay.classList.remove('hidden');
             setTimeout(() => overlay.classList.remove('opacity-0'), 100);
 
-            // Set nội dung chiến thắng
-            const titleEl = document.getElementById('resultTitle');
-            titleEl.innerText = "HOÀN THÀNH!";
-            titleEl.className = "text-4xl md:text-5xl font-black mb-2 uppercase tracking-wide text-amber-400 drop-shadow-lg";
-            
+            document.getElementById('resultTitle').innerText = "HOÀN THÀNH!";
+            document.getElementById('resultTitle').className = "text-4xl font-black mb-2 uppercase tracking-wide text-amber-400";
             document.getElementById('resultMsg').innerText = `Bạn đã chinh phục ${LEVELS[state.level-1].name}`;
             
             const scoreEl = document.getElementById('resultScore');
             scoreEl.innerText = state.score;
-            scoreEl.className = "text-6xl md:text-7xl font-black font-mono text-amber-400 tracking-tighter drop-shadow-orange-glow";
-
-            // 6. Xử lý nút "Màn Tiếp Theo"
+            scoreEl.className = "text-6xl md:text-7xl font-black font-mono text-amber-400 tracking-tighter drop-shadow-lg";
             const btnNext = document.getElementById('btnNextLevel');
-            // Chỉ hiện nút Next nếu đang chơi Adventure VÀ chưa phải màn cuối cùng
-            if (state.mode === 'adventure' && state.level < LEVELS.length) {
-                btnNext.classList.remove('hidden');
-                btnNext.classList.add('flex');
-            } else {
-                btnNext.classList.add('hidden');
-                btnNext.classList.remove('flex');
-            }
-
-            // 7. Hiển thị số sao đạt được (Animation)
+    // Chỉ hiện nút Next nếu đang chơi Adventure VÀ chưa phải màn cuối (LEVELS.length là 10)
+    if (state.mode === 'adventure' && state.level < LEVELS.length) {
+        btnNext.classList.remove('hidden');
+        btnNext.classList.add('flex'); // Đảm bảo flex để căn giữa icon
+    } else {
+        btnNext.classList.add('hidden');
+        btnNext.classList.remove('flex');
+    }
             const starsContainer = document.getElementById('victoryStars');
             const failIcon = document.getElementById('failIcon');
-            
             starsContainer.classList.remove('hidden');
             failIcon.classList.add('hidden');
             starsContainer.innerHTML = '';
 
-            const starSVG = (delay) => `
-                <div class="star-pop" style="animation-delay: ${delay}s">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 drop-shadow-2xl filter brightness-110">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                </div>`;
-            
-            // Loop để vẽ số sao tương ứng
-            for(let i=0; i<stars; i++) {
-                starsContainer.innerHTML += starSVG(i * 0.25); 
-            }
+            const starSVG = (delay) => `<div class="star-pop" style="animation-delay: ${delay}s"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 drop-shadow-2xl filter brightness-110"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>`;
+            for(let i=0; i<stars; i++) starsContainer.innerHTML += starSVG(i * 0.25); 
         }
 
         function handleReplay() {
@@ -1431,28 +1414,20 @@
             document.getElementById('gameCanvas').style.zIndex = "10";
             showSection('mainMenu');
             renderStats();
-            generateLevelGrid();
-            setBackground(THEMES[state.currentThemeKey] ? THEMES[state.currentThemeKey][0] : THEMES.theme1[0]); // Fix nhẹ logic background nếu cần
+            setBackground(THEMES[0]);
             startCardRotation(); 
         }
 
         // --- GENERATORS ---
-  function generateLevelGrid() {
+        function generateLevelGrid() {
             const grid = document.getElementById('levelGrid');
             grid.innerHTML = '';
-            
             LEVELS.forEach(lvl => {
-                // Đọc trạng thái unlock từ biến state (đã được cập nhật theo bài học)
                 const isLocked = lvl.id > state.unlockedLevel;
-                
-                // Đọc số sao riêng của bài học này: ht_star_bai1_lvl_1
-                const starsKey = `ht_star_${state.currentLessonId}_lvl_${lvl.id}`;
-                const starsEarned = parseInt(localStorage.getItem(starsKey) || 0);
-
-                const bgImg = getLevelImage(lvl.id);
                 const div = document.createElement('button');
-                
-                // ... (Phần tạo giao diện nút bấm giữ nguyên như cũ) ...
+                const bgImg = getLevelImage(lvl.id);
+                const starsEarned = parseInt(localStorage.getItem(`ht_star_lvl_${lvl.id}`) || 0);
+
                 div.className = `relative h-32 rounded-2xl overflow-hidden border transition-all ${isLocked ? 'border-slate-800 bg-slate-900 opacity-60 grayscale' : 'border-slate-600 hover:border-amber-500 cursor-pointer shadow-lg'}`;
                 if (!isLocked) div.onclick = () => startGame('adventure', lvl.id);
 
