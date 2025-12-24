@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <!-- FIX: Use interactive-widget=resizes-content to handle keyboard/UI better -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mưa Hán Tự - Load Data Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800;900&family=Noto+Serif+SC:wght@500;700;900&display=swap');
+        
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --primary: #f59e0b;
+            --primary-glow: rgba(245, 158, 11, 0.4);
+            --bg-dark: #0f172a;
+            --glass-surface: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        /* FIX: Body fixed to prevent overscroll rubber-banding */
+        body {
+            font-family: 'Mulish', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            position: fixed; 
+            inset: 0;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hanzi-font {
+            font-family: "KaiTi", "楷体", "STKaiti", "Noto Serif SC", serif;
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            background: #020617;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loader-ring {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* --- MODERN GLASS UI --- */
+        .glass-panel {
+            background: var(--glass-surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* Nút bấm mềm mại, hiện đại (Soft UI) */
+        .glass-btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .glass-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .glass-btn:active {
+            transform: scale(0.96);
+        }
+
+        .glass-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* --- ANSWER BUTTONS REIMAGINED --- */
+        .answer-btn {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.3), 
+                0 2px 4px -1px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.15s ease-out;
+            position: relative;
+        }
+
+        .answer-btn:active:not(:disabled) {
+            transform: scale(0.97);
+            background: #0f172a;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(180deg, #059669 0%, #047857 100%);
+            border-color: #34d399;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .answer-btn.wrong {
+            background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+            border-color: #f87171;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Select Dropdown Styling */
+        .custom-select {
+            appearance: none;
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.75rem 1rem;
+            padding-right: 2.5rem;
+            border-radius: 0.75rem;
+            width: 100%;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+        .custom-select:hover {
+            border-color: var(--primary);
+            background-color: rgba(30, 41, 59, 0.95);
+        }
+        .custom-select:focus {
+            outline: none;
+            ring: 2px solid var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+            z-index: 200;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+        
+        @keyframes floatUp { 0% { transform: translate(-50%, 0) scale(1); opacity: 1; } 100% { transform: translate(-50%, -60px) scale(1.2); opacity: 0; } }
+        .float-text { animation: floatUp 0.8s ease-out forwards; pointer-events: none; }
+
+        /* Star Animation */
+        @keyframes starPop {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .star-pop { animation: starPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Typography Effects */
+        .text-shadow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .text-shadow-glow { text-shadow: 0 0 15px var(--primary-glow); }
+
+        .rainy-title {
+            background: linear-gradient(to bottom, #fbbf24, #d97706);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        
+        /* Custom Scrollbar */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Background Transitions */
+        #bgContainer, #bgOverlay { transition: all 1s ease; }
+    </style>
+</head>
+<body class="h-full w-full bg-slate-950 overflow-hidden fixed inset-0">
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span id="toastMsg">Đã tải dữ liệu thành công!</span>
+    </div>
+
+    <!-- LOADING SCREEN -->
+    <div id="loadingScreen">
+        <div class="mb-6 relative">
+            <div class="absolute inset-0 bg-amber-500/20 blur-xl rounded-full animate-pulse"></div>
+            <h1 class="text-4xl font-black hanzi-font text-amber-500 relative z-10">汉字雨</h1>
+        </div>
+        <div class="loader-ring mb-4"></div>
+        <p class="text-slate-400 text-sm font-semibold tracking-wider animate-pulse">ĐANG TẢI TÀI NGUYÊN...</p>
+    </div>
+
+    <!-- BACKGROUND SYSTEM -->
+    <div id="bgContainer" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-1000 transform scale-105 opacity-0"></div>
+    <div id="bgOverlay" class="absolute inset-0 z-0 bg-slate-900/90 backdrop-blur-[2px]"></div>
+    
+    <!-- CANVAS LAYER -->
+    <canvas id="gameCanvas" class="absolute top-0 left-0 w-full h-full z-10 touch-none pointer-events-none"></canvas>
+
+    <!-- UI LAYER (High Z-Index) -->
+    <div id="uiLayer" class="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between">
+        
+        <!-- TOP HUD -->
+        <header id="gameHUD" class="w-full pt-safe-top px-4 pb-2 transition-transform duration-500 -translate-y-full opacity-0">
+            <div class="flex items-center gap-3 pt-2">
+                <!-- Score Pill -->
+                <div class="glass-panel px-4 py-2 rounded-full flex flex-col items-center min-w-[80px]">
+                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Điểm</span>
+                    <span id="scoreDisplay" class="text-xl font-black text-amber-400 font-mono leading-none">0</span>
+                </div>
+
+                <!-- Progress Bar (Center) -->
+                <div id="adventureProgress" class="flex-1 flex flex-col justify-center mx-1 transition-opacity duration-300 opacity-0">
+                    <div class="flex justify-between items-end mb-1 px-1">
+                        <span id="levelTitle" class="text-[10px] font-bold text-slate-300 uppercase tracking-wide">Màn 1</span>
+                        <span id="progressText" class="text-[10px] font-mono text-emerald-400">0%</span>
+                    </div>
+                    <div class="h-2 w-full bg-slate-800/80 rounded-full overflow-hidden border border-slate-700">
+                        <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+
+                <!-- Controls Right -->
+                <div class="flex items-center gap-2 pointer-events-auto">
+                    <!-- Combo Badge -->
+                    <div id="comboBadge" class="hidden bg-gradient-to-r from-orange-500 to-red-600 px-2 py-1 rounded-lg shadow-lg border border-orange-400/30 animate-pulse">
+                        <span id="comboText" class="text-xs font-black text-white italic whitespace-nowrap">x2</span>
+                    </div>
+
+                    <!-- Pause Btn -->
+                    <button onclick="togglePause()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-300 hover:text-white hover:border-amber-500/50 transition active:scale-90">
+                        <i data-lucide="pause" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lives Strip -->
+            <div class="absolute top-[4.5rem] left-4 flex gap-1 z-30 pointer-events-none" id="livesDisplay">
+                <!-- Hearts injected via JS -->
+            </div>
+        </header>
+
+        <!-- MAIN MENU -->
+        <main id="mainMenu" class="absolute inset-0 flex flex-col items-center justify-center px-6 overflow-y-auto hide-scrollbar pointer-events-auto transition-opacity duration-500">
+            
+            <div class="w-full max-w-sm md:max-w-4xl mx-auto flex flex-col items-center">
+                <!-- Branding -->
+                <div class="text-center mb-6 relative group cursor-default mt-10 md:mt-0">
+                    <div class="absolute -inset-8 bg-gradient-to-r from-amber-500/20 to-red-500/20 blur-3xl rounded-full opacity-60 group-hover:opacity-80 transition duration-1000"></div>
+                    <h1 class="text-7xl md:text-8xl font-black hanzi-font rainy-title drop-shadow-lg" data-text="汉字雨">汉字雨</h1>
+                    <div class="mt-2 flex items-center justify-center gap-3 opacity-80">
+                        <div class="h-px w-8 bg-gradient-to-r from-transparent to-slate-400"></div>
+                        <span class="text-xs font-bold text-slate-300 tracking-[0.5em] uppercase">Mưa Hán Tự</span>
+                        <div class="h-px w-8 bg-gradient-to-l from-transparent to-slate-400"></div>
+                    </div>
+                </div>
+
+                <!-- NEW: LESSON SELECTOR DROPDOWN -->
+                <div class="w-full max-w-sm mb-6 relative z-50">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 block pl-1">Chọn Bài Học</label>
+                    <select id="lessonSelector" onchange="changeLesson(this.value)" class="custom-select shadow-lg shadow-black/20">
+                        <option value="default">Mặc định (Demo)</option>
+                        <option value="bai1">Bài 1: Làm quen</option>
+                        <option value="bai2">Bài 2: Gia đình</option>
+                        <option value="bai3">Bài 3: Ăn uống</option>
+                        <option value="bai4">Bài 4: Mua sắm</option>
+                        <option value="bai5">Bài 5: Trường học</option>
+                    </select>
+                    <div id="vocabCountBadge" class="absolute top-0 right-0 text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full">20 từ</div>
+                </div>
+
+                <!-- Desktop Layout Wrapper -->
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
+                    
+                    <!-- Left Column: Adventure Mode -->
+                    <div class="flex flex-col gap-4">
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Chế độ chính</div>
+                        <button onclick="showSection('levelSelect')" class="group relative w-full aspect-[4/3] md:aspect-auto md:h-64 rounded-3xl overflow-hidden shadow-2xl transition-transform active:scale-95 ring-1 ring-white/10 hover:ring-amber-500/50">
+                            <!-- Dynamic Background -->
+                            <div id="adventureCardBg" class="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-1000 group-hover:scale-110"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                            
+                            <div class="absolute inset-0 p-6 flex flex-col justify-end items-start text-left">
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30 text-white mb-4 group-hover:-translate-y-2 transition-transform duration-300">
+                                    <i data-lucide="swords" class="w-7 h-7"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="text-2xl font-black text-white group-hover:text-amber-200 transition">Thử Thách</div>
+                                    <div class="text-sm text-slate-300 font-medium max-w-[200px]">Chinh phục thử thách, mở khóa thăng hạng.</div>
+                                </div>
+                                
+                                <div class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 backdrop-blur flex items-center justify-center group-hover:bg-amber-500 group-hover:text-slate-900 transition-colors">
+                                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Right Column: Stats & Practice -->
+                    <div class="flex flex-col gap-4">
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Thông tin & Luyện tập</div>
+                        
+                        <!-- Stats Mini Cards -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="glass-panel p-3 rounded-2xl flex items-center gap-3 hover:bg-white/5 transition">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                    <i data-lucide="trophy" class="w-5 h-5"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400">Kỷ Lục</span>
+                                    <span class="text-lg font-bold font-mono" id="menuHighScore">0</span>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-3 rounded-2xl flex items-center gap-3 hover:bg-white/5 transition">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                    <i data-lucide="zap" class="w-5 h-5"></i>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400">Tổng Điểm</span>
+                                    <span class="text-lg font-bold font-mono" id="menuTotalScore">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Practice Modes Grid -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="startGame('hanzi_to_viet')" class="glass-btn p-4 rounded-2xl flex flex-col items-center justify-center gap-2 h-24 hover:bg-white/10 group">
+                                <i data-lucide="languages" class="text-blue-400 w-6 h-6 group-hover:scale-110 transition"></i>
+                                <span class="text-xs font-bold text-slate-300">Nhìn Hán Tự</span>
+                            </button>
+                            <button onclick="startGame('viet_to_hanzi')" class="glass-btn p-4 rounded-2xl flex flex-col items-center justify-center gap-2 h-24 hover:bg-white/10 group">
+                                <i data-lucide="type" class="text-purple-400 w-6 h-6 group-hover:scale-110 transition"></i>
+                                <span class="text-xs font-bold text-slate-300">Nhìn Tiếng Việt</span>
+                            </button>
+                        </div>
+
+                        <!-- Footer Tools -->
+                        <div class="flex gap-3">
+                            <button onclick="showThemeSelect()" class="flex-1 p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-white transition flex items-center justify-center gap-2 text-xs font-bold border border-slate-700">
+                                <i data-lucide="palette" class="w-4 h-4"></i> Giao Diện
+                            </button>
+                            <button class="flex-1 p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-white transition flex items-center justify-center gap-2 text-xs font-bold border border-slate-700">
+                                <i data-lucide="award" class="w-4 h-4"></i> Thành Tích
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- LEVEL SELECT -->
+        <section id="levelSelect" class="absolute inset-0 bg-slate-900/95 z-50 flex flex-col transition-transform duration-300 translate-x-full pointer-events-auto">
+            <div class="p-4 flex items-center gap-4 bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
+                <button onclick="showSection('mainMenu')" class="p-2 rounded-full hover:bg-slate-800 text-slate-300"><i data-lucide="arrow-left"></i></button>
+                <h2 class="text-xl font-bold">Chọn Màn Chơi</h2>
+            </div>
+            <div id="levelGrid" class="flex-1 overflow-y-auto p-4 grid grid-cols-2 md:grid-cols-4 gap-4 pb-20 max-w-6xl mx-auto w-full">
+                <!-- Levels injected via JS -->
+            </div>
+        </section>
+
+        <!-- THEME SELECT -->
+        <section id="themeSelect" class="absolute inset-0 bg-slate-900/95 z-50 flex flex-col transition-transform duration-300 translate-x-full pointer-events-auto">
+             <div class="p-4 flex items-center gap-4 bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
+                <button onclick="showSection('mainMenu')" class="p-2 rounded-full hover:bg-slate-800 text-slate-300"><i data-lucide="arrow-left"></i></button>
+                <h2 class="text-xl font-bold">Kho Giao Diện</h2>
+            </div>
+            <div id="themeGrid" class="flex-1 overflow-y-auto p-4 grid grid-cols-2 md:grid-cols-4 gap-4 pb-20 max-w-6xl mx-auto w-full">
+                <!-- Themes injected via JS -->
+            </div>
+        </section>
+
+        <!-- GAME OVER / VICTORY OVERLAY -->
+        <div id="resultOverlay" class="absolute inset-0 z-50 bg-slate-950/90 backdrop-blur flex items-center justify-center p-6 hidden opacity-0 transition-opacity duration-500 pointer-events-auto">
+            <div class="w-full max-w-sm md:max-w-md text-center">
+                
+                <!-- Star Rating Container -->
+                <div id="victoryStars" class="flex justify-center items-center gap-4 mb-6 h-24"></div>
+                
+                <!-- Fallback Icon container -->
+                <div id="failIcon" class="mb-6 flex justify-center hidden"></div>
+
+                <h2 id="resultTitle" class="text-4xl md:text-5xl font-black mb-2 uppercase tracking-wide drop-shadow-lg"></h2>
+                <p id="resultMsg" class="text-slate-400 mb-8 font-medium text-sm md:text-base"></p>
+                
+                <div class="glass-panel p-6 md:p-8 rounded-3xl mb-8 border-t border-white/10 shadow-2xl">
+                    <div class="text-xs font-bold text-slate-500 uppercase mb-2 tracking-widest">Điểm số đạt được</div>
+                    <div id="resultScore" class="text-6xl md:text-7xl font-black font-mono text-amber-400 tracking-tighter drop-shadow-orange-glow">0</div>
+                </div>
+
+<div class="flex flex-col gap-3">
+    <button id="btnNextLevel" onclick="nextLevel()" class="hidden w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-[1.02] transition active:scale-95 flex items-center justify-center gap-2">
+        <i data-lucide="fast-forward" class="w-5 h-5"></i>
+        <span>Màn Tiếp Theo</span>
+    </button>
+    
+    <button onclick="handleReplay()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.02] transition active:scale-95 flex items-center justify-center gap-2">
+        <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+        <span>Chơi Lại</span>
+    </button>
+    
+    <button onclick="resetToMenu()" class="w-full bg-transparent border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 font-bold py-4 rounded-xl hover:bg-slate-800 transition active:scale-95">
+        Về Menu
+    </button>
+</div>
+            </div>
+        </div>
+
+        <!-- BOTTOM CONTROLS (GAMEPLAY) -->
+        <div id="gameControls" class="w-full p-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pointer-events-auto transition-all duration-300 translate-y-full opacity-0 invisible absolute bottom-0 z-30 bg-gradient-to-t from-slate-950 via-slate-900/90 to-transparent">
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <button id="btn0" onclick="checkAnswer(0)" class="answer-btn h-24 flex flex-col items-center justify-center p-2 group">
+                    <span class="text-2xl font-bold text-white z-10 pointer-events-none transition-transform group-active:scale-90" id="txt0">...</span>
+                    <!-- Status Icon -->
+                    <div class="status-icon absolute top-2 right-2 opacity-0 transition-opacity"></div>
+                </button>
+                <button id="btn1" onclick="checkAnswer(1)" class="answer-btn h-24 flex flex-col items-center justify-center p-2 group">
+                     <span class="text-2xl font-bold text-white z-10 pointer-events-none transition-transform group-active:scale-90" id="txt1">...</span>
+                     <div class="status-icon absolute top-2 right-2 opacity-0 transition-opacity"></div>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PAUSE MENU OVERLAY -->
+    <div id="pauseMenu" class="absolute inset-0 z-40 bg-slate-900/60 backdrop-blur-md hidden flex-col items-center justify-center pointer-events-auto">
+        <h2 class="text-3xl font-black text-white mb-8 tracking-widest">TẠM DỪNG</h2>
+        <div class="flex flex-col gap-4 w-64">
+            <button onclick="togglePause()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95">Tiếp Tục</button>
+            <button onclick="resetToMenu()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95">Thoát</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Mưa Hán Tự - Core Game Logic
+         * Updated for External Data Loading
+         */
+
+        // --- DATA ---
+        // Default Data (Fallback)
+        const DEFAULT_VOCAB = [
+            { hanzi: "你好", pinyin: "nǐ hǎo", meaning: "Xin chào" }, { hanzi: "谢谢", pinyin: "xièxie", meaning: "Cảm ơn" },
+            { hanzi: "再见", pinyin: "zàijiàn", meaning: "Tạm biệt" }, { hanzi: "对不起", pinyin: "duìbuqǐ", meaning: "Xin lỗi" },
+            { hanzi: "爱", pinyin: "ài", meaning: "Yêu" }, { hanzi: "人", pinyin: "rén", meaning: "Người" },
+            { hanzi: "家", pinyin: "jiā", meaning: "Nhà" }, { hanzi: "我", pinyin: "wǒ", meaning: "Tôi" },
+            { hanzi: "你", pinyin: "nǐ", meaning: "Bạn" }, { hanzi: "他", pinyin: "tā", meaning: "Anh ấy" },
+            { hanzi: "吃", pinyin: "chī", meaning: "Ăn" }, { hanzi: "喝", pinyin: "hē", meaning: "Uống" },
+            { hanzi: "茶", pinyin: "chá", meaning: "Trà" }, { hanzi: "水", pinyin: "shuǐ", meaning: "Nước" },
+            { hanzi: "书", pinyin: "shū", meaning: "Sách" }, { hanzi: "猫", pinyin: "māo", meaning: "Mèo" },
+            { hanzi: "狗", pinyin: "gǒu", meaning: "Chó" }, { hanzi: "大", pinyin: "dà", meaning: "To lớn" },
+            { hanzi: "小", pinyin: "xiǎo", meaning: "Nhỏ bé" }, { hanzi: "快乐", pinyin: "kuàilè", meaning: "Vui vẻ" }
+        ];
+
+        // Current Active Vocabulary
+        let VOCABULARY = [...DEFAULT_VOCAB];
+
+        // 10 Cửa ải
+        const LEVELS = Array.from({length: 10}, (_, i) => ({
+            id: i + 1,
+            name: `Ải ${i + 1}`,
+            target: 20,
+            speed: 1.0 + (i * 0.4),
+            spawnRate: Math.max(40, 140 - (i * 10))
+        }));
+
+        // Themes
+        const THEMES = {
+            theme1: [ "https://i.ibb.co/9mkrgxBB/1.jpg", "https://i.ibb.co/BVPSfDyd/2.jpg", "https://i.ibb.co/pBvdyqcG/3.jpg", "https://i.ibb.co/hxML5Dcs/4.jpg", "https://i.ibb.co/XqSSQPj/5.jpg", "https://i.ibb.co/LhDR011H/6.jpg", "https://i.ibb.co/jknJpX9D/7.jpg", "https://i.ibb.co/GvhfcVhL/8.jpg", "https://i.ibb.co/vxQxyggg/9.jpg", "https://i.ibb.co/N22wWH4F/10.jpg" ],
+            theme2: [ "https://i.ibb.co/jPvCgpLF/1.jpg", "https://i.ibb.co/pjGCgwWJ/2.jpg", "https://i.ibb.co/dwmD80X4/3.jpg", "https://i.ibb.co/dwNwLz5q/4.jpg", "https://i.ibb.co/zhjFjkSm/5.jpg", "https://i.ibb.co/1tKtLqLr/6.jpg", "https://i.ibb.co/Xr4dcL1X/7.jpg", "https://i.ibb.co/XkJYt9XS/8.jpg", "https://i.ibb.co/xSn62fLc/9.jpg", "https://i.ibb.co/SwGyDZgr/10.jpg" ],
+            theme3: [ "https://i.ibb.co/LX5jbTLj/1.jpg", "https://i.ibb.co/Kxf6WZJk/2.jpg", "https://i.ibb.co/Z32tPxg/3.jpg", "https://i.ibb.co/jvRmFNVh/4.jpg", "https://i.ibb.co/kCGgC6L/5.jpg", "https://i.ibb.co/Y7Wr5hY9/6.jpg", "https://i.ibb.co/k6JFPGSN/7.jpg", "https://i.ibb.co/rK1ywf7t/8.jpg", "https://i.ibb.co/dJ3GMS21/9.jpg", "https://i.ibb.co/67yNFVXs/10.jpg" ],
+            theme4: [ "https://i.ibb.co/k2gjPNBD/image-1.jpg", "https://i.ibb.co/wNz17Kr7/image-2.jpg", "https://i.ibb.co/TqqKqqkm/image-3.jpg", "https://i.ibb.co/QjdsZdKp/image-4.jpg", "https://i.ibb.co/bjLKtx08/image-5.jpg", "https://i.ibb.co/n8RpHKGZ/image-6.jpg", "https://i.ibb.co/cXbw31Rq/image-7.jpg", "https://i.ibb.co/0RR46KK0/image-8.jpg", "https://i.ibb.co/cX2Kvg5q/image-9.jpg", "https://i.ibb.co/Dg1Jt9dG/image-10.jpg" ]
+        };
+        // Added fallbacks for simplified theme structure logic if not fully expanded
+        THEMES.theme5 = THEMES.theme1; THEMES.theme6 = THEMES.theme2; THEMES.theme7 = THEMES.theme3; THEMES.theme8 = THEMES.theme4;
+        THEMES.theme9 = THEMES.theme1; THEMES.theme10 = THEMES.theme2; THEMES.theme11 = THEMES.theme3; THEMES.theme12 = THEMES.theme4;
+
+        // --- STATE MANAGEMENT ---
+        const state = {
+            screen: 'loading', 
+            mode: 'adventure', 
+            level: 1,
+            score: 0,
+            lives: 5,
+            combo: 0,
+            correctCount: 0,
+            isPaused: false,
+            highScore: parseInt(localStorage.getItem('ht_highscore') || 0),
+            totalScore: parseInt(localStorage.getItem('ht_totalscore') || 0),
+            unlockedLevel: parseInt(localStorage.getItem('ht_unlocked') || 1),
+            currentThemeKey: localStorage.getItem('ht_current_theme') || 'theme1',
+            currentLessonId: 'default'
+        };
+
+        // --- NEW: DATA LOADING LOGIC ---
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const icon = toast.querySelector('i');
+            
+            toastMsg.innerText = message;
+            toast.style.background = isError ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)';
+            
+            if(isError) {
+                icon.setAttribute('data-lucide', 'alert-circle');
+            } else {
+                icon.setAttribute('data-lucide', 'check-circle');
+            }
+            lucide.createIcons();
+
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        async function changeLesson(lessonId) {
+            state.currentLessonId = lessonId;
+            
+            // Nếu chọn mặc định, reset về data gốc
+            if (lessonId === 'default') {
+                VOCABULARY = [...DEFAULT_VOCAB];
+                document.getElementById('vocabCountBadge').innerText = `${VOCABULARY.length} từ`;
+                showToast("Đã về dữ liệu mặc định");
+                return;
+            }
+
+            // Load file text
+            try {
+                // Thêm timestamp để tránh cache browser
+                const response = await fetch(`data_chineseStroke/${lessonId}.txt?t=${Date.now()}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                const lines = text.split('\n');
+                
+                const newVocab = [];
+                
+                lines.forEach(line => {
+                    const cleanLine = line.trim();
+                    if (cleanLine) {
+                        const parts = cleanLine.split('|');
+                        // Expect format: Hanzi|Pinyin|Meaning
+                        if (parts.length >= 3) {
+                            newVocab.push({
+                                hanzi: parts[0].trim(),
+                                pinyin: parts[1].trim(),
+                                meaning: parts[2].trim()
+                            });
+                        }
+                    }
+                });
+
+                if (newVocab.length > 0) {
+                    VOCABULARY = newVocab;
+                    document.getElementById('vocabCountBadge').innerText = `${VOCABULARY.length} từ`;
+                    showToast(`Đã tải ${VOCABULARY.length} từ vựng từ ${lessonId}`);
+                } else {
+                    showToast("File rỗng hoặc sai định dạng!", true);
+                    // Revert UI to default if failed? Or keep previous? Keeping previous for now.
+                }
+
+            } catch (error) {
+                console.error("Lỗi tải bài học:", error);
+                showToast(`Không tìm thấy file ${lessonId}.txt`, true);
+                
+                // Fallback to default if load fails significantly
+                // VOCABULARY = [...DEFAULT_VOCAB];
+            }
+        }
+
+        // --- HELPER TO GET IMAGE ---
+        function getLevelImage(levelId) {
+            const images = THEMES[state.currentThemeKey];
+            if (!images) return THEMES['theme1'][0];
+            const idx = (levelId - 1) % images.length;
+            return images[idx];
+        }
+
+        // --- CANVAS SETUP ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d', { alpha: true, desynchronized: false });
+        let animationId;
+        let lastTime = 0;
+        let gameWidth, gameHeight;
+
+        // --- GAME ENTITIES ---
+        let words = [];
+        let particles = [];
+        let confettis = [];
+        let spawnTimer = 0;
+        let currentTargetWord = null;
+        let rainSystem; 
+        let cardInterval;
+        let cardBgIndex = 0;
+
+        // --- AUDIO SYSTEM (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            const now = audioCtx.currentTime;
+            
+            switch(type) {
+                case 'correct':
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(1000, now + 0.1);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.2);
+                    osc.start(now); osc.stop(now + 0.2);
+                    break;
+                case 'wrong':
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.linearRampToValueAtTime(50, now + 0.3);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
+                    break;
+                case 'pop':
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                    osc.start(now); osc.stop(now + 0.1);
+                    break;
+                case 'win':
+                    [0, 0.1, 0.2].forEach((delay, i) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.frequency.setValueAtTime(500 + (i*200), now + delay);
+                        g.gain.setValueAtTime(0.1, now + delay);
+                        g.gain.linearRampToValueAtTime(0, now + delay + 0.4);
+                        o.start(now + delay); o.stop(now + delay + 0.4);
+                    });
+                    break;
+            }
+        }
+
+        // --- VISUAL CLASSES ---
+        class Confetti {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                const angle = Math.random() * Math.PI * 2; 
+                const v = Math.random() * 15 + 8; 
+                this.vx = Math.cos(angle) * v; 
+                this.vy = Math.sin(angle) * v;
+                this.color = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981', '#ec4899'][Math.floor(Math.random()*5)];
+                this.size = Math.random() * 12 + 6; 
+                this.life = 1.0; 
+                this.decay = Math.random() * 0.005 + 0.002; 
+                this.gravity = 0.4; 
+                this.friction = 0.92; 
+                this.rotation = Math.random() * 360;
+            }
+            update() { 
+                this.vy += this.gravity; 
+                this.vx *= this.friction; 
+                this.vy *= this.friction; 
+                this.x += this.vx; 
+                this.y += this.vy; 
+                this.rotation += 10; 
+                this.life -= this.decay; 
+            }
+            draw(ctx) { 
+                if(this.life<=0)return; 
+                ctx.save(); 
+                ctx.globalAlpha = this.life; 
+                ctx.translate(this.x, this.y); 
+                ctx.rotate(this.rotation*Math.PI/180); 
+                ctx.fillStyle = this.color; 
+                ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*0.6); 
+                ctx.restore(); 
+            }
+        }
+
+        class RainDrop {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * gameWidth;
+                this.y = Math.random() * -gameHeight; 
+                this.length = Math.random() * 20 + 10;
+                this.speed = Math.random() * 5 + 5;
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+            update(speedMultiplier) {
+                this.y += this.speed * speedMultiplier;
+                if (this.y > gameHeight) {
+                    this.y = Math.random() * -100;
+                    this.x = Math.random() * gameWidth;
+                    this.speed = (Math.random() * 5 + 5); 
+                }
+            }
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(173, 216, 230, ${this.opacity})`;
+                ctx.lineWidth = 1;
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x, this.y + this.length);
+                ctx.stroke();
+            }
+        }
+
+        class RainSystem {
+            constructor() {
+                this.drops = [];
+                this.maxDrops = 100; 
+                for(let i=0; i<this.maxDrops; i++) this.drops.push(new RainDrop());
+            }
+            update(baseSpeed) {
+                const speedFactor = Math.max(1, baseSpeed);
+                const activeCount = Math.min(this.maxDrops, 20 + (speedFactor * 25));
+                for (let i = 0; i < this.drops.length; i++) {
+                    if (i < activeCount) this.drops[i].update(speedFactor * 0.5 + 0.5); 
+                    else this.drops[i].y = -100;
+                }
+            }
+            draw(ctx) {
+                const activeCount = Math.min(this.maxDrops, 100);
+                for (let i = 0; i < activeCount; i++) this.drops[i].draw(ctx);
+            }
+        }
+
+        class GameWord {
+            constructor() {
+                this.data = VOCABULARY[Math.floor(Math.random() * VOCABULARY.length)];
+                this.radius = 42; 
+                this.x = Math.random() * (gameWidth - this.radius * 2) + this.radius;
+                this.y = -this.radius * 2;
+                
+                let speedMultiplier = 1;
+                if (state.mode === 'adventure') {
+                    speedMultiplier = LEVELS[state.level - 1].speed;
+                } else {
+                    speedMultiplier = 1 + (state.score / 500);
+                }
+                this.speed = (Math.random() * 0.5 + 1.5) * speedMultiplier;
+                
+                this.id = Math.random().toString(36).substr(2, 9);
+                this.hue = Math.floor(Math.random() * 360);
+                this.markedForDeletion = false;
+            }
+
+            update(dt) {
+                this.y += this.speed;
+                if (this.y > gameHeight + this.radius) {
+                    this.markedForDeletion = true;
+                    handleMiss();
+                }
+            }
+
+            draw(ctx, isTarget) {
+                ctx.save();
+                
+                // Bubble Body
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                
+                if (isTarget) {
+                    const grad = ctx.createLinearGradient(this.x, this.y - this.radius, this.x, this.y + this.radius);
+                    grad.addColorStop(0, '#d97706'); 
+                    grad.addColorStop(1, '#92400e'); 
+                    ctx.fillStyle = grad;
+                    ctx.shadowColor = '#fbbf24';
+                    ctx.shadowBlur = 15;
+                } else {
+                    const colorTop = `hsla(${this.hue}, 70%, 30%, 0.95)`;
+                    const colorBot = `hsla(${this.hue}, 70%, 20%, 0.95)`;
+                    const grad = ctx.createLinearGradient(this.x, this.y - this.radius, this.x, this.y + this.radius);
+                    grad.addColorStop(0, colorTop);
+                    grad.addColorStop(1, colorBot);
+                    ctx.fillStyle = grad;
+                    ctx.shadowBlur = 0;
+                }
+                ctx.fill();
+
+                // Border & Glare
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)'; 
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.ellipse(this.x - this.radius*0.35, this.y - this.radius*0.35, this.radius*0.2, this.radius*0.1, Math.PI/4, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+
+                // Text
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)'; 
+                ctx.fillStyle = '#ffffff'; 
+
+                if (state.mode === 'hanzi_to_viet' || state.mode === 'adventure') {
+                    ctx.font = 'bold 34px "KaiTi", "Noto Serif SC"';
+                    ctx.strokeText(this.data.hanzi, this.x, this.y - 8); 
+                    ctx.fillText(this.data.hanzi, this.x, this.y - 8);   
+                    
+                    ctx.font = '800 13px "Mulish"';
+                    ctx.fillStyle = '#fcd34d'; 
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(this.data.pinyin, this.x, this.y + 22);
+                    ctx.fillText(this.data.pinyin, this.x, this.y + 22);
+                } else {
+                    const fontSize = this.data.meaning.length > 8 ? 18 : 24;
+                    ctx.font = `900 ${fontSize}px "Mulish"`; 
+                    ctx.strokeText(this.data.meaning, this.x, this.y);
+                    ctx.fillText(this.data.meaning, this.x, this.y);
+                }
+                ctx.restore();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.life = 1;
+                this.color = color;
+                this.gravity = 0.15;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                this.vy += this.gravity;
+                this.life -= 0.02;
+            }
+            draw(ctx) {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // --- APP INITIALIZATION ---
+        window.addEventListener('load', initApp);
+        window.addEventListener('resize', resizeCanvas);
+
+        function initApp() {
+            resizeCanvas();
+            renderStats();
+            
+            rainSystem = new RainSystem();
+
+            // Simulate asset loading
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    setBackground(getLevelImage(1)); 
+                    startCardRotation(); 
+                }, 800);
+            }, 1500);
+
+            generateLevelGrid(); 
+            generateThemeGrid(); 
+            lucide.createIcons();
+            
+            requestAnimationFrame(renderLoop);
+        }
+
+        function resizeCanvas() {
+            gameWidth = window.innerWidth;
+            gameHeight = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = gameWidth * dpr;
+            canvas.height = gameHeight * dpr;
+            ctx.scale(dpr, dpr);
+        }
+
+        function setBackground(url) {
+            const bg = document.getElementById('bgContainer');
+            bg.style.backgroundImage = `url('${url}')`;
+            bg.style.opacity = '1';
+        }
+
+        // --- CARD ROTATION ---
+        function startCardRotation() {
+            stopCardRotation();
+            updateCardBg();
+            cardInterval = setInterval(updateCardBg, 30000); 
+        }
+
+        function stopCardRotation() {
+            if (cardInterval) { clearInterval(cardInterval); cardInterval = null; }
+        }
+
+        function updateCardBg() {
+            const card = document.getElementById('adventureCardBg');
+            if (!card) return;
+            const images = THEMES[state.currentThemeKey];
+            if (images && images.length > 0) {
+                cardBgIndex = (cardBgIndex + 1) % images.length;
+                card.style.backgroundImage = `url('${images[cardBgIndex]}')`;
+            }
+        }
+
+        // --- GAME FLOW ---
+        function startGame(mode, levelId = 1) {
+            stopCardRotation(); 
+            state.mode = mode;
+            state.level = levelId;
+            state.score = 0;
+            state.lives = 5;
+            state.combo = 0;
+            state.correctCount = 0;
+            state.isPaused = false;
+            words = [];
+            particles = [];
+            confettis = [];
+            currentTargetWord = null;
+            state.screen = 'playing';
+
+            // UI Transitions
+            document.getElementById('mainMenu').style.opacity = '0';
+            setTimeout(() => { document.getElementById('mainMenu').style.display = 'none'; }, 500);
+            closeAllSections();
+
+            const hud = document.getElementById('gameHUD');
+            hud.classList.remove('-translate-y-full', 'opacity-0');
+            
+            const controls = document.getElementById('gameControls');
+            controls.classList.remove('translate-y-full', 'opacity-0', 'invisible');
+            controls.classList.remove('pointer-events-none');
+            
+            document.getElementById('bgOverlay').className = "absolute inset-0 z-0 bg-slate-950/80 backdrop-blur-sm transition-all duration-1000";
+
+            updateScoreUI();
+            updateLivesUI();
+            document.getElementById('gameCanvas').style.zIndex = "10";
+
+            const progressEl = document.getElementById('adventureProgress');
+            if (mode === 'adventure') {
+                progressEl.classList.remove('opacity-0');
+                document.getElementById('levelTitle').innerText = LEVELS[levelId-1].name;
+                updateProgressBar();
+                setBackground(getLevelImage(levelId));
+            } else {
+                progressEl.classList.add('opacity-0');
+                setBackground(getLevelImage(1)); 
+            }
+        }
+
+        function spawnLogic() {
+            if (state.isPaused) return;
+            
+            let rate = 100;
+            if (state.mode === 'adventure') {
+                rate = LEVELS[state.level-1].spawnRate;
+            } else {
+                rate = Math.max(30, 120 - Math.floor(state.score/20));
+            }
+
+            if (spawnTimer <= 0) {
+                words.push(new GameWord());
+                spawnTimer = rate;
+            } else {
+                spawnTimer--;
+            }
+        }
+
+        function renderLoop() {
+            ctx.clearRect(0, 0, gameWidth, gameHeight);
+
+            if (state.screen === 'playing' && !state.isPaused) {
+                if (rainSystem) {
+                    rainSystem.update(state.mode === 'adventure' ? LEVELS[state.level-1].speed : 1.5);
+                    rainSystem.draw(ctx);
+                }
+
+                spawnLogic();
+                
+                let lowestY = -999;
+                let newTarget = null;
+                words.forEach(w => {
+                    if (w.y > lowestY) { lowestY = w.y; newTarget = w; }
+                });
+
+                if (newTarget !== currentTargetWord) {
+                    currentTargetWord = newTarget;
+                    updateButtons(currentTargetWord);
+                }
+
+                words.forEach(word => {
+                    word.update();
+                    word.draw(ctx, word === currentTargetWord);
+                });
+                
+                words = words.filter(w => !w.markedForDeletion);
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw(ctx);
+                    if (p.life <= 0) particles.splice(i, 1);
+                });
+
+            } else {
+                if (rainSystem) { rainSystem.update(1.0); rainSystem.draw(ctx); }
+            }
+
+            confettis.forEach((c, i) => {
+                c.update();
+                c.draw(ctx);
+                if (c.life <= 0) confettis.splice(i, 1);
+            });
+            requestAnimationFrame(renderLoop);
+        }
+
+        // --- INTERACTION ---
+        function updateButtons(target) {
+            if (!target) {
+                document.getElementById('btn0').disabled = true;
+                document.getElementById('btn1').disabled = true;
+                document.getElementById('txt0').innerText = "...";
+                document.getElementById('txt1').innerText = "...";
+                return;
+            }
+
+            const btn0 = document.getElementById('btn0');
+            const btn1 = document.getElementById('btn1');
+            btn0.disabled = false; btn1.disabled = false;
+            
+            [btn0, btn1].forEach(btn => {
+                btn.className = "answer-btn h-24 flex flex-col items-center justify-center p-2 group";
+                btn.querySelector('.status-icon').innerHTML = '';
+                btn.querySelector('.status-icon').style.opacity = '0';
+            });
+
+            const isHanziMode = (state.mode === 'hanzi_to_viet' || state.mode === 'adventure');
+            const correctText = isHanziMode ? target.data.meaning : target.data.hanzi;
+            const fontClass = isHanziMode ? "font-sans" : "hanzi-font text-3xl";
+
+            let wrongOption;
+            do {
+                wrongOption = VOCABULARY[Math.floor(Math.random() * VOCABULARY.length)];
+            } while (wrongOption.hanzi === target.data.hanzi);
+            
+            const wrongText = isHanziMode ? wrongOption.meaning : wrongOption.hanzi;
+            const correctIdx = Math.random() > 0.5 ? 0 : 1;
+            
+            const el0 = document.getElementById('txt0');
+            const el1 = document.getElementById('txt1');
+            
+            if (correctIdx === 0) {
+                el0.innerText = correctText; el0.className = `text-lg md:text-xl font-bold text-white z-10 pointer-events-none transition-transform group-active:scale-90 ${fontClass}`;
+                el1.innerText = wrongText; el1.className = `text-lg md:text-xl font-bold text-white z-10 pointer-events-none transition-transform group-active:scale-90 ${fontClass}`;
+                btn0.dataset.correct = "true"; btn1.dataset.correct = "false";
+            } else {
+                el0.innerText = wrongText; el0.className = `text-lg md:text-xl font-bold text-white z-10 pointer-events-none transition-transform group-active:scale-90 ${fontClass}`;
+                el1.innerText = correctText; el1.className = `text-lg md:text-xl font-bold text-white z-10 pointer-events-none transition-transform group-active:scale-90 ${fontClass}`;
+                btn0.dataset.correct = "false"; btn1.dataset.correct = "true";
+            }
+        }
+
+        function checkAnswer(idx) {
+            if (state.isPaused || !currentTargetWord) return;
+            
+            const btn = document.getElementById(`btn${idx}`);
+            const isCorrect = btn.dataset.correct === "true";
+            const iconContainer = btn.querySelector('.status-icon');
+
+            if (isCorrect) {
+                playSound('correct');
+                state.score += 10 + (state.combo * 2);
+                state.combo++;
+                state.correctCount++;
+                createExplosion(currentTargetWord.x, currentTargetWord.y, '#fbbf24');
+                currentTargetWord.markedForDeletion = true;
+                
+                btn.classList.add('correct');
+                iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-emerald-200"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+                iconContainer.style.opacity = '1';
+                showFloatingText(`+${10 + (state.combo*2)}`, currentTargetWord.x, currentTargetWord.y, 'text-emerald-400');
+                if (state.mode === 'adventure') updateProgressBar();
+
+            } else {
+                handleMiss();
+                btn.classList.add('wrong');
+                iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-rose-200"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+                iconContainer.style.opacity = '1';
+                if (navigator.vibrate) navigator.vibrate(200);
+            }
+
+            updateScoreUI();
+            setTimeout(() => {
+                btn.classList.remove('correct', 'wrong');
+                iconContainer.style.opacity = '0';
+            }, 300);
+        }
+
+        function handleMiss() {
+            playSound('wrong');
+            state.lives--;
+            state.combo = 0;
+            document.body.classList.add('shake');
+            setTimeout(() => document.body.classList.remove('shake'), 400);
+            updateLivesUI();
+            updateScoreUI(); 
+            if (state.lives <= 0) gameOver(false);
+        }
+
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 15; i++) particles.push(new Particle(x, y, color));
+        }
+
+        function triggerConfetti() {
+            document.getElementById('gameCanvas').style.zIndex = "60";
+            const cx = gameWidth / 2; const cy = gameHeight / 2;
+            for(let i=0; i<3; i++) {
+                setTimeout(() => {
+                    for(let j=0; j<50; j++) confettis.push(new Confetti(cx, cy));
+                    playSound('pop'); 
+                }, i * 300);
+            }
+        }
+
+        // --- UI UPDATERS ---
+        function updateScoreUI() {
+            document.getElementById('scoreDisplay').innerText = state.score;
+            const comboEl = document.getElementById('comboBadge');
+            if (state.combo > 1) {
+                comboEl.classList.remove('hidden');
+                document.getElementById('comboText').innerText = `x${state.combo}`;
+            } else comboEl.classList.add('hidden');
+        }
+
+        function updateLivesUI() {
+            const container = document.getElementById('livesDisplay');
+            if (!container) return;
+            container.innerHTML = '';
+            const maxVisualHearts = 8;
+            const displayCount = Math.min(state.lives, maxVisualHearts);
+            const heartSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 drop-shadow-lg"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>`;
+            for(let i=0; i<displayCount; i++) {
+                const div = document.createElement('div');
+                div.className = "transition-transform hover:scale-110";
+                div.innerHTML = heartSVG;
+                container.appendChild(div);
+            }
+            if (state.lives > maxVisualHearts) {
+                const plusText = document.createElement('span');
+                plusText.className = "text-sm font-bold text-red-400 self-center ml-1";
+                plusText.innerText = `+${state.lives - maxVisualHearts}`;
+                container.appendChild(plusText);
+            }
+        }
+
+        function updateProgressBar() {
+            const target = LEVELS[state.level-1].target;
+            const pct = Math.min(100, (state.correctCount / target) * 100);
+            document.getElementById('progressBar').style.width = `${pct}%`;
+            document.getElementById('progressText').innerText = `${Math.floor(pct)}%`;
+            if (state.correctCount >= target) levelComplete();
+        }
+
+        function showFloatingText(text, x, y, colorClass) {
+            const el = document.createElement('div');
+            el.className = `absolute text-2xl font-black ${colorClass} float-text z-50 text-shadow-sm`;
+            el.innerText = text;
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        }
+
+        // --- MENUS & NAVIGATION ---
+        function showSection(id) {
+            closeAllSections();
+            const sec = document.getElementById(id);
+            if(sec) sec.classList.remove('translate-x-full');
+            if(id === 'mainMenu') {
+                document.getElementById('mainMenu').style.display = 'flex';
+                setTimeout(()=> document.getElementById('mainMenu').style.opacity = '1', 10);
+            }
+        }
+
+        function closeAllSections() {
+            document.getElementById('levelSelect').classList.add('translate-x-full');
+            document.getElementById('themeSelect').classList.add('translate-x-full');
+        }
+
+        function togglePause() {
+            state.isPaused = !state.isPaused;
+            const menu = document.getElementById('pauseMenu');
+            if (state.isPaused) {
+                menu.classList.remove('hidden'); menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden'); menu.classList.remove('flex');
+            }
+        }
+
+        function gameOver(isWin) {
+            state.screen = 'result';
+            playSound('wrong');
+            document.getElementById('btnNextLevel').classList.add('hidden');
+            
+            if (state.score > state.highScore) {
+                state.highScore = state.score;
+                localStorage.setItem('ht_highscore', state.highScore);
+            }
+            state.totalScore += state.score;
+            localStorage.setItem('ht_totalscore', state.totalScore);
+
+            document.getElementById('gameControls').classList.add('translate-y-full', 'opacity-0', 'invisible');
+            document.getElementById('gameHUD').classList.add('-translate-y-full', 'opacity-0');
+            const overlay = document.getElementById('resultOverlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 100);
+
+            document.getElementById('resultTitle').innerText = "THẤT BẠI";
+            document.getElementById('resultTitle').className = "text-4xl font-black mb-2 uppercase tracking-wide text-rose-500";
+            document.getElementById('resultMsg').innerText = "Đừng nản lòng, thử lại nhé!";
+            
+            const scoreEl = document.getElementById('resultScore');
+            scoreEl.innerText = state.score;
+            scoreEl.className = "text-6xl md:text-7xl font-black font-mono text-slate-300 tracking-tighter";
+            
+            document.getElementById('victoryStars').classList.add('hidden');
+            const failIcon = document.getElementById('failIcon');
+            failIcon.classList.remove('hidden');
+            failIcon.innerHTML = '<div class="w-24 h-24 rounded-full bg-rose-500/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>';
+        }
+
+        function levelComplete() {
+            state.screen = 'result';
+            playSound('win');
+            
+            let stars = 1;
+            if (state.lives === 5) stars = 3; else if (state.lives >= 3) stars = 2;
+
+            const currentSavedStars = parseInt(localStorage.getItem(`ht_star_lvl_${state.level}`) || 0);
+            if (stars > currentSavedStars) localStorage.setItem(`ht_star_lvl_${state.level}`, stars);
+
+            if (state.score > state.highScore) {
+                state.highScore = state.score;
+                localStorage.setItem('ht_highscore', state.highScore);
+            }
+            state.totalScore += state.score;
+            localStorage.setItem('ht_totalscore', state.totalScore);
+
+            if (state.mode === 'adventure' && state.level === state.unlockedLevel) {
+                state.unlockedLevel++;
+                localStorage.setItem('ht_unlocked', state.unlockedLevel);
+                generateLevelGrid(); 
+            }
+            triggerConfetti();
+
+            document.getElementById('gameControls').classList.add('translate-y-full', 'opacity-0', 'invisible');
+            document.getElementById('gameHUD').classList.add('-translate-y-full', 'opacity-0');
+
+            const overlay = document.getElementById('resultOverlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 100);
+
+            document.getElementById('resultTitle').innerText = "HOÀN THÀNH!";
+            document.getElementById('resultTitle').className = "text-4xl font-black mb-2 uppercase tracking-wide text-amber-400";
+            document.getElementById('resultMsg').innerText = `Bạn đã chinh phục ${LEVELS[state.level-1].name}`;
+            
+            const scoreEl = document.getElementById('resultScore');
+            scoreEl.innerText = state.score;
+            scoreEl.className = "text-6xl md:text-7xl font-black font-mono text-amber-400 tracking-tighter drop-shadow-lg";
+            const btnNext = document.getElementById('btnNextLevel');
+    // Chỉ hiện nút Next nếu đang chơi Adventure VÀ chưa phải màn cuối (LEVELS.length là 10)
+    if (state.mode === 'adventure' && state.level < LEVELS.length) {
+        btnNext.classList.remove('hidden');
+        btnNext.classList.add('flex'); // Đảm bảo flex để căn giữa icon
+    } else {
+        btnNext.classList.add('hidden');
+        btnNext.classList.remove('flex');
+    }
+            const starsContainer = document.getElementById('victoryStars');
+            const failIcon = document.getElementById('failIcon');
+            starsContainer.classList.remove('hidden');
+            failIcon.classList.add('hidden');
+            starsContainer.innerHTML = '';
+
+            const starSVG = (delay) => `<div class="star-pop" style="animation-delay: ${delay}s"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 drop-shadow-2xl filter brightness-110"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>`;
+            for(let i=0; i<stars; i++) starsContainer.innerHTML += starSVG(i * 0.25); 
+        }
+
+        function handleReplay() {
+            document.getElementById('resultOverlay').classList.add('hidden', 'opacity-0');
+            startGame(state.mode, state.level);
+        }
+
+        function resetToMenu() {
+            state.screen = 'menu';
+            document.getElementById('resultOverlay').classList.add('hidden', 'opacity-0');
+            document.getElementById('pauseMenu').classList.add('hidden');
+            document.getElementById('bgOverlay').className = "absolute inset-0 z-0 bg-slate-900/90 backdrop-blur-[2px]";
+            document.getElementById('gameHUD').classList.add('-translate-y-full', 'opacity-0');
+            document.getElementById('gameControls').classList.add('translate-y-full', 'opacity-0', 'invisible');
+            document.getElementById('gameCanvas').style.zIndex = "10";
+            showSection('mainMenu');
+            renderStats();
+            setBackground(THEMES[0]);
+            startCardRotation(); 
+        }
+
+        // --- GENERATORS ---
+        function generateLevelGrid() {
+            const grid = document.getElementById('levelGrid');
+            grid.innerHTML = '';
+            LEVELS.forEach(lvl => {
+                const isLocked = lvl.id > state.unlockedLevel;
+                const div = document.createElement('button');
+                const bgImg = getLevelImage(lvl.id);
+                const starsEarned = parseInt(localStorage.getItem(`ht_star_lvl_${lvl.id}`) || 0);
+
+                div.className = `relative h-32 rounded-2xl overflow-hidden border transition-all ${isLocked ? 'border-slate-800 bg-slate-900 opacity-60 grayscale' : 'border-slate-600 hover:border-amber-500 cursor-pointer shadow-lg'}`;
+                if (!isLocked) div.onclick = () => startGame('adventure', lvl.id);
+
+                let statusHtml = '';
+                if (isLocked) {
+                    statusHtml = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+                } else {
+                    statusHtml = '<div class="flex gap-1">';
+                    for (let i = 1; i <= 3; i++) {
+                        if (i <= starsEarned) statusHtml += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow-sm"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+                        else statusHtml += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+                    }
+                    statusHtml += '</div>';
+                }
+
+                div.innerHTML = `
+                    <div class="absolute inset-0 bg-cover bg-center opacity-50 transition-all duration-500" style="background-image: url('${bgImg}')"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                        <div>
+                            <div class="text-xs font-bold text-slate-400 uppercase">Màn</div>
+                            <div class="text-2xl font-black font-mono text-white leading-none">${lvl.id}</div>
+                        </div>
+                        ${statusHtml}
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function generateThemeGrid() {
+            const grid = document.getElementById('themeGrid');
+            grid.innerHTML = '';
+            Object.keys(THEMES).forEach((key, idx) => {
+                const images = THEMES[key];
+                const previewUrl = images[0]; 
+                const isActive = state.currentThemeKey === key;
+                const div = document.createElement('button');
+                div.className = `relative h-32 rounded-2xl overflow-hidden border-2 transition-all ${isActive ? 'border-amber-500 ring-2 ring-amber-500/20' : 'border-slate-700 hover:border-slate-400'}`;
+                div.innerHTML = `
+                    <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style="background-image: url('${previewUrl}')"></div>
+                    <div class="absolute inset-0 bg-black/30 hover:bg-black/10 transition-colors"></div>
+                    <div class="absolute bottom-2 left-3 font-bold text-sm text-white drop-shadow-md">
+                        Giao diện ${idx + 1}
+                        ${isActive ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="inline ml-1"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' : ''}
+                    </div>
+                `;
+                div.onclick = () => {
+                    state.currentThemeKey = key;
+                    localStorage.setItem('ht_current_theme', key);
+                    setBackground(previewUrl);
+                    generateThemeGrid(); 
+                    generateLevelGrid(); 
+                    playSound('pop');
+                };
+                grid.appendChild(div);
+            });
+        }
+
+        function showThemeSelect() { showSection('themeSelect'); }
+        function renderStats() {
+            document.getElementById('menuHighScore').innerText = state.highScore;
+            document.getElementById('menuTotalScore').innerText = state.totalScore;
+        }
+function nextLevel() {
+    // Ẩn bảng kết quả
+    document.getElementById('resultOverlay').classList.add('hidden', 'opacity-0');
+    
+    // Kiểm tra nếu chưa phải màn cuối (Level 10) thì tăng level
+    if (state.level < LEVELS.length) {
+        startGame('adventure', state.level + 1);
+    } else {
+        // Nếu là màn cuối rồi thì về menu hoặc thông báo
+        resetToMenu();
+    }
+}
+    </script>
+</body>
+</html>
