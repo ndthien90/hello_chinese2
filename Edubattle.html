@@ -906,7 +906,13 @@ const setupListeners = (uid) => {
             // 1. Profile Listener
             onSnapshot(doc(db, getPath('users'), uid), (snap) => {
                 if(snap.exists()) {
-                    state.profile = snap.data();
+                 const newData = snap.data();
+                   // [FIX LỖI MẤT BÀI TẬP]: Giữ lại classIds đã tính toán từ trước nếu có
+                    if (state.profile && state.profile.classIds) {
+                        newData.classIds = state.profile.classIds;
+                    }
+                    
+                    state.profile = newData;
                     if (!state.ui.isProcessingStudentCreation) {
                          // [FIX NHÁY]: Tổng hợp các trạng thái bận
                          const isBusy = state.ui.takingAssignmentId || state.ui.challengeMode === 'do' || 
@@ -12370,43 +12376,31 @@ window.closeWelcomeStats = function(id) {
         if(style) style.remove();
     }, 400);
 };
-// === LOGIC MỞ GAME (Đã sửa lỗi scope) ===
-window.openGameModal = function(gameUrl) {
-    console.log("Đang mở game:", gameUrl); // Dòng này để kiểm tra xem hàm có chạy không
-
+// === LOGIC MỞ GAME ===
+function openGameModal(gameUrl) {
     const modal = document.getElementById('gameModal');
     const frame = document.getElementById('gameFrame');
     
-    // Kiểm tra xem đã có Modal chưa (Bước 1)
-    if (!modal || !frame) {
-        alert("Lỗi: Không tìm thấy khung Game! Bạn hãy kiểm tra lại xem đã dán code Bước 1 vào cuối file HTML chưa.");
-        return;
-    }
-    
-    // Đặt đường dẫn file game
+    // Đặt đường dẫn file game (đảm bảo file game nằm cùng thư mục)
     frame.src = gameUrl;
     
-    // Hiển thị Modal (Xóa class hidden)
+    // Hiển thị Modal
     modal.classList.remove('hidden');
     
-    // Tạo lại icon nếu cần
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-};
+    // Tạo hiệu ứng (nếu cần)
+    lucide.createIcons();
+}
 
-window.closeGameModal = function() {
+function closeGameModal() {
     const modal = document.getElementById('gameModal');
     const frame = document.getElementById('gameFrame');
     
-    if (modal) {
-        modal.classList.add('hidden'); // Thêm lại class hidden để ẩn
-    }
+    // Ẩn Modal
+    modal.classList.add('hidden');
     
-    if (frame) {
-        frame.src = ''; // Tắt game
-    }
-};
+    // Xóa src để tắt hẳn game (ngừng âm thanh/xử lý ngầm)
+    frame.src = '';
+}
     </script>
 <div id="gameModal" class="fixed inset-0 z-[60] hidden">
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeGameModal()"></div>
