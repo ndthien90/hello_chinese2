@@ -12376,31 +12376,43 @@ window.closeWelcomeStats = function(id) {
         if(style) style.remove();
     }, 400);
 };
-// === LOGIC MỞ GAME ===
-function openGameModal(gameUrl) {
+// === LOGIC MỞ GAME (Đã sửa lỗi scope) ===
+window.openGameModal = function(gameUrl) {
+    console.log("Đang mở game:", gameUrl); // Dòng này để kiểm tra xem hàm có chạy không
+
     const modal = document.getElementById('gameModal');
     const frame = document.getElementById('gameFrame');
     
-    // Đặt đường dẫn file game (đảm bảo file game nằm cùng thư mục)
+    // Kiểm tra xem đã có Modal chưa (Bước 1)
+    if (!modal || !frame) {
+        alert("Lỗi: Không tìm thấy khung Game! Bạn hãy kiểm tra lại xem đã dán code Bước 1 vào cuối file HTML chưa.");
+        return;
+    }
+    
+    // Đặt đường dẫn file game
     frame.src = gameUrl;
     
-    // Hiển thị Modal
+    // Hiển thị Modal (Xóa class hidden)
     modal.classList.remove('hidden');
     
-    // Tạo hiệu ứng (nếu cần)
-    lucide.createIcons();
-}
+    // Tạo lại icon nếu cần
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+};
 
-function closeGameModal() {
+window.closeGameModal = function() {
     const modal = document.getElementById('gameModal');
     const frame = document.getElementById('gameFrame');
     
-    // Ẩn Modal
-    modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden'); // Thêm lại class hidden để ẩn
+    }
     
-    // Xóa src để tắt hẳn game (ngừng âm thanh/xử lý ngầm)
-    frame.src = '';
-}
+    if (frame) {
+        frame.src = ''; // Tắt game
+    }
+};
     </script>
 <div id="gameModal" class="fixed inset-0 z-[60] hidden">
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeGameModal()"></div>
