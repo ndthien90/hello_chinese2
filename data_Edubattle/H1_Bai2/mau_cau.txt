@@ -1,15 +1,15 @@
-我是记者。
-你是厨师吗？
-我妈妈是演员。
-那不是警察。
-这是冰箱。
-我哥哥是厨师。
-这是我爷爷。
-那是我奶奶。
-你姐姐是老师吗？
-我姐姐不是老师。
-你弟弟是学生吗？
-我哥哥是消防员。
-那不是医生。
-你妈妈是护士吗？
-我妈妈不是护士。
+我是记者。|Tôi là phóng viên.
+你是厨师吗？|Bạn là đầu bếp phải không?
+我妈妈是演员。|Mẹ tôi là diễn viên.
+那不是警察。|Kia không phải là cảnh sát.
+这是冰箱。|Đây là tủ lạnh.
+我哥哥是厨师。|Anh trai tôi là đầu bếp.
+这是我爷爷。|Đây là ông nội tôi.
+那是我奶奶。|Kia là bà nội tôi.
+你姐姐是老师吗？|Chị gái bạn là giáo viên phải không?
+我姐姐不是老师。|Chị gái tôi không phải là giáo viên.
+你弟弟是学生吗？|Em trai bạn là học sinh phải không?
+我哥哥是消防员。|Anh trai tôi là lính cứu hỏa.
+那不是医生。|Kia không phải là bác sĩ.
+你妈妈是护士吗？|Mẹ bạn là y tá phải không?
+我妈妈不是护士。|Mẹ tôi không phải là y tá.
