@@ -1,0 +1,6 @@
+你家有几口人？|Nǐ jiā yǒu jǐ kǒu rén?|Nhà bạn có mấy người?
+我家有三口人：爸爸、妈妈和我。|Wǒ jiā yǒu sān kǒu rén: bàba, māma hé wǒ.|Nhà tôi có ba người: bố, mẹ và tôi.
+你爸爸有什么爱好？|Nǐ bàba yǒu shénme àihào?|Bố bạn có sở thích gì?
+我爸爸喜欢看书。|Wǒ bàba xǐhuān kànshū.|Bố tôi thích đọc sách.
+你妈妈呢？|Nǐ māma ne?|Thế còn mẹ bạn?
+我妈妈喜欢做饭。|Wǒ māma xǐhuān zuò fàn.|Mẹ tôi thích nấu ăn.

@@ -1,7 +1,7 @@
-nǐ hǎo, nǐ shì Chén Nán ma?|你好，你是陈楠吗？|Xin chào, bạn có phải là Trần Nan không?
-bù shì, wǒ shì Guó ān.|不是，我是国安。|Không, tôi là Quốc An.
-nà shì Chén Nán ma?|那是陈楠吗？|Đó có phải là Trần Nam không?
-shì, nà shì Chén Nán.|是，那是陈楠。|Đúng, đó là Trần Nam.
-Chén Nán shì lǎoshī ma?|陈楠是老师吗？|Trần Nam có phải là giáo viên không?
-bù shì, Chén Nán shì xuéshēng.|不是，陈楠是学生。|Không, Trần Nam là học sinh.
-xièxie.|谢谢。|Cảm ơn.
+你好，你是陈楠吗？|nǐ hǎo, nǐ shì Chén Nán ma|Xin chào, bạn có phải là Trần Nan không?
+不是，我是国安。|bù shì, wǒ shì Guó ān.|Không, tôi là Quốc An.
+那是陈楠吗？|nà shì Chén Nán ma?|Đó có phải là Trần Nam không?
+是，那是陈楠。|shì, nà shì Chén Nán.|Đúng, đó là Trần Nam.
+陈楠是老师吗？|Chén Nán shì lǎoshī ma?|Trần Nam có phải là giáo viên không?
+不是，陈楠是学生。|bù shì, Chén Nán shì xuéshēng.|Không, Trần Nam là học sinh.
+谢谢。|xièxie.|Cảm ơn.

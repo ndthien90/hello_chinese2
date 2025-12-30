@@ -1,0 +1,66 @@
+家|jiā|Nhà, gia đình
+有|yǒu|Có
+没|méi|Không có, chưa
+口|kǒu|Miệng, khẩu
+女儿|nǚ'ér|Con gái
+儿子|érzi|Con trai
+男生|nánshēng|nam sinh
+女生|nǚshēng|nữ sinh
+班|bān|Lớp
+独生子|dúshēngzǐ|Con trai một
+兄弟|xiōngdì|Anh em (trai)
+姐妹|jiěmèi|Chị em (gái)
+学校|xuéxiào|Trường học
+爱好|àihào|Sở thích
+几|jǐ|Mấy, vài
+岁|suì|Tuổi
+多|duō|Nhiều, đa
+少|shǎo|Ít, thiểu
+多少|duōshao|Bao nhiêu
+只|zhǐ|Chỉ
+了|le|Rồi 
+年|nián|Năm
+今年|jīnnián|Năm nay
+明年|míngnián|Năm sau
+去年|qùnián|Năm ngoái
+大|dà|To, lớn, đại
+小|xiǎo|Nhỏ, tiểu
+多大|duō dà|Bao tuổi
+小孩|xiǎohái|Trẻ con
+孩子|háizi|Con cái
+饭馆|fànguǎn|Quán ăn
+商店|shāngdiàn|Cửa hàng
+香水|xiāngshuǐ|Nước hoa
+医院|yīyuàn|Bệnh viện
+公园|gōngyuán|Công viên
+爱|ài|Yêu, thích, ái
+早上|zǎoshang|Buổi sáng sớm
+上午|shàngwǔ|Buổi sáng
+中午|zhōngwǔ|Buổi trưa
+下午|xiàwǔ|Buổi chiều
+晚上|wǎnshang|Buổi tối
+肉|ròu|Thịt
+点|diǎn|Giờ
+考试|kǎoshì|Thi cử, kiểm tra
+放学|fàngxué|Tan học
+上课|shàngkè|Vào học, lên lớp
+下课|xiàkè|Tan tiết,xuống lớp
+图书馆|túshūguǎn|Thư viện
+火车|huǒchē|Tàu hỏa
+大巴|dàbā|xe khách
+地铁|dìtiě|Tàu điện ngầm
+钱包|qiánbāo|Ví tiền
+书包|shūbāo|Ba lô
+大学|dàxué|Đại học
+出租车|chūzūchē|Xe taxi
+电脑|diànnǎo|Máy tính
+公交车|gōngjiāochē|Xe buýt
+酒店|jiǔdiàn|Khách sạn
+旅游|lǚyóu|Du lịch
+音乐|yīnyuè|Âm nhạc
+跳舞|tiàowǔ|Nhảy múa
+做饭|zuò fàn|Nấu ăn
+饺子|jiǎozi|Sủi cảo
+相机|xiàngjī|Máy ảnh
+果汁|guǒzhī|Nước ép trái cây
+拍照|pāizhào|Chụp ảnh

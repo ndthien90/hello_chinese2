@@ -1,0 +1,6 @@
+你家有狗吗？|nǐ jiā yǒu gǒu ma?|Nhà bạn có chó không?
+没有，我家只有猫。|méi yǒu, wǒ jiā zhǐ yǒu māo.|Không có, nhà tôi chỉ có mèo.
+你家有几只猫？|nǐ jiā yǒu jǐ zhī māo?|Nhà bạn có mấy con mèo?
+我家有三只猫？|wǒ jiā yǒu sān zhī māo?|Nhà tôi có ba con mèo.
+你家的猫是什么颜色的？|nǐ jiā de māo shì shén me yán sè de?|Mèo nhà bạn màu gì?
+我家的猫是黄色的。|wǒ jiā de māo shì huáng sè de.|Mèo nhà tôi màu vàng.

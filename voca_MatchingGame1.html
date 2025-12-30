@@ -62,6 +62,11 @@
         }
         .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-custom { animation: spin 1s linear infinite; }
+
         /* Card Styles */
         .word-card {
             transition: all 0.2s ease;
@@ -144,6 +149,16 @@
             <button id="startBtn" disabled class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 text-lg">
                 <i class="fas fa-play"></i> Bắt đầu
             </button>
+            
+            <p class="text-xs text-center text-gray-400 mt-2">
+                *Dữ liệu sẽ được tải từ thư mục <span class="font-mono bg-gray-100 px-1 rounded">data_chineseStroke</span>
+            </p>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-screen" class="hidden absolute inset-0 bg-white/80 z-50 flex-col items-center justify-center backdrop-blur-sm">
+            <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin-custom mb-3"></div>
+            <p class="text-blue-600 font-bold">Đang tải dữ liệu...</p>
         </div>
 
         <!-- GAME SCREEN -->
@@ -203,70 +218,26 @@
     </div>
 
     <script>
-        // --- DATA ---
-        const lessonVocabulary = {
-            'H1 Bài 1: 老师您好！': [
-                { vocab: "你", meaning: "bạn, cậu" }, { vocab: "我", meaning: "tôi" },
-                { vocab: "您", meaning: "ngài" }, { vocab: "老师", meaning: "thầy/cô giáo" },
-                { vocab: "学生", meaning: "học sinh" }, { vocab: "好", meaning: "tốt, khỏe" },
-                { vocab: "很", meaning: "rất" }, { vocab: "吗", meaning: "không?" },
-                { vocab: "谢谢", meaning: "cảm ơn" }, { vocab: "这", meaning: "đây" },
-                { vocab: "那", meaning: "kia" }, { vocab: "是", meaning: "là" },
-                { vocab: "不", meaning: "không" }, { vocab: "本子", meaning: "vở" },
-                { vocab: "书", meaning: "sách" }, { vocab: "你好", meaning: "xin chào" },
-                { vocab: "再见", meaning: "tạm biệt" }, { vocab: "陈楠", meaning: "Trần Nam" },
-                { vocab: "国安", meaning: "Quốc An" }
-            ],
-            'H1 Bài 2: 谢谢你！': [
-                { vocab: "爷爷", meaning: "ông" }, { vocab: "奶奶", meaning: "bà" },
-                { vocab: "爸爸", meaning: "bố" }, { vocab: "妈妈", meaning: "mẹ" },
-                { vocab: "哥哥", meaning: "anh trai" }, { vocab: "姐姐", meaning: "chị gái" },
-                { vocab: "弟弟", meaning: "em trai" }, { vocab: "妹妹", meaning: "em gái" },
-                { vocab: "医生", meaning: "bác sĩ" }, { vocab: "记者", meaning: "phóng viên" },
-                { vocab: "公安", meaning: "công an" }, { vocab: "警察", meaning: "cảnh sát" },
-                { vocab: "律师", meaning: "luật sư" }, { vocab: "厨师", meaning: "đầu bếp" },
-                { vocab: "演员", meaning: "diễn viên" }, { vocab: "司机", meaning: "tài xế" },
-                { vocab: "护士", meaning: "y tá" }, { vocab: "部队", meaning: "bộ đội" },
-                { vocab: "消防员", meaning: "lính cứu hỏa" }, { vocab: "工人", meaning: "công nhân" },
-                { vocab: "农民", meaning: "nông dân" }, { vocab: "公务员", meaning: "công chức" }
-            ],
-            'H1 Bài 3: 你叫什么名字?': [
-                { vocab: "叫", meaning: "gọi" }, { vocab: "请", meaning: "mời" },
-                { vocab: "问", meaning: "hỏi" }, { vocab: "吃", meaning: "ăn" },
-                { vocab: "喝", meaning: "uống" }, { vocab: "说", meaning: "nói" },
-                { vocab: "喜欢", meaning: "thích" }, { vocab: "什么", meaning: "cái gì" },
-                { vocab: "名字", meaning: "tên" }, { vocab: "贵姓", meaning: "quý tính" },
-                { vocab: "姓", meaning: "họ" }, { vocab: "他", meaning: "anh ấy" },
-                { vocab: "她", meaning: "cô ấy" }, { vocab: "们", meaning: "các (số nhiều)" },
-                { vocab: "人", meaning: "người" }, { vocab: "也", meaning: "cũng" },
-                { vocab: "都", meaning: "đều" }, { vocab: "中国", meaning: "Trung Quốc" },
-                { vocab: "美国", meaning: "Mỹ" }, { vocab: "英国", meaning: "Anh" },
-                { vocab: "韩国", meaning: "Hàn Quốc" }, { vocab: "泰国", meaning: "Thái Lan" },
-                { vocab: "德国", meaning: "Đức" }, { vocab: "法国", meaning: "Pháp" },
-                { vocab: "日本", meaning: "Nhật Bản" }, { vocab: "越南", meaning: "Việt Nam" },
-                { vocab: "汉语", meaning: "Tiếng Hán" }, { vocab: "英语", meaning: "Tiếng Anh" }
-            ],
-            'H1 Bài 4: 她是我的汉语老师': [
-                { vocab: "谁", meaning: "ai" }, { vocab: "哪", meaning: "nào" },
-                { vocab: "呢", meaning: "thì sao" }, { vocab: "的", meaning: "của" },
-                { vocab: "两", meaning: "hai" }, { vocab: "和", meaning: "và" },
-                { vocab: "个", meaning: "cái (lượng từ)" }, { vocab: "本", meaning: "quyển" },
-                { vocab: "条", meaning: "chiếc/sợi" }, { vocab: "件", meaning: "chiếc (áo)" },
-                { vocab: "张", meaning: "tấm/tờ" }, { vocab: "把", meaning: "cái (ghế)" },
-                { vocab: "只", meaning: "con (vật)" }, { vocab: "双", meaning: "đôi" },
-                { vocab: "辆", meaning: "chiếc (xe)" }, { vocab: "看", meaning: "xem/nhìn" },
-                { vocab: "打", meaning: "đánh" }, { vocab: "踢", meaning: "đá" },
-                { vocab: "穿", meaning: "mặc" }, { vocab: "同学", meaning: "bạn học" },
-                { vocab: "朋友", meaning: "bạn bè" }, { vocab: "电视", meaning: "ti vi" },
-                { vocab: "电影", meaning: "phim" }, { vocab: "衣服", meaning: "quần áo" },
-                { vocab: "颜色", meaning: "màu sắc" }
-            ]
-        };
+        // --- DATA CONFIGURATION ---
+        // Danh sách các bài học và tên file tương ứng
+        // Bạn có thể thêm bao nhiêu bài tùy thích vào đây
+        const lessonList = [
+            { id: 'bai1.txt', name: 'H1 Bài 1: 老师您好！' },
+            { id: 'bai2.txt', name: 'H1 Bài 2: 谢谢你！' },
+            { id: 'bai3.txt', name: 'H1 Bài 3: 你叫什么名字?' },
+            { id: 'bai4.txt', name: 'H1 Bài 4: 她是我的汉语老师。' },
+            { id: 'bai5.txt', name: 'H1 Bài 5: 她女儿今年八岁。' },
+        ];
+
+        // Thư mục chứa file dữ liệu
+        const DATA_FOLDER = 'data_chineseStroke/';
 
         // --- STATE ---
-        let vocabPairs = [];
-        let selectedWord1 = null; // DOM Element
-        let selectedWord2 = null; // DOM Element
+        let currentVocabList = []; // Dữ liệu tải về sẽ lưu vào đây
+        let vocabPairs = []; // Dữ liệu dùng cho game
+        
+        let selectedWord1 = null; 
+        let selectedWord2 = null; 
         let correctPairs = {};
         let matchedPairsCount = 0;
         let totalPairs = 0;
@@ -281,17 +252,18 @@
         const setupScreen = document.getElementById('setup-screen');
         const gameScreen = document.getElementById('game-screen');
         const resultScreen = document.getElementById('result-screen');
+        const loadingScreen = document.getElementById('loading-screen');
         
         const leftColumn = document.getElementById('leftColumn');
         const rightColumn = document.getElementById('rightColumn');
 
         // --- INITIALIZATION ---
         function init() {
-            // Populate Lesson Select
-            Object.keys(lessonVocabulary).forEach(lesson => {
+            // Populate Lesson Select from Config Array
+            lessonList.forEach(lesson => {
                 const option = document.createElement('option');
-                option.value = lesson;
-                option.textContent = lesson;
+                option.value = lesson.id; // Giá trị là tên file (vd: bai1.txt)
+                option.textContent = lesson.name;
                 lessonSelect.appendChild(option);
             });
 
@@ -312,32 +284,88 @@
             shuffleBtn.addEventListener('click', shuffleRightColumn);
         }
 
+        // --- DATA LOADING LOGIC ---
+
+        async function fetchVocabulary(filename) {
+            const url = `${DATA_FOLDER}${filename}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const text = await response.text();
+                return parseVocabText(text);
+            } catch (error) {
+                console.error("Lỗi tải file:", error);
+                alert(`Không thể tải file dữ liệu: ${filename}.\nHãy chắc chắn file nằm trong thư mục ${DATA_FOLDER} và bạn đang chạy trên Web Server.`);
+                return [];
+            }
+        }
+
+        function parseVocabText(text) {
+            // Cấu trúc: từ vựng|pinyin|nghĩa
+            const lines = text.split('\n');
+            const data = [];
+            
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine && !trimmedLine.startsWith('//')) { // Bỏ dòng trống và comment
+                    const parts = trimmedLine.split('|');
+                    if (parts.length >= 3) {
+                        data.push({
+                            vocab: parts[0].trim(),
+                            pinyin: parts[1].trim(), // Lưu pinyin nhưng hiện tại chưa dùng hiển thị
+                            meaning: parts[2].trim()
+                        });
+                    }
+                }
+            });
+            return data;
+        }
+
         // --- GAME LOGIC ---
 
-        function startGame() {
-            const selectedLesson = lessonSelect.value;
-            if (!selectedLesson) return;
+        async function startGame() {
+            const selectedFile = lessonSelect.value;
+            if (!selectedFile) return;
 
-            // Setup Data
-            vocabPairs = [...lessonVocabulary[selectedLesson]];
-            const count = Math.min(parseInt(countInput.value), vocabPairs.length);
+            // Show Loading
+            loadingScreen.classList.remove('hidden');
+            loadingScreen.classList.add('flex');
+
+            // 1. Tải dữ liệu
+            currentVocabList = await fetchVocabulary(selectedFile);
+
+            // Hide Loading
+            loadingScreen.classList.add('hidden');
+            loadingScreen.classList.remove('flex');
+
+            if (currentVocabList.length === 0) return; // Nếu lỗi hoặc file rỗng thì dừng
+
+            // 2. Setup Data Game
+            vocabPairs = [...currentVocabList];
             
-            // Switch Screens
+            // Điều chỉnh số lượng thẻ tối đa nếu file có ít từ hơn số lượng chọn
+            let count = parseInt(countInput.value);
+            if (vocabPairs.length < count) {
+                count = vocabPairs.length;
+                alert(`Bài này chỉ có ${count} từ, sẽ sử dụng tất cả.`);
+            }
+
+            // 3. Switch Screens
             setupScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
             gameScreen.classList.remove('hidden');
             gameScreen.classList.add('flex');
 
-            // Prepare Game Board
+            // 4. Prepare Game Board
             prepareBoard(count);
         }
 
         function handleBack() {
             if (!setupScreen.classList.contains('hidden')) {
-                // If on setup screen, go back history
                 window.history.back();
             } else {
-                // If on game/result screen, go back to setup
                 resetGame();
             }
         }
@@ -351,6 +379,7 @@
             // Reset state
             selectedWord1 = null;
             selectedWord2 = null;
+            currentVocabList = []; // Xóa data cũ
         }
 
         function prepareBoard(count) {
@@ -368,7 +397,7 @@
             // Create Left Column (Chinese)
             randomPairs.forEach(pair => {
                 correctPairs[pair.vocab] = pair.meaning;
-                createCard(pair.vocab, 'chinese', leftColumn);
+                createCard(pair.vocab, 'chinese', leftColumn, pair.pinyin); // Truyền thêm pinyin nếu muốn dùng sau này
             });
 
             // Create Right Column (Meaning) - Shuffled
@@ -378,9 +407,9 @@
             });
         }
 
-        function createCard(text, type, container) {
+        function createCard(text, type, container, pinyin = '') {
             const card = document.createElement('div');
-            card.className = `word-card w-full bg-white p-3 rounded-xl shadow-sm border-2 border-transparent cursor-pointer flex items-center justify-center text-center min-h-[70px] select-none`;
+            card.className = `word-card w-full bg-white p-3 rounded-xl shadow-sm border-2 border-transparent cursor-pointer flex items-center justify-center text-center min-h-[70px] select-none relative overflow-hidden`;
             
             // Text Styling
             if (type === 'chinese') {
@@ -389,7 +418,16 @@
                 card.classList.add('text-sm', 'font-bold', 'text-gray-600');
             }
             
-            card.textContent = text;
+            // Nếu muốn hiện Pinyin nhỏ bên trên chữ Hán thì dùng code này (đang tắt để giữ giao diện sạch)
+            /*
+            if (type === 'chinese' && pinyin) {
+                 card.innerHTML = `<div class="flex flex-col"><span class="text-xs text-gray-400 font-sans mb-1">${pinyin}</span><span>${text}</span></div>`;
+            } else {
+                card.textContent = text;
+            }
+            */
+            card.textContent = text; // Mặc định chỉ hiện chữ
+
             card.dataset.value = text;
             card.dataset.type = type;
 
@@ -399,10 +437,8 @@
         }
 
         function handleCardClick(card) {
-            // Ignore if already matched or animating
             if (card.classList.contains('correct') || card.classList.contains('pop-out')) return;
 
-            // Deselect if clicking same card
             if (card === selectedWord1) {
                 card.classList.remove('selected');
                 selectedWord1 = null;
@@ -410,11 +446,9 @@
             }
 
             if (!selectedWord1) {
-                // First selection
                 selectedWord1 = card;
                 card.classList.add('selected');
             } else {
-                // Second selection
                 selectedWord2 = card;
                 card.classList.add('selected');
                 checkMatch();
@@ -428,11 +462,9 @@
 
             let isMatch = false;
 
-            // Determine checking direction
             if (type1 === 'chinese') {
                 isMatch = correctPairs[val1] === val2;
             } else {
-                // type1 is meaning, so check if correctPairs[val2] === val1
                 isMatch = correctPairs[val2] === val1;
             }
 
@@ -444,15 +476,11 @@
         }
 
         function handleCorrectMatch() {
-            // Apply correct style
             selectedWord1.classList.remove('selected');
             selectedWord2.classList.remove('selected');
             selectedWord1.classList.add('correct');
             selectedWord2.classList.add('correct');
 
-            // Play small confetti or sound here if desired
-            
-            // Remove matching cards after short delay
             const s1 = selectedWord1;
             const s2 = selectedWord2;
             
@@ -460,13 +488,9 @@
                 s1.classList.add('pop-out');
                 s2.classList.add('pop-out');
                 
-                // Actually remove from DOM after animation to clear space
                 setTimeout(() => {
                     s1.style.visibility = 'hidden'; 
                     s2.style.visibility = 'hidden';
-                    // We don't remove() to keep the grid structure stable, 
-                    // or we can remove() if we want items to shift up.
-                    // Let's remove() to be cleaner for mobile scroll
                     s1.remove();
                     s2.remove();
                 }, 500);
@@ -486,7 +510,6 @@
             selectedWord1.classList.add('wrong', 'animate-shake');
             selectedWord2.classList.add('wrong', 'animate-shake');
 
-            // Reset after animation
             setTimeout(() => {
                 if (selectedWord1) selectedWord1.classList.remove('wrong', 'animate-shake', 'selected');
                 if (selectedWord2) selectedWord2.classList.remove('wrong', 'animate-shake', 'selected');
@@ -501,13 +524,12 @@
             resultScreen.classList.remove('hidden');
             resultScreen.classList.add('flex');
 
-            // Fire Confetti
-            const duration = 3000;
+            const duration = 500;
             const end = Date.now() + duration;
 
             (function frame() {
                 confetti({
-                    particleCount: 5,
+                    particleCount: 3,
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
@@ -528,23 +550,19 @@
         }
 
         function shuffleRightColumn() {
-            // Only shuffle items currently in the container (not removed ones)
             const cards = Array.from(rightColumn.children);
             if (cards.length === 0) return;
 
-            // Fade out
             rightColumn.style.opacity = '0';
             
             setTimeout(() => {
                 cards.sort(() => 0.5 - Math.random());
                 cards.forEach(card => rightColumn.appendChild(card));
-                // Fade in
                 rightColumn.style.opacity = '1';
                 rightColumn.classList.add('transition-opacity', 'duration-300');
             }, 200);
         }
 
-        // Run Init
         window.onload = init;
 
     </script>

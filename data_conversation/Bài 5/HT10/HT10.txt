@@ -1,0 +1,6 @@
+你有妹妹吗？|Nǐ yǒu mèimei ma?|Bạn có em gái không?
+没有，我只有哥哥。|Méiyǒu, wǒ zhǐyǒu gēgē.|Không có, tôi chỉ có anh trai thôi.
+你有几个哥哥？|Nǐ yǒu jǐ ge gēgē?|Bạn có mấy anh trai?
+我有一个哥哥？|Wǒ yǒu yī gè gēgē?|Tôi có một anh trai?
+你哥哥今年多大了？|Nǐ gēgē jīnnián duō dà le?|Anh trai bạn năm nay bao nhiêu tuổi rồi?
+我哥哥今年十八岁了。|Wǒ gēgē jīnnián shí bā suì le.|Anh trai tôi năm nay 18 tuổi rồi.

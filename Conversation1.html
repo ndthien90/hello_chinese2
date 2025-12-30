@@ -89,10 +89,11 @@
         <div class="flex gap-2">
             <div class="relative flex-1">
                 <select id="lessonGroupSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2.5 pl-3 pr-8 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer truncate">
-                    <option value="Bài 1">Bài 1: 老师您好</option>
-                    <option value="Bài 2">Bài 2: 谢谢你！</option>
-                    <option value="Bài 3">Bài 3: 你叫什么名字？</option>
-                    <option value="Bài 4">Bài 4: 她是我的汉语老师</option>
+                    <option value="Bài 1">H1 Bài 1: 老师您好</option>
+                    <option value="Bài 2">H1 Bài 2: 谢谢你！</option>
+                    <option value="Bài 3">H1 Bài 3: 你叫什么名字？</option>
+                    <option value="Bài 4">H1 Bài 4: 她是我的汉语老师。</option>
+                   <option value="Bài 5">H1 Bài 5: 她女儿今年八岁。</option>
                 </select>
             </div>
             <div class="relative w-28">
@@ -179,7 +180,7 @@
         // Cấu hình số lượng hội thoại mỗi bài
         const lessonConfig = {
             'Bài 1': 2, 'Bài 2': 2, 'Bài 3': 3, 'Bài 4': 3,
-            'Bài 5': 3, 'Bài 6': 3, 'Bài 7': 3, 'Bài 8': 3, 'Bài 9': 3
+            'Bài 5': 10, 'Bài 6': 3, 'Bài 7': 3, 'Bài 8': 3, 'Bài 9': 3
         };
 
         // --- DOM Elements ---
@@ -225,8 +226,8 @@
                     const parts = line.split('|');
                     return {
                         speaker: index % 2 === 0 ? 'A' : 'B',
-                        pinyin: parts[0]?.trim() || '',
-                        chinese: parts[1]?.trim() || '',
+                        pinyin: parts[1]?.trim() || '',
+                        chinese: parts[0]?.trim() || '',
                         vietnamese: parts[2]?.trim() || ''
                     };
                 });

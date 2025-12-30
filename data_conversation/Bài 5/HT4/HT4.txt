@@ -1,0 +1,6 @@
+小明，你有哥哥吗？|Xiǎo Míng, nǐ yǒu gēge ma?|Tiểu Minh, bạn có anh trai không?
+没有，我只有一个弟弟。|Méiyǒu, wǒ zhǐ yǒu yī ge dìdi.|Không có, tôi chỉ có một em trai.
+你弟弟今年几岁了？|Nǐ dìdi jīnnián jǐ suì le?|Em trai bạn năm nay mấy tuổi rồi?
+他今年八岁了。|Tā jīnnián bā suì le.|Em ấy năm nay tám tuổi rồi.
+你弟弟喜欢喝什么？|Nǐ dìdi xǐhuān hē shénme?|Em trai bạn thích uống gì?
+他喜欢喝果汁。|Tā xǐhuān hē guǒzhī.|Cậu ấy thích uống nước ép trái cây.

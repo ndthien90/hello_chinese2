@@ -1,6 +1,6 @@
-Chén Nán, nà shì nǐ péngyou ma?|陈楠，那是你朋友吗?|Trần Nam, kia là bạn của bạn phải không?
-Tā bú shì wǒ péngyou, tā shì wǒ tóngxué.|她不是我朋友，她是我同学。|Cô ấy không phải là bạn của tôi, cô ấy là bạn học của tôi.
-Tā ne? Tā yě shì nǐ tóngxué ma?|她呢？她也是你同学吗？|cô ấy thì sao? Cô ấy cũng là bạn học của bạn phải không?
-Bú shì, tā shì wǒ de hǎo péngyou.|不是，她是我的好朋友。|Không phải, cô ấy là bạn tốt của tôi.
-Tā shì Zhōngguó rén ma?|她是中国人吗？|Cô ấy là người Trung Quốc phải không?
-Bú shì, tā shì Hánguó rén.|不是，她是韩国人。|Không phải, cô ấy là người Hàn Quốc.
+陈楠，那是你朋友吗?|Chén Nán, nà shì nǐ péngyou ma?|Trần Nam, kia là bạn của bạn phải không?
+她不是我朋友，她是我同学。|Tā bú shì wǒ péngyou, tā shì wǒ tóngxué.|Cô ấy không phải là bạn của tôi, cô ấy là bạn học của tôi.
+她呢？她也是你同学吗？|Tā ne? Tā yě shì nǐ tóngxué ma?|cô ấy thì sao? Cô ấy cũng là bạn học của bạn phải không?
+不是，她是我的好朋友。|Bú shì, tā shì wǒ de hǎo péngyou.|Không phải, cô ấy là bạn tốt của tôi.
+她是中国人吗？|Tā shì Zhōngguó rén ma?|Cô ấy là người Trung Quốc phải không?
+不是，她是韩国人。|Bú shì, tā shì Hánguó rén.|Không phải, cô ấy là người Hàn Quốc.

@@ -55,6 +55,11 @@
             100% { border-color: #3b82f6; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
 
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-custom { animation: spin 1s linear infinite; }
+
         /* Game Elements */
         .blank-slot {
             display: inline-flex;
@@ -132,10 +137,8 @@
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Bài học</label>
                 <div class="relative">
                     <select id="lessonSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
-                        <option value="1">H1 Bài 1: 老师您好！</option>
-                        <option value="2">H1 Bài 2: 谢谢你！</option>
-                        <option value="3">H1 Bài 3: 你叫什么名字？</option>
-                        <option value="4">H1 Bài 4: 她是我的汉语老师</option>
+                        <option value="">Chọn bài học...</option>
+                        <!-- Options injected via JS -->
                     </select>
                 </div>
             </div>
@@ -162,9 +165,19 @@
             </div>
 
             <!-- Start Button -->
-            <button id="startBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-2 text-lg">
+            <button id="startBtn" disabled class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-2 text-lg">
                 <i class="fas fa-play"></i> Bắt đầu
             </button>
+            
+            <p class="text-xs text-center text-gray-400 mt-2">
+                *Dữ liệu sẽ được tải từ thư mục <span class="font-mono bg-gray-100 px-1 rounded">data_FillBlankGame</span>
+            </p>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-screen" class="hidden absolute inset-0 bg-white/80 z-50 flex-col items-center justify-center backdrop-blur-sm">
+            <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin-custom mb-3"></div>
+            <p class="text-blue-600 font-bold">Đang tải câu hỏi...</p>
         </div>
 
         <!-- GAME SCREEN -->
@@ -239,34 +252,21 @@
     </div>
 
     <script>
-        // --- DATA ---
-        const lessonData = {
-            1: [
-                "/你/好。", "再/见/。", "你好/吗/？", "那/不是/陈楠。",
-                "我不是老师，我是/学生/。", "我/很/好。", "我是/国安/。", "/老师/，您好。"
-            ],
-            2: [
-                "/谢谢/你！", "不/客/气！", "我爸爸不是/医生/。", "你妈妈/是/记者吗？",
-                "我妈妈很好，谢谢/你/！", "/那/不是警察，那是部队。", "那/不是/书，那是本子。",
-                "对不/起/，我不是律师。", "那是你/哥哥/吗？"
-            ],
-            3: [
-                "你/叫/什么名字？", "请问，您/贵姓/？", "你姓/什么/？", "妈妈/姓/王，爸爸姓/李/。",
-                "你喜欢/喝/什么?", "这是什么/书?", "我很/喜欢/韩国。", "她不喜欢/吃/火锅。",
-                "你是越南/人/吗？", "我不是/中国人/，我是泰国人。", "妈妈是日本人，爸爸也是/日本人/。",
-                "他是美国人，他说/英语/。", "我是越南人，我/说/越南语。", "他是法国人，他说/法语/。",
-                "我和他们/都/是韩国人。", "我妈妈姓张，我爸爸/也/姓张。"
-            ],
-            4: [
-                "/谁/是李月", "你是/哪/国人？", "一/张/桌子和两/把/雨伞。", "我有两/双/鞋。",
-                "这是我/的/书", "他是我的/汉语/老师", "我是陈楠，你/呢/？", "我喜欢/踢/足球。",
-                "她喜欢/打/羽毛球。", "我们都喜欢看/电影/。", "我不喜欢狗，我喜欢/猫/",
-                "她喜欢/穿/拖鞋。", "他不是我朋友，她是我/同学/。", "你喝哪/杯/奶茶？",
-                "奶茶/和/咖啡我都喜欢喝。"
-            ]
-        };
+        // --- DATA CONFIGURATION ---
+        // Danh sách các bài học
+        const lessonList = [
+            { id: 'bai1.txt', name: 'H1 Bài 1: 老师您好！' },
+            { id: 'bai2.txt', name: 'H1 Bài 2: 谢谢你！' },
+            { id: 'bai3.txt', name: 'H1 Bài 3: 你叫什么名字？' },
+            { id: 'bai4.txt', name: 'H1 Bài 4: 她是我的汉语老师。' },
+            { id: 'bai5.txt', name: 'H1 Bài 5: 她女儿今年八岁。' },
+            // Thêm bài mới tại đây
+        ];
+
+        const DATA_FOLDER = 'data_FillBlankGame/';
 
         // --- STATE ---
+        let currentLessonData = []; // Dữ liệu thô tải từ file
         let timer;
         let timeLeft = 300;
         let totalTime = 0;
@@ -274,12 +274,13 @@
         let answers = new Set();
         let selectedBlank = null;
         let selectedAnswer = null;
-        let completedQuestions = 0;
-
+        
         // --- UI ELEMENTS ---
         const setupScreen = document.getElementById('setup-screen');
         const gameScreen = document.getElementById('game-screen');
         const resultScreen = document.getElementById('result-screen');
+        const loadingScreen = document.getElementById('loading-screen');
+        
         const timerDisplay = document.getElementById('timerDisplay');
         const placeholder = document.getElementById('placeholder');
         const questionsContainer = document.getElementById('questionsContainer');
@@ -289,49 +290,104 @@
         const timerInput = document.getElementById('timerInput');
         const timerInputDisplay = document.getElementById('timerInputDisplay');
         const lessonSelect = document.getElementById('lessonSelect');
+        const startBtn = document.getElementById('startBtn');
 
         // --- INITIALIZATION ---
         
-        questionCountInput.addEventListener('input', (e) => {
-            questionCountDisplay.textContent = e.target.value;
-        });
+        function init() {
+            // Load Lesson List
+            lessonSelect.innerHTML = '<option value="">Chọn bài học...</option>';
+            lessonList.forEach(lesson => {
+                const option = document.createElement('option');
+                option.value = lesson.id;
+                option.textContent = lesson.name;
+                lessonSelect.appendChild(option);
+            });
 
-        timerInput.addEventListener('input', (e) => {
-            timerInputDisplay.textContent = e.target.value + 's';
-        });
+            // Listeners
+            questionCountInput.addEventListener('input', (e) => {
+                questionCountDisplay.textContent = e.target.value;
+            });
 
-        lessonSelect.addEventListener('change', (e) => {
-            // Update max questions based on lesson
-            const max = lessonData[e.target.value].length;
-            questionCountInput.max = max;
-            if (parseInt(questionCountInput.value) > max) {
-                questionCountInput.value = max;
-                questionCountDisplay.textContent = max;
+            timerInput.addEventListener('input', (e) => {
+                timerInputDisplay.textContent = e.target.value + 's';
+            });
+
+            lessonSelect.addEventListener('change', () => {
+                startBtn.disabled = !lessonSelect.value;
+            });
+
+            startBtn.addEventListener('click', startGame);
+        }
+
+        // --- DATA LOADING LOGIC ---
+
+        async function fetchQuestions(filename) {
+            const url = `${DATA_FOLDER}${filename}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const text = await response.text();
+                return parseTextData(text);
+            } catch (error) {
+                console.error("Lỗi tải file:", error);
+                alert(`Không thể tải file dữ liệu: ${filename}.\nKiểm tra thư mục ${DATA_FOLDER} và Web Server.`);
+                return [];
             }
-        });
+        }
 
-        document.getElementById('startBtn').addEventListener('click', startGame);
+        function parseTextData(text) {
+            // Mỗi dòng là một câu: "Hello /world/."
+            const lines = text.split('\n');
+            const data = [];
+            lines.forEach(line => {
+                const cleanLine = line.trim();
+                // Bỏ dòng trống hoặc comment
+                if (cleanLine && !cleanLine.startsWith('//')) {
+                    data.push(cleanLine);
+                }
+            });
+            return data;
+        }
 
         // --- GAME LOGIC ---
 
-        function startGame() {
-            // Get settings
-            const lesson = parseInt(lessonSelect.value);
-            const count = parseInt(questionCountInput.value);
+        async function startGame() {
+            const selectedFile = lessonSelect.value;
+            if (!selectedFile) return;
+
+            // 1. Show Loading
+            loadingScreen.classList.remove('hidden');
+            loadingScreen.classList.add('flex');
+
+            // 2. Fetch Data
+            currentLessonData = await fetchQuestions(selectedFile);
+            
+            // Hide Loading
+            loadingScreen.classList.add('hidden');
+            loadingScreen.classList.remove('flex');
+
+            if (currentLessonData.length === 0) return;
+
+            // 3. Configure Game
             timeLeft = parseInt(timerInput.value);
             totalTime = timeLeft;
+            
+            // Adjust max count
+            let count = parseInt(questionCountInput.value);
+            if (currentLessonData.length < count) {
+                count = currentLessonData.length;
+                alert(`Bài này chỉ có ${count} câu, sẽ sử dụng tất cả.`);
+            }
 
-            // Prepare Questions
-            const lessonQuestions = lessonData[lesson];
-            if(!lessonQuestions) return;
-
-            const shuffledAll = [...lessonQuestions].sort(() => 0.5 - Math.random());
+            // Shuffle and Select
+            const shuffledAll = [...currentLessonData].sort(() => 0.5 - Math.random());
             const selectedRaw = shuffledAll.slice(0, count);
             
+            // Parse for Game Logic
             questions = selectedRaw.map(parseQuestion);
-            completedQuestions = 0;
 
-            // Switch UI
+            // 4. Switch UI
             setupScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
             gameScreen.classList.remove('hidden');
@@ -340,7 +396,7 @@
             timerDisplay.classList.remove('hidden');
             placeholder.style.display = 'none';
 
-            // Render
+            // 5. Render & Start
             renderGame();
             startTimer();
         }
@@ -361,35 +417,29 @@
             timerDisplay.classList.add('hidden');
             placeholder.style.display = 'block';
             setupScreen.classList.remove('hidden');
+            
+            // Reset Internal State
+            currentLessonData = [];
+            selectedBlank = null;
+            selectedAnswer = null;
         }
 
         function parseQuestion(text) {
-            const parts = text.split('/');
-            const result = {
-                textParts: [], // Array of { type: 'text'|'blank', content: string }
-                answer: null
-            };
-            
             // Format: "Hello /world/." -> world is blank
-            // Note: Current logic assumes 1 blank per question for simplicity of UI flow in HelloChinese style
-            // If multiple blanks, logic can handle, but UI is better with 1 focus.
-            // Let's adapt the parser to handle the split correctly.
-            
-            // Example: "我/很/好。" -> ["我", "很", "好。"]
-            // Even index = text, Odd index = blank
-            
-            let htmlParts = [];
+            const parts = text.split('/');
+            const htmlParts = [];
             
             for (let i = 0; i < parts.length; i++) {
                 if (i % 2 === 0) {
+                    // Even index = Text
                     if(parts[i]) htmlParts.push({ type: 'text', content: parts[i] });
                 } else {
+                    // Odd index = Blank
                     htmlParts.push({ type: 'blank', content: parts[i] });
-                    answers.add(parts[i]); // Add to global pool for this game
+                    answers.add(parts[i]); 
                 }
             }
-            result.textParts = htmlParts;
-            return result;
+            return { textParts: htmlParts };
         }
 
         function renderGame() {
@@ -397,7 +447,7 @@
             answersContainer.innerHTML = '';
             answers.clear();
 
-            // Collect all answers first to shuffle
+            // Collect answers
             questions.forEach(q => {
                 q.textParts.forEach(p => {
                     if(p.type === 'blank') answers.add(p.content);
@@ -420,8 +470,6 @@
                         const blank = document.createElement('div');
                         blank.className = 'blank-slot chinese-font text-2xl';
                         blank.dataset.answer = part.content;
-                        
-                        // Auto-select first blank of first question initially? No, let user tap.
                         blank.addEventListener('click', () => handleBlankClick(blank));
                         qDiv.appendChild(blank);
                     }
@@ -439,7 +487,6 @@
                 answersContainer.appendChild(btn);
             });
             
-            // Add padding at bottom for sticky word bank
             const spacer = document.createElement('div');
             spacer.className = "h-32";
             questionsContainer.appendChild(spacer);
@@ -448,36 +495,26 @@
         // --- INTERACTION LOGIC ---
 
         function handleBlankClick(blank) {
-            if (blank.classList.contains('filled')) return; // Already correct
+            if (blank.classList.contains('filled')) return; 
 
-            // Deselect old
             if (selectedBlank) selectedBlank.classList.remove('selected');
-            
-            // Select new
             selectedBlank = blank;
             blank.classList.add('selected');
 
-            // If an answer was already selected, try to fill immediately
-            if (selectedAnswer) {
-                tryMatch();
-            }
+            if (selectedAnswer) tryMatch();
         }
 
         function handleAnswerClick(btn) {
             if (btn.classList.contains('used')) return;
 
-            // Deselect old answer visual
             if (selectedAnswer) selectedAnswer.classList.remove('selected');
-
             selectedAnswer = btn;
             btn.classList.add('selected');
 
-            // If a blank is selected, try fill
             if (selectedBlank) {
                 tryMatch();
             } else {
-                // Auto-find first empty blank if none selected? 
-                // Enhanced UX: Yes, find first non-filled blank
+                // Auto-select first empty blank
                 const firstEmpty = document.querySelector('.blank-slot:not(.filled)');
                 if (firstEmpty) {
                     selectedBlank = firstEmpty;
@@ -500,26 +537,22 @@
                 selectedBlank.classList.add('filled');
                 
                 selectedAnswer.classList.remove('selected');
-                selectedAnswer.classList.add('used'); // Hide/Disable in bank
+                selectedAnswer.classList.add('used'); 
 
-                // Check completion
                 checkCompletion();
             } else {
                 // Wrong
                 selectedBlank.classList.add('animate-pulse');
-                // Shake effect manually
-                selectedBlank.style.borderColor = '#ef4444'; // Red
+                selectedBlank.style.borderColor = '#ef4444'; 
                 setTimeout(() => {
-                    selectedBlank.style.borderColor = ''; // Reset
+                    selectedBlank.style.borderColor = ''; 
                     selectedBlank.classList.remove('animate-pulse');
                 }, 400);
                 
-                // Deselect answer to let user try again easily
                 selectedAnswer.classList.remove('selected');
                 selectedAnswer = null;
             }
             
-            // Reset selection references
             selectedBlank.classList.remove('selected');
             selectedBlank = null;
             selectedAnswer = null;
@@ -529,7 +562,6 @@
             const allBlanks = document.querySelectorAll('.blank-slot');
             const filledBlanks = document.querySelectorAll('.blank-slot.filled');
             
-            // Update Progress
             const progress = (filledBlanks.length / allBlanks.length) * 100;
             document.getElementById('gameProgress').style.width = `${progress}%`;
 
@@ -570,26 +602,21 @@
         function finishGame() {
             clearInterval(timer);
             
-            // Show Confetti
-            const duration = 3000;
-            const end = Date.now() + duration;
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#3b82f6', '#10b981', '#f59e0b']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#3b82f6', '#10b981', '#f59e0b']
-                });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+            // Single shot confetti (Đã chỉnh sửa theo yêu cầu)
+            confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#3b82f6', '#10b981', '#f59e0b']
+            });
+            confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#3b82f6', '#10b981', '#f59e0b']
+            });
 
             // Update Result UI
             const timeTaken = totalTime - timeLeft;
@@ -606,9 +633,7 @@
             resultScreen.classList.add('flex');
         }
 
-        // Init
-        // Auto-set max for lesson 1 initially
-        questionCountInput.max = lessonData[1].length;
+        window.onload = init;
 
     </script>
 </body>
