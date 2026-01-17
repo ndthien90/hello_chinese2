@@ -4758,9 +4758,9 @@ window.updatePlayingUI = () => {
                      // Nếu sai: Hiện màu đỏ ngay và khóa tạm thời
                      btn.classList.remove('bg-white', 'hover:bg-blue-50');
                      btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
-                     showToast("Sai rồi! Bị phạt chờ 2 giây.", "error");
+                     showToast("Sai rồi! Bị phạt chờ 3 giây.", "error");
                      
-                     // Logic phạt: Khóa người chơi trong 2s
+                     // Logic phạt: Khóa người chơi trong 5s
                      state.ui.hasAnsweredCurrentQ = true; 
                      setTimeout(() => {
                          state.ui.hasAnsweredCurrentQ = false; // Mở khóa
@@ -4769,7 +4769,7 @@ window.updatePlayingUI = () => {
                              btn.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed'); // Disable nút sai
                              btn.disabled = true;
                          }
-                     }, 2000);
+                     }, 3000);
                      return; // Dừng lại, không gửi lên server
                  }
              }
@@ -12418,7 +12418,7 @@ window.closeGameModal = function() {
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeGameModal()"></div>
     
     <div class="absolute inset-0 flex items-center justify-center p-0 md:p-4 h-full w-full">
-        <div class="bg-white w-full h-full md:h-[95%] md:w-[500px] md:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative animate-up">
+        <div class="bg-white w-full h-full md:h-[100%] md:w-[500px] md:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative animate-up">
             
             <div class="bg-slate-900 text-white p-3 flex justify-between items-center shrink-0 z-10 shadow-md">
                 <div class="flex items-center gap-2">

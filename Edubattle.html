@@ -1466,7 +1466,7 @@ ${state.ui.isBulkModalOpen ? `
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-bold text-slate-700 mb-1">Mã Giáo Viên (*)</label>
-                                        <input id="bulk-teacher-code" type="text" class="w-full p-2 border rounded-lg focus:border-purple-500" placeholder="Nhập: ruands10">
+                                        <input id="bulk-teacher-code" type="text" class="w-full p-2 border rounded-lg focus:border-purple-500" placeholder="Nhập mã giáo viên">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-bold text-slate-700 mb-1">Mật khẩu chung (*)</label>
@@ -1502,7 +1502,7 @@ ${state.ui.isBulkModalOpen ? `
                                     <button onclick="toggleBulkModal(false)" class="flex-1 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
                                         Hủy bỏ
                                     </button>
-                                    <button onclick="handleBulkCreate()" class="flex-[2] bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition">
+                                    <button onclick="window.handleBulkCreate()" class="flex-[2] bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition">
                                         <i data-lucide="user-plus"></i> Bắt đầu tạo
                                     </button>
                                 </div>
@@ -4758,7 +4758,7 @@ window.updatePlayingUI = () => {
                      // Nếu sai: Hiện màu đỏ ngay và khóa tạm thời
                      btn.classList.remove('bg-white', 'hover:bg-blue-50');
                      btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
-                     showToast("Sai rồi! Bị phạt chờ 3 giây.", "error");
+                     showToast("Sai rồi! Bị phạt chờ 5 giây.", "error");
                      
                      // Logic phạt: Khóa người chơi trong 5s
                      state.ui.hasAnsweredCurrentQ = true; 
@@ -4769,7 +4769,7 @@ window.updatePlayingUI = () => {
                              btn.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed'); // Disable nút sai
                              btn.disabled = true;
                          }
-                     }, 3000);
+                     }, 5000);
                      return; // Dừng lại, không gửi lên server
                  }
              }
@@ -5255,29 +5255,90 @@ const renderCompetition = () => {
             }
         };
 
-        window.confirmDeleteClass = (id, title) => {
-            const confirmModal = document.createElement('div');
-            confirmModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
-            confirmModal.innerHTML = `
-                <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center">
-                    <p class="font-bold text-lg mb-4 text-slate-800">Xác nhận xóa Lớp học</p>
-                    <p class="text-slate-600 mb-6 text-sm">Bạn có chắc muốn xóa lớp "${title}"? Thao tác này sẽ KHÔNG xóa tài khoản học sinh, nhưng sẽ loại bỏ lớp này.</p>
-                    <div class="flex justify-around gap-4">
-                        <button id="cancel-btn" class="flex-1 bg-slate-200 text-slate-700 py-2 rounded-lg font-medium hover:bg-slate-300 transition text-sm">Hủy</button>
-                        <button id="delete-btn" class="flex-1 bg-red-600 text-white py-2 rounded-lg font-bold hover:bg-red-700 transition text-sm">Xác nhận XÓA</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(confirmModal);
+window.confirmDeleteClass = (id, title) => {
+    // Tạo modal xác nhận
+    const confirmModal = document.createElement('div');
+    confirmModal.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[70] p-4 fade-in backdrop-blur-sm';
+    
+    confirmModal.innerHTML = `
+        <div class="bg-white p-6 rounded-2xl shadow-2xl max-w-sm w-full text-center transform transition-all scale-100">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="lock" class="w-8 h-8 text-red-500"></i>
+            </div>
+            
+            <h3 class="font-bold text-xl mb-2 text-slate-800">Xác nhận xóa lớp</h3>
+            <p class="text-slate-500 mb-4 text-sm">
+                Bạn đang xóa lớp <span class="font-bold text-red-600">"${title}"</span>.<br>
+                Hành động này không thể hoàn tác!
+            </p>
 
-            const removeModal = () => document.body.removeChild(confirmModal);
+            <div class="mb-6 relative">
+                <input type="password" id="delete-class-code" 
+                       class="w-full p-3 pl-10 border-2 border-slate-200 rounded-xl focus:border-red-500 focus:ring-red-200 outline-none transition font-bold text-slate-700" 
+                       placeholder="Nhập mã giáo viên xác nhận">
+                <i data-lucide="key" class="w-5 h-5 text-slate-400 absolute left-3 top-3.5"></i>
+                <p id="delete-error-msg" class="text-red-500 text-xs mt-2 hidden font-bold text-left pl-1">
+                    * Mã không chính xác!
+                </p>
+            </div>
 
-            document.getElementById('cancel-btn').onclick = removeModal;
-            document.getElementById('delete-btn').onclick = () => {
-                deleteClass(id);
-                removeModal();
-            };
-        };
+            <div class="flex gap-3">
+                <button id="cancel-btn" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-200 transition">
+                    Hủy bỏ
+                </button>
+                <button id="confirm-btn" class="flex-1 bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 shadow-lg transition flex items-center justify-center gap-2">
+                    Xóa ngay
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(confirmModal);
+    
+    // Kích hoạt icon Lucide trong modal mới tạo
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Focus vào ô nhập
+    setTimeout(() => document.getElementById('delete-class-code').focus(), 100);
+
+    const removeModal = () => confirmModal.remove();
+
+    // Xử lý nút Hủy
+    document.getElementById('cancel-btn').onclick = removeModal;
+
+    // Xử lý nút Xác nhận
+    const handleConfirm = () => {
+        const inputCode = document.getElementById('delete-class-code').value.trim();
+        const errorMsg = document.getElementById('delete-error-msg');
+        const inputEl = document.getElementById('delete-class-code');
+
+        // Kiểm tra với mã giáo viên (TEACHER_CODE đã khai báo ở đầu file config)
+        if (inputCode === TEACHER_CODE) {
+            deleteClass(id); // Gọi hàm xóa gốc
+            removeModal();
+        } else {
+            // Hiển thị lỗi
+            errorMsg.classList.remove('hidden');
+            inputEl.classList.add('border-red-500', 'bg-red-50');
+            inputEl.focus();
+            
+            // Hiệu ứng rung nhẹ
+            inputEl.animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-5px)' },
+                { transform: 'translateX(5px)' },
+                { transform: 'translateX(0)' }
+            ], { duration: 300 });
+        }
+    };
+
+    document.getElementById('confirm-btn').onclick = handleConfirm;
+
+    // Cho phép nhấn Enter để xóa
+    document.getElementById('delete-class-code').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleConfirm();
+    });
+};
 
         window.deleteClass = async (id) => {
             try {
@@ -7050,123 +7111,131 @@ window.saveManualGrade = async (subId, qIdx, maxPoints) => {
             return str;
         }
 
-        window.handleBulkCreate = async () => {
-            const teacherCode = document.getElementById('bulk-teacher-code').value.trim();
-            const password = document.getElementById('bulk-password').value.trim();
-            const className = document.getElementById('bulk-class-name').value.trim(); // Dùng làm đuôi email
-            const classCode = document.getElementById('bulk-class-code').value.trim();
-            const studentListText = document.getElementById('bulk-student-list').value.trim();
-            const csvFile = document.getElementById('bulk-csv-file').files[0];
-            const statusEl = document.getElementById('bulk-status');
+window.handleBulkCreate = async () => {
+        const teacherCode = document.getElementById('bulk-teacher-code').value.trim();
+        const password = document.getElementById('bulk-password').value.trim();
+        const className = document.getElementById('bulk-class-name').value.trim();
+        const classCode = document.getElementById('bulk-class-code').value.trim(); // Mã lớp nhập vào
+        const studentListText = document.getElementById('bulk-student-list').value.trim();
+        const csvFile = document.getElementById('bulk-csv-file').files[0];
+        const statusEl = document.getElementById('bulk-status');
 
-            if (teacherCode !== TEACHER_CODE) return showToast("Mã giáo viên không đúng!", "error");
-            if (!password || password.length < 6) return showToast("Mật khẩu chung phải ít nhất 6 ký tự.", "error");
-            if (!className && !csvFile) return showToast("Vui lòng nhập tên lớp (để tạo email tự động) hoặc tải file CSV.", "error");
+        if (teacherCode !== TEACHER_CODE) return showToast("Mã giáo viên không đúng!", "error");
+        if (!password || password.length < 6) return showToast("Mật khẩu chung phải ít nhất 6 ký tự.", "error");
+        if (!className && !csvFile) return showToast("Vui lòng nhập tên lớp (để tạo email tự động) hoặc tải file CSV.", "error");
 
-            state.ui.isBulkCreating = true;
-            statusEl.textContent = "Đang khởi tạo...";
-            statusEl.className = "text-center text-sm font-bold mt-2 text-blue-600 animate-pulse";
-            
-            // 1. CHUẨN BỊ DATA HỌC SINH
-            let studentsToCreate = [];
+        state.ui.isBulkCreating = true;
+        statusEl.textContent = "Đang khởi tạo...";
+        statusEl.className = "text-center text-sm font-bold mt-2 text-blue-600 animate-pulse";
 
-            if (csvFile) {
-                // Xử lý CSV (Đơn giản hóa)
-                // TODO: Đọc file CSV nếu cần thiết. Ở đây ưu tiên Textarea cho demo nhanh.
-            } 
-            
-            if (studentListText) {
-                const lines = studentListText.split('\n');
-                lines.forEach(line => {
-                    const name = line.trim();
-                    if (name) {
-                        // Tạo email tự động: ten_lop@gmail.com
-                        const cleanName = removeVietnameseTones(name).toLowerCase().replace(/\s+/g, '');
-                        const cleanClass = removeVietnameseTones(className).toLowerCase().replace(/\s+/g, '');
-                        const email = `${cleanName}.${cleanClass}@gmail.com`;
-                        studentsToCreate.push({ name, email, password });
-                    }
-                });
-            }
-
-            if (studentsToCreate.length === 0) {
-                state.ui.isBulkCreating = false;
-                return showToast("Danh sách học sinh trống.", "error");
-            }
-
-            // 2. KHỞI TẠO SECONDARY APP (Để không bị đăng xuất Admin)
-            let secondaryApp = null;
-            let secondaryAuth = null;
-            let successCount = 0;
-            let failCount = 0;
-
-            try {
-                // Sử dụng initializeApp lần 2 với tên khác để tạo instance độc lập
-                secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
-                secondaryAuth = getAuth(secondaryApp);
-
-                statusEl.textContent = `Đang xử lý 0/${studentsToCreate.length}...`;
-
-                // 3. TÌM LỚP ĐỂ ADD (Nếu có mã lớp)
-                let classIdToAdd = null;
-                if (classCode) {
-                    const classSnap = await getDocs(query(collection(db, 'artifacts', appId, 'public', 'data', 'classes'), where('classCode', '==', classCode)));
-                    if (!classSnap.empty) {
-                        classIdToAdd = classSnap.docs[0].id;
-                    }
+        // 1. CHUẨN BỊ DATA
+        let studentsToCreate = [];
+        if (studentListText) {
+            const lines = studentListText.split('\n');
+            lines.forEach(line => {
+                const name = line.trim();
+                if (name) {
+                    const cleanName = removeVietnameseTones(name).toLowerCase().replace(/\s+/g, '');
+                    const cleanClass = removeVietnameseTones(className).toLowerCase().replace(/\s+/g, '');
+                    const email = `${cleanName}_${cleanClass}@gmail.com`;
+                    studentsToCreate.push({ name, email, password });
                 }
+            });
+        }
 
-                // 4. LOOP VÀ TẠO USER
-                for (let i = 0; i < studentsToCreate.length; i++) {
-                    const student = studentsToCreate[i];
-                    try {
-                        const cred = await createUserWithEmailAndPassword(secondaryAuth, student.email, student.password);
-                        const uid = cred.user.uid;
+        if (studentsToCreate.length === 0) {
+            state.ui.isBulkCreating = false;
+            return showToast("Danh sách học sinh trống.", "error");
+        }
 
-                        // Tạo profile trong Firestore (Dùng db chính của Admin)
-                        await setDoc(doc(db, getPath('users'), uid), {
-                            uid: uid,
-                            name: student.name,
-                            role: 'student',
-                            points: 0,
-                            email: student.email,
-                            avatarUrl: null,
-                            createdAt: serverTimestamp()
-                        });
+        // 2. KHỞI TẠO SECONDARY APP
+        let secondaryApp = null;
+        let secondaryAuth = null;
+        let secondaryDb = null; // Thêm biến DB phụ
+        let successCount = 0;
+        let failCount = 0;
 
-                        // Thêm vào lớp (Nếu có)
-                        if (classIdToAdd) {
-                             await updateDoc(doc(db, getPath('classes'), classIdToAdd), {
-                                studentIds: arrayUnion(uid)
-                            });
+        try {
+            secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
+            secondaryAuth = getAuth(secondaryApp);
+            secondaryDb = getFirestore(secondaryApp); // Khởi tạo Firestore cho app phụ
+
+            statusEl.textContent = `Đang xử lý 0/${studentsToCreate.length}...`;
+
+            // QUAN TRỌNG: Di chuyển biến classIdToAdd ra đây, nhưng CHƯA TÌM NGAY
+            let classIdToAdd = null;
+            let hasCheckedClass = false; // Cờ đánh dấu đã kiểm tra lớp hay chưa
+
+            // 3. LOOP VÀ TẠO USER
+            for (let i = 0; i < studentsToCreate.length; i++) {
+                const student = studentsToCreate[i];
+                try {
+                    // Bước A: Tạo User và Đăng nhập tự động vào secondaryAuth
+                    const cred = await createUserWithEmailAndPassword(secondaryAuth, student.email, student.password);
+                    const uid = cred.user.uid;
+
+                    // Bước B: (FIX LỖI) Chỉ tìm lớp khi đã có User đầu tiên đăng nhập thành công
+                    if (classCode && !hasCheckedClass) {
+                        hasCheckedClass = true; // Đánh dấu đã kiểm tra để không tìm lại 50 lần
+                        try {
+                            // Dùng secondaryDb (đang có User đăng nhập) để tìm -> Hợp lệ
+                            const q = query(collection(secondaryDb, 'artifacts', appId, 'public', 'data', 'classes'), where('classCode', '==', classCode));
+                            const classSnap = await getDocs(q);
+                            if (!classSnap.empty) {
+                                classIdToAdd = classSnap.docs[0].id;
+                            } else {
+                                console.warn("Không tìm thấy mã lớp: " + classCode);
+                            }
+                        } catch (err) {
+                            console.error("Lỗi tìm lớp (dù đã đăng nhập):", err);
                         }
-
-                        successCount++;
-                    } catch (err) {
-                        console.error(`Lỗi tạo user ${student.email}:`, err);
-                        failCount++;
                     }
-                    
-                    statusEl.textContent = `Đang xử lý ${i+1}/${studentsToCreate.length} (Thành công: ${successCount}, Lỗi: ${failCount})`;
+
+                    // Bước C: Tạo profile (Dùng secondaryDb để đảm bảo quyền ghi)
+                    await setDoc(doc(secondaryDb, getPath('users'), uid), {
+                        uid: uid,
+                        name: student.name,
+                        role: 'student',
+                        points: 0,
+                        email: student.email,
+                        avatarUrl: null,
+                        createdAt: serverTimestamp()
+                    });
+
+                    // Bước D: Thêm vào lớp (Nếu tìm thấy ID ở Bước B)
+                    if (classIdToAdd) {
+                        await updateDoc(doc(secondaryDb, getPath('classes'), classIdToAdd), {
+                            studentIds: arrayUnion(uid)
+                        });
+                    }
+
+                    successCount++;
+                } catch (err) {
+                    console.error(`Lỗi tạo user ${student.email}:`, err);
+                    failCount++;
                 }
-
-                // 5. CLEANUP
-                await signOut(secondaryAuth);
-                await deleteApp(secondaryApp);
-
-                showToast(`Hoàn tất! Thành công: ${successCount}, Lỗi: ${failCount}`);
-                if (successCount > 0) {
-                     setTimeout(() => toggleBulkModal(false), 2000);
-                }
-
-            } catch (e) {
-                console.error("Critical Bulk Error:", e);
-                showToast("Lỗi hệ thống khi tạo hàng loạt.", "error");
-            } finally {
-                state.ui.isBulkCreating = false;
-                statusEl.className = "text-center text-sm font-bold mt-2 text-slate-600";
+                statusEl.textContent = `Đang xử lý ${i+1}/${studentsToCreate.length} (Thành công: ${successCount}, Lỗi: ${failCount})`;
             }
-        };
+
+            // 4. CLEANUP
+            await signOut(secondaryAuth);
+            await deleteApp(secondaryApp);
+
+            showToast(`Hoàn tất! Thành công: ${successCount}, Lỗi: ${failCount}`);
+            if (successCount > 0) {
+                setTimeout(() => toggleBulkModal(false), 2000);
+            }
+
+        } catch (e) {
+            console.error("Critical Bulk Error:", e);
+            // Nếu lỗi do App already exists (do lần trước crash chưa dọn dẹp), thử dọn dẹp
+            try { if (secondaryApp) await deleteApp(secondaryApp); } catch {}
+            showToast("Lỗi hệ thống: " + e.message, "error");
+        } finally {
+            state.ui.isBulkCreating = false;
+            statusEl.className = "text-center text-sm font-bold mt-2 text-slate-600";
+        }
+    };
 // --- LOGIC TẢI FILE ÂM THANH CHO CÂU HỎI ---
         window.tempAudioUrl = null; // Biến lưu tạm URL sau khi upload
 
@@ -12418,7 +12487,7 @@ window.closeGameModal = function() {
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeGameModal()"></div>
     
     <div class="absolute inset-0 flex items-center justify-center p-0 md:p-4 h-full w-full">
-        <div class="bg-white w-full h-full md:h-[100%] md:w-[500px] md:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative animate-up">
+        <div class="bg-white w-full h-full md:h-[95%] md:w-[500px] md:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative animate-up">
             
             <div class="bg-slate-900 text-white p-3 flex justify-between items-center shrink-0 z-10 shadow-md">
                 <div class="flex items-center gap-2">
