@@ -1,0 +1,147 @@
+Từ vựng|Pinyin|Nghĩa
+你叫什么名字？|Nǐ jiào shénme míngzi?|Bạn tên là gì?
+我叫李月。|Wǒ jiào Lǐ Yuè.|Tôi tên là Lý Nguyệt.
+请问，您贵姓？|Qǐngwèn, nín guìxìng?|Xin hỏi, ông họ gì?
+我姓陈。|Wǒ xìng Chén.|Tôi họ Trần.
+你姓什么？|Nǐ xìng shénme?|Bạn họ gì?
+他叫什么名字？|Tā jiào shénme míngzi?|Anh ấy tên là gì?
+她叫陈楠。|Tā jiào Chén Nán.|Cô ấy tên là Trần Nam.
+他叫刘国安吗？|Tā jiào Liú Guó'ān ma?|Anh ấy tên là Lưu Quốc An phải không?
+她姓王。|Tā xìng Wáng.|Cô ấy họ Vương.
+他姓李吗？|Tā xìng Lǐ ma?|Anh ấy họ Lý phải không?
+你是越南人吗？|Nǐ shì Yuènán rén ma?|Bạn là người Việt Nam phải không?
+我是越南人。|Wǒ shì Yuènán rén.|Tôi là người Việt Nam.
+他是中国人吗？|Tā shì Zhōngguó rén ma?|Anh ấy là người Trung Quốc phải không?
+她是美国人。|Tā shì Měiguó rén.|Cô ấy là người Mỹ.
+我们是越南人。|Wǒmen shì Yuènán rén.|Chúng tôi là người Việt Nam.
+他们是中国人吗？|Tāmen shì Zhōngguó rén ma?|Họ là người Trung Quốc phải không?
+她们是韩国人吗？|Tāmen shì Hánguó rén ma?|Các cô ấy là người Hàn Quốc phải không?
+陈楠是越南人吗？|Chén Nán shì Yuènán rén ma?|Trần Nam là người Việt Nam phải không?
+他是日本人吗？|Tā shì Rìběn rén ma?|Anh ấy là người Nhật Bản phải không?
+她是泰国人，我是美国人。|Tā shì Tàiguó rén, wǒ shì Měiguó rén.|Cô ấy là người Thái Lan, tôi là người Mỹ.
+她是泰国人，她说泰语。|Tā shì Tàiguó rén, tā shuō Tàiyǔ.|Cô ấy là người Thái Lan, cô ấy nói tiếng Thái.
+我是中国人，我说汉语。|Wǒ shì Zhōngguó rén, wǒ shuō Hànyǔ.|Tôi là người Trung Quốc, tôi nói tiếng Hán.
+他们是德国人，他们说德语。|Tāmen shì Déguó rén, tāmen shuō Déyǔ.|Họ là người Đức, họ nói tiếng Đức.
+她是韩国人，她说韩语。|Tā shì Hánguó rén, tā shuō Hányǔ.|Cô ấy là người Hàn Quốc, cô ấy nói tiếng Hàn.
+我爸爸是越南人，他说越南语。|Wǒ bàba shì Yuènán rén, tā shuō Yuènányǔ.|Bố tôi là người Việt Nam, ông ấy nói tiếng Việt.
+我弟弟是英国人，他说英语。|Wǒ dìdi shì Yīngguó rén, tā shuō Yīngyǔ.|Em trai tôi là người Anh, cậu ấy nói tiếng Anh.
+他是泰国人，他不说说汉语。|Tā shì Tàiguó rén, tā bù shuō shuō Hànyǔ.|Anh ấy là người Thái, anh ấy không nói tiếng Hán.
+他是韩国人，他不说日语。|Tā shì Hánguó rén, tā bù shuō Rìyǔ.|Anh ấy là người Hàn Quốc, anh ấy không nói tiếng Nhật.
+你说汉语吗？|Nǐ shuō Hànyǔ ma?|Bạn nói tiếng Hán không?
+我说越南语。|Wǒ shuō Yuènányǔ.|Tôi nói tiếng Việt.
+他说英语吗？|Tā shuō Yīngyǔ ma?|Anh ấy nói tiếng Anh không?
+我们说越南语。|Wǒmen shuō Yuènányǔ.|Chúng tôi nói tiếng Việt.
+他们说汉语。|Tāmen shuō Hànyǔ.|Họ nói tiếng Hán.
+她们说韩语。|Tāmen shuō Hányǔ.|Các cô ấy nói tiếng Hàn.
+老师说汉语，我们说越南语。|Lǎoshī shuō Hànyǔ, wǒmen shuō Yuènányǔ.|Giáo viên nói tiếng Hán, chúng tôi nói tiếng Việt.
+学生说英语。|Xuésheng shuō Yīngyǔ.|Học sinh nói tiếng Anh.
+我说韩语，他说英语。|Wǒ shuō Hányǔ, tā shuō Yīngyǔ.|Tôi nói tiếng Hàn, anh ấy nói tiếng Anh.
+她说日语，我说法语。|Tā shuō Rìyǔ, wǒ shuō Fǎyǔ.|Cô ấy nói tiếng Nhật, tôi nói tiếng Pháp.
+我们都是学生。|Wǒmen dōu shì xuésheng.|Chúng tôi đều là học sinh.
+你们都是老师吗？|Nǐmen dōu shì lǎoshī ma?|Các bạn đều là giáo viên phải không?
+他们都是医生。|Tāmen dōu shì yīshēng.|Họ đều là bác sĩ.
+她们都是老师。|Tāmen dōu shì lǎoshī.|Các cô ấy đều là giáo viên.
+你们叫什么名字？|Nǐmen jiào shénme míngzi?|Các bạn tên là gì?
+她们姓陈吗？|Tāmen xìng Chén ma?|Các cô ấy họ Trần phải không?
+我们都说英语。|Wǒmen dōu shuō Yīngyǔ.|Chúng tôi đều nói tiếng Anh.
+你们是美国人。|Nǐmen shì Měiguó rén.|Các bạn là người Mỹ.
+你喜欢猫吗？|Nǐ xǐhuan māo ma?|Bạn thích mèo không?
+我喜欢猫。|Wǒ xǐhuan māo.|Tôi thích mèo.
+我不喜欢猫。|Wǒ bù xǐhuan māo.|Tôi không thích mèo.
+你喜欢雪吗？|Nǐ xǐhuan xuě ma?|Bạn thích tuyết không?
+我喜欢雪。|Wǒ xǐhuan xuě.|Tôi thích tuyết.
+我不喜欢雪。|Wǒ bù xǐhuan xuě.|Tôi không thích tuyết.
+你喜欢喝咖啡吗？|Nǐ xǐhuan hē kāfēi ma?|Bạn thích uống cà phê không?
+我喜欢喝咖啡。|Wǒ xǐhuan hē kāfēi.|Tôi thích uống cà phê.
+我不喜欢喝咖啡。|Wǒ bù xǐhuan hē kāfēi.|Tôi không thích uống cà phê.
+你喜欢吃火锅吗？|Nǐ xǐhuan chī huǒguō ma?|Bạn thích ăn lẩu không?
+我喜欢吃火锅。|Wǒ xǐhuan chī huǒguō.|Tôi thích ăn lẩu.
+我不喜欢吃火锅。|Wǒ bù xǐhuan chī huǒguō.|Tôi không thích ăn lẩu.
+他喜欢喝红茶。|Tā xǐhuan hē hóngchá.|Anh ấy thích uống hồng trà (trà đen).
+她喜欢喝牛奶。|Tā xǐhuan hē niúnǎi.|Cô ấy thích uống sữa.
+学生喜欢唱歌。|Xuésheng xǐhuan chànggē.|Học sinh thích ca hát.
+老师喜欢喝茶。|Lǎoshī xǐhuan hē chá.|Giáo viên thích uống trà.
+我喜欢吃面包。|Wǒ xǐhuan chī miànbāo.|Tôi thích ăn bánh mì.
+你喜欢水果吗？|Nǐ xǐhuan shuǐguǒ ma?|Bạn thích trái cây không?
+他喜欢游泳。|Tā xǐhuan yóuyǒng.|Anh ấy thích bơi lội.
+她不喜欢打扫。|Tā bù xǐhuan dǎsǎo.|Cô ấy không thích dọn dẹp.
+我是学生，她也是学生。|Wǒ shì xuésheng, tā yě shì xuésheng.|Tôi là học sinh, cô ấy cũng là học sinh.
+我是越南人, 她也是越南人.|Wǒ shì Yuènán rén, tā yě shì Yuènán rén.|Tôi là người Việt Nam, cô ấy cũng là người Việt Nam.
+我喜欢喝可乐，她也喜欢喝可乐。|Wǒ xǐhuan hē kělè, tā yě xǐhuan hē kělè.|Tôi thích uống Coca, cô ấy cũng thích uống Coca.
+我说汉语，他也说汉语。|Wǒ shuō Hànyǔ, tā yě shuō Hànyǔ.|Tôi nói tiếng Hán, anh ấy cũng nói tiếng Hán.
+我喜欢唱歌，她也喜欢唱歌。|Wǒ xǐhuan chànggē, tā yě xǐhuan chànggē.|Tôi thích ca hát, cô ấy cũng thích ca hát.
+我喜欢喝牛奶，他也喜欢喝牛奶。|Wǒ xǐhuan hē niúnǎi, tā yě xǐhuan hē niúnǎi.|Tôi thích uống sữa, anh ấy cũng thích uống sữa.
+他是老师，我也是老师。|Tā shì lǎoshī, wǒ yě shì lǎoshī.|Anh ấy là giáo viên, tôi cũng là giáo viên.
+他姓王, 我也姓王.|Tā xìng Wáng, wǒ yě xìng Wáng.|Anh ấy họ Vương, tôi cũng họ Vương.
+你说英语, 我也说英语.|Nǐ shuō Yīngyǔ, wǒ yě shuō Yīngyǔ.|Bạn nói tiếng Anh, tôi cũng nói tiếng Anh.
+她喜欢吃火锅, 我也喜欢吃火锅.|Tā xǐhuan chī huǒguō, wǒ yě xǐhuan chī huǒguō.|Cô ấy thích ăn lẩu, tôi cũng thích ăn lẩu.
+我们都是越南人。|Wǒmen dōu shì Yuènán rén.|Chúng tôi đều là người Việt Nam.
+我们都喜欢喝牛奶。|Wǒmen dōu xǐhuan hē niúnǎi.|Chúng tôi đều thích uống sữa.
+他们都是中国人。|Tāmen dōu shì Zhōngguó rén.|Họ đều là người Trung Quốc.
+她们都喜欢唱歌。|Tāmen dōu xǐhuan chànggē.|Các cô ấy đều thích ca hát.
+学生们都说汉语。|Xuéshengmen dōu shuō Hànyǔ.|Các học sinh đều nói tiếng Hán.
+老师们都喜欢喝茶。|Lǎoshīmen dōu xǐhuan hē chá.|Các giáo viên đều thích uống trà.
+你们都喜欢雪吗？|Nǐmen dōu xǐhuan xuě ma?|Các bạn đều thích tuyết phải không?
+我们都姓陈。|Wǒmen dōu xìng Chén.|Chúng tôi đều họ Trần.
+他们都叫李月。|Tāmen dōu jiào Lǐ Yuè.|Họ đều tên là Lý Nguyệt.
+我们都说英语。|Wǒmen dōu shuō Yīngyǔ.|Chúng tôi đều nói tiếng Anh.
+这是什么？|Zhè shì shénme?|Đây là cái gì?
+这是什么书？|Zhè shì shénme shū?|Đây là sách gì?
+这是汉语书。|Zhè shì Hànyǔ shū.|Đây là sách tiếng Hán.
+你喝什么茶?|Nǐ hē shénme chá?|Bạn uống trà gì?
+我喝茶。|Wǒ hē chá.|Tôi uống trà.
+你喝什么茶？|Nǐ hē shénme chá?|Bạn uống trà gì?
+这是红茶。|Zhè shì hóngchá.|Đây là hồng trà (trà đen).
+这是什么茶？|Zhè shì shénme chá?|Đây là trà gì?
+这是奶茶。|Zhè shì nǎichá.|Đây là trà sữa.
+我叫陈楠。|Wǒ jiào Chén Nán.|Tôi tên là Trần Nam.
+那是什么笔？|Nà shì shénme bǐ?|Kia là bút gì?
+那是毛笔。|Nà shì máobǐ.|Kia là bút lông.
+那是李月吗？|Nà shì Lǐ Yuè ma?|Kia là Lý Nguyệt phải không?
+他说英语吗？|Tā shuō Yīngyǔ ma?|Anh ấy nói tiếng Anh không?
+他不喜欢喝茶。|Tā bù xǐhuan hē chá.|Anh ấy không thích uống trà.
+老师不说英语。|Lǎoshī bù shuō Yīngyǔ.|Giáo viên không nói tiếng Anh.
+我们不吃面包。|Wǒmen bù chī miànbāo.|Chúng tôi không ăn bánh mì.
+她不是美国人。|Tā bú shì Měiguó rén.|Cô ấy không phải là người Mỹ.
+他们不喜欢打扫。|Tāmen bù xǐhuan dǎsǎo.|Họ không thích dọn dẹp.
+学生不喝咖啡。|Xuésheng bù hē kāfēi.|Học sinh không uống cà phê.
+我不姓王。|Wǒ bú xìng Wáng.|Tôi không họ Vương.
+他不叫国安。|Tā bú jiào Guó'ān.|Anh ấy không tên là Quốc An.
+我们不喜欢雪。|Wǒmen bù xǐhuan xuě.|Chúng tôi không thích tuyết.
+她们不是老师。|Tāmen bú shì lǎoshī.|Các cô ấy không phải là giáo viên.
+你喜欢吃包子吗？|Nǐ xǐhuan chī bāozi ma?|Bạn thích ăn bánh bao không?
+他喜欢喝奶茶吗？|Tā xǐhuan hē nǎichá ma?|Anh ấy thích uống trà sữa không?
+你们说汉语吗？|Nǐmen shuō Hànyǔ ma?|Các bạn nói tiếng Hán không?
+她们是学生吗？|Tāmen shì xuésheng ma?|Các cô ấy là học sinh phải không?
+老师姓陈吗？|Lǎoshī xìng Chén ma?|Giáo viên họ Trần phải không?
+你喝红茶吗？|Nǐ hē hóngchá ma?|Bạn uống hồng trà (trà đen) không?
+他喜欢游泳吗？|Tā xǐhuan yóuyǒng ma?|Anh ấy thích bơi lội không?
+你们吃水果吗？|Nǐmen chī shuǐguǒ ma?|Các bạn ăn trái cây không?
+你喜欢音乐吗？|Nǐ xǐhuan yīnyuè ma?|Bạn thích âm nhạc không?
+我们都说越南语。|Wǒmen dōu shuō Yuènányǔ.|Chúng tôi đều nói tiếng Việt.
+他们都喜欢吃炒饭。|Tāmen dōu xǐhuan chī chǎofàn.|Họ đều thích ăn cơm rang.
+她们都不是医生。|Tāmen dōu bú shì yīshēng.|Các cô ấy đều không phải là bác sĩ.
+学生们都喜欢喝牛奶。|Xuéshengmen dōu xǐhuan hē niúnǎi.|Các học sinh đều thích uống sữa.
+我们都不吃火锅。|Wǒmen dōu bù chī huǒguō.|Chúng tôi đều không ăn lẩu.
+我喜欢喝茶，他也喜欢喝茶。|Wǒ xǐhuan hē chá, tā yě xǐhuan hē chá.|Tôi thích uống trà, anh ấy cũng thích uống trà.
+他是学生，我也是学生。|Tā shì xuésheng, wǒ yě shì xuésheng.|Anh ấy là học sinh, tôi cũng là học sinh.
+老师说汉语，学生也说汉语。|Lǎoshī shuō Hànyǔ, xuésheng yě shuō Hànyǔ.|Giáo viên nói tiếng Hán, học sinh cũng nói tiếng Hán.
+她姓陈，我也姓陈。|Tā xìng Chén, wǒ yě xìng Chén.|Cô ấy họ Trần, tôi cũng họ Trần.
+我不吃面包，他也不吃面包。|Wǒ bù chī miànbāo, tā yě bù chī miànbāo.|Tôi không ăn bánh mì, anh ấy cũng không ăn bánh mì.
+你喜欢游泳，我也喜欢游泳。|Nǐ xǐhuan yóuyǒng, wǒ yě xǐhuan yóuyǒng.|Bạn thích bơi lội, tôi cũng thích bơi lội.
+她不是中国人，我也不是中国人。|Tā bú shì Zhōngguó rén, wǒ yě bú shì Zhōngguó rén.|Cô ấy không phải người Trung Quốc, tôi cũng không phải người Trung Quốc.
+我喝牛奶，他也喝牛奶。|Wǒ hē niúnǎi, tā yě hē niúnǎi.|Tôi uống sữa, anh ấy cũng uống sữa.
+他们喜欢唱歌，我们也喜欢唱歌。|Tāmen xǐhuan chànggē, wǒmen yě xǐhuan chànggē.|Họ thích ca hát, chúng tôi cũng thích ca hát.
+你叫陈楠，他也叫陈楠。|Nǐ jiào Chén Nán, tā yě jiào Chén Nán.|Bạn tên Trần Nam, anh ấy cũng tên Trần Nam.
+那是什么？|Nà shì shénme?|Kia là cái gì?
+那是越南语书。|Nà shì Yuènányǔ shū.|Kia là sách tiếng Việt.
+请问，您贵姓？|Qǐngwèn, nín guìxìng?|Xin hỏi, quý danh của ngài là gì?
+请问，那是谁？|Qǐngwèn, nà shì shéi?|Xin hỏi, kia là ai?
+请问，这是什么水果？|Qǐngwèn, zhè shì shénme shuǐguǒ?|Xin hỏi, đây là trái cây gì?
+请问，你喝什么茶？|Qǐngwèn, nǐ hē shénme chá?|Xin hỏi, bạn uống trà gì?
+请问，你喜欢吃什么？|Qǐngwèn, nǐ xǐhuan chī shénme?|Xin hỏi, bạn thích ăn gì?
+对不起，我不说英语。|Duìbuqǐ, wǒ bù shuō Yīngyǔ.|Xin lỗi, tôi không nói tiếng Anh.
+你好，请喝茶。|Nǐ hǎo, qǐng hē chá.|Xin chào, mời uống trà.
+谢谢，我不喝茶。|Xièxie, wǒ bù hē chá.|Cảm ơn, tôi không uống trà.
+你们喜欢喝可乐吗？|Nǐmen xǐhuan hē kělè ma?|Các bạn thích uống Coca-Cola không?
+他不喜欢吃面条，他喜欢吃炒饭。|Tā bù xǐhuan chī miàntiáo, tā xǐhuan chī chǎofàn.|Anh ấy không thích ăn mì, anh ấy thích ăn cơm rang.

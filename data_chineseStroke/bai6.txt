@@ -1,0 +1,46 @@
+会|huì|biết (kỹ năng), sẽ|我会说汉语。|Wǒ huì shuō Hànyǔ.|Tôi biết nói tiếng Hán.
+做|zuò|làm, chế tạo|你在做什么？|Nǐ zài zuò shénme?|Bạn đang làm gì vậy?
+菜|cài|món ăn, rau|这道菜很好吃。|Zhè dào cài hěn hǎochī.|Món ăn này rất ngon.
+门|mén|cửa, lượng từ (môn học)|这是一门很有趣的语言。|Zhè shì yī mén hěn yǒuqù de yǔyán.|Đây là một ngôn ngữ rất thú vị.
+语言|yǔyán|ngôn ngữ|学习一门新语言很有挑战。|Xuéxí yī mén xīn yǔyán hěn yǒu tiǎozhàn.|Học một ngôn ngữ mới rất có tính thử thách.
+读|dú|đọc|请大声读课文。|Qǐng dàshēng dú kèwén.|Xin hãy đọc to bài khóa.
+学习|xuéxí|học tập|我每天学习中文。|Wǒ měitiān xuéxí Zhōngwén.|Tôi học tiếng Trung mỗi ngày.
+包|bāo|cái túi, gói|我的包里有书。|Wǒ de bāo lǐ yǒu shū.|Trong cặp của tôi có sách.
+煮|zhǔ|nấu, luộc|我想煮面条。|Wǒ xiǎng zhǔ miàntiáo.|Tôi muốn nấu mì.
+玩|wán|chơi, vui chơi|孩子们在外面玩。|Háizimen zài wàimiàn wán.|Các đứa trẻ đang chơi ở bên ngoài.
+写|xiě|viết|请你写下你的名字。|Qǐng nǐ xiě xià nǐ de míngzì.|Xin bạn viết tên của mình xuống.
+开|kāi|mở, lái (xe)|我会开车。|Wǒ huì kāichē.|Tôi biết lái xe.
+骑|qí|cưỡi, đi (xe đạp)|他喜欢骑自行车。|Tā xǐhuān qí zìxíngchē.|Anh ấy thích đạp xe đạp.
+弹|tán|đàn, gẩy|她会弹钢琴。|Tā huì tán gāngqín.|Cô ấy biết chơi piano.
+表演|biǎoyǎn|biểu diễn|昨晚的表演很精彩。|Zuówǎn de biǎoyǎn hěn jīngcǎi.|Buổi biểu diễn tối qua rất đặc sắc.
+做饭|zuòfàn|nấu cơm, nấu ăn|我今天晚上做饭。|Wǒ jīntiān wǎnshang zuòfàn.|Tối nay tôi nấu cơm.
+怎么|zěnme|thế nào, làm sao|这个词怎么读？|Zhège cí zěnme dú?|Từ này đọc thế nào?
+来自|láizì|đến từ|我来自越南。|Wǒ láizì Yuènán.|Tôi đến từ Việt Nam.
+哪里|nǎlǐ|ở đâu|你住在哪里？|Nǐ zhù zài nǎlǐ?|Bạn sống ở đâu?
+好吃|hǎochī|ngon (đồ ăn)|这碗面条真好吃！|Zhè wǎn miàntiáo zhēn hǎochī!|Bát mì này thật ngon!
+好喝|hǎohē|ngon (đồ uống)|这杯咖啡很好喝。|Zhè bēi kāfēi hěn hǎohē.|Cốc cà phê này rất ngon.
+好听|hǎotīng|hay (nghe)|这首歌很好听。|Zhè shǒu gē hěn hǎotīng.|Bài hát này rất hay.
+好看|hǎokàn|đẹp, hay (nhìn, phim)|这件衣服很好看。|Zhè jiàn yīfu hěn hǎokàn.|Bộ quần áo này rất đẹp.
+好玩|hǎowán|vui, thú vị|那个游戏很好玩。|Nàge yóuxì hěn hǎowán.|Trò chơi đó rất vui.
+国家|guójiā|quốc gia, đất nước|你是哪个国家的人？|Nǐ shì nǎge guójiā de rén?|Bạn là người nước nào?
+排球|páiqiú|bóng chuyền|我喜欢打排球。|Wǒ xǐhuān dǎ páiqiú.|Tôi thích chơi bóng chuyền.
+台球|táiqiú|bi-a|週末我们去打台球吧。|Zhōumò wǒmen qù dǎ tái qiú ba.|Cuối tuần chúng ta đi chơi bi-a đi.
+乒乓球|pīngpāngqiú|bóng bàn|乒乓球是中国很受欢迎的运动。|Pīngpāngqiú shì Zhōngguó hěn shòu huānyíng de yùndòng.|Bóng bàn là môn thể thao rất được yêu thích ở Trung Quốc.
+网球|wǎngqiú|quần vợt (tennis)|她每周练习网球。|Tā měi zhōu liànxí wǎngqiú.|Cô ấy luyện tập quần vợt mỗi tuần.
+匹克球|pǐkèqiú|pickleball|匹克球最近很流行。|Pǐkèqiú zuìjìn hěn liúxíng.|Pickleball gần đây rất phổ biến.
+保龄球|bǎolíngqiú|bowling|我们去玩保龄球。|Wǒmen qù wán bǎolíngqiú.|Chúng ta đi chơi bowling.
+橄榄球|gǎnlǎnqiú|bóng bầu dục|橄榄球在美国很受欢迎。|Gǎnlǎnqiú zài Měiguó hěn shòu huānyíng.|Bóng bầu dục rất được yêu thích ở Mỹ.
+钢琴|gāngqín|đàn piano|她正在学习弹钢琴。|Tā zhèngzài xuéxí tán gāngqín.|Cô ấy đang học chơi piano.
+其他|qítā|khác, cái khác|你还有其他问题吗？|Nǐ hái yǒu qítā wèntí ma?|Bạn còn câu hỏi nào khác không?
+魔术|móshù|ảo thuật|那个魔术师很厉害。|Nàge móshùshī hěn lìhài.|Nhà ảo thuật đó rất giỏi.
+书法|shūfǎ|thư pháp|书法是中国的传统艺术。|Shūfǎ shì Zhōngguó de chuántǒng yìshù.|Thư pháp là nghệ thuật truyền thống của Trung Quốc.
+饭|fàn|cơm, bữa ăn|我们一起吃晚饭吧。|Wǒmen yīqǐ chī wǎnfàn ba.|Chúng ta cùng nhau ăn bữa tối đi.
+编程|biānchéng|lập trình|学习编程很有用。|Xuéxí biānchéng hěn yǒuyòng.|Học lập trình rất hữu ích.
+画画儿|huàhuàr|vẽ tranh|我从小就喜欢画画儿。|Wǒ cóngxiǎo jiù xǐhuān huàhuàr.|Tôi thích vẽ tranh từ nhỏ.
+北宁|Běiníng|Bắc Ninh (Tỉnh)|北宁在河内东边。|Běiníng zài Hénèi dōngbiān.|Bắc Ninh ở phía Đông Hà Nội.
+北江|Běijiāng|Bắc Giang (Tỉnh)|他是北江人。|Tā shì Běijiāng rén.|Anh ấy là người Bắc Giang.
+河内|Hénèi|Hà Nội (Thủ đô)|河内是越南的首都。|Hénèi shì Yuènán de shǒudū.|Hà Nội là thủ đô của Việt Nam.
+胡志明|Húzhìmíng|Hồ Chí Minh (Tên người/thành phố)|我住在胡志明市。|Wǒ zhù zài Húzhìmíng Shì.|Tôi sống ở thành phố Hồ Chí Minh.
+海防|Hǎifáng|Hải Phòng (Thành phố)|海防是一个海港城市。|Hǎifáng shì yīgè hǎigǎng chéngshì.|Hải Phòng là một thành phố cảng biển.
+海阳|Hǎiyáng|Hải Dương (Tỉnh)|海阳的绿豆糕很有名。|Hǎiyáng de lǜdòu gāo hěn yǒumíng.|Bánh đậu xanh Hải Dương rất nổi tiếng.
+兴安|Xīng'ān|Hưng Yên (Tỉnh)|兴安在越南北部。|Xīng'ān zài Yuènán běibù.|Hưng Yên ở miền Bắc Việt Nam.
