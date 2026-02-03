@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Nghe & Viết - Chinese Practice</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Select */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.25em 1.25em;
+            appearance: none;
+        }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .animate-pulse-ring { animation: pulse-ring 2s infinite; }
+
+        textarea:focus, input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative text-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="handleBack()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Luyện Nghe & Viết</h1>
+        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shadow-sm border border-blue-100">
+            <span id="questionCounter">0/0</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar relative">
+        
+        <!-- SETUP SCREEN -->
+        <div id="setup-screen" class="flex flex-col gap-6 pt-4 transition-all duration-300">
+            <!-- Icon Hero -->
+            <div class="flex justify-center mb-2">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center shadow-inner">
+                    <span class="text-5xl">🎧</span>
+                </div>
+            </div>
+
+            <!-- Settings Form -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                
+                <!-- Lesson Select -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Chọn bài học</label>
+                    <div class="relative">
+                        <select id="lessonSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                            <option value="bai1">H1 Bài 1 老师您好</option>
+                            <option value="bai2">H1 Bài 2: 谢谢你</option>
+                            <option value="bai3">H1 Bài 3: 你叫什么名字?</option>
+                            <option value="bai4">H1 Bài 4: 她是我的汉语老师。</option>
+                            <option value="bai5">H1 Bài 5: 她女儿今年八岁。</option>
+                            <option value="bai6">H1 Bài 6: 我会说汉语。</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Number of Questions -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Số câu luyện tập</label>
+                    <div class="flex items-center gap-3">
+                        <input type="number" id="questionCount" value="5" min="1" max="50" class="w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 px-4 rounded-xl focus:ring-2 focus:ring-blue-500 transition text-center" />
+                        <span class="text-xs text-gray-400 font-medium whitespace-nowrap">(Ngẫu nhiên)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <button id="startBtn" onclick="initGame()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 text-lg">
+                <i class="fas fa-play"></i> Bắt đầu luyện tập
+            </button>
+            
+            <p id="loadingMsg" class="hidden text-center text-sm text-gray-400 animate-pulse mt-2">Đang tải dữ liệu...</p>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="hidden flex-col h-full relative">
+            
+            <!-- Progress Bar -->
+            <div class="w-full h-1.5 bg-gray-200 rounded-full mb-6 overflow-hidden">
+                <div id="gameProgress" class="h-full bg-green-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="flex-1 flex flex-col items-center">
+                
+                <!-- Mode Indicator -->
+                <div id="modeIndicator" class="bg-blue-50 text-blue-600 text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">
+                    Nghe và viết lại
+                </div>
+
+                <!-- Content (Audio or Text) -->
+                <div class="w-full bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-6 flex flex-col items-center justify-center min-h-[160px] relative">
+                    
+                    <!-- Audio Button (Hidden by default) -->
+                    <button id="audioBtn" onclick="playCurrentAudio()" class="hidden w-20 h-20 rounded-full bg-blue-500 text-white items-center justify-center shadow-lg shadow-blue-200 hover:scale-105 active:scale-95 transition-all animate-pulse-ring mb-2">
+                        <i class="fas fa-volume-up text-3xl"></i>
+                    </button>
+                    <p id="audioHint" class="hidden text-xs text-gray-400 font-medium mt-2">Nhấn để nghe lại</p>
+
+                    <!-- Vietnamese Text (Hidden by default) -->
+                    <h3 id="vietnameseText" class="hidden text-xl md:text-2xl font-bold text-gray-800 text-center leading-relaxed">
+                        <!-- Content here -->
+                    </h3>
+
+                </div>
+
+                <!-- Input Area -->
+                <div class="w-full">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider ml-1">Nhập câu tiếng Trung</label>
+                    <textarea id="userInput" rows="2" class="w-full chinese-font text-xl border-2 border-gray-200 rounded-xl p-4 focus:border-blue-500 transition-colors resize-none text-center placeholder-gray-300" placeholder="Nhập câu trả lời..."></textarea>
+                    
+                    <!-- NEW: Success Pinyin Display & Audio Recording -->
+                    <div id="pinyinResult" class="hidden mt-4 text-center animate-fade-in-up">
+                        
+                        <!-- Actions Row -->
+                        <div class="flex items-center justify-center gap-4 mb-2">
+                            
+                            <!-- Native Audio Button -->
+                            <div class="flex items-center gap-1 cursor-pointer group px-3 py-1 rounded-full hover:bg-green-50 transition" onclick="playCurrentAudio()" title="Nghe mẫu">
+                                <span class="text-xs text-green-600 font-bold uppercase tracking-widest">Pinyin</span>
+                                <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center group-hover:bg-green-200 group-active:scale-95 transition shadow-sm">
+                                    <i class="fas fa-volume-up text-xs"></i>
+                                </div>
+                            </div>
+
+                            <!-- Recording Controls -->
+                            <div class="flex items-center gap-2 border-l pl-4 border-gray-200">
+                                <!-- Record/Stop Button -->
+                                <button id="recordBtn" onclick="toggleRecording()" class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center hover:bg-red-200 active:scale-95 transition shadow-sm" title="Ghi âm giọng bạn">
+                                    <i class="fas fa-microphone text-xs"></i>
+                                </button>
+                                
+                                <!-- Play User Audio Button (Hidden initially) -->
+                                <button id="playUserBtn" onclick="playUserAudio()" class="hidden w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 active:scale-95 transition shadow-sm animate-pop-in" title="Nghe lại giọng bạn">
+                                    <i class="fas fa-play text-xs"></i>
+                                </button>
+
+                                <!-- Status Text -->
+                                <span id="recordStatus" class="text-[10px] text-gray-400 font-medium hidden md:inline-block">Ghi âm</span>
+                            </div>
+
+                        </div>
+                        
+                        <!-- Pinyin Text -->
+                        <p id="pinyinResultText" class="text-xl text-blue-600 font-bold"></p>
+                    </div>
+
+                    <!-- Error Hint (Shown on wrong answer) -->
+                    <div id="hintArea" class="hidden mt-3 p-3 bg-red-50 rounded-lg border border-red-100 text-center">
+                        <p class="text-xs text-red-500 font-bold uppercase mb-1">Gợi ý (Pinyin)</p>
+                        <p id="pinyinText" class="text-gray-700 font-medium"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-auto pt-4">
+                <button id="checkBtn" onclick="checkAnswer()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all">
+                    Kiểm tra
+                </button>
+                <button id="nextBtn" onclick="nextQuestion()" class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-200 active:scale-95 transition-all">
+                    Tiếp tục <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden flex-col h-full pt-6">
+            <div class="text-center mb-4">
+                <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-3 shadow-sm mx-auto animate-bounce">
+                    <span class="text-4xl">🎉</span>
+                </div>
+                <h2 class="text-2xl font-extrabold text-gray-800">Hoàn thành!</h2>
+            </div>
+            
+            <!-- Modified Grid for Accuracy -->
+            <div class="bg-white rounded-xl p-4 w-full mb-4 border border-gray-100 shadow-sm grid grid-cols-2 gap-4 mx-auto max-w-sm">
+                <div class="text-center border-r border-gray-100">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Tổng số câu</p>
+                    <p id="resultTotal" class="text-2xl font-bold text-gray-800">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Chính xác</p>
+                    <p id="resultAccuracy" class="text-2xl font-bold text-blue-600">0%</p>
+                </div>
+            </div>
+
+            <!-- NEW: REVIEW LIST -->
+            <div class="flex-1 overflow-hidden flex flex-col mb-4">
+                 <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2 px-1">Xem lại bài làm</h3>
+                 <div id="reviewList" class="flex-1 overflow-y-auto space-y-3 px-1 no-scrollbar pb-2">
+                     <!-- Review items injected here -->
+                 </div>
+            </div>
+
+            <div class="mt-auto space-y-3">
+                <button onclick="resetGame()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition">
+                    Luyện tập tiếp
+                </button>
+                <button onclick="handleBack()" class="w-full bg-white text-gray-600 border border-gray-200 font-bold py-3.5 rounded-xl active:scale-95 transition">
+                    Về màn hình chính
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-pen-nib text-xl"></i>
+            <span class="text-[10px] font-medium">Nghe Viết</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-gamepad text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-6 w-11/12 max-w-xs shadow-2xl transform transition-all scale-100 animate-pop-in border border-gray-100">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i class="fas fa-sign-out-alt text-red-500 text-2xl pl-1"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-800 mb-2">Dừng luyện tập?</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Tiến trình hiện tại của bạn sẽ không được lưu nếu bạn thoát ngay bây giờ.</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeConfirmModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition active:scale-95">
+                    Hủy
+                </button>
+                <button onclick="confirmExit()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-200 transition active:scale-95">
+                    Thoát
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="feedbackToast" class="fixed top-20 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full shadow-lg text-sm font-bold transition-all duration-300 z-[60] pointer-events-none whitespace-nowrap">
+        <!-- Text injected -->
+    </div>
+
+    <script>
+        // --- CONSTANTS & STATE ---
+        const MOCK_DATA = [
+            "你好。|Nǐ hǎo.|Xin chào.",
+            "我很好。|Wǒ hěn hǎo.|Tôi rất khỏe.",
+            "谢谢你。|Xièxiè nǐ.|Cảm ơn bạn.",
+            "再见。|Zàijiàn.|Tạm biệt.",
+            "你叫什么名字？|Nǐ jiào shénme míngzì?|Bạn tên là gì?"
+        ];
+
+        let currentLessonId = '';
+        let practiceData = [];
+        let currentIndex = 0;
+        let currentQuestion = null;
+        let audioPlayer = new Audio();
+        let autoAdvanceTimer = null; 
+        
+        // Tracking Score
+        let totalAttempts = 0; 
+        
+        // Tracking Session Results for Review
+        let sessionResults = []; // Stores {question, answer, audioUrl}
+
+        // Recording State
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let userAudioUrl = null;
+        let isRecording = false;
+
+        // DOM Elements
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const loadingMsg = document.getElementById('loadingMsg');
+        
+        const questionCounter = document.getElementById('questionCounter');
+        const gameProgress = document.getElementById('gameProgress');
+        
+        const modeIndicator = document.getElementById('modeIndicator');
+        const audioBtn = document.getElementById('audioBtn');
+        const audioHint = document.getElementById('audioHint');
+        const vietnameseText = document.getElementById('vietnameseText');
+        const userInput = document.getElementById('userInput');
+        const hintArea = document.getElementById('hintArea');
+        const pinyinText = document.getElementById('pinyinText');
+        
+        // Pinyin Result Elements
+        const pinyinResult = document.getElementById('pinyinResult');
+        const pinyinResultText = document.getElementById('pinyinResultText');
+
+        // Recording Elements
+        const recordBtn = document.getElementById('recordBtn');
+        const playUserBtn = document.getElementById('playUserBtn');
+        const recordStatus = document.getElementById('recordStatus');
+
+        const checkBtn = document.getElementById('checkBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const confirmModal = document.getElementById('confirmModal');
+        const reviewList = document.getElementById('reviewList');
+
+        // --- CORE FUNCTIONS ---
+
+        async function initGame() {
+            const lessonSelect = document.getElementById('lessonSelect');
+            const countInput = document.getElementById('questionCount');
+            const startBtn = document.getElementById('startBtn');
+            
+            currentLessonId = lessonSelect.value;
+            const requestedCount = parseInt(countInput.value) || 5;
+            
+            // Reset Score Stats
+            totalAttempts = 0;
+            sessionResults = []; // Clear previous results
+
+            if (startBtn) startBtn.classList.add('opacity-50', 'pointer-events-none');
+            loadingMsg.classList.remove('hidden');
+
+            try {
+                let rawText = "";
+                try {
+                    const response = await fetch(`data_listenWrite/${currentLessonId}/${currentLessonId}.txt`);
+                    if (!response.ok) throw new Error("File not found");
+                    rawText = await response.text();
+                } catch (err) {
+                    console.warn("Dùng dữ liệu mẫu:", err);
+                    rawText = MOCK_DATA.join('\n');
+                    showToast("Chế độ Demo (Không tìm thấy file)", "bg-yellow-100 text-yellow-700");
+                }
+
+                const allSentences = parseData(rawText);
+                
+                if (allSentences.length === 0) {
+                    alert("Bài học này chưa có dữ liệu!");
+                    resetGame();
+                    return;
+                }
+                
+                allSentences.sort(() => 0.5 - Math.random());
+                practiceData = allSentences.slice(0, requestedCount);
+
+                currentIndex = 0;
+                setupScreen.classList.add('hidden');
+                gameScreen.classList.remove('hidden');
+                gameScreen.classList.add('flex');
+                
+                loadQuestion();
+
+            } catch (e) {
+                alert("Lỗi: " + e.message);
+                resetGame();
+            } finally {
+                if (startBtn) startBtn.classList.remove('opacity-50', 'pointer-events-none');
+                loadingMsg.classList.add('hidden');
+            }
+        }
+
+        function parseData(text) {
+            const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+            return lines.map(line => {
+                const parts = line.split('|');
+                if (parts.length >= 3) {
+                    return {
+                        chinese: parts[0].trim(),
+                        pinyin: parts[1].trim(),
+                        vietnamese: parts[2].trim()
+                    };
+                }
+                return null;
+            }).filter(item => item !== null);
+        }
+
+        function loadQuestion() {
+            if (autoAdvanceTimer) {
+                clearTimeout(autoAdvanceTimer);
+                autoAdvanceTimer = null;
+            }
+            window.speechSynthesis.cancel();
+            audioPlayer.pause();
+            
+            // IMPORTANT: Don't revoke URL here anymore because we save it to sessionResults
+            // We only reset the current state
+            isRecording = false;
+            audioChunks = [];
+            userAudioUrl = null; // Clear pointer, but don't revoke prev object
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+            // Reset Recording UI
+            recordBtn.classList.remove('bg-red-500', 'text-white', 'animate-pulse');
+            recordBtn.classList.add('bg-red-100', 'text-red-500');
+            recordBtn.querySelector('i').className = 'fas fa-microphone text-xs';
+            playUserBtn.classList.add('hidden');
+            recordStatus.innerText = "Ghi âm";
+            recordStatus.className = "text-[10px] text-gray-400 font-medium hidden md:inline-block";
+
+
+            // Reset UI
+            checkBtn.classList.remove('hidden');
+            nextBtn.classList.add('hidden');
+            hintArea.classList.add('hidden');
+            pinyinResult.classList.add('hidden'); // Hide Correct Pinyin
+            
+            userInput.value = '';
+            userInput.classList.remove('border-red-500', 'bg-red-50', 'border-green-500', 'bg-green-50', 'animate-shake');
+            userInput.classList.add('border-gray-200');
+            userInput.disabled = false;
+            userInput.focus();
+            
+            questionCounter.innerText = `${currentIndex + 1}/${practiceData.length}`;
+            gameProgress.style.width = `${(currentIndex / practiceData.length) * 100}%`;
+
+            const data = practiceData[currentIndex];
+            const mode = Math.random() < 0.5 ? 'audio' : 'text'; 
+            
+            currentQuestion = { ...data, mode };
+
+            if (mode === 'audio') {
+                modeIndicator.innerText = "Nghe và viết lại câu";
+                audioBtn.classList.remove('hidden');
+                audioBtn.classList.add('flex');
+                audioHint.classList.remove('hidden');
+                vietnameseText.classList.add('hidden');
+                setTimeout(() => playCurrentAudio(), 500);
+            } else {
+                modeIndicator.innerText = "Dịch câu sau sang tiếng Trung";
+                audioBtn.classList.add('hidden');
+                audioBtn.classList.remove('flex');
+                audioHint.classList.add('hidden');
+                vietnameseText.classList.remove('hidden');
+                vietnameseText.innerText = data.vietnamese;
+            }
+        }
+
+        function playCurrentAudio() {
+            if (!currentQuestion) return;
+            playAudioWithCallback(null); 
+            
+            const btn = document.getElementById('audioBtn');
+            if(btn && !btn.classList.contains('hidden')){
+                btn.classList.remove('animate-pulse-ring');
+                void btn.offsetWidth;
+                btn.classList.add('animate-pulse-ring');
+            }
+        }
+
+        function playAudioWithCallback(onComplete) {
+            if (!currentQuestion) return;
+            const filename = encodeURIComponent(currentQuestion.chinese);
+            const audioPath = `data_listenWrite/${currentLessonId}/mp3/${filename}.mp3`;
+            
+            audioPlayer.onended = null;
+            audioPlayer.onerror = null;
+
+            audioPlayer.src = audioPath;
+            
+            audioPlayer.onended = () => {
+                if (onComplete) onComplete();
+            };
+
+            audioPlayer.play().catch(e => {
+                console.warn("Audio file error, falling back to TTS", e);
+                speakFallback(currentQuestion.chinese, onComplete);
+            });
+        }
+
+        function speakFallback(text, onComplete) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.8;
+                
+                utterance.onend = () => {
+                    if (onComplete) onComplete();
+                };
+                
+                utterance.onerror = () => {
+                     if (onComplete) onComplete();
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                if (onComplete) onComplete();
+            }
+        }
+
+        // --- RECORDING FUNCTIONS ---
+
+        async function toggleRecording() {
+            if (!isRecording) {
+                // Start Recording
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        userAudioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // UI update after stop
+                        playUserBtn.classList.remove('hidden');
+                        recordStatus.innerText = "Đã xong";
+                        recordStatus.className = "text-[10px] text-green-500 font-bold hidden md:inline-block";
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    
+                    // UI Update
+                    recordBtn.classList.remove('bg-red-100', 'text-red-500');
+                    recordBtn.classList.add('bg-red-500', 'text-white', 'animate-pulse');
+                    recordBtn.querySelector('i').className = 'fas fa-stop text-xs'; // Switch to Stop Icon
+                    
+                    playUserBtn.classList.add('hidden'); // Hide old play button while recording
+                    recordStatus.innerText = "Đang ghi...";
+                    recordStatus.className = "text-[10px] text-red-500 font-bold hidden md:inline-block";
+
+                } catch (err) {
+                    console.error("Error accessing microphone:", err);
+                    alert("Không thể truy cập microphone. Vui lòng kiểm tra quyền truy cập.");
+                }
+            } else {
+                // Stop Recording
+                mediaRecorder.stop();
+                isRecording = false;
+
+                // UI Update
+                recordBtn.classList.remove('bg-red-500', 'text-white', 'animate-pulse');
+                recordBtn.classList.add('bg-red-100', 'text-red-500');
+                recordBtn.querySelector('i').className = 'fas fa-microphone text-xs'; // Back to Mic Icon
+                
+                // Stop all tracks to release mic
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function playUserAudio() {
+            if (userAudioUrl) {
+                const audio = new Audio(userAudioUrl);
+                audio.play();
+            } else {
+                showToast("Chưa có bản ghi âm nào!", "bg-gray-800 text-white");
+            }
+        }
+
+
+        // --- ANSWER CHECKING ---
+
+        function checkAnswer() {
+            const userVal = userInput.value.trim();
+            const correctVal = currentQuestion.chinese.trim();
+            
+            if (!userVal) {
+                showToast("Vui lòng nhập câu trả lời!", "bg-gray-800 text-white");
+                userInput.focus();
+                return;
+            }
+            
+            totalAttempts++;
+
+            // NORMALIZE: Chỉ xóa khoảng trắng thừa và chuyển thường, KHÔNG quy đổi dấu câu
+            const normalize = (str) => {
+                return str
+                    .replace(/\s+/g, '')  // Xóa khoảng trắng thừa
+                    .toLowerCase();       // Chuyển chữ thường
+            };
+            
+            if (normalize(userVal) === normalize(correctVal)) {
+                handleCorrect();
+            } else {
+                handleWrong();
+            }
+        }
+
+        function handleCorrect() {
+            userInput.classList.remove('border-gray-200', 'border-red-500', 'bg-red-50');
+            userInput.classList.add('border-green-500', 'bg-green-50');
+            userInput.disabled = true;
+            
+            // --- THAY ĐỔI: Không lưu sessionResults ở đây nữa ---
+            // Vì lúc này người dùng CHƯA ghi âm.
+            // Việc lưu sẽ chuyển sang hàm nextQuestion.
+
+            // Show Success Pinyin
+            pinyinResultText.innerText = currentQuestion.pinyin;
+            pinyinResult.classList.remove('hidden');
+            hintArea.classList.add('hidden'); 
+
+            showToast("Chính xác! Tuyệt vời", "bg-green-100 text-green-700");
+            
+            checkBtn.classList.add('hidden');
+            nextBtn.classList.remove('hidden');
+            nextBtn.focus();
+            
+            playAudioWithCallback(null);
+        }
+
+        function handleWrong() {
+            // ... existing code ... (giữ nguyên hàm handleWrong)
+            userInput.classList.remove('border-gray-200');
+            userInput.classList.add('border-red-500', 'bg-red-50', 'animate-shake');
+            
+            pinyinText.innerText = currentQuestion.pinyin;
+            hintArea.classList.remove('hidden');
+            hintArea.classList.add('pop-in');
+
+            showToast("Chưa đúng, hãy thử lại!", "bg-red-100 text-red-600");
+
+            setTimeout(() => {
+                userInput.classList.remove('animate-shake');
+                userInput.focus();
+            }, 500);
+        }
+
+        function nextQuestion() {
+            // --- THAY ĐỔI: Lưu kết quả (kèm file ghi âm) tại đây ---
+            // Lúc này người dùng đã nhấn "Tiếp tục", nghĩa là đã hoàn tất ghi âm (nếu có)
+            if (currentQuestion) {
+                sessionResults.push({
+                    ...currentQuestion,
+                    userRecording: userAudioUrl // Lúc này userAudioUrl đã có dữ liệu nếu người dùng ghi âm
+                });
+            }
+
+            if (autoAdvanceTimer) {
+                clearTimeout(autoAdvanceTimer);
+                autoAdvanceTimer = null;
+            }
+
+            currentIndex++;
+            if (currentIndex < practiceData.length) {
+                loadQuestion();
+            } else {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+
+            document.getElementById('resultTotal').innerText = practiceData.length;
+            
+            // Calculate Accuracy
+            const accuracy = totalAttempts > 0 ? Math.round((practiceData.length / totalAttempts) * 100) : 0;
+            document.getElementById('resultAccuracy').innerText = `${accuracy}%`;
+
+            // Render Review List
+            renderReview();
+
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function renderReview() {
+            reviewList.innerHTML = '';
+            
+            if (sessionResults.length === 0) {
+                reviewList.innerHTML = '<p class="text-center text-gray-400 text-sm">Chưa có dữ liệu bài làm.</p>';
+                return;
+            }
+
+            sessionResults.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between";
+                
+                // HTML for the play button if recording exists
+                let playBtnHtml = '';
+                if (item.userRecording) {
+                    playBtnHtml = `
+                        <button onclick="playSavedAudio('${item.userRecording}')" class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 transition" title="Nghe giọng bạn">
+                            <i class="fas fa-play text-xs"></i>
+                        </button>
+                    `;
+                } else {
+                    playBtnHtml = `
+                         <div class="w-8 h-8 rounded-full bg-gray-50 text-gray-300 flex items-center justify-center">
+                            <i class="fas fa-microphone-slash text-xs"></i>
+                        </div>
+                    `;
+                }
+
+                div.innerHTML = `
+                    <div class="flex-1">
+                        <p class="chinese-font text-lg font-bold text-gray-800 leading-tight">${item.chinese}</p>
+                        <p class="text-xs text-blue-500 font-bold mb-0.5">${item.pinyin}</p>
+                        <p class="text-[10px] text-gray-400 italic">${item.vietnamese}</p>
+                    </div>
+                    <div class="ml-2">
+                        ${playBtnHtml}
+                    </div>
+                `;
+                reviewList.appendChild(div);
+            });
+        }
+
+        // Global function to play blob URLs from string
+        window.playSavedAudio = function(url) {
+            const audio = new Audio(url);
+            audio.play();
+        }
+
+        function resetGame() {
+            // Clean up blob URLs to free memory
+            sessionResults.forEach(res => {
+                if(res.userRecording) {
+                    URL.revokeObjectURL(res.userRecording);
+                }
+            });
+            sessionResults = [];
+            if (userAudioUrl) URL.revokeObjectURL(userAudioUrl);
+            userAudioUrl = null;
+
+            setupScreen.classList.remove('hidden');
+            gameScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            document.getElementById('questionCount').value = 5;
+            
+            if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
+            window.speechSynthesis.cancel();
+            audioPlayer.pause();
+            
+            // UI Reset for recorder
+            isRecording = false;
+            audioChunks = [];
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+            recordBtn.classList.remove('bg-red-500', 'text-white', 'animate-pulse');
+            recordBtn.classList.add('bg-red-100', 'text-red-500');
+            recordBtn.querySelector('i').className = 'fas fa-microphone text-xs';
+            playUserBtn.classList.add('hidden');
+            recordStatus.innerText = "Ghi âm";
+            recordStatus.className = "text-[10px] text-gray-400 font-medium hidden md:inline-block";
+        }
+
+        function handleBack() {
+            if (!setupScreen.classList.contains('hidden')) {
+                window.location.href = "index.html"; 
+            } else if (!resultScreen.classList.contains('hidden')) {
+                 resetGame();
+            } else {
+                showConfirmModal();
+            }
+        }
+
+        function showConfirmModal() {
+            confirmModal.classList.remove('hidden');
+            confirmModal.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            confirmModal.classList.add('hidden');
+            confirmModal.classList.remove('flex');
+        }
+
+        function confirmExit() {
+            closeConfirmModal();
+            resetGame();
+        }
+
+        function showToast(message, colorClass) {
+            const toast = document.getElementById('feedbackToast');
+            toast.innerText = message;
+            toast.className = `fixed top-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-lg text-sm font-bold transition-all duration-300 z-[60] pointer-events-none ${colorClass}`;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-20px]');
+            }, 2000);
+        }
+
+    </script>
+</body>
+</html>
