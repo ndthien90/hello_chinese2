@@ -1,6 +1,0 @@
-我不会做奶茶。|Wǒ bú huì zuò nǎichá.|Tôi không biết làm trà sữa.
-你会游泳吗？|Nǐ huì yóuyǒng ma?|Bạn biết bơi không?
-我不会游泳。|Wǒ bú huì yóuyǒng.|Tôi không biết bơi.
-你会跳舞吗？|Nǐ huì tiàowǔ ma?|Bạn biết nhảy/khiêu vũ không?
-我不会跳舞。|Wǒ bú huì tiàowǔ.|Tôi không biết nhảy/khiêu vũ.
-他会不会踢足球。|Tā huì bú huì tī zúqiú.|Anh ấy có biết đá bóng không?

@@ -1,0 +1,181 @@
+他会写这个汉字。|Tā huì xiě zhè ge Hànzì.|Anh ấy biết viết chữ Hán này.
+你会做饭吗？|Nǐ huì zuò fàn ma?|Bạn biết nấu ăn không?
+我不会做饭。|Wǒ bú huì zuò fàn.|Tôi không biết nấu ăn.
+你会做中国菜吗？|Nǐ huì zuò Zhōngguó cài ma?|Bạn biết nấu món Trung Quốc không?
+我喜欢吃中国菜，我也会做中国菜。|Wǒ xǐhuān chī Zhōngguó cài, wǒ yě huì zuò Zhōngguó cài.|Tôi thích ăn món Trung Quốc, tôi cũng biết nấu món Trung Quốc.
+我不会做奶茶。|Wǒ bú huì zuò nǎichá.|Tôi không biết làm trà sữa.
+你会游泳吗？|Nǐ huì yóuyǒng ma?|Bạn biết bơi không?
+我不会游泳。|Wǒ bú huì yóuyǒng.|Tôi không biết bơi.
+你会跳舞吗？|Nǐ huì tiàowǔ ma?|Bạn biết nhảy (khiêu vũ) không?
+我不会跳舞。|Wǒ bú huì tiàowǔ.|Tôi không biết nhảy (khiêu vũ).
+他会不会踢足球。|Tā huì bú huì tī zúqiú.|Anh ấy có biết đá bóng không?
+他喜欢看足球，但是他不会踢足球。|Tā xǐhuān kàn zúqiú, dànshì tā bú huì tī zúqiú.|Anh ấy thích xem bóng đá, nhưng anh ấy không biết đá bóng.
+你爸爸会打羽毛球吗？|Nǐ bàba huì dǎ yǔmáoqiú ma?|Bố bạn biết chơi cầu lông không?
+羽毛球和乒乓球他都会打。|Yǔmáoqiú hé pīngpāngqiú tā dōu huì dǎ.|Cầu lông và bóng bàn anh ấy đều biết chơi.
+你朋友会开汽车吗？|Nǐ péngyou huì kāi qìchē ma?|Bạn bè bạn biết lái xe ô tô không?
+他家有汽车，但是他不会开。|Tā jiā yǒu qìchē, dànshì tā bú huì kāi.|Nhà anh ấy có ô tô, nhưng anh ấy không biết lái.
+你弟弟会不会骑摩托车？|Nǐ dìdi huì bú huì qí mótuōchē?|Em trai bạn có biết đi xe máy không?
+他不会骑摩托车但是他会骑电瓶车。|Tā bú huì qí mótuōchē dànshì tā huì qí diànpíngchē.|Anh ấy không biết đi xe máy nhưng anh ấy biết đi xe điện.
+你妈妈会唱歌吗？|Nǐ māma huì chànggē ma?|Mẹ bạn biết hát không?
+她喜欢听歌但是她不会唱歌。|Tā xǐhuān tīng gē dànshì tā bú huì chànggē.|Cô ấy thích nghe nhạc nhưng cô ấy không biết hát.
+你们会不会表演魔术。|Nǐmen huì bú huì biǎoyǎn móshù.|Các bạn có biết biểu diễn ảo thuật không?
+他会表演魔术。|Tā huì biǎoyǎn móshù.|Anh ấy biết biểu diễn ảo thuật.
+你会说汉语吗？|Nǐ huì shuō Hànyǔ ma?|Bạn biết nói tiếng Hán không?
+我会说汉语。|Wǒ huì shuō Hànyǔ.|Tôi biết nói tiếng Hán.
+我不会说汉语。|Wǒ bù huì shuō Hànyǔ.|Tôi không biết nói tiếng Trung.
+你会写汉字吗？|Nǐ huì xiě Hànzì ma?|Bạn biết viết chữ Hán không?
+我会写汉字。|Wǒ huì xiě Hànzì.|Tôi biết viết chữ Hán.
+我不会写汉字。|Wǒ bù huì xiě Hànzì.|Tôi không biết viết chữ Hán.
+你会做中国菜吗？|Nǐ huì zuò Zhōngguó cài ma?|Bạn biết nấu món Trung Quốc không?
+我会做中国菜。|Wǒ huì zuò Zhōngguó cài.|Tôi biết nấu món Trung Quốc.
+我不会做中国菜。|Wǒ bù huì zuò Zhōngguó cài.|Tôi không biết nấu món Trung Quốc.
+你会游泳吗？|Nǐ huì yóuyǒng ma?|Bạn biết bơi không?
+我会游泳。|Wǒ huì yóuyǒng.|Tôi biết bơi.
+我不会游泳。|Wǒ bù huì yóuyǒng.|Tôi không biết bơi.
+你会踢足球吗？|Nǐ huì tī zúqiú ma?|Bạn biết đá bóng không?
+我会踢足球。|Wǒ huì tī zúqiú.|Tôi biết đá bóng.
+我不会踢足球。|Wǒ bù huì tī zúqiú.|Tôi không biết đá bóng.
+你会打羽毛球吗？|Nǐ huì dǎ yǔmáoqiú ma?|Bạn biết đánh cầu lông không?
+我会打羽毛球。|Wǒ huì dǎ yǔmáoqiú.|Tôi biết đánh cầu lông.
+我不会打羽毛球。|Wǒ bù huì dǎ yǔmáoqiú.|Tôi không biết đánh cầu lông.
+你会打台球吗？|Nǐ huì dǎ tái qiú ma?|Bạn biết đánh bi-a không?
+我会打台球。|Wǒ huì dǎ tái qiú.|Tôi biết đánh bi-a.
+我不会打台球。|Wǒ bù huì dǎ tái qiú.|Tôi không biết đánh bi-a.
+你会打乒乓球吗？|Nǐ huì dǎ pīngpāngqiú ma?|Bạn biết đánh bóng bàn không?
+我会打乒乓球。|Wǒ huì dǎ pīngpāngqiú.|Tôi biết đánh bóng bàn.
+我不会打乒乓球。|Wǒ bù huì dǎ pīngpāngqiú.|Tôi không biết đánh bóng bàn.
+你会弹钢琴吗？|Nǐ huì tán gāngqín ma?|Bạn biết chơi đàn piano không?
+我会弹钢琴。|Wǒ huì tán gāngqín.|Tôi biết chơi đàn piano.
+我不会弹钢琴。|Wǒ bù huì tán gāngqín.|Tôi không biết chơi đàn piano.
+你会弹其他吗？|Nǐ huì tán qítā ma?|Bạn biết chơi nhạc cụ khác không?
+我会弹其他。|Wǒ huì tán qítā.|Tôi biết chơi nhạc cụ khác.
+我不会弹其他|Wǒ bù huì tán qítā.|Tôi không biết chơi nhạc cụ khác
+你会打保龄球吗？|Nǐ huì dǎ bǎolíngqiú ma?|Bạn biết chơi bowling không?
+我会打保龄球。我会。|Wǒ huì dǎ bǎolíngqiú. Wǒ huì.|Tôi biết chơi bowling. Tôi biết.
+我不会打保龄球。|Wǒ bù huì dǎ bǎolíngqiú.|Tôi không biết chơi bowling.
+你会打匹克球吗？|Nǐ huì dǎ pǐkèqiú ma?|Bạn biết chơi pickleball không?
+我会打匹克球。|Wǒ huì dǎ pǐkèqiú.|Tôi biết chơi pickleball.
+我不会打匹克球。|Wǒ bù huì dǎ pǐkèqiú.|Tôi không biết chơi pickleball.
+你会煮鸡蛋吗？|Nǐ huì zhǔ jīdàn ma?|Bạn biết luộc trứng không?
+我会煮鸡蛋。|Wǒ huì zhǔ jīdàn.|Tôi biết luộc trứng.
+我不会煮鸡蛋。|Wǒ bù huì zhǔ jīdàn.|Tôi không biết luộc trứng.
+你会包饺子吗？|Nǐ huì bāo jiǎozi ma?|Bạn biết gói bánh sủi cảo không?
+我会包饺子。|Wǒ huì bāo jiǎozi.|Tôi biết gói bánh sủi cảo.
+我不会包饺子。|Wǒ bù huì bāo jiǎozi.|Tôi không biết gói bánh sủi cảo.
+你会做饭吗？|Nǐ huì zuò fàn ma?|Bạn biết nấu ăn không?
+我会做饭。|Wǒ huì zuò fàn.|Tôi biết nấu ăn.
+我不会做饭。|Wǒ bù huì zuò fàn.|Tôi không biết nấu ăn.
+你会滑雪吗？|Nǐ huì huá xuě ma?|Bạn biết trượt tuyết không?
+我会滑雪。|Wǒ huì huá xuě.|Tôi biết trượt tuyết.
+我不会滑雪。|Wǒ bù huì huá xuě.|Tôi không biết trượt tuyết.
+你会滑冰吗？|Nǐ huì huá bīng ma?|Bạn biết trượt băng không?
+我会滑冰。|Wǒ huì huá bīng.|Tôi biết trượt băng.
+我不会滑冰。|Wǒ bù huì huá bīng.|Tôi không biết trượt băng.
+你会表演魔术吗？|Nǐ huì biǎoyǎn móshù ma?|Bạn biết biểu diễn ảo thuật không?
+我会表演魔术。|Wǒ huì biǎoyǎn móshù.|Tôi biết biểu diễn ảo thuật.
+我不会表演魔术。|Wǒ bù huì biǎoyǎn móshù.|Tôi không biết biểu diễn ảo thuật.
+你会煮面条吗？|Nǐ huì zhǔ miàntiáo ma?|Bạn biết nấu mì sợi không?
+我会煮面条。|Wǒ huì zhǔ miàntiáo.|Tôi biết nấu mì sợi.
+我不会煮面条。|Wǒ bù huì zhǔ miàntiáo.|Tôi không biết nấu mì sợi.
+你会写书法吗？|Nǐ huì xiě shūfǎ ma?|Bạn biết viết thư pháp không?
+我会写书法。|Wǒ huì xiě shūfǎ.|Tôi biết viết thư pháp.
+我不会写书法。|Wǒ bù huì xiě shūfǎ.|Tôi không biết viết thư pháp.
+你会画画儿吗？|Nǐ huì huà huàr ma?|Bạn biết vẽ không?
+我会画画儿。|Wǒ huì huà huàr.|Tôi biết vẽ.
+我不会画画儿。|Wǒ bù huì huà huàr.|Tôi không biết vẽ.
+你会编程吗？|Nǐ huì biānchéng ma?|Bạn biết lập trình không?
+我会编程。|Wǒ huì biānchéng.|Tôi biết lập trình.
+我不会编程。|Wǒ bù huì biānchéng.|Tôi không biết lập trình.
+你会骑摩托车吗？|Nǐ huì qí mótuōchē ma?|Bạn biết lái xe máy không?
+我会骑摩托车。|Wǒ huì qí mótuōchē.|Tôi biết lái xe máy.
+我不会骑摩托车。|Wǒ bù huì qí mótuōchē.|Tôi không biết lái xe máy.
+你会骑自行车吗？|Nǐ huì qí zìxíngchē ma?|Bạn biết đi xe đạp không?
+我会骑自行车。|Wǒ huì qí zìxíngchē.|Tôi biết đi xe đạp.
+我不会骑自行车。|Wǒ bù huì qí zìxíngchē.|Tôi không biết đi xe đạp.
+你会骑马吗？|Nǐ huì qí mǎ ma?|Bạn biết cưỡi ngựa không?
+我会骑马。|Wǒ huì qí mǎ.|Tôi biết cưỡi ngựa.
+我不会骑马。|Wǒ bù huì qí mǎ.|Tôi không biết cưỡi ngựa.
+你会开车吗？|Nǐ huì kāichē ma?|Bạn biết lái xe không?
+我会开车。|Wǒ huì kāichē.|Tôi biết lái xe.
+我不会开车。|Wǒ bú huì kāichē.|Tôi không biết lái xe.
+你会开火车吗？|Nǐ huì kāi huǒchē ma?|Bạn biết lái tàu hỏa không?
+我会开火车。|Wǒ huì kāi huǒchē.|Tôi biết lái tàu hỏa.
+我不会开火车。|Wǒ bú huì kāi huǒchē.|Tôi không biết lái tàu hỏa.
+你会开地铁吗？|Nǐ huì kāi dìtiě ma?|Bạn biết lái tàu điện ngầm không?
+我会开地铁。|Wǒ huì kāi dìtiě.|Tôi biết lái tàu điện ngầm.
+我不会开地铁。|Wǒ bú huì kāi dìtiě.|Tôi không biết lái tàu điện ngầm.
+你会说韩语吗？|Nǐ huì shuō Hányǔ ma?|Bạn biết nói tiếng Hàn không?
+我不会说韩语，我只会说英语。|Wǒ bú huì shuō Hányǔ, wǒ zhǐ huì shuō Yīngyǔ.|Tôi không biết nói tiếng Hàn, tôi chỉ biết nói tiếng Anh.
+你哥哥会写汉字吗？|Nǐ gēge huì xiě Hànzì ma?|Anh trai bạn biết viết chữ Hán không?
+我哥哥只会说汉语，不会写汉字。|Wǒ gēge zhǐ huì shuō Hànyǔ, bú huì xiě Hànzì.|Anh trai tôi chỉ biết nói tiếng Hán, không biết viết chữ Hán.
+你会包饺子吗？|Nǐ huì bāo jiǎozi ma?|Bạn biết gói sủi cảo không?
+我喜欢吃饺子，但是我不会包。|Wǒ xǐhuān chī jiǎozi, dànshì wǒ bú huì bāo.|Tôi thích ăn sủi cảo, nhưng tôi không biết gói.
+你会做中国菜吗？|Nǐ huì zuò Zhōngguócài ma?|Bạn biết làm món Trung Quốc không?
+我不会做中国菜，我妈妈会做。|Wǒ bú huì zuò Zhōngguócài, wǒ māma huì zuò.|Tôi không biết làm món Trung Quốc, mẹ tôi biết làm.
+你们会游泳吗？|Nǐmen huì yóuyǒng ma?|Các bạn biết bơi không?
+我会游泳，他不会。|Wǒ huì yóuyǒng, tā bú huì.|Tôi biết bơi, anh ấy không biết.
+你的美国朋友会做美国菜吗？|Nǐ de Měiguó péngyou huì zuò Měiguócài ma?|Bạn bè người Mỹ của bạn biết làm món Mỹ không?
+我的美国朋友会做很多美国菜。|Wǒ de Měiguó péngyou huì zuò hěn duō Měiguócài.|Bạn bè người Mỹ của tôi biết làm rất nhiều món Mỹ.
+你姐姐会做越南菜吗？|Nǐ jiějie huì zuò Yuènáncài ma?|Chị gái bạn biết làm món Việt Nam không?
+我姐姐会做很多越南菜。|Wǒ jiějie huì zuò hěn duō Yuènáncài.|Chị gái tôi biết làm rất nhiều món Việt Nam.
+我们都会说日语。|Wǒmen dōu huì shuō Rìyǔ.|Chúng tôi đều biết nói tiếng Nhật.
+她会写汉字，我也会写汉字。|Tā huì xiě Hànzì, wǒ yě huì xiě Hànzì.|Cô ấy biết viết chữ Hán, tôi cũng biết viết chữ Hán.
+我会说德语，他会说法语。|Wǒ huì shuō Déyǔ, tā huì shuō Fǎyǔ.|Tôi biết nói tiếng Đức, anh ấy biết nói tiếng Pháp.
+我爸爸是越南人，他会做越南菜。|Wǒ bàba shì Yuènánrén, tā huì zuò Yuènáncài.|Bố tôi là người Việt Nam, ông ấy biết làm món Việt.
+她姐姐会滑雪，也会滑冰。|Tā jiějie huì huáxuě, yě huì huábīng.|Chị gái cô ấy biết trượt tuyết, cũng biết trượt băng.
+泰国菜和日本菜我们都喜欢吃。|Tàiguócài hé Rìběncài wǒmen dōu xǐhuān chī.|Món Thái và món Nhật chúng tôi đều thích ăn.
+泰国菜和日本菜我们都会做。|Tàiguócài hé Rìběncài wǒmen dōu huì zuò.|Món Thái và món Nhật chúng tôi đều biết làm.
+我爸爸会做法国菜和德国菜。|Wǒ bàba huì zuò Fǎguócài hé Déguócài.|Bố tôi biết làm món Pháp và món Đức.
+我会骑摩托车，我弟弟会骑自行车。|Wǒ huì qí mótuōchē, wǒ dìdi huì qí zìxíngchē.|Tôi biết lái mô tô, em trai tôi biết đi xe đạp.
+你们家谁会做饭？|Nǐmen jiā shéi huì zuòfàn?|Nhà bạn ai biết nấu ăn?
+我们家妈妈和姐姐都会做饭。|Wǒmen jiā māma hé jiějie dōu huì zuòfàn.|Trong nhà chúng tôi, mẹ và chị gái đều biết nấu ăn.
+我不会做饭，我只会煮面条。|Wǒ bú huì zuòfàn, wǒ zhǐ huì zhǔ miàntiáo.|Tôi không biết nấu ăn, tôi chỉ biết luộc mì (nấu mì).
+我不会做饭，我只会煮鸡蛋。|Wǒ bú huì zuòfàn, wǒ zhǐ huì zhǔ jīdàn.|Tôi không biết nấu ăn, tôi chỉ biết luộc trứng.
+你们班谁会说英语？|Nǐmen bān shéi huì shuō Yīngyǔ?|Lớp các bạn ai biết nói tiếng Anh?
+我们班都会说英语。|Wǒmen bān dōu huì shuō Yīngyǔ.|Lớp chúng tôi đều biết nói tiếng Anh.
+你们会说什么语言？|Nǐmen huì shuō shénme yǔyán?|Các bạn biết nói ngôn ngữ gì?
+我会说越南语，他会说汉语。|Wǒ huì shuō Yuènányǔ, tā huì shuō Hànyǔ.|Tôi biết nói tiếng Việt, anh ấy biết nói tiếng Hán.
+我喜欢学习汉语，不喜欢学习英语。|Wǒ xǐhuān xuéxí Hànyǔ, bù xǐhuān xuéxí Yīngyǔ.|Tôi thích học tiếng Hán, không thích học tiếng Anh.
+你会打台球吗？|Nǐ huì dǎ táiqiú ma?|Bạn biết chơi bi-a không?
+我不会打台球，我会打乒乓球。|Wǒ bú huì dǎ táiqiú, wǒ huì dǎ pīngpāngqiú.|Tôi không biết chơi bi-a, tôi biết chơi bóng bàn.
+你朋友会打保龄球吗？|Nǐ péngyou huì dǎ bǎolíngqiú ma?|Bạn bè bạn biết chơi bowling không?
+我朋友会打保龄球，也会打匹克球。|Wǒ péngyou huì dǎ bǎolíngqiú, yě huì dǎ pǐkèqiú.|Bạn tôi biết chơi bowling, cũng biết chơi pickleball.
+弟弟会打羽毛球，也会打网球。|Dìdi huì dǎ yǔmáoqiú, yě huì dǎ wǎngqiú.|Em trai biết chơi cầu lông, cũng biết chơi quần vợt.
+他姐姐会弹钢琴吗？|Tā jiějie huì tán gāngqín ma?|Chị gái anh ấy biết chơi piano không?
+他姐姐会弹钢琴，也会弹吉他。|Tā jiějie huì tán gāngqín, yě huì tán jítā.|Chị gái anh ấy biết chơi piano, cũng biết chơi guitar.
+我不会弹钢琴，我只会弹吉他。|Wǒ bú huì tán gāngqín, wǒ zhǐ huì tán jítā.|Tôi không biết chơi piano, tôi chỉ biết chơi guitar.
+你会踢足球吗？|Nǐ huì tī zúqiú ma?|Bạn biết đá bóng không?
+我只会打乒乓球，不会踢足球。|Wǒ zhǐ huì dǎ pīngpāngqiú, bú huì tī zúqiú.|Tôi chỉ biết chơi bóng bàn, không biết đá bóng.
+我哥哥喜欢打排球，不喜欢打篮球。|Wǒ gēge xǐhuān dǎ páiqiú, bù xǐhuān dǎ lánqiú.|Anh trai tôi thích chơi bóng chuyền, không thích chơi bóng rổ.
+你会打橄榄球吗？|Nǐ huì dǎ gǎnlǎnqiú ma?|Bạn biết chơi bóng bầu dục không?
+我不会打橄榄球，我只会打羽毛球。|Wǒ bú huì dǎ gǎnlǎnqiú, wǒ zhǐ huì dǎ yǔmáoqiú.|Tôi không biết chơi bóng bầu dục, tôi chỉ biết chơi cầu lông.
+我妈妈和姐姐都会弹钢琴。|Wǒ māma hé jiějie dōu huì tán gāngqín.|Mẹ và chị gái tôi đều biết chơi piano.
+你们的老师会弹吉他吗？|Nǐmen de lǎoshī huì tán jítā ma?|Giáo viên của các bạn biết chơi guitar không?
+他会弹吉他，也会弹钢琴。|Tā huì tán jítā, yě huì tán gāngqín.|Anh ấy biết chơi guitar, cũng biết chơi piano.
+他会做饭，他做的饭很好吃。|Tā huì zuò fàn, tā zuò de fàn hěn hǎo chī.|Anh ấy biết nấu ăn, món anh ấy nấu rất ngon.
+你的朋友会做中国菜吗？|Nǐ de péngyǒu huì zuò Zhōngguócài ma?|Bạn của bạn biết nấu món Trung Quốc không?
+我的朋友不会做中国菜。|Wǒ de péngyǒu bù huì zuò Zhōngguócài.|Bạn tôi không biết nấu món Trung Quốc.
+妈妈会包饺子，也会煮面条。|Māma huì bāo jiǎozi, yě huì zhǔ miàntiáo.|Mẹ biết gói sủi cảo, cũng biết nấu mì.
+你们会做越南菜吗？|Nǐmen huì zuò Yuènáncài ma?|Các bạn biết nấu món Việt Nam không?
+我们都会做越南菜，越南菜很好吃。|Wǒmen dōu huì zuò Yuènáncài, Yuènáncài hěn hǎo chī.|Chúng tôi đều biết nấu món Việt, món Việt rất ngon.
+我会说汉语，也会写汉字。|Wǒ huì shuō Hànyǔ, yě huì xiě Hànzì.|Tôi biết nói tiếng Hán, cũng biết viết chữ Hán.
+你的老师会说几门语言？|Nǐ de lǎoshī huì shuō jǐ mén yǔyán?|Giáo viên của bạn biết nói mấy thứ tiếng?
+我的老师会说三门语言。|Wǒ de lǎoshī huì shuō sān mén yǔyán.|Giáo viên của tôi biết nói ba thứ tiếng.
+你会编程吗？|Nǐ huì biānchéng ma?|Bạn biết lập trình không?
+我不会编程，我哥哥会。|Wǒ bù huì biānchéng, wǒ gēge huì.|Tôi không biết lập trình, anh trai tôi biết.
+你妹妹喜欢画画儿吗？|Nǐ mèimei xǐhuān huà huàr ma?|Em gái bạn có thích vẽ không?
+我妹妹很喜欢画画儿。|Wǒ mèimei hěn xǐhuān huà huàr.|Em gái tôi rất thích vẽ.
+我会说汉语和德语。|Wǒ huì shuō Hànyǔ hé Déyǔ.|Tôi biết nói tiếng Hán và tiếng Đức.
+谁会表演魔术？|Shéi huì biǎoyǎn móshù?|Ai biết biểu diễn ảo thuật?
+我哥哥会表演魔术。|Wǒ gēge huì biǎoyǎn móshù.|Anh trai tôi biết biểu diễn ảo thuật.
+爸爸会写书法，也会画画儿。|Bàba huì xiě shūfǎ, yě huì huà huàr.|Bố biết viết thư pháp, cũng biết vẽ.
+你学习什么语言？|Nǐ xuéxí shénme yǔyán?|Bạn học ngôn ngữ gì?
+你会骑自行车吗？|Nǐ huì qí zìxíngchē ma?|Bạn biết đi xe đạp không?
+我会骑自行车，也会骑摩托车。|Wǒ huì qí zìxíngchē, yě huì qí mótuōchē.|Tôi biết đi xe đạp, cũng biết đi xe máy.
+你的朋友会开车吗？|Nǐ de péngyǒu huì kāichē ma?|Bạn của bạn biết lái xe hơi không?
+我朋友家有车，他会开车。|Wǒ péngyǒu jiā yǒu chē, tā huì kāichē.|Nhà bạn tôi có xe hơi, cậu ấy biết lái xe.
+你会滑雪吗？|Nǐ huì huá xuě ma?|Bạn biết trượt tuyết không?
+我不会滑雪，我只会滑冰。|Wǒ bù huì huá xuě, wǒ zhǐ huì huá bīng.|Tôi không biết trượt tuyết, tôi chỉ biết trượt băng.
+妹妹会滑冰吗？|Mèimei huì huá bīng ma?|Em gái có biết trượt băng không?
+妹妹会滑冰，也会滑雪。|Mèimei huì huá bīng, yě huì huá xuě.|Em gái biết trượt băng, cũng biết trượt tuyết.
+我们不会开车，我们只会骑摩托车。|Wǒmen bù huì kāichē, wǒmen zhǐ huì qí mótuōchē.|Chúng tôi không biết lái xe hơi, chúng tôi chỉ biết đi xe máy.
