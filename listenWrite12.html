@@ -195,7 +195,8 @@
                                 </button>
                                 
                                 <!-- Play User Audio Button (Hidden initially) -->
-                                <button id="playUserBtn" onclick="playUserAudio()" class="hidden w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 active:scale-95 transition shadow-sm animate-pop-in" title="Nghe lại giọng bạn">
+                                <!-- Đã sửa: bg-purple-100 -> bg-blue-100, text-purple-600 -> text-blue-600, hover:bg-purple-200 -> hover:bg-blue-200 -->
+                                <button id="playUserBtn" onclick="playUserAudio()" class="hidden w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 active:scale-95 transition shadow-sm animate-pop-in" title="Nghe lại giọng bạn">
                                     <i class="fas fa-play text-xs"></i>
                                 </button>
 
@@ -770,8 +771,9 @@
                 // HTML for the play button if recording exists
                 let playBtnHtml = '';
                 if (item.userRecording) {
+                    // Đã sửa: bg-purple-100 -> bg-blue-100, text-purple-600 -> text-blue-600, hover:bg-purple-200 -> hover:bg-blue-200
                     playBtnHtml = `
-                        <button onclick="playSavedAudio('${item.userRecording}', this)" class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 transition" title="Nghe giọng bạn">
+                        <button onclick="playSavedAudio('${item.userRecording}', this)" class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition" title="Nghe giọng bạn">
                             <i class="fas fa-play text-xs"></i>
                         </button>
                     `;
@@ -821,8 +823,9 @@
             reviewPlayer.src = url;
 
             // Set UI to Playing
-            btn.classList.remove('bg-purple-100', 'text-purple-600');
-            btn.classList.add('bg-purple-600', 'text-white', 'animate-pulse');
+            // Đã sửa: purple -> blue
+            btn.classList.remove('bg-blue-100', 'text-blue-600');
+            btn.classList.add('bg-blue-600', 'text-white', 'animate-pulse');
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fas fa-stop text-xs';
 
@@ -845,8 +848,9 @@
 
         function resetReviewBtnUI(btn) {
             if(!btn) return;
-            btn.classList.add('bg-purple-100', 'text-purple-600');
-            btn.classList.remove('bg-purple-600', 'text-white', 'animate-pulse');
+            // Đã sửa: purple -> blue
+            btn.classList.add('bg-blue-100', 'text-blue-600');
+            btn.classList.remove('bg-blue-600', 'text-white', 'animate-pulse');
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fas fa-play text-xs';
         }
