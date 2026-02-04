@@ -1,6 +1,21 @@
-我不会做奶茶。|Wǒ bú huì zuò nǎichá.|Tôi không biết làm trà sữa.
-你会游泳吗？|Nǐ huì yóuyǒng ma?|Bạn biết bơi không?
-我不会游泳。|Wǒ bú huì yóuyǒng.|Tôi không biết bơi.
-你会跳舞吗？|Nǐ huì tiàowǔ ma?|Bạn biết nhảy/khiêu vũ không?
-我不会跳舞。|Wǒ bú huì tiàowǔ.|Tôi không biết nhảy/khiêu vũ.
-他会不会踢足球。|Tā huì bú huì tī zúqiú.|Anh ấy có biết đá bóng không?
+你好。|Nǐ hǎo.|Chào bạn.
+老师您好。|Lǎo shī nín hǎo.|Chào thầy/cô.
+这是本子吗？|Zhè shì běnzi ma?|Đây là vở không?
+这不是本子。|Zhè bú shì běnzi.|Đây không phải là vở.
+这是书。|Zhè shì shū.|Đây là sách.
+那是书吗？|Nà shì shū ma?|Kia là sách không?
+那不是书。|Nà bú shì shū.|Kia không phải là sách.
+那是本子。|Nà shì běnzi.|Kia là vở.
+那是学生吗？|Nà shì xuésheng ma?|Kia là học sinh không?
+那不是学生。|Nà bú shì xuésheng.|Kia không phải là học sinh.
+那是老师吗？|Nà shì lǎoshī ma?|Kia là giáo viên không?
+那不是老师。|Nà bú shì lǎoshī.|Kia không phải là giáo viên.
+那是陈楠吗？|Nà shì Chén Nán ma?|Kia là Trần Nam không?
+那不是陈楠。|Nà bú shì Chén Nán.|Kia không phải là Trần Nam.
+那是陈楠。|Nà shì Chén Nán.|Kia là Trần Nam.
+那是国安吗？|Nà shì Guó'ān ma?|Kia là Quốc An không?
+那不是国安。|Nà bú shì Guó'ān.|Kia không phải là Quốc An.
+那是国安。|Nà shì Guó'ān.|Kia là Quốc An.
+那不是老师，那是学生。|Nà bú shì lǎoshī, nà shì xuésheng.|Kia không phải là giáo viên, kia là học sinh.
+这不是书，这是本子。|Zhè bú shì shū, zhè shì běnzi.|Đây không phải là sách, đây là vở.
+那不是国安，那是陈楠。|Nà bú shì Guó'ān, nà shì Chén Nán.|Kia không phải là Quốc An, kia là Trần Nam.
