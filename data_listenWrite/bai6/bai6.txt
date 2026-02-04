@@ -8,17 +8,12 @@
 我不会游泳。|Wǒ bú huì yóuyǒng.|Tôi không biết bơi.
 你会跳舞吗？|Nǐ huì tiàowǔ ma?|Bạn biết nhảy (khiêu vũ) không?
 我不会跳舞。|Wǒ bú huì tiàowǔ.|Tôi không biết nhảy (khiêu vũ).
-他会不会踢足球。|Tā huì bú huì tī zúqiú.|Anh ấy có biết đá bóng không?
-他喜欢看足球，但是他不会踢足球。|Tā xǐhuān kàn zúqiú, dànshì tā bú huì tī zúqiú.|Anh ấy thích xem bóng đá, nhưng anh ấy không biết đá bóng.
 你爸爸会打羽毛球吗？|Nǐ bàba huì dǎ yǔmáoqiú ma?|Bố bạn biết chơi cầu lông không?
 羽毛球和乒乓球他都会打。|Yǔmáoqiú hé pīngpāngqiú tā dōu huì dǎ.|Cầu lông và bóng bàn anh ấy đều biết chơi.
 你朋友会开汽车吗？|Nǐ péngyou huì kāi qìchē ma?|Bạn bè bạn biết lái xe ô tô không?
-他家有汽车，但是他不会开。|Tā jiā yǒu qìchē, dànshì tā bú huì kāi.|Nhà anh ấy có ô tô, nhưng anh ấy không biết lái.
-你弟弟会不会骑摩托车？|Nǐ dìdi huì bú huì qí mótuōchē?|Em trai bạn có biết đi xe máy không?
 他不会骑摩托车但是他会骑电瓶车。|Tā bú huì qí mótuōchē dànshì tā huì qí diànpíngchē.|Anh ấy không biết đi xe máy nhưng anh ấy biết đi xe điện.
 你妈妈会唱歌吗？|Nǐ māma huì chànggē ma?|Mẹ bạn biết hát không?
 她喜欢听歌但是她不会唱歌。|Tā xǐhuān tīng gē dànshì tā bú huì chànggē.|Cô ấy thích nghe nhạc nhưng cô ấy không biết hát.
-你们会不会表演魔术。|Nǐmen huì bú huì biǎoyǎn móshù.|Các bạn có biết biểu diễn ảo thuật không?
 他会表演魔术。|Tā huì biǎoyǎn móshù.|Anh ấy biết biểu diễn ảo thuật.
 你会说汉语吗？|Nǐ huì shuō Hànyǔ ma?|Bạn biết nói tiếng Hán không?
 我会说汉语。|Wǒ huì shuō Hànyǔ.|Tôi biết nói tiếng Hán.
@@ -47,8 +42,8 @@
 你会弹钢琴吗？|Nǐ huì tán gāngqín ma?|Bạn biết chơi đàn piano không?
 我会弹钢琴。|Wǒ huì tán gāngqín.|Tôi biết chơi đàn piano.
 我不会弹钢琴。|Wǒ bù huì tán gāngqín.|Tôi không biết chơi đàn piano.
-你会弹其他吗？|Nǐ huì tán qítā ma?|Bạn biết chơi nhạc cụ khác không?
-我会弹其他。|Wǒ huì tán qítā.|Tôi biết chơi nhạc cụ khác.
+你会弹吉他吗？|Nǐ huì tán jítā ma?|Bạn biết chơi guitar không?
+我会弹吉他。|Wǒ huì tán jítā.|Tôi biết chơi guitar.
 我不会弹其他|Wǒ bù huì tán qítā.|Tôi không biết chơi nhạc cụ khác
 你会打保龄球吗？|Nǐ huì dǎ bǎolíngqiú ma?|Bạn biết chơi bowling không?
 我会打保龄球。我会。|Wǒ huì dǎ bǎolíngqiú. Wǒ huì.|Tôi biết chơi bowling. Tôi biết.
