@@ -108,12 +108,11 @@
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Chọn bài học</label>
                     <div class="relative">
                         <select id="lessonSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
-                            <option value="bai1">H1 Bài 1 老师您好</option>
-                            <option value="bai2">H1 Bài 2: 谢谢你</option>
-                            <option value="bai3">H1 Bài 3: 你叫什么名字?</option>
-                            <option value="bai4">H1 Bài 4: 她是我的汉语老师。</option>
-                            <option value="bai5">H1 Bài 5: 她女儿今年八岁。</option>
-                            <option value="bai6">H1 Bài 6: 我会说汉语。</option>
+                            <option value="bai1">Bài 1: Xin chào</option>
+                            <option value="bai2">Bài 2: Cảm ơn</option>
+                            <option value="bai3">Bài 3: Tên bạn là gì?</option>
+                            <option value="bai4">Bài 4: Cô ấy là giáo viên</option>
+                            <option value="bai5">Bài 5: Gia đình tôi</option>
                         </select>
                     </div>
                 </div>
@@ -278,7 +277,7 @@
         </a>
         <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
             <i class="fas fa-pen-nib text-xl"></i>
-            <span class="text-[10px] font-medium">Nghe Viết</span>
+            <span class="text-[10px] font-medium">Luyện Viết</span>
         </a>
         <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
             <i class="fas fa-gamepad text-xl group-hover:scale-110 transition"></i>
@@ -344,6 +343,10 @@
         let audioChunks = [];
         let userAudioUrl = null;
         let isRecording = false;
+
+        // Review Player Global State
+        const reviewPlayer = new Audio();
+        let currentReviewBtn = null;
 
         // DOM Elements
         const setupScreen = document.getElementById('setup-screen');
@@ -660,10 +663,6 @@
             userInput.classList.add('border-green-500', 'bg-green-50');
             userInput.disabled = true;
             
-            // --- THAY ĐỔI: Không lưu sessionResults ở đây nữa ---
-            // Vì lúc này người dùng CHƯA ghi âm.
-            // Việc lưu sẽ chuyển sang hàm nextQuestion.
-
             // Show Success Pinyin
             pinyinResultText.innerText = currentQuestion.pinyin;
             pinyinResult.classList.remove('hidden');
@@ -679,7 +678,6 @@
         }
 
         function handleWrong() {
-            // ... existing code ... (giữ nguyên hàm handleWrong)
             userInput.classList.remove('border-gray-200');
             userInput.classList.add('border-red-500', 'bg-red-50', 'animate-shake');
             
@@ -696,12 +694,10 @@
         }
 
         function nextQuestion() {
-            // --- THAY ĐỔI: Lưu kết quả (kèm file ghi âm) tại đây ---
-            // Lúc này người dùng đã nhấn "Tiếp tục", nghĩa là đã hoàn tất ghi âm (nếu có)
             if (currentQuestion) {
                 sessionResults.push({
                     ...currentQuestion,
-                    userRecording: userAudioUrl // Lúc này userAudioUrl đã có dữ liệu nếu người dùng ghi âm
+                    userRecording: userAudioUrl
                 });
             }
 
@@ -774,7 +770,7 @@
                 let playBtnHtml = '';
                 if (item.userRecording) {
                     playBtnHtml = `
-                        <button onclick="playSavedAudio('${item.userRecording}')" class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 transition" title="Nghe giọng bạn">
+                        <button onclick="playSavedAudio('${item.userRecording}', this)" class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 transition" title="Nghe giọng bạn">
                             <i class="fas fa-play text-xs"></i>
                         </button>
                     `;
@@ -801,9 +797,57 @@
         }
 
         // Global function to play blob URLs from string
-        window.playSavedAudio = function(url) {
-            const audio = new Audio(url);
-            audio.play();
+        window.playSavedAudio = function(url, btn) {
+            // Stop current if playing
+            if (!reviewPlayer.paused) {
+                reviewPlayer.pause();
+                reviewPlayer.currentTime = 0;
+            }
+
+            // Reset UI of previous button
+            if (currentReviewBtn && currentReviewBtn !== btn) {
+                resetReviewBtnUI(currentReviewBtn);
+            }
+
+            // If clicking the same button while playing, just stop and reset
+            if (currentReviewBtn === btn && !reviewPlayer.paused) {
+                resetReviewBtnUI(btn);
+                currentReviewBtn = null;
+                return;
+            }
+
+            currentReviewBtn = btn;
+            reviewPlayer.src = url;
+
+            // Set UI to Playing
+            btn.classList.remove('bg-purple-100', 'text-purple-600');
+            btn.classList.add('bg-purple-600', 'text-white', 'animate-pulse');
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = 'fas fa-stop text-xs';
+
+            reviewPlayer.play().catch(e => {
+                console.error("Lỗi phát audio:", e);
+                resetReviewBtnUI(btn);
+            });
+
+            reviewPlayer.onended = () => {
+                resetReviewBtnUI(btn);
+                currentReviewBtn = null;
+            };
+            
+            reviewPlayer.onerror = () => {
+                 resetReviewBtnUI(btn);
+                 currentReviewBtn = null;
+                 alert("Lỗi phát file ghi âm");
+            };
+        }
+
+        function resetReviewBtnUI(btn) {
+            if(!btn) return;
+            btn.classList.add('bg-purple-100', 'text-purple-600');
+            btn.classList.remove('bg-purple-600', 'text-white', 'animate-pulse');
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = 'fas fa-play text-xs';
         }
 
         function resetGame() {
@@ -816,6 +860,13 @@
             sessionResults = [];
             if (userAudioUrl) URL.revokeObjectURL(userAudioUrl);
             userAudioUrl = null;
+
+            // Stop Review Audio
+            if (!reviewPlayer.paused) {
+                reviewPlayer.pause();
+                reviewPlayer.currentTime = 0;
+            }
+            currentReviewBtn = null;
 
             setupScreen.classList.remove('hidden');
             gameScreen.classList.add('hidden');
