@@ -5,82 +5,82 @@
 这不是我奶奶。|Zhè bú shì wǒ nǎinai.|Đây không phải bà nội của tôi.
 这是我妈妈。|Zhè shì wǒ māma.|Đây là mẹ của tôi.
 这不是我哥哥。|Zhè bú shì wǒ gēge.|Đây không phải anh trai của tôi.
-这是姐姐吗？|Zhè shì jiějie ma?|Đây là chị gái sao?
+这是姐姐吗？|Zhè shì jiějie ma?|Đây là chị gái phải không?
 这是我弟弟。|Zhè shì wǒ dìdi.|Đây là em trai của tôi.
 这不是我妹妹。|Zhè bú shì wǒ mèimei.|Đây không phải em gái của tôi.
-这是医生吗？|Zhè shì yīshēng ma?|Đây là bác sĩ sao?
-这是护士吗？|Zhè shì hùshi ma?|Đây là y tá sao?
-这是演员吗？|Zhè shì yǎnyuán ma?|Đây là diễn viên sao?
+这是医生吗？|Zhè shì yīshēng ma?|Đây là bác sĩ phải không?
+这是护士吗？|Zhè shì hùshi ma?|Đây là y tá phải không?
+这是演员吗？|Zhè shì yǎnyuán ma?|Đây là diễn viên phải không?
 这是我爸爸。|Zhè shì wǒ bàba.|Đây là bố của tôi.
 这不是我妈妈。|Zhè bú shì wǒ māma.|Đây không phải mẹ của tôi.
-这是记者吗？|Zhè shì jìzhě ma?|Đây là phóng viên sao?
+这是记者吗？|Zhè shì jìzhě ma?|Đây là phóng viên phải không?
 那是我爷爷。|Nà shì wǒ yéye.|Kia là ông nội của tôi.
 那不是我奶奶。|Nà bú shì wǒ nǎinai.|Kia không phải bà nội của tôi.
-那是爸爸吗？|Nà shì bàba ma?|Kia là bố sao?
+那是爸爸吗？|Nà shì bàba ma?|Kia là bố phải không?
 那是我妈妈。|Nà shì wǒ māma.|Kia là mẹ của tôi.
 那不是我哥哥。|Nà bú shì wǒ gēge.|Kia không phải anh trai của tôi.
-那是姐姐吗？|Nà shì jiějie ma?|Kia là chị gái sao?
+那是姐姐吗？|Nà shì jiějie ma?|Kia là chị gái phải không?
 那是我弟弟。|Nà shì wǒ dìdi.|Kia là em trai của tôi.
 那不是我妹妹。|Nà bú shì wǒ mèimei.|Kia không phải em gái của tôi.
-那是公安吗？|Nà shì gōng'ān ma?|Kia là công an sao?
+那是公安吗？|Nà shì gōng'ān ma?|Kia là công an phải không?
 那不是公安，那是部队。|Nà bú shì gōng'ān, nà shì bùduì.|Kia không phải công an, kia là quân đội.
 那是我爸爸。|Nà shì wǒ bàba.|Kia là bố của tôi.
 那不是我妈妈。|Nà bú shì wǒ māma.|Kia không phải mẹ của tôi.
-那是警察吗？|Nà shì jǐngchá ma?|Kia là cảnh sát sao?
+那是警察吗？|Nà shì jǐngchá ma?|Kia là cảnh sát phải không?
 那不是警察，那是公安。|Nà bú shì jǐngchá, nà shì gōng'ān.|Kia không phải cảnh sát, kia là công an.
-那是厨师吗？|Nà shì chúshī ma?|Kia là đầu bếp sao?
+那是厨师吗？|Nà shì chúshī ma?|Kia là đầu bếp phải không?
 那不是厨师，那是老师。|Nà bú shì chúshī, nà shì lǎoshī.|Kia không phải đầu bếp, kia là giáo viên.
-那是消防员吗？|Nà shì xiāofángyuán ma?|Kia là lính cứu hỏa sao?
+那是消防员吗？|Nà shì xiāofángyuán ma?|Kia là lính cứu hỏa phải không?
 那不是消防员，那是律师。|Nà bú shì xiāofángyuán, nà shì lǜshī.|Kia không phải lính cứu hỏa, kia là luật sư.
-那是公务员吗？|Nà shì gōngwùyuán ma?|Kia là công chức sao?
-那是律师吗？|Nà shì lǜshī ma?|Kia là luật sư sao?
-那是床吗？|Nà shì chuáng ma?|Kia là giường sao?
+那是公务员吗？|Nà shì gōngwùyuán ma?|Kia là công chức phải không?
+那是律师吗？|Nà shì lǜshī ma?|Kia là luật sư phải không?
+那是床吗？|Nà shì chuáng ma?|Kia là giường phải không?
 那不是床，那是冰箱。|Nà bú shì chuáng, nà shì bīngxiāng.|Kia không phải giường, kia là tủ lạnh.
-那是猫吗？|Nà shì māo ma?|Kia là mèo sao?
+那是猫吗？|Nà shì māo ma?|Kia là mèo phải không?
 那不是猫，那是熊猫。|Nà bú shì māo, nà shì xióngmāo.|Kia không phải mèo, kia là gấu trúc.
-那是鸡蛋吗？|Nà shì jīdàn ma?|Kia là trứng gà sao?
+那是鸡蛋吗？|Nà shì jīdàn ma?|Kia là trứng gà phải không?
 那不是鸡蛋，那是足球。|Nà bú shì jīdàn, nà shì zúqiú.|Kia không phải trứng gà, kia là bóng đá/quả bóng đá.
 那是手表，那不是钟。|Nà shì shǒubiǎo, nà bú shì zhōng.|Kia là đồng hồ đeo tay, kia không phải đồng hồ (treo tường).
 我爷爷是医生。|Wǒ yéye shì yīshēng.|Ông nội tôi là bác sĩ.
 我奶奶不是记者。|Wǒ nǎinai bú shì jìzhě.|Bà nội tôi không phải phóng viên.
-你爸爸是公安吗？|Nǐ bàba shì gōng'ān ma?|Bố bạn là công an sao?
+你爸爸是公安吗？|Nǐ bàba shì gōng'ān ma?|Bố bạn là công an phải không?
 我妈妈是警察。|Wǒ māma shì jǐngchá.|Mẹ tôi là cảnh sát.
 我哥哥不是律师。|Wǒ gēge bú shì lǜshī.|Anh trai tôi không phải luật sư.
-你姐姐是厨师吗？|Nǐ jiějie shì chúshī ma?|Chị gái bạn là đầu bếp sao?
+你姐姐是厨师吗？|Nǐ jiějie shì chúshī ma?|Chị gái bạn là đầu bếp phải không?
 我弟弟是演员。|Wǒ dìdi shì yǎnyuán.|Em trai tôi là diễn viên.
 我妹妹不是司机。|Wǒ mèimei bú shì sījī.|Em gái tôi không phải tài xế.
-你爷爷是护士吗？|Nǐ yéye shì hùshi ma?|Ông nội bạn là y tá sao?
+你爷爷是护士吗？|Nǐ yéye shì hùshi ma?|Ông nội bạn là y tá phải không?
 我爸爸不是消防员。|Wǒ bàba bú shì xiāofángyuán.|Bố tôi không phải lính cứu hỏa.
-你妈妈是工人吗？|Nǐ māma shì gōngrén ma?|Mẹ bạn là công nhân sao?
+你妈妈是工人吗？|Nǐ māma shì gōngrén ma?|Mẹ bạn là công nhân phải không?
 我哥哥是农民。|Wǒ gēge shì nóngmín.|Anh trai tôi là nông dân.
 我姐姐不是公务员。|Wǒ jiějie bú shì gōngwùyuán.|Chị gái tôi không phải công chức.
-你弟弟是医生吗？|Nǐ dìdi shì yīshēng ma?|Em trai bạn là bác sĩ sao?
+你弟弟是医生吗？|Nǐ dìdi shì yīshēng ma?|Em trai bạn là bác sĩ phải không?
 我弟弟不是医生，我弟弟是学生。|Wǒ dìdi bú shì yīshēng, wǒ dìdi shì xuésheng.|Em trai tôi không phải bác sĩ, em trai tôi là học sinh.
 我妹妹是记者。|Wǒ mèimei shì jìzhě.|Em gái tôi là phóng viên.
 我爷爷不是公安。|Wǒ yéye bú shì gōng'ān.|Ông nội tôi không phải công an.
-你奶奶是警察吗？|Nǐ nǎinai shì jǐngchá ma?|Bà nội bạn là cảnh sát sao?
+你奶奶是警察吗？|Nǐ nǎinai shì jǐngchá ma?|Bà nội bạn là cảnh sát phải không?
 我奶奶不是警察，我奶奶是医生。|Wǒ nǎinai bú shì jǐngchá, wǒ nǎinai shì yīshēng.|Bà nội tôi không phải cảnh sát, bà nội tôi là bác sĩ.
 我爸爸是律师。|Wǒ bàba shì lǜshī.|Bố tôi là luật sư.
 我妈妈不是厨师。|Wǒ māma bú shì chúshī.|Mẹ tôi không phải đầu bếp.
-你哥哥是演员吗？|Nǐ gēge shì yǎnyuán ma?|Anh trai bạn là diễn viên sao?
+你哥哥是演员吗？|Nǐ gēge shì yǎnyuán ma?|Anh trai bạn là diễn viên phải không?
 我哥哥不是演员，我哥哥是记者。|Wǒ gēge bú shì yǎnyuán, wǒ gēge shì jìzhě.|Anh trai tôi không phải diễn viên, anh trai tôi là phóng viên.
 我姐姐是司机。|Wǒ jiějie shì sījī.|Chị gái tôi là tài xế.
 我弟弟不是护士。|Wǒ dìdi bú shì hùshi.|Em trai tôi không phải y tá.
 我爷爷是消防员，我爸爸是警察。|Wǒ yéye shì xiāofángyuán, wǒ bàba shì jǐngchá.|Ông nội tôi là lính cứu hỏa, bố tôi là cảnh sát.
 我奶奶不是工人，我爷爷是工人。|Wǒ nǎinai bú shì gōngrén, wǒ yéye shì gōngrén.|Bà nội tôi không phải công nhân, ông nội tôi là công nhân.
-你爸爸是农民吗？|Nǐ bàba shì nóngmín ma?|Bố bạn là nông dân sao?
+你爸爸是农民吗？|Nǐ bàba shì nóngmín ma?|Bố bạn là nông dân phải không?
 我爸爸不是农民，我爸爸是工人。|Wǒ bàba bú shì nóngmín, wǒ bàba shì gōngrén.|Bố tôi không phải nông dân, bố tôi là công nhân.
 我妈妈是公务员。|Wǒ māma shì gōngwùyuán.|Mẹ tôi là công chức.
 我哥哥不是医生，我哥哥是护士。|Wǒ gēge bú shì yīshēng, wǒ gēge shì hùshi.|Anh trai tôi không phải bác sĩ, anh trai tôi là y tá.
-你姐姐是记者吗？|Nǐ jiějie shì jìzhě ma?|Chị gái bạn là phóng viên sao?
+你姐姐是记者吗？|Nǐ jiějie shì jìzhě ma?|Chị gái bạn là phóng viên phải không?
 我姐姐不是记者，我姐姐是公务员。|Wǒ jiějie bú shì jìzhě, wǒ jiějie shì gōngwùyuán.|Chị gái tôi không phải phóng viên, chị gái tôi là công chức.
 我弟弟是公安。|Wǒ dìdi shì gōng'ān.|Em trai tôi là công an.
 我妹妹不是警察。|Wǒ mèimei bú shì jǐngchá.|Em gái tôi không phải cảnh sát.
-你爷爷是律师吗？|Nǐ yéye shì lǜshī ma?|Ông nội bạn là luật sư sao?
+你爷爷是律师吗？|Nǐ yéye shì lǜshī ma?|Ông nội bạn là luật sư phải không?
 我爸爸是厨师。|Wǒ bàba shì chúshī.|Bố tôi là đầu bếp.
 我妈妈不是演员。|Wǒ māma bú shì yǎnyuán.|Mẹ tôi không phải diễn viên.
-你哥哥是司机吗？|Nǐ gēge shì sījī ma?|Anh trai bạn là tài xế sao?
+你哥哥是司机吗？|Nǐ gēge shì sījī ma?|Anh trai bạn là tài xế phải không?
 我姐姐是护士，我哥哥是医生。|Wǒ jiějie shì hùshi, wǒ gēge shì yīshēng.|Chị gái tôi là y tá, anh trai tôi là bác sĩ.
-你妹妹是消防员吗？|Nǐ mèimei shì xiāofángyuán ma?|Em gái bạn là lính cứu hỏa sao?
+你妹妹是消防员吗？|Nǐ mèimei shì xiāofángyuán ma?|Em gái bạn là lính cứu hỏa phải không?
 我爷爷是工人，我奶奶是农民。|Wǒ yéye shì gōngrén, wǒ nǎinai shì nóngmín.|Ông nội tôi là công nhân, bà nội tôi là nông dân.
 我奶奶不是农民。|Wǒ nǎinai bú shì nóngmín.|Bà nội tôi không phải nông dân.
