@@ -1,0 +1,190 @@
+这是我的汉语老师。|Zhè shì wǒ de Hànyǔ lǎoshī.|Đây là giáo viên tiếng Trung của tôi.
+那是我的英语老师。|Nà shì wǒ de Yīngyǔ lǎoshī.|Kia là giáo viên tiếng Anh của tôi.
+这是我的中国朋友。|Zhè shì wǒ de Zhōngguó péngyǒu.|Đây là bạn Trung Quốc của tôi.
+那是我的韩国同学。|Nà shì wǒ de Hánguó tóngxué.|Kia là bạn học Hàn Quốc của tôi.
+这是你的日本朋友吗？|Zhè shì nǐ de Rìběn péngyǒu ma?|Đây là bạn Nhật Bản của bạn phải không?
+这不是我的日本朋友。|Zhè bú shì wǒ de Rìběn péngyǒu.|Đây không phải là bạn Nhật Bản của tôi.
+他是你的德语老师吗？|Tā shì nǐ de Déyǔ lǎoshī ma?|Anh ấy là giáo viên tiếng Đức của bạn phải không?
+他不是我的泰语老师。|Tā bú shì wǒ de Tàiyǔ lǎoshī.|Anh ấy không phải là giáo viên tiếng Thái của tôi.
+你的汉语老师是中国人吗？|Nǐ de Hànyǔ lǎoshī shì Zhōngguórén ma?|Giáo viên tiếng Trung của bạn là người Trung Quốc phải không?
+我的汉语老师是中国人。|Wǒ de Hànyǔ lǎoshī shì Zhōngguórén.|Giáo viên tiếng Trung của tôi là người Trung Quốc.
+他的英语老师是美国人吗？|Tā de Yīngyǔ lǎoshī shì Měiguórén ma?|Giáo viên tiếng Anh của anh ấy là người Mỹ phải không?
+他的英语老师是英国人。|Tā de Yīngyǔ lǎoshī shì Yīngguórén.|Giáo viên tiếng Anh của anh ấy là người Anh.
+你的日语老师是哪国人？|Nǐ de Rìyǔ lǎoshī shì nǎ guó rén?|Giáo viên tiếng Nhật của bạn là người nước nào?
+我的日语老师是越南人。|Wǒ de Rìyǔ lǎoshī shì Yuènánrén.|Giáo viên tiếng Nhật của tôi là người Việt Nam.
+我弟弟的日语老师是越南人。|Wǒ dìdi de Rìyǔ lǎoshī shì Yuènánrén.|Giáo viên tiếng Nhật của em trai tôi là người Việt Nam.
+这是我的法国朋友。|Zhè shì wǒ de Fǎguó péngyou.|Đây là bạn người Pháp của tôi.
+那是我的美国同学。|Nà shì wǒ de Měiguó tóngxué.|Kia là bạn học người Mỹ của tôi.
+这是你的韩国老师吗？|Zhè shì nǐ de Hánguó lǎoshī ma?|Đây là giáo viên Hàn Quốc của bạn phải không?
+这不是我的韩国老师。|Zhè bú shì wǒ de Hánguó lǎoshī.|Đây không phải là giáo viên Hàn Quốc của tôi.
+他是你的汉语老师吗？|Tā shì nǐ de Hànyǔ lǎoshī ma?|Ông ấy là giáo viên tiếng Hán của bạn phải không?
+他不是我的英语老师。|Tā bú shì wǒ de Yīngyǔ lǎoshī.|Ông ấy không phải là giáo viên tiếng Anh của tôi.
+他是你的法语老师吗？|Tā shì nǐ de Fǎyǔ lǎoshī ma?|Ông ấy là giáo viên tiếng Pháp của bạn phải không?
+他不是我的日语老师。|Tā bú shì wǒ de Rìyǔ lǎoshī.|Ông ấy không phải là giáo viên tiếng Nhật của tôi.
+这是他的中国朋友。|Zhè shì tā de Zhōngguó péngyou.|Đây là bạn người Trung Quốc của anh ấy.
+那是他的美国朋友。|Nà shì tā de Měiguó péngyou.|Kia là bạn người Mỹ của anh ấy.
+这是你们的汉语老师吗？|Zhè shì nǐmen de Hànyǔ lǎoshī ma?|Đây là giáo viên tiếng Hán của các bạn phải không?
+这是我们的汉语老师。|Zhè shì wǒmen de Hànyǔ lǎoshī.|Đây là giáo viên tiếng Hán của chúng tôi.
+那是你们的英语老师吗？|Nà shì nǐmen de Yīngyǔ lǎoshī ma?|Kia là giáo viên tiếng Anh của các bạn phải không?
+那是我们的英语老师。|Nà shì wǒmen de Yīngyǔ lǎoshī.|Kia là giáo viên tiếng Anh của chúng tôi.
+你的朋友是中国人吗？|Nǐ de péngyou shì Zhōngguó rén ma?|Bạn của bạn là người Trung Quốc phải không?
+我的朋友是韩国人。|Wǒ de péngyou shì Hánguó rén.|Bạn của tôi là người Hàn Quốc.
+他的同学是日本人吗？|Tā de tóngxué shì Rìběn rén ma?|Bạn học của anh ấy là người Nhật Bản phải không?
+他的同学是日本人。|Tā de tóngxué shì Rìběn rén.|Bạn học của anh ấy là người Nhật Bản.
+他的老师是美国人吗？|Tā de lǎoshī shì Měiguó rén ma?|Giáo viên của anh ấy là người Mỹ phải không?
+他的老师是英国人。|Tā de lǎoshī shì Yīngguó rén.|Giáo viên của anh ấy là người Anh.
+这是我哥哥的汉语老师。|Zhè shì wǒ gēge de Hànyǔ lǎoshī.|Đây là giáo viên tiếng Hán của anh trai tôi.
+那是我妹妹的英语老师。|Nà shì wǒ mèimei de Yīngyǔ lǎoshī.|Kia là giáo viên tiếng Anh của em gái tôi.
+这是你的中国同学吗？|Zhè shì nǐ de Zhōngguó tóngxué ma?|Đây là bạn học người Trung Quốc của bạn phải không?
+那不是我的中国同学。|Nà bú shì wǒ de Zhōngguó tóngxué.|Kia không phải là bạn học người Trung Quốc của tôi.
+这是你的美国朋友吗？|Zhè shì nǐ de Měiguó péngyou ma?|Đây là bạn người Mỹ của bạn phải không?
+那不是我的美国朋友。|Nà bú shì wǒ de Měiguó péngyou.|Kia không phải là bạn người Mỹ của tôi.
+他是你的韩国朋友吗？|Tā shì nǐ de Hánguó péngyou ma?|Anh ấy là bạn người Hàn Quốc của bạn phải không?
+他不是我的韩国朋友。|Tā bú shì wǒ de Hánguó péngyou.|Anh ấy không phải là bạn người Hàn Quốc của tôi.
+他是你的日本同学吗？|Tā shì nǐ de Rìběn tóngxué ma?|Anh ấy là bạn học người Nhật Bản của bạn phải không?
+他不是我的日本同学。|Tā bú shì wǒ de Rìběn tóngxué.|Anh ấy không phải là bạn học người Nhật Bản của tôi.
+你的德语老师是哪国人？|Nǐ de Déyǔ lǎoshī shì nǎ guó rén?|Giáo viên tiếng Đức của bạn là người nước nào?
+我的德语老师是德国人。|Wǒ de Déyǔ lǎoshī shì Déguórén.|Giáo viên tiếng Đức của tôi là người Đức.
+你的法语老师是哪国人？|Nǐ de Fǎyǔ lǎoshī shì nǎ guórén?|Giáo viên tiếng Pháp của bạn là người nước nào?
+我的法语老师是法国人。|Wǒ de Fǎyǔ lǎoshī shì Fǎguórén.|Giáo viên tiếng Pháp của tôi là người Pháp.
+他的泰语老师是哪国人？|Tā de Tàiyǔ lǎoshī shì nǎ guórén?|Giáo viên tiếng Thái của anh ấy là người nước nào?
+他的泰语老师是泰国人。|Tā de Tàiyǔ lǎoshī shì Tàiguórén.|Giáo viên tiếng Thái của anh ấy là người Thái Lan.
+这是我们的中国老师。|Zhè shì wǒmen de Zhōngguó lǎoshī.|Đây là giáo viên Trung Quốc của chúng tôi.
+那是我们的美国老师。|Nà shì wǒmen de Měiguó lǎoshī.|Kia là giáo viên Mỹ của chúng tôi.
+这是他们的韩国朋友。|Zhè shì tāmen de Hánguó péngyǒu.|Đây là bạn Hàn Quốc của họ.
+那是他们的日本同学。|Nà shì tāmen de Rìběn tóngxué.|Kia là bạn học Nhật Bản của họ.
+这是他的越南朋友。|Zhè shì tā de Yuènán péngyǒu.|Đây là bạn Việt Nam của anh ấy.
+那是他的中国同学。|Nà shì tā de Zhōngguó tóngxué.|Kia là bạn học Trung Quốc của anh ấy.
+你的汉语老师是越南人吗？|Nǐ de Hànyǔ lǎoshī shì Yuènánrén ma?|Giáo viên tiếng Hán của bạn là người Việt Nam phải không?
+我的汉语老师是越南人。|Wǒ de Hànyǔ lǎoshī shì Yuènánrén.|Giáo viên tiếng Hán của tôi là người Việt Nam.
+你的英语老师是美国人吗？|Nǐ de Yīngyǔ lǎoshī shì Měiguórén ma?|Giáo viên tiếng Anh của bạn là người Mỹ phải không?
+我的英语老师是美国人。|Wǒ de Yīngyǔ lǎoshī shì Měiguórén.|Giáo viên tiếng Anh của tôi là người Mỹ.
+他的日语老师是日本人吗？|Tā de Rìyǔ lǎoshī shì Rìběnrén ma?|Giáo viên tiếng Nhật của anh ấy là người Nhật Bản phải không?
+他的日语老师是日本人。|Tā de Rìyǔ lǎoshī shì Rìběnrén.|Giáo viên tiếng Nhật của anh ấy là người Nhật Bản.
+他的法语老师是法国人吗？|Tā de Fǎyǔ lǎoshī shì Fǎguórén ma?|Giáo viên tiếng Pháp của anh ấy là người Pháp phải không?
+他的法语老师是法国人。|Tā de Fǎyǔ lǎoshī shì Fǎguórén.|Giáo viên tiếng Pháp của anh ấy là người Pháp.
+这是我爸爸的汉语老师。|Zhè shì wǒ bàba de Hànyǔ lǎoshī.|Đây là giáo viên tiếng Hán của bố tôi.
+那是我妈妈的英语老师。|Nà shì wǒ māma de Yīngyǔ lǎoshī.|Kia là giáo viên tiếng Anh của mẹ tôi.
+这是你的新同学吗？|Zhè shì nǐ de xīn tóngxué ma?|Đây là bạn học mới của bạn phải không?
+那不是我的新同学。|Nà bú shì wǒ de xīn tóngxué.|Kia không phải là bạn học mới của tôi.
+这是你的好朋友吗？|Zhè shì nǐ de hǎo péngyǒu ma?|Đây là bạn tốt của bạn phải không?
+那不是我的好朋友。|Nà bú shì wǒ de hǎo péngyǒu.|Kia không phải là bạn tốt của tôi.
+你的朋友是美国人吗？|Nǐ de péngyǒu shì Měiguórén ma?|Bạn của bạn là người Mỹ phải không?
+我的朋友是英国人。|Wǒ de péngyǒu shì Yīngguórén.|Bạn của tôi là người Anh.
+他的同学是韩国人吗？|Tā de tóngxué shì Hánguórén ma?|Bạn học của anh ấy là người Hàn Quốc phải không?
+他的同学是韩国人。|Tā de tóngxué shì Hánguórén.|Bạn học của anh ấy là người Hàn Quốc.
+他的朋友是中国人吗？|Tā de péngyǒu shì Zhōngguórén ma?|Bạn của anh ấy là người Trung Quốc phải không?
+他的朋友是中国人。|Tā de péngyǒu shì Zhōngguórén.|Bạn của anh ấy là người Trung Quốc.
+这是我们的汉语老师。|Zhè shì wǒmen de Hànyǔ lǎoshī.|Đây là giáo viên tiếng Hán của chúng tôi.
+那是我们的英语老师。|Nà shì wǒmen de Yīngyǔ lǎoshī.|Kia là giáo viên tiếng Anh của chúng tôi.
+这是我妹妹的中国朋友吗？|Zhè shì wǒ mèimei de Zhōngguó péngyǒu ma?|Đây là bạn Trung Quốc của em gái tôi phải không?
+那不是我弟弟的中国朋友。|Nà bú shì wǒ dìdi de Zhōngguó péngyǒu.|Kia không phải là bạn Trung Quốc của em trai tôi.
+这是他的日本同学吗？|Zhè shì tā de Rìběn tóngxué ma?|Đây là bạn học Nhật Bản của anh ấy phải không?
+那不是他的日本同学。|Nà bú shì tā de Rìběn tóngxué.|Kia không phải là bạn học Nhật Bản của anh ấy.
+我的老师是中国人。|Wǒ de lǎoshī shì Zhōngguórén.|Giáo viên của tôi là người Trung Quốc.
+我们的英语老师都是美国人。|Wǒmen de Yīngyǔ lǎoshī dōu shì Měiguó rén.|Giáo viên tiếng Anh của chúng tôi đều là người Mỹ.
+我们的汉语老师都是中国人。|Wǒmen de Hànyǔ lǎoshī dōu shì Zhōngguó rén.|Giáo viên tiếng Hán của chúng tôi đều là người Trung Quốc.
+我们的日语老师都是日本人。|Wǒmen de Rìyǔ lǎoshī dōu shì Rìběn rén.|Giáo viên tiếng Nhật của chúng tôi đều là người Nhật Bản.
+他们的英语老师都是美国人。|Tāmen de Yīngyǔ lǎoshī dōu shì Měiguó rén.|Giáo viên tiếng Anh của họ đều là người Mỹ.
+我们的同学都是越南人。|Wǒmen de tóngxué dōu shì Yuènán rén.|Bạn học của chúng tôi đều là người Việt Nam.
+他们的朋友都是中国人。|Tāmen de péngyǒu dōu shì Zhōngguó rén.|Bạn bè của họ đều là người Trung Quốc.
+我们的法语老师都是法国人。|Wǒmen de Fǎyǔ lǎoshī dōu shì Fǎguó rén.|Giáo viên tiếng Pháp của chúng tôi đều là người Pháp.
+我们的德语老师都是德国人。|Wǒmen de Déyǔ lǎoshī dōu shì Déguó rén.|Giáo viên tiếng Đức của chúng tôi đều là người Đức.
+他们的汉语老师都是中国人。|Tāmen de Hànyǔ lǎoshī dōu shì Zhōngguó rén.|Giáo viên tiếng Hán của họ đều là người Trung Quốc.
+我们的泰语老师都是泰国人。|Wǒmen de Tàiyǔ lǎoshī dōu shì Tàiguó rén.|Giáo viên tiếng Thái của chúng tôi đều là người Thái Lan.
+我们的朋友都是越南人。|Wǒmen de péngyǒu dōu shì Yuènán rén.|Bạn bè của chúng tôi đều là người Việt Nam.
+我们的老师都是中国人。|Wǒmen de lǎoshī dōu shì Zhōngguó rén.|Giáo viên của chúng tôi đều là người Trung Quốc.
+他们的老师都是美国人。|Tāmen de lǎoshī dōu shì Měiguó rén.|Giáo viên của họ đều là người Mỹ.
+我们的汉语同学都是越南人。|Wǒmen de Hànyǔ tóngxué dōu shì Yuènán rén.|Bạn học tiếng Hán của chúng tôi đều là người Việt Nam.
+他们的英语同学都是美国人。|Tāmen de Yīngyǔ tóngxué dōu shì Měiguó rén.|Bạn học tiếng Anh của họ đều là người Mỹ.
+我们的日语同学都是日本人。|Wǒmen de Rìyǔ tóngxué dōu shì Rìběn rén.|Bạn học tiếng Nhật của chúng tôi đều là người Nhật Bản.
+他们的法语同学都是法国人。|Tāmen de Fǎyǔ tóngxué dōu shì Fǎguó rén.|Bạn học tiếng Pháp của họ đều là người Pháp.
+我们的汉语朋友都是中国人。|Wǒmen de Hànyǔ péngyǒu dōu shì Zhōngguó rén.|Bạn bè tiếng Hán của chúng tôi đều là người Trung Quốc.
+他们的英语朋友都是美国人。|Tāmen de Yīngyǔ péngyǒu dōu shì Měiguó rén.|Bạn bè tiếng Anh của họ đều là người Mỹ.
+那是电影院，这也是电影院。|Nà shì diànyǐngyuàn, zhè yě shì diànyǐngyuàn.|Kia là rạp chiếu phim, đây cũng là rạp chiếu phim.
+这是书店，那也是书店。|Zhè shì shūdiàn, nà yě shì shūdiàn.|Đây là hiệu sách, kia cũng là hiệu sách.
+这是鸟，那是蝴蝶。|Zhè shì niǎo, nà shì húdié.|Đây là chim, kia là bướm.
+这是牛，那是马。|Zhè shì niú, nà shì mǎ.|Đây là bò, kia là ngựa.
+我喜欢猫，他喜欢狗。|Wǒ xǐhuān māo, tā xǐhuān gǒu.|Tôi thích mèo, anh ấy thích chó.
+这不是我的书。|Zhè bú shì wǒ de shū.|Đây không phải là sách của tôi.
+这不是我的英语书。|Zhè bú shì wǒ de Yīngyǔ shū.|Đây không phải là sách tiếng Anh của tôi.
+那不是他的猫。|Nà bú shì tā de māo.|Kia không phải là mèo của anh ấy.
+那是我的汉语书。|Nà shì wǒ de Hànyǔ shū.|Kia là sách tiếng Hán của tôi.
+那是谁的书？|Nà shì shéi de shū?|Kia là sách của ai?
+那是谁的汉语书？|Nà shì shéi de Hànyǔ shū?|Kia là sách tiếng Hán của ai?
+那是谁的奶茶？|Nà shì shéi de nǎichá?|Kia là trà sữa của ai?
+那是我朋友的奶茶。|Nà shì wǒ péngyǒu de nǎichá.|Kia là trà sữa của bạn tôi.
+那是谁的朋友？|Nà shì shéi de péngyǒu?|Kia là bạn của ai?
+那是陈楠弟弟的朋友。|Nà shì Chén Nán dìdi de péngyǒu.|Kia là bạn của em trai Trần Nam.
+这是谁的狗？|Zhè shì shéi de gǒu?|Đây là chó của ai?
+这是我哥哥的狗。|Zhè shì wǒ gēge de gǒu.|Đây là chó của anh trai tôi.
+这是我的中国朋友。|Zhè shì wǒ de Zhōngguó péngyǒu.|Đây là bạn Trung Quốc của tôi.
+那是我的法国同学。|Nà shì wǒ de Fǎguó tóngxué.|Kia là bạn học người Pháp của tôi.
+这不是我的衣服。|Zhè bú shì wǒ de yīfu.|Đây không phải là quần áo của tôi.
+那不是我朋友的杯子。|Nà bú shì wǒ péngyǒu de bēizi.|Kia không phải là cái cốc của bạn tôi.
+我喜欢看电视，他喜欢看电影。|Wǒ xǐhuān kàn diànshì, tā xǐhuān kàn diànyǐng.|Tôi thích xem TV, anh ấy thích xem phim.
+我喜欢打羽毛球，弟弟喜欢踢足球。|Wǒ xǐhuān dǎ yǔmáoqiú, dìdi xǐhuān tī zúqiú.|Tôi thích chơi cầu lông, em trai thích đá bóng.
+我的中国朋友喜欢打羽毛球。|Wǒ de Zhōngguó péngyǒu xǐhuān dǎ yǔmáoqiú.|Bạn Trung Quốc của tôi thích chơi cầu lông.
+哥哥的朋友喜欢踢足球。|Gēge de péngyǒu xǐhuān tī zúqiú.|Bạn của anh trai thích đá bóng.
+我喜欢穿红色的衣服。|Wǒ xǐhuān chuān hóngsè de yīfu.|Tôi thích mặc quần áo màu đỏ.
+我弟弟喜欢穿黄色的衣服。|Wǒ dìdi xǐhuān chuān huángsè de yīfu.|Em trai tôi thích mặc quần áo màu vàng.
+我妹妹喜欢穿绿色的衣服。|Wǒ mèimei xǐhuān chuān lǜsè de yīfu.|Em gái tôi thích mặc quần áo màu xanh lá.
+我哥哥喜欢穿黑色的衣服。|Wǒ gēge xǐhuān chuān hēisè de yīfu.|Anh trai tôi thích mặc quần áo màu đen.
+我妈妈喜欢穿白色的衣服。|Wǒ māma xǐhuān chuān báisè de yīfu.|Mẹ tôi thích mặc quần áo màu trắng.
+我爸爸喜欢穿蓝色的衣服。|Wǒ bàba xǐhuān chuān lánsè de yīfu.|Bố tôi thích mặc quần áo màu xanh dương.
+我喜欢穿蓝色的拖鞋。|Wǒ xǐhuān chuān lánsè de tuōxié.|Tôi thích mang dép lê màu xanh dương.
+我朋友喜欢穿紫色的拖鞋。|Wǒ péngyǒu xǐhuān chuān zǐsè de tuōxié.|Bạn tôi thích mang dép lê màu tím.
+谁喜欢穿红色的衣服。|Shéi xǐhuān chuān hóngsè de yīfu.|Ai thích mặc quần áo màu đỏ?
+你喜欢穿什么颜色的衣服？|Nǐ xǐhuān chuān shénme yánsè de yīfu?|Bạn thích mặc quần áo màu gì?
+你姐姐喜欢穿什么颜色的衣服？|Nǐ jiějie xǐhuān chuān shénme yánsè de yīfu?|Chị gái bạn thích mặc quần áo màu gì?
+他弟弟喜欢穿什么颜色的衣服？|Tā dìdi xǐhuān chuān shénme yánsè de yīfu?|Em trai anh ấy thích mặc quần áo màu gì?
+你哥哥喜欢穿什么颜色的衣服？|Nǐ gēge xǐhuān chuān shénme yánsè de yīfu?|Anh trai bạn thích mặc quần áo màu gì?
+你的汉语老师喜欢穿什么颜色的衣服？|Nǐ de Hànyǔ lǎoshī xǐhuān chuān shénme yánsè de yīfu?|Giáo viên tiếng Trung của bạn thích mặc quần áo màu gì?
+他的法国朋友喜欢穿什么颜色的衣服？|Tā de Fǎguó péngyǒu xǐhuān chuān shénme yánsè de yīfu?|Bạn người Pháp của anh ấy thích mặc quần áo màu gì?
+你喜欢看什么电影？|Nǐ xǐhuān kàn shénme diànyǐng?|Bạn thích xem phim gì?
+你喜欢哪本书？|Nǐ xǐhuān nǎ běn shū?|Bạn thích quyển sách nào?
+你喜欢哪只猫？|Nǐ xǐhuān nǎ zhī māo?|Bạn thích con mèo nào?
+你喜欢喝哪杯奶茶？|Nǐ xǐhuān hē nǎ bēi nǎichá?|Bạn thích uống ly trà sữa nào?
+你喜欢哪双鞋？|Nǐ xǐhuān nǎ shuāng xié?|Bạn thích đôi giày nào?
+你喜欢哪辆自行车？|Nǐ xǐhuān nǎ liàng zìxíngchē?|Bạn thích chiếc xe đạp nào?
+这是谁的法语书？|Zhè shì shéi de Fǎyǔ shū?|Đây là sách tiếng Pháp của ai?
+谁是你的好朋友？|Shéi shì nǐ de hǎo péngyǒu?|Ai là bạn tốt của bạn?
+谁是你的同学？|Shéi shì nǐ de tóngxué?|Ai là bạn cùng lớp của bạn?
+这是两本汉语书。|Zhè shì liǎng běn Hànyǔ shū.|Đây là hai quyển sách tiếng Trung.
+那是我朋友的雨伞。|Nà shì wǒ péngyǒu de yǔsǎn.|Kia là ô (dù) của bạn tôi.
+你喜欢看中国电影吗？|Nǐ xǐhuān kàn Zhōngguó diànyǐng ma?|Bạn thích xem phim Trung Quốc không?
+你哥哥喜欢看美国电影吗？|Nǐ gēge xǐhuān kàn Měiguó diànyǐng ma?|Anh trai bạn thích xem phim Mỹ không?
+他们都是我的朋友。|Tāmen dōu shì wǒ de péngyǒu.|Họ đều là bạn của tôi.
+他也喜欢看中国电影。|Tā yě xǐhuān kàn Zhōngguó diànyǐng.|Anh ấy cũng thích xem phim Trung Quốc.
+他也喜欢穿黑色衣服。|Tā yě xǐhuān chuān hēisè yīfu.|Anh ấy cũng thích mặc quần áo màu đen.
+我喜欢红色，他也喜欢红色。|Wǒ xǐhuān hóngsè, tā yě xǐhuān hóngsè.|Tôi thích màu đỏ, anh ấy cũng thích màu đỏ.
+我喜欢白色，他也喜欢白色。|Wǒ xǐhuān báisè, tā yě xǐhuān báisè.|Tôi thích màu trắng, anh ấy cũng thích màu trắng.
+你喜欢面条，我喜欢炒饭。|Nǐ xǐhuān miàntiáo, wǒ xǐhuān chǎofàn.|Bạn thích mì, tôi thích cơm rang.
+我喜欢这本书，他也喜欢这本书。|Wǒ xǐhuān zhè běn shū, tā yě xǐhuān zhè běn shū.|Tôi thích quyển sách này, anh ấy cũng thích quyển sách này.
+我喜欢那只猫，他也喜欢那只猫。|Wǒ xǐhuān nà zhī māo, tā yě xǐhuān nà zhī māo.|Tôi thích con mèo đó, anh ấy cũng thích con mèo đó.
+我喜欢那辆车，他也喜欢那辆车。|Wǒ xǐhuān nà liàng chē, tā yě xǐhuān nà liàng chē.|Tôi thích chiếc xe đó, anh ấy cũng thích chiếc xe đó.
+我喜欢这双鞋，他也喜欢这双鞋。|Wǒ xǐhuān zhè shuāng xié, tā yě xǐhuān zhè shuāng xié.|Tôi thích đôi giày này, anh ấy cũng thích đôi giày này.
+他喜欢看韩国电影。|Tā xǐhuān kàn Hánguó diànyǐng.|Anh ấy thích xem phim Hàn Quốc.
+妈妈喜欢看美国电影。|Māma xǐhuān kàn Měiguó diànyǐng.|Mẹ thích xem phim Mỹ.
+姐姐喜欢看越南电影。|Jiějie xǐhuān kàn Yuènán diànyǐng.|Chị gái thích xem phim Việt Nam.
+你喜欢吃什么水果？|Nǐ xǐhuān chī shénme shuǐguǒ?|Bạn thích ăn loại trái cây nào?
+我的中国朋友喜欢吃香蕉。|Wǒ de Zhōngguó péngyǒu xǐhuān chī xiāngjiāo.|Bạn Trung Quốc của tôi thích ăn chuối.
+他的韩国同学喜欢吃西瓜。|Tā de Hánguó tóngxué xǐhuān chī xīguā.|Bạn học Hàn Quốc của anh ấy thích ăn dưa hấu.
+我的日本朋友喜欢吃芒果。|Wǒ de Rìběn péngyǒu xǐhuān chī mángguǒ.|Bạn Nhật Bản của tôi thích ăn xoài.
+我的韩国朋友喜欢吃葡萄。|Wǒ de Hánguó péngyǒu xǐhuān chī pútao.|Bạn Hàn Quốc của tôi thích ăn nho.
+他的美国朋友喜欢吃草莓。|Tā de Měiguó péngyǒu xǐhuān chī cǎoméi.|Bạn Mỹ của anh ấy thích ăn dâu tây.
+我爸爸喜欢吃吃苹果。|Wǒ bàba xǐhuān chī chī píngguǒ.|Bố tôi thích ăn táo.
+西瓜和草莓我都喜欢吃。|Xīguā hé cǎoméi wǒ dōu xǐhuān chī.|Dưa hấu và dâu tây tôi đều thích ăn.
+我弟弟喜欢吃葡萄和芒果。|Wǒ dìdi xǐhuān chī pútao hé mángguǒ.|Em trai tôi thích ăn nho và xoài.
+你的衣服是什么颜色的？|Nǐ de yīfu shì shénme yánsè de?|Quần áo của bạn màu gì?
+你的拖鞋是什么颜色的？|Nǐ de tuōxié shì shénme yánsè de?|Dép lê của bạn màu gì?
+那只狗是什么颜色的？|Nà zhī gǒu shì shénme yánsè de?|Con chó kia màu gì?
+苹果是什么颜色的？|Píngguǒ shì shénme yánsè de?|Táo màu gì?
+香蕉是什么颜色的？|Xiāngjiāo shì shénme yánsè de?|Chuối màu gì?
+西瓜是什么颜色的？|Xīguā shì shénme yánsè de?|Dưa hấu màu gì?
+草莓是什么颜色的？|Cǎoméi shì shénme yánsè de?|Dâu tây màu gì?
+葡萄是什么颜色的？|Pútao shì shénme yánsè de?|Nho màu gì?
+芒果是什么颜色的？|Mángguǒ shì shénme yánsè de?|Xoài màu gì?
+梨是什么颜色的？|Lí shì shénme yánsè de?|Lê màu gì?
+你的自行车是什么颜色的？|Nǐ de zìxíngchē shì shénme yánsè de?|Xe đạp của bạn màu gì?
+你的车是什么颜色的？|Nǐ de chē shì shénme yánsè de?|Xe ô tô của bạn màu gì?
