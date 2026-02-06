@@ -62,6 +62,11 @@
         }
         .animate-sound-wave { animation: sound-wave 1s infinite; }
 
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-custom { animation: spin 1s linear infinite; }
+
         /* Word Chips */
         .word-chip {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -87,7 +92,7 @@
     <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar relative">
         
         <!-- SETUP SCREEN -->
-        <div id="setup-screen" class="flex flex-col gap-6 pt-4 transition-all duration-300">
+        <div id="setup-screen" class="flex flex-col gap-4 pt-4 transition-all duration-300">
             <!-- Icon Hero -->
             <div class="flex justify-center mb-2">
                 <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center shadow-inner">
@@ -100,18 +105,40 @@
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Bài học</label>
                 <div class="relative">
                     <select id="lessonSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
-                        <option value="lesson1">H1 Bài 1: 老师您好！</option>
-                        <option value="lesson2">H1 Bài 2: 谢谢你！</option>
-                        <option value="lesson3">H1 Bài 3: 你叫什么名字?</option>
-                        <option value="lesson4">H1 Bài 4: 她是我的汉语老师</option>
+                        <option value="">Chọn bài học...</option>
+                        <!-- Options injected via JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Quantity Selection (NEW) -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Số lượng câu</label>
+                <div class="relative">
+                    <select id="questionCountSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-800 font-bold py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+                        <option value="5" selected>5 Câu (Ngẫu nhiên)</option>
+                        <option value="10">10 Câu (Ngẫu nhiên)</option>
+                        <option value="15">15 Câu (Ngẫu nhiên)</option>
+                        <option value="20">20 Câu (Ngẫu nhiên)</option>
+                        <option value="all">Tất cả (Làm hết)</option>
                     </select>
                 </div>
             </div>
 
             <!-- Start Button -->
-            <button id="startBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 text-lg">
+            <button id="startBtn" disabled class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-2 mt-2 text-lg">
                 <i class="fas fa-play"></i> Bắt đầu
             </button>
+
+            <p class="text-xs text-center text-gray-400 mt-2">
+                *Dữ liệu sẽ được tải từ thư mục <span class="font-mono bg-gray-100 px-1 rounded">data_wordGame</span>
+            </p>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-screen" class="hidden absolute inset-0 bg-white/80 z-50 flex-col items-center justify-center backdrop-blur-sm">
+            <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin-custom mb-3"></div>
+            <p class="text-blue-600 font-bold">Đang tải câu...</p>
         </div>
 
         <!-- GAME SCREEN -->
@@ -149,7 +176,7 @@
             </div>
 
             <!-- Next Button (Hidden until correct/wrong) -->
-             <button id="nextQuestionBtn" class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-200 active:scale-95 transition-all mt-auto mb-2 animate-bounce">
+             <button id="nextQuestionBtn" class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-200 active:scale-95 transition-all mt-auto mb-2">
                 Tiếp tục <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
@@ -209,31 +236,17 @@
     </div>
 
     <script>
-        // --- DATA ---
-        const lessonData = {
-            lesson1: [
-                "你/好/。", "再/见/。", "老师，/您/好。", "你/好/吗？", "这/是/书/吗？",
-                "这/不/是/书。", "那/是/陈楠。", "你/是/学生/吗？", "不是，/我/是/老师。",
-                "国安，/你/好。", "国安/不/是/老师。", "我/很/好。"
-            ],
-            lesson2: [
-                "/谢谢/你！", "不/客/气！", "我/爸爸/不是/医生/。", "你/妈妈/是/记者/吗？",
-                "我/妈妈/很好，/谢谢/你/！", "那/不/是/警察。", "那/不是/书/吗？",
-                "对/不/起/，我/不是/律师。", "那是/你/哥哥/吗？"
-            ],
-            lesson3: [
-                "你/叫/什么/名字？", "我/叫/李月。", "请问/您/贵姓？", "你/姓/什么？",
-                "我/爸爸/姓/李。", "你/喜欢/喝/什么?", "这/是/什么/书/?", "我/很/喜欢/韩国。",
-                "她/不喜欢/吃/火锅。", "你/是/越南人/吗？", "我/不是/中国人。",
-                "他/是/美国人，/他/说/英语。", "我/是/越南人，/我/说/越南语。", "他/是/法国人，/他/说/法语。",
-                "他们/都/是/韩国人。", "我/爸爸/也/姓/张。"
-            ],
-            lesson4: [
-                "谁/是/国安？", "你们/是/哪/国/人？", "你/喜欢/什么/颜色？", "那/是/我/的/猫。",
-                "这/是/我/的/英语/老师。", "我/叫/李月，/你/呢?", "你/喜欢/打/羽毛球/吗?",
-                "他/不/是/我/朋友。", "他/是/我/的/好朋友。", "我/喜欢/穿/拖鞋。"
-            ]
-        };
+        // --- DATA CONFIGURATION ---
+        const lessonList = [
+            { id: 'bai1.txt', name: 'H1 Bài 1: 老师您好！' },
+            { id: 'bai2.txt', name: 'H1 Bài 2: 谢谢你！' },
+            { id: 'bai3.txt', name: 'H1 Bài 3: 你叫什么名字?' },
+            { id: 'bai4.txt', name: 'H1 Bài 4: 她是我的汉语老师。' },
+            { id: 'bai5.txt', name: 'H1 Bài 5: 他女儿今年八岁。' },
+            { id: 'bai6.txt', name: 'H1 Bài 6: 我会说汉语。' },
+        ];
+
+        const DATA_FOLDER = 'data_wordGame/';
 
         // --- STATE ---
         let currentLessonSentences = [];
@@ -251,8 +264,10 @@
         const setupScreen = document.getElementById('setup-screen');
         const gameScreen = document.getElementById('game-screen');
         const resultScreen = document.getElementById('result-screen');
+        const loadingScreen = document.getElementById('loading-screen');
         
         const lessonSelect = document.getElementById('lessonSelect');
+        const questionCountSelect = document.getElementById('questionCountSelect');
         const startBtn = document.getElementById('startBtn');
         const questionCounter = document.getElementById('questionCounter');
         const gameProgress = document.getElementById('gameProgress');
@@ -264,32 +279,65 @@
         const replayAudioBtn = document.getElementById('replayAudioBtn');
 
         // --- INIT ---
-        startBtn.addEventListener('click', startGame);
+        
+        function init() {
+            // Load Lesson List
+            lessonSelect.innerHTML = '<option value="">Chọn bài học...</option>';
+            lessonList.forEach(lesson => {
+                const option = document.createElement('option');
+                option.value = lesson.id;
+                option.textContent = lesson.name;
+                lessonSelect.appendChild(option);
+            });
+            
+            // Listeners
+            lessonSelect.addEventListener('change', () => {
+                startBtn.disabled = !lessonSelect.value;
+            });
+            
+            startBtn.addEventListener('click', startGame);
+        }
 
-        function handleBack() {
-            if (!setupScreen.classList.contains('hidden')) {
-                window.history.back();
-            } else {
-                resetGame();
+        // --- DATA LOADING ---
+
+        async function fetchSentences(filename) {
+            const url = `${DATA_FOLDER}${filename}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const text = await response.text();
+                return parseTextData(text);
+            } catch (error) {
+                console.error("Lỗi tải file:", error);
+                alert(`Không thể tải file dữ liệu: ${filename}.\nKiểm tra thư mục ${DATA_FOLDER} và Web Server.`);
+                return [];
             }
+        }
+
+        function parseTextData(text) {
+            // Mỗi dòng là một câu, các từ ngăn cách bởi /
+            const lines = text.split('\n');
+            const data = [];
+            lines.forEach(line => {
+                const cleanLine = line.trim();
+                if (cleanLine && !cleanLine.startsWith('//')) {
+                    data.push(cleanLine);
+                }
+            });
+            return data;
         }
 
         // --- AUDIO ---
         function speakCurrentSentence() {
             if (!('speechSynthesis' in window)) {
-                console.warn('Web Speech API not supported');
                 return;
             }
-            
-            // Cancel current speech if any
             window.speechSynthesis.cancel();
-
             const utterance = new SpeechSynthesisUtterance(originalSentence);
-            utterance.lang = 'zh-CN'; // Set language to Chinese
-            utterance.rate = 0.85;     // Slightly slower for learning
+            utterance.lang = 'zh-CN'; 
+            utterance.rate = 0.85;     
             utterance.pitch = 1;
 
-            // Optional: select a chinese voice if available
             const voices = window.speechSynthesis.getVoices();
             const zhVoice = voices.find(v => v.lang.includes('zh'));
             if(zhVoice) utterance.voice = zhVoice;
@@ -299,11 +347,40 @@
 
         // --- GAME LOGIC ---
 
-        function startGame() {
-            const lesson = lessonSelect.value;
-            currentLessonSentences = [...lessonData[lesson]];
-            // Shuffle questions
-            currentLessonSentences.sort(() => 0.5 - Math.random());
+        async function startGame() {
+            const selectedFile = lessonSelect.value;
+            const limitValue = questionCountSelect.value; // Lấy giá trị số câu
+            
+            if (!selectedFile) return;
+
+            // 1. Show Loading
+            loadingScreen.classList.remove('hidden');
+            loadingScreen.classList.add('flex');
+
+            // 2. Fetch Data
+            let allSentences = await fetchSentences(selectedFile);
+            
+            // Hide Loading
+            loadingScreen.classList.add('hidden');
+            loadingScreen.classList.remove('flex');
+
+            if (allSentences.length === 0) return;
+
+            // --- LOGIC MỚI: Xáo trộn và cắt danh sách câu hỏi ---
+            
+            // Xáo trộn ngẫu nhiên tất cả các câu trước
+            allSentences.sort(() => 0.5 - Math.random());
+
+            // Kiểm tra số lượng người dùng chọn
+            if (limitValue !== 'all') {
+                const limit = parseInt(limitValue);
+                // Nếu số câu trong file ít hơn số yêu cầu, lấy hết số câu có trong file
+                currentLessonSentences = allSentences.slice(0, limit);
+            } else {
+                currentLessonSentences = allSentences;
+            }
+
+            // ----------------------------------------------------
             
             totalQuestions = currentLessonSentences.length;
             currentQuestionIndex = 0;
@@ -317,14 +394,22 @@
             loadQuestion();
         }
 
+        function handleBack() {
+            if (!setupScreen.classList.contains('hidden')) {
+                window.history.back();
+            } else {
+                resetGame();
+            }
+        }
+
         function loadQuestion() {
             isChecking = false;
             nextQuestionBtn.classList.add('hidden');
             feedbackIcon.innerHTML = '';
             feedbackIcon.classList.add('hidden');
             replayAudioBtn.classList.add('hidden');
-            userSentenceArea.classList.remove('border-green-500', 'bg-green-50'); // Reset Correct Styles
-            userSentenceArea.parentElement.classList.remove('border-green-500'); // Reset border of container
+            userSentenceArea.classList.remove('border-green-500', 'bg-green-50'); 
+            userSentenceArea.parentElement.classList.remove('border-green-500'); 
             
             // Update Stats
             questionCounter.innerText = `${currentQuestionIndex + 1}/${totalQuestions}`;
@@ -475,11 +560,19 @@
             resultScreen.classList.remove('hidden');
             resultScreen.classList.add('flex');
 
-            // Confetti
+            // Confetti (Single Shot)
             confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#3b82f6', '#10b981', '#f59e0b']
+            });
+            confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
                 colors: ['#3b82f6', '#10b981', '#f59e0b']
             });
 
@@ -494,6 +587,9 @@
             gameScreen.classList.remove('flex');
             resultScreen.classList.add('hidden');
             setupScreen.classList.remove('hidden');
+            
+            // Reset Data
+            currentLessonSentences = [];
         }
 
         function showToast(message, colorClass) {
@@ -506,6 +602,9 @@
                 toast.classList.add('opacity-0', 'translate-y-[-20px]');
             }, 2000);
         }
+
+        // Init App
+        window.onload = init;
 
     </script>
 </body>
