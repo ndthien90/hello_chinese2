@@ -4,7 +4,7 @@
 我姓陈。|Wǒ xìng Chén.|Tôi họ Trần.
 你姓什么？|Nǐ xìng shénme?|Bạn họ gì?
 他叫什么名字？|Tā jiào shénme míngzi?|Anh ấy tên là gì?
-她叫陈楠。|Tā jiào Chén Nán.|Cô ấy tên là Trần Nam.
+他叫陈楠。|Tā jiào Chén Nán.|Anh ấy tên là Trần Nam.
 他叫刘国安吗？|Tā jiào Liú Guó'ān ma?|Anh ấy tên là Lưu Quốc An phải không?
 她姓王。|Tā xìng Wáng.|Cô ấy họ Vương.
 他姓李吗？|Tā xìng Lǐ ma?|Anh ấy họ Lý phải không?
@@ -38,7 +38,7 @@
 我们都是学生。|Wǒmen dōu shì xuésheng.|Chúng tôi đều là học sinh.
 你们都是老师吗？|Nǐmen dōu shì lǎoshī ma?|Các bạn đều là giáo viên phải không?
 他们都是医生。|Tāmen dōu shì yīshēng.|Họ đều là bác sĩ.
-她们都是老师。|Tāmen dōu shì lǎoshī.|Các cô ấy đều là giáo viên.
+他们都是老师。|Tāmen dōu shì lǎoshī.|Bọn họ đều là giáo viên.
 你们叫什么名字？|Nǐmen jiào shénme míngzi?|Các bạn tên là gì?
 她们姓陈吗？|Tāmen xìng Chén ma?|Các cô ấy họ Trần phải không?
 我们都说英语。|Wǒmen dōu shuō Yīngyǔ.|Chúng tôi đều nói tiếng Anh.
