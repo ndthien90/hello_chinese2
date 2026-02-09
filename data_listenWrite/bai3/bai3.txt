@@ -24,7 +24,6 @@
 她是韩国人，她说韩语。|Tā shì Hánguó rén, tā shuō Hányǔ.|Cô ấy là người Hàn Quốc, cô ấy nói tiếng Hàn.
 我爸爸是越南人，他说越南语。|Wǒ bàba shì Yuènán rén, tā shuō Yuènányǔ.|Bố tôi là người Việt Nam, ông ấy nói tiếng Việt.
 我弟弟是英国人，他说英语。|Wǒ dìdi shì Yīngguó rén, tā shuō Yīngyǔ.|Em trai tôi là người Anh, cậu ấy nói tiếng Anh.
-他是泰国人，他不说说汉语。|Tā shì Tàiguó rén, tā bù shuō shuō Hànyǔ.|Anh ấy là người Thái, anh ấy không nói tiếng Hán.
 他是韩国人，他不说日语。|Tā shì Hánguó rén, tā bù shuō Rìyǔ.|Anh ấy là người Hàn Quốc, anh ấy không nói tiếng Nhật.
 你说汉语吗？|Nǐ shuō Hànyǔ ma?|Bạn nói tiếng Hán không?
 我说越南语。|Wǒ shuō Yuènányǔ.|Tôi nói tiếng Việt.
