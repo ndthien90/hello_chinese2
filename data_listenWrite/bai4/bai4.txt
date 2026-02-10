@@ -95,12 +95,6 @@
 我们的朋友都是越南人。|Wǒmen de péngyǒu dōu shì Yuènán rén.|Bạn bè của chúng tôi đều là người Việt Nam.
 我们的老师都是中国人。|Wǒmen de lǎoshī dōu shì Zhōngguó rén.|Giáo viên của chúng tôi đều là người Trung Quốc.
 他们的老师都是美国人。|Tāmen de lǎoshī dōu shì Měiguó rén.|Giáo viên của họ đều là người Mỹ.
-我们的汉语同学都是越南人。|Wǒmen de Hànyǔ tóngxué dōu shì Yuènán rén.|Bạn học tiếng Hán của chúng tôi đều là người Việt Nam.
-他们的英语同学都是美国人。|Tāmen de Yīngyǔ tóngxué dōu shì Měiguó rén.|Bạn học tiếng Anh của họ đều là người Mỹ.
-我们的日语同学都是日本人。|Wǒmen de Rìyǔ tóngxué dōu shì Rìběn rén.|Bạn học tiếng Nhật của chúng tôi đều là người Nhật Bản.
-他们的法语同学都是法国人。|Tāmen de Fǎyǔ tóngxué dōu shì Fǎguó rén.|Bạn học tiếng Pháp của họ đều là người Pháp.
-我们的汉语朋友都是中国人。|Wǒmen de Hànyǔ péngyǒu dōu shì Zhōngguó rén.|Bạn bè tiếng Hán của chúng tôi đều là người Trung Quốc.
-他们的英语朋友都是美国人。|Tāmen de Yīngyǔ péngyǒu dōu shì Měiguó rén.|Bạn bè tiếng Anh của họ đều là người Mỹ.
 那是电影院，这也是电影院。|Nà shì diànyǐngyuàn, zhè yě shì diànyǐngyuàn.|Kia là rạp chiếu phim, đây cũng là rạp chiếu phim.
 这是书店，那也是书店。|Zhè shì shūdiàn, nà yě shì shūdiàn.|Đây là hiệu sách, kia cũng là hiệu sách.
 这是鸟，那是蝴蝶。|Zhè shì niǎo, nà shì húdié.|Đây là chim, kia là bướm.
