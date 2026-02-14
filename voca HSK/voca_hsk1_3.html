@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện từ vựng HSK Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Hanzi Writer Library -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7/dist/hanzi-writer.min.js"></script>
+
+    <style>
+        /* Font chữ Hán viết tay */
+        @font-face {
+            font-family: 'Kaiti';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body { 
+            background-color: #f3f4f6; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 90px;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        
+        .card-container {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-container.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .btn-press:active { transform: scale(0.95); }
+        
+        /* Animation cho nút loa */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        .speaking-animation::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            border-radius: 50%; background-color: rgba(59, 130, 246, 0.5); z-index: -1;
+            animation: pulse-ring 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        /* Style cho Font chữ Hán trong Modal */
+        .chinese-font { font-family: 'Kaiti', 'Noto Sans SC', sans-serif; }
+
+        /* Custom Checkbox */
+        .custom-checkbox:checked {
+            background-color: #10b981;
+            border-color: #10b981;
+        }
+        .custom-checkbox:checked::after {
+            content: '✔';
+            display: block;
+            color: white;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto min-h-screen bg-gray-50 border-x border-gray-200 shadow-2xl relative flex flex-col">
+
+    <!-- Top Bar -->
+    <div class="bg-white px-4 py-3 flex justify-between items-center sticky top-0 z-30 shadow-sm">
+        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <h1 class="font-bold text-gray-800 text-lg">Luyện thi HSK</h1>
+        <div class="w-10 h-10 flex items-center justify-center text-gray-400" id="totalProgress">0%</div>
+    </div>
+
+    <!-- View Toggles (Tabs) -->
+    <div class="px-5 mt-4">
+        <div class="bg-gray-200 p-1 rounded-xl flex text-sm font-semibold">
+            <button id="tabFlashcard" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="switchTab('flashcard')">
+                <i class="fas fa-clone mr-1"></i> Flashcard
+            </button>
+            <button id="tabList" class="flex-1 py-2 rounded-lg text-gray-500 hover:text-gray-700 transition-all duration-300" onclick="switchTab('list')">
+                <i class="fas fa-list mr-1"></i> Danh sách
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="p-5 flex-1 flex flex-col">
+        
+        <!-- Level Selector & Filter -->
+        <div class="flex gap-2 mb-4">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-layer-group text-blue-500"></i>
+                </div>
+                <select id="hskSelect" class="w-full bg-white border border-gray-200 text-gray-700 font-bold py-3 pl-10 pr-8 rounded-2xl shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer text-sm">
+                    <option value="HSK1">HSK 1 - Cơ bản</option>
+                    <option value="HSK2">HSK 2 - Sơ cấp</option>
+                    <!-- Thêm các level khác nếu có data -->
+                </select>
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i class="fas fa-chevron-down text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Control (Chỉ hiện ở Flashcard mode) -->
+        <div id="studyModeControl" class="mb-4 flex items-center justify-between bg-orange-50 p-3 rounded-xl border border-orange-100 hidden">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                    <i class="fas fa-filter"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-orange-800">Ôn tập trọng tâm</div>
+                    <div class="text-[10px] text-orange-600">Chỉ hiện từ chưa thuộc</div>
+                </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="onlyWeakToggle" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+            </label>
+        </div>
+
+        <!-- VIEW 1: FLASHCARD -->
+        <div id="flashcardView" class="w-full flex flex-col items-center">
+            
+            <!-- Flashcard Area -->
+            <div class="relative w-full aspect-[4/3] perspective-1000 mb-6">
+                
+                <!-- NÚT TẬP VIẾT -->
+                <button id="openWriterBtn" class="absolute top-4 right-16 z-20 w-10 h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center shadow-md hover:bg-indigo-200 transition btn-press" title="Tập viết">
+                    <i class="fas fa-pen-nib"></i>
+                </button>
+
+                <!-- Nút Loa -->
+                <button id="speakBtn" class="absolute top-4 right-4 z-20 w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shadow-md hover:bg-blue-200 transition btn-press" title="Phát âm">
+                    <i class="fas fa-volume-up text-lg"></i>
+                </button>
+
+                <!-- Nút Đánh dấu Đã Thuộc -->
+                <button id="markMemorizedBtn" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-12 h-12 bg-white text-gray-300 rounded-full flex items-center justify-center shadow-lg hover:bg-gray-50 transition btn-press border border-gray-100" title="Đánh dấu đã thuộc">
+                    <i class="fas fa-check text-xl"></i>
+                </button>
+
+                <!-- Empty State for Study Mode -->
+                <div id="emptyState" class="hidden w-full h-full absolute bg-white rounded-3xl border-2 border-dashed border-green-300 flex flex-col items-center justify-center z-30 p-6 text-center">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl mb-4">🎉</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Tuyệt vời!</h3>
+                    <p class="text-gray-500 text-sm">Bạn đã thuộc hết các từ vựng này. Hãy chuyển sang danh sách đầy đủ hoặc reset để học lại.</p>
+                </div>
+
+                <div id="mainCard" class="card-inner card-container w-full h-full relative transform-style-3d shadow-2xl shadow-blue-100 rounded-3xl cursor-pointer" onclick="flipCard()">
+                    
+                    <!-- Mặt trước -->
+                    <div class="card-face absolute w-full h-full backface-hidden bg-white rounded-3xl flex flex-col items-center justify-center border-2 border-gray-50 overflow-hidden pb-8">
+                        <div class="text-center z-10 w-full px-4">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 block">Hán tự</span>
+                            <!-- Cho phép chữ co giãn nếu quá dài -->
+                            <div class="card-front font-['Kaiti','Noto_Sans_SC'] text-6xl md:text-7xl text-gray-800 leading-tight drop-shadow-sm select-none break-words">
+                                爱
+                            </div>
+                            <p class="text-sm text-gray-400 mt-6 animate-pulse">Chạm để xem nghĩa</p>
+                        </div>
+                    </div>
+
+                    <!-- Mặt sau -->
+                    <div class="card-face absolute w-full h-full backface-hidden bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl flex flex-col items-center justify-center rotate-y-180 text-white border-2 border-blue-500 pb-8">
+                        <div class="text-center p-6">
+                            <span class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4 block">Pinyin & Nghĩa</span>
+                            <div class="pinyin text-3xl font-bold mb-3 font-sans tracking-wide text-yellow-300">ài</div>
+                            <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-4"></div>
+                            <div class="meaning text-xl font-medium leading-relaxed">yêu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Info -->
+            <div class="w-full flex justify-between items-center px-2 mb-6">
+                <div class="text-xs font-bold text-gray-400 uppercase">Tiến độ</div>
+                <div class="word-count bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm">1 / 10</div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="grid grid-cols-3 gap-4 w-full">
+                <button class="prev-button btn-press bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 h-14 rounded-2xl shadow-sm flex items-center justify-center transition text-xl"><i class="fas fa-arrow-left"></i></button>
+                <button class="random-button btn-press bg-gradient-to-r from-orange-500 to-red-500 text-white h-14 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center transition font-bold gap-2 text-sm hover:brightness-110"><i class="fas fa-random"></i></button>
+                <button class="next-button btn-press bg-blue-600 text-white hover:bg-blue-700 h-14 rounded-2xl shadow-lg shadow-blue-200 flex items-center justify-center transition text-xl"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: LIST VIEW -->
+        <div id="listView" class="w-full hidden flex-col gap-3 pb-20">
+            <!-- Search/Info bar -->
+            <div class="bg-blue-50 p-3 rounded-lg text-xs text-blue-700 mb-2 flex justify-between items-center sticky top-0 z-10 shadow-sm border border-blue-100">
+                <span class="flex-1 mr-2"><i class="fas fa-info-circle mr-1"></i> Tích vào ô bên phải nếu bạn đã thuộc.</span>
+                <label class="flex items-center gap-1.5 cursor-pointer bg-white px-2 py-1 rounded-md border border-blue-100 shadow-sm hover:bg-blue-50 transition">
+                    <span class="text-[10px] font-bold text-blue-600 whitespace-nowrap">Tất cả</span>
+                    <input type="checkbox" id="selectAllCheckbox" class="w-5 h-5 rounded border-2 border-blue-300 custom-checkbox focus:ring-0 transition cursor-pointer">
+                </label>
+            </div>
+            
+            <!-- Pagination Controls (Moved Here) -->
+            <div id="paginationControls" class="flex justify-center items-center gap-3 py-2">
+                <!-- Controls will be injected here via JS -->
+            </div>
+
+            <div id="vocabularyListContainer" class="flex flex-col gap-3">
+                <!-- List Items will be injected here via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- WRITING MODAL -->
+    <div id="animationModal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95" id="animationModalContent">
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Tập viết</h2>
+                    <p class="text-xs text-gray-500">Thứ tự nét chữ Hán</p>
+                </div>
+                <button id="closeModal" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Info -->
+            <div class="text-center mb-4">
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <span id="animationPinyin" class="text-lg font-bold text-blue-600"></span>
+                    <span class="text-gray-300">|</span>
+                    <span id="animationMeaning" class="text-gray-600 text-sm font-medium"></span>
+                </div>
+                <!-- Character Tabs (cho từ ghép) -->
+                <div id="characterTabs" class="flex justify-center gap-2 flex-wrap mb-4"></div>
+            </div>
+
+            <!-- Drawing Area -->
+            <div class="bg-white border-2 border-gray-100 rounded-3xl p-2 mb-6 shadow-inner flex justify-center items-center aspect-square max-w-[260px] mx-auto relative overflow-hidden">
+                <div id="animationTarget" class="w-full h-full flex items-center justify-center cursor-pointer"></div>
+            </div>
+
+            <!-- Control -->
+            <button id="animateActionBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 active:scale-95 transition flex items-center justify-center gap-2">
+                <i class="fas fa-play"></i> Viết lại
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3">
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16"><i class="fas fa-home text-xl"></i><span class="text-[10px] font-medium">Home</span></a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16"><i class="fas fa-book-open text-xl"></i><span class="text-[10px] font-medium">Học</span></a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16"><i class="fas fa-gamepad text-xl"></i><span class="text-[10px] font-medium">Game</span></a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16"><i class="fas fa-user text-xl"></i><span class="text-[10px] font-medium">Tôi</span></a>
+    </div>
+
+    <script>
+        const fullVocabularyData = {
+            HSK1: [
+                { "hanzi": "爱", "pinyin": "ài", "meaning": "yêu" },
+                { "hanzi": "八", "pinyin": "bā", "meaning": "tám" },
+                { "hanzi": "爸爸", "pinyin": "bà ba", "meaning": "bố" },
+                { "hanzi": "杯子", "pinyin": "bēi zi", "meaning": "cốc, chén, ly, tách" },
+                { "hanzi": "北京", "pinyin": "Běi jīng", "meaning": "Bắc Kinh" },
+                { "hanzi": "本", "pinyin": "běn", "meaning": "quyển, gốc, vốn, thân" },
+                { "hanzi": "不客气", "pinyin": "bú kè qi", "meaning": "không có gì" },
+                { "hanzi": "不", "pinyin": "bù", "meaning": "không, chưa" },
+                { "hanzi": "菜", "pinyin": "cài", "meaning": "món ăn, thức ăn" },
+                { "hanzi": "茶", "pinyin": "chá", "meaning": "trà" },
+                { "hanzi": "吃", "pinyin": "chī", "meaning": "ăn" },
+                { "hanzi": "出租车", "pinyin": "chū zū chē", "meaning": "taxi" },
+                { "hanzi": "打电话", "pinyin": "dǎ diàn huà", "meaning": "gọi điện thoại" },
+                { "hanzi": "大", "pinyin": "dà", "meaning": "to, lớn" },
+                { "hanzi": "的", "pinyin": "de", "meaning": "của" },
+                { "hanzi": "点", "pinyin": "diǎn", "meaning": "điểm, giờ" },
+                { "hanzi": "电脑", "pinyin": "diàn nǎo", "meaning": "máy vi tính" },
+                { "hanzi": "电视", "pinyin": "diàn shì", "meaning": "truyền hình, tivi" },
+                { "hanzi": "电影", "pinyin": "diàn yǐng", "meaning": "phim" },
+                { "hanzi": "东西", "pinyin": "dōng xi", "meaning": "đồ" },
+                { "hanzi": "都", "pinyin": "dōu", "meaning": "đều" },
+                { "hanzi": "读", "pinyin": "dú", "meaning": "đọc" },
+                { "hanzi": "对不起", "pinyin": "duì bu qǐ", "meaning": "xin lỗi" },
+                { "hanzi": "多", "pinyin": "duō", "meaning": "nhiều" },
+                { "hanzi": "多少", "pinyin": "duō shao", "meaning": "bao nhiêu, mấy" },
+                { "hanzi": "儿子", "pinyin": "ér zi", "meaning": "con trai" },
+                { "hanzi": "二", "pinyin": "èr", "meaning": "hai" },
+                { "hanzi": "饭店", "pinyin": "fàn diàn", "meaning": "nhà hàng, khách" },
+                { "hanzi": "飞机", "pinyin": "fēi jī", "meaning": "máy bay" },
+                { "hanzi": "高兴", "pinyin": "gāo xìng", "meaning": "vui vẻ, vui mừng" },
+                { "hanzi": "个", "pinyin": "gè", "meaning": "cái" },
+                { "hanzi": "工作", "pinyin": "gōng zuò", "meaning": "làm việc" },
+                { "hanzi": "狗", "pinyin": "gǒu", "meaning": "con chó" },
+                { "hanzi": "汉语", "pinyin": "hàn yǔ", "meaning": "tiếng Hán" },
+                { "hanzi": "好", "pinyin": "hǎo", "meaning": "tốt, hay" },
+                { "hanzi": "喝", "pinyin": "hē", "meaning": "uống" },
+                { "hanzi": "和", "pinyin": "hé", "meaning": "và, với" },
+                { "hanzi": "很", "pinyin": "hěn", "meaning": "rất, lắm" },
+                { "hanzi": "后面", "pinyin": "hòu miàn", "meaning": "phía sau, mặt sau" },
+                { "hanzi": "回", "pinyin": "huí", "meaning": "lần, về, quay lại" },
+                { "hanzi": "会", "pinyin": "huì", "meaning": "hội, hợp" },
+                { "hanzi": "火车站", "pinyin": "huǒ chē zhàn", "meaning": "nhà ga" },
+                { "hanzi": "几", "pinyin": "jǐ", "meaning": "mấy, vài" },
+                { "hanzi": "岁", "pinyin": "suì", "meaning": "tuổi" },
+                { "hanzi": "家", "pinyin": "jiā", "meaning": "nhà, gia đình" },
+                { "hanzi": "叫", "pinyin": "jiào", "meaning": "kêu, gọi" },
+                { "hanzi": "今天", "pinyin": "jīn tiān", "meaning": "hôm nay" },
+                { "hanzi": "九", "pinyin": "jiǔ", "meaning": "chín" },
+                { "hanzi": "开", "pinyin": "kāi", "meaning": "mở, nở" },
+                { "hanzi": "看", "pinyin": "kàn", "meaning": "nhìn, xem" },
+                { "hanzi": "看见", "pinyin": "kàn jiàn", "meaning": "nhìn thấy" },
+                { "hanzi": "块", "pinyin": "kuài", "meaning": "miếng, viên, bánh" },
+                { "hanzi": "来", "pinyin": "lái", "meaning": "đến, tới" },
+                { "hanzi": "老师", "pinyin": "lǎo shī", "meaning": "giáo viên" },
+                { "hanzi": "了", "pinyin": "le", "meaning": "rồi" },
+                { "hanzi": "冷", "pinyin": "lěng", "meaning": "lạnh" },
+                { "hanzi": "里", "pinyin": "lǐ", "meaning": "trong" },
+                { "hanzi": "零", "pinyin": "líng", "meaning": "số không" },
+                { "hanzi": "六", "pinyin": "liù", "meaning": "sáu" },
+                { "hanzi": "妈妈", "pinyin": "mā ma", "meaning": "mẹ" },
+                { "hanzi": "吗", "pinyin": "ma", "meaning": "à, ư" },
+                { "hanzi": "买", "pinyin": "mǎi", "meaning": "mua" },
+                { "hanzi": "猫", "pinyin": "māo", "meaning": "con mèo" },
+                { "hanzi": "没", "pinyin": "méi", "meaning": "chưa, không" },
+                { "hanzi": "没关系", "pinyin": "méi guān xi", "meaning": "không sao" },
+                { "hanzi": "米饭", "pinyin": "mǐ fàn", "meaning": "cơm" },
+                { "hanzi": "名字", "pinyin": "míng zi", "meaning": "tên" },
+                { "hanzi": "明天", "pinyin": "míng tiān", "meaning": "ngày mai" },
+                { "hanzi": "哪儿", "pinyin": "nǎ r", "meaning": "đâu, chỗ nào" },
+                { "hanzi": "那", "pinyin": "nà", "meaning": "nào" },
+                { "hanzi": "呢", "pinyin": "ne", "meaning": "thế, nhỉ, vậy, nhé, cơ" },
+                { "hanzi": "能", "pinyin": "néng", "meaning": "có thể" },
+                { "hanzi": "你", "pinyin": "nǐ", "meaning": "bạn, anh, chị, ông, bà" },
+                { "hanzi": "你们", "pinyin": "nǐ men", "meaning": "các bạn" },
+                { "hanzi": "年", "pinyin": "nián", "meaning": "năm" },
+                { "hanzi": "女儿", "pinyin": "nv ér", "meaning": "con gái" },
+                { "hanzi": "朋友", "pinyin": "péng you", "meaning": "bạn, bạn bè" },
+                { "hanzi": "苹果", "pinyin": "píng guǒ", "meaning": "quả táo" },
+                { "hanzi": "七", "pinyin": "qī", "meaning": "bảy" },
+                { "hanzi": "钱", "pinyin": "qián", "meaning": "tiền" },
+                { "hanzi": "前面", "pinyin": "qián miàn", "meaning": "phía trước" },
+                { "hanzi": "请", "pinyin": "qǐng", "meaning": "xin, mời" },
+                { "hanzi": "去", "pinyin": "qù", "meaning": "đi" },
+                { "hanzi": "热", "pinyin": "rè", "meaning": "nhiệt, nóng" }
+            ],
+            HSK2: [] // Add HSK2 data here
+        };
+
+        // --- GLOBAL VARIABLES ---
+        let currentLevel = 'HSK1';
+        let currentIndex = 0;
+        let activeVocabulary = []; // Words currently in Flashcard deck (filtered or all)
+        let memorizedWords = new Set(); // Store 'hanzi' of memorized words
+        let isStudyWeakMode = false;
+        
+        // Pagination Variables
+        let currentPage = 1;
+        const itemsPerPage = 50;
+        
+        // --- DOM Elements ---
+        const cardContainer = document.querySelector('.card-container');
+        const hskSelect = document.getElementById('hskSelect');
+        const randomButton = document.querySelector('.random-button');
+        const prevButton = document.querySelector('.prev-button');
+        const nextButton = document.querySelector('.next-button');
+        const wordCountDisplay = document.querySelector('.word-count');
+        const cardFront = document.querySelector('.card-front');
+        const cardBackPinyin = document.querySelector('.pinyin');
+        const cardBackMeaning = document.querySelector('.meaning');
+        const speakBtn = document.getElementById('speakBtn');
+        const openWriterBtn = document.getElementById('openWriterBtn');
+        const markMemorizedBtn = document.getElementById('markMemorizedBtn');
+        const onlyWeakToggle = document.getElementById('onlyWeakToggle');
+        const emptyState = document.getElementById('emptyState');
+        const mainCard = document.getElementById('mainCard');
+        const totalProgressDisplay = document.getElementById('totalProgress');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const paginationControls = document.getElementById('paginationControls'); // NEW
+
+        // Modal Elements
+        const animationModal = document.getElementById('animationModal');
+        const animationModalContent = document.getElementById('animationModalContent');
+        const closeModalBtn = document.getElementById('closeModal');
+        const animateActionBtn = document.getElementById('animateActionBtn');
+        const animationTarget = document.getElementById('animationTarget');
+        let animationWriter = null;
+        let animationCharacters = [];
+
+        // --- INITIALIZATION ---
+        function init() {
+            loadProgress();
+            updateActiveVocabulary(); // Prepare the deck
+            renderListView();
+            updateCardUI();
+            updateTotalProgress();
+        }
+
+        // --- STORAGE & LOGIC ---
+        function loadProgress() {
+            const saved = localStorage.getItem('hsk_memorized');
+            if (saved) {
+                memorizedWords = new Set(JSON.parse(saved));
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('hsk_memorized', JSON.stringify([...memorizedWords]));
+            updateTotalProgress();
+        }
+
+        function updateTotalProgress() {
+            const total = fullVocabularyData[currentLevel] ? fullVocabularyData[currentLevel].length : 0;
+            if (total === 0) return;
+            
+            // Count how many words in current level are memorized
+            let memorizedCount = 0;
+            fullVocabularyData[currentLevel].forEach(word => {
+                if (memorizedWords.has(word.hanzi)) memorizedCount++;
+            });
+
+            const percent = Math.round((memorizedCount / total) * 100);
+            totalProgressDisplay.textContent = `${percent}%`;
+            
+            // Color code progress
+            if(percent < 30) totalProgressDisplay.className = "w-10 h-10 flex items-center justify-center text-xs font-bold bg-gray-100 rounded-full text-gray-500";
+            else if (percent < 70) totalProgressDisplay.className = "w-10 h-10 flex items-center justify-center text-xs font-bold bg-blue-100 rounded-full text-blue-600";
+            else totalProgressDisplay.className = "w-10 h-10 flex items-center justify-center text-xs font-bold bg-green-100 rounded-full text-green-600";
+        }
+
+        function updateActiveVocabulary() {
+            const rawList = fullVocabularyData[currentLevel] || [];
+            
+            if (isStudyWeakMode) {
+                activeVocabulary = rawList.filter(item => !memorizedWords.has(item.hanzi));
+            } else {
+                activeVocabulary = [...rawList];
+            }
+            
+            // Reset index if out of bounds
+            if (currentIndex >= activeVocabulary.length) currentIndex = 0;
+            
+            // Handle Empty State (All memorized in study mode)
+            if (activeVocabulary.length === 0 && isStudyWeakMode) {
+                emptyState.classList.remove('hidden');
+                mainCard.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                mainCard.classList.remove('hidden');
+            }
+
+            // If we just switched modes, ensure card is reset
+            if (cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.remove('flipped');
+                setTimeout(() => updateCardUI(), 300);
+            } else {
+                updateCardUI();
+            }
+        }
+
+        function toggleMemorized(hanzi, isChecked) {
+            if (isChecked) {
+                memorizedWords.add(hanzi);
+            } else {
+                memorizedWords.delete(hanzi);
+            }
+            saveProgress();
+            
+            // If in Study Weak mode, refreshing logic might remove the current card
+            if (isStudyWeakMode) {
+                // If we are in List view, we just save. 
+                // If we go back to Flashcard view, updateActiveVocabulary needs to run.
+                updateActiveVocabulary(); 
+            }
+            updateCardUI(); // Update UI buttons
+        }
+
+        // --- UI FUNCTIONS: TABS ---
+        function switchTab(tabName) {
+            const flashcardView = document.getElementById('flashcardView');
+            const listView = document.getElementById('listView');
+            const tabFlashcard = document.getElementById('tabFlashcard');
+            const tabList = document.getElementById('tabList');
+            const studyModeControl = document.getElementById('studyModeControl');
+
+            if (tabName === 'flashcard') {
+                flashcardView.classList.remove('hidden');
+                listView.classList.add('hidden');
+                listView.classList.remove('flex');
+                
+                // Style Tabs
+                tabFlashcard.classList.replace('text-gray-500', 'text-blue-600');
+                tabFlashcard.classList.add('bg-white', 'shadow-sm');
+                tabFlashcard.classList.remove('hover:text-gray-700');
+                
+                tabList.classList.replace('text-blue-600', 'text-gray-500');
+                tabList.classList.replace('bg-white', 'bg-transparent');
+                tabList.classList.remove('shadow-sm');
+                tabList.classList.add('hover:text-gray-700');
+
+                studyModeControl.classList.remove('hidden');
+                updateActiveVocabulary(); // Refresh deck based on any changes in list
+            } else {
+                flashcardView.classList.add('hidden');
+                listView.classList.remove('hidden');
+                listView.classList.add('flex');
+                
+                // Reset page to 1 when switching to list view
+                currentPage = 1;
+
+                // Style Tabs
+                tabList.classList.replace('text-gray-500', 'text-blue-600');
+                tabList.classList.add('bg-white', 'shadow-sm');
+                tabList.classList.remove('hover:text-gray-700');
+
+                tabFlashcard.classList.replace('text-blue-600', 'text-gray-500');
+                tabFlashcard.classList.remove('bg-white', 'shadow-sm');
+                tabFlashcard.classList.add('hover:text-gray-700');
+
+                studyModeControl.classList.add('hidden');
+                renderListView(); // Re-render list to show correct checks
+            }
+        }
+
+        // --- UI FUNCTIONS: FLASHCARD ---
+        function flipCard() { cardContainer.classList.toggle('flipped'); }
+
+        function updateCardUI() {
+            if (activeVocabulary.length === 0) {
+                wordCountDisplay.textContent = `0 / 0`;
+                return;
+            }
+
+            const vocabItem = activeVocabulary[currentIndex];
+            const isMemorized = memorizedWords.has(vocabItem.hanzi);
+            
+            // Update Mark Button State
+            if (isMemorized) {
+                markMemorizedBtn.className = "absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition btn-press border border-green-500";
+            } else {
+                markMemorizedBtn.className = "absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-12 h-12 bg-white text-gray-300 rounded-full flex items-center justify-center shadow-lg hover:bg-gray-50 transition btn-press border border-gray-100";
+            }
+
+            // Front
+            cardFront.style.opacity = 0;
+            setTimeout(() => {
+                cardFront.textContent = vocabItem.hanzi;
+                cardFront.style.opacity = 1;
+            }, 150);
+
+            // Back
+            cardBackPinyin.textContent = vocabItem.pinyin;
+            cardBackMeaning.textContent = vocabItem.meaning;
+            
+            wordCountDisplay.textContent = `${currentIndex + 1} / ${activeVocabulary.length}`;
+        }
+
+        function navigateCard(direction) {
+            if (activeVocabulary.length === 0) return;
+
+            if (cardContainer.classList.contains('flipped')) {
+                cardContainer.classList.remove('flipped');
+                setTimeout(() => changeIndex(direction), 200);
+            } else {
+                changeIndex(direction);
+            }
+        }
+
+        function changeIndex(direction) {
+            if (direction === 'next') currentIndex = (currentIndex + 1) % activeVocabulary.length;
+            else currentIndex = (currentIndex - 1 + activeVocabulary.length) % activeVocabulary.length;
+            updateCardUI();
+        }
+
+        function animateRandomSelection() {
+            if (activeVocabulary.length === 0) return;
+            randomButton.disabled = true;
+            if (cardContainer.classList.contains('flipped')) cardContainer.classList.remove('flipped');
+            let count = 0;
+            const interval = setInterval(() => {
+                const tempIndex = Math.floor(Math.random() * activeVocabulary.length);
+                cardFront.textContent = activeVocabulary[tempIndex].hanzi;
+                count++;
+                if (count >= 10) {
+                    clearInterval(interval);
+                    currentIndex = tempIndex;
+                    updateCardUI();
+                    randomButton.disabled = false;
+                }
+            }, 80);
+        }
+
+        // --- UI FUNCTIONS: LIST VIEW & PAGINATION ---
+        function renderListView() {
+            const container = document.getElementById('vocabularyListContainer');
+            container.innerHTML = '';
+            
+            const fullList = fullVocabularyData[currentLevel] || [];
+            
+            // Check Master Checkbox State (Applied to ALL items in level)
+            const allMemorized = fullList.length > 0 && fullList.every(item => memorizedWords.has(item.hanzi));
+            selectAllCheckbox.checked = allMemorized;
+
+            if (fullList.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-10">Chưa có dữ liệu</div>';
+                paginationControls.innerHTML = ''; // Clear pagination
+                return;
+            }
+
+            // --- PAGINATION LOGIC ---
+            const totalPages = Math.ceil(fullList.length / itemsPerPage);
+            
+            // Validation
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedItems = fullList.slice(startIndex, endIndex);
+
+            // Render Items
+            paginatedItems.forEach((item, index) => {
+                const isMemorized = memorizedWords.has(item.hanzi);
+                
+                const el = document.createElement('div');
+                el.className = `bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between transition hover:shadow-md ${isMemorized ? 'bg-green-50/50' : ''}`;
+                
+                el.innerHTML = `
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="min-w-[3rem] w-auto px-2 py-1 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-xl chinese-font text-blue-600 text-center whitespace-nowrap">
+                            ${item.hanzi}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold text-gray-800 text-lg leading-tight mb-1 break-words">${item.pinyin}</div>
+                            <div class="text-sm text-gray-500 truncate">${item.meaning}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center pl-2">
+                        <label class="cursor-pointer p-2">
+                            <input type="checkbox" class="w-6 h-6 rounded-md border-2 border-gray-300 custom-checkbox focus:ring-0 transition cursor-pointer" 
+                                ${isMemorized ? 'checked' : ''} 
+                                onchange="handleListCheck(this, '${item.hanzi}')">
+                        </label>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+
+            // Render Pagination Controls
+            renderPaginationControls(totalPages);
+        }
+
+        function renderPaginationControls(totalPages) {
+            if (totalPages <= 1) {
+                paginationControls.innerHTML = '';
+                paginationControls.classList.add('hidden');
+                paginationControls.classList.remove('flex');
+                return;
+            }
+
+            paginationControls.classList.remove('hidden');
+            paginationControls.classList.add('flex');
+
+            paginationControls.innerHTML = `
+                <button 
+                    onclick="changePage(-1)" 
+                    class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <span class="text-sm font-medium text-gray-600">
+                    Trang ${currentPage} / ${totalPages}
+                </span>
+                
+                <button 
+                    onclick="changePage(1)" 
+                    class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderListView();
+            // Scroll to top of list view to show new items clearly
+            document.getElementById('listView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function handleListCheck(checkbox, hanzi) {
+            toggleMemorized(hanzi, checkbox.checked);
+            // Visual feedback on the row
+            const row = checkbox.closest('div').parentElement;
+            if (checkbox.checked) {
+                row.classList.add('bg-green-50/50');
+            } else {
+                row.classList.remove('bg-green-50/50');
+            }
+            
+            // Update Master Checkbox state logic
+            const currentList = fullVocabularyData[currentLevel] || [];
+            const allMemorized = currentList.length > 0 && currentList.every(item => memorizedWords.has(item.hanzi));
+            selectAllCheckbox.checked = allMemorized;
+        }
+
+        // --- EVENT HANDLERS ---
+        hskSelect.addEventListener('change', (e) => {
+            currentLevel = e.target.value;
+            currentIndex = 0;
+            currentPage = 1; // Reset page on level change
+            init();
+        });
+
+        onlyWeakToggle.addEventListener('change', (e) => {
+            isStudyWeakMode = e.target.checked;
+            currentIndex = 0;
+            currentPage = 1;
+            updateActiveVocabulary();
+        });
+
+        // Toggle Memorized Button on Flashcard
+        markMemorizedBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (activeVocabulary.length > 0) {
+                const currentHanzi = activeVocabulary[currentIndex].hanzi;
+                const isCurrentlyMemorized = memorizedWords.has(currentHanzi);
+                toggleMemorized(currentHanzi, !isCurrentlyMemorized);
+            }
+        });
+
+        // Master Checkbox Logic
+        selectAllCheckbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            const currentList = fullVocabularyData[currentLevel] || [];
+            
+            currentList.forEach(item => {
+                if (isChecked) {
+                    memorizedWords.add(item.hanzi);
+                } else {
+                    memorizedWords.delete(item.hanzi);
+                }
+            });
+            
+            saveProgress();
+            renderListView(); // Re-render to update all checkboxes visually
+            updateTotalProgress();
+        });
+
+        // Speech
+        speakBtn.addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            if (activeVocabulary.length > 0) {
+                const text = activeVocabulary[currentIndex].hanzi;
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'zh-CN';
+                    utterance.rate = 0.8;
+                    speakBtn.classList.add('speaking-animation');
+                    utterance.onend = () => speakBtn.classList.remove('speaking-animation');
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+        });
+
+        randomButton.addEventListener('click', (e) => { e.stopPropagation(); animateRandomSelection(); });
+        nextButton.addEventListener('click', (e) => { e.stopPropagation(); navigateCard('next'); });
+        prevButton.addEventListener('click', (e) => { e.stopPropagation(); navigateCard('prev'); });
+
+        // --- WRITING MODAL LOGIC (Preserved) ---
+        function openAnimationModal() {
+            if (activeVocabulary.length === 0) return;
+            const vocab = activeVocabulary[currentIndex];
+            
+            document.getElementById('animationPinyin').textContent = vocab.pinyin;
+            document.getElementById('animationMeaning').textContent = vocab.meaning;
+            
+            animationCharacters = [...vocab.hanzi];
+            generateCharacterTabs();
+            
+            animationModal.classList.remove('hidden');
+            setTimeout(() => {
+                animationModal.classList.remove('opacity-0');
+                animationModalContent.classList.remove('scale-95');
+                animationModalContent.classList.add('scale-100');
+                initializeAnimation(animationCharacters[0]);
+            }, 50);
+        }
+
+        function closeAnimationModal() {
+            animationModal.classList.add('opacity-0');
+            animationModalContent.classList.remove('scale-100');
+            animationModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                animationModal.classList.add('hidden');
+                cleanupAnimation();
+            }, 300);
+        }
+
+        function generateCharacterTabs() {
+            const container = document.getElementById('characterTabs');
+            container.innerHTML = '';
+            if (animationCharacters.length > 1) {
+                animationCharacters.forEach((char, index) => {
+                    const tab = document.createElement('button');
+                    // REMOVED 'font-bold' from the tab
+                    tab.className = `w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg chinese-font transition ${index === 0 ? 'border-indigo-500 text-indigo-600 bg-indigo-50' : 'border-gray-200 text-gray-400 hover:border-indigo-300'}`;
+                    tab.textContent = char;
+                    tab.onclick = () => {
+                         Array.from(container.children).forEach((t, i) => {
+                            // REMOVED 'font-bold' from the active/inactive tab classes
+                            t.className = i === index ? 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg chinese-font transition border-indigo-500 text-indigo-600 bg-indigo-50' : 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg chinese-font transition border-gray-200 text-gray-400 hover:border-indigo-300';
+                        });
+                        initializeAnimation(animationCharacters[index]);
+                    }
+                    container.appendChild(tab);
+                });
+            }
+        }
+
+        function createGridBackground(svg, size) {
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            svg.appendChild(defs);
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('stroke', '#e5e7eb'); g.setAttribute('stroke-width', '1'); g.setAttribute('stroke-dasharray', '5,5');
+            
+            const lines = [
+                {x1: size/2, y1: 0, x2: size/2, y2: size}, 
+                {x1: 0, y1: size/2, x2: size, y2: size/2}, 
+                {x1: 0, y1: 0, x2: size, y2: size},       
+                {x1: size, y1: 0, x2: 0, y2: size}        
+            ];
+            lines.forEach(l => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', l.x1); line.setAttribute('y1', l.y1);
+                line.setAttribute('x2', l.x2); line.setAttribute('y2', l.y2);
+                g.appendChild(line);
+            });
+            svg.appendChild(g);
+        }
+
+        function initializeAnimation(character) {
+            cleanupAnimation();
+            const target = animationTarget;
+            const size = target.clientWidth;
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', size); svg.setAttribute('height', size); svg.setAttribute('id', 'hanzi-svg-target');
+            createGridBackground(svg, size);
+            target.appendChild(svg);
+            try {
+                animationWriter = HanziWriter.create('hanzi-svg-target', character, {
+                    width: size, height: size, padding: 10, strokeAnimationSpeed: 1, delayBetweenStrokes: 500,
+                    strokeColor: '#4f46e5', radicalColor: '#818cf8', outlineColor: '#e5e7eb', showOutline: true, showCharacter: true
+                });
+                animationWriter.animateCharacter();
+            } catch (e) { console.error("HanziWriter error:", e); }
+        }
+
+        function cleanupAnimation() {
+            if (animationWriter) {
+                try { animationWriter.pauseAnimation(); } catch(e){}
+                animationWriter = null;
+            }
+            animationTarget.innerHTML = '';
+        }
+
+        openWriterBtn.addEventListener('click', (e) => { e.stopPropagation(); openAnimationModal(); });
+        closeModalBtn.addEventListener('click', closeAnimationModal);
+        animateActionBtn.addEventListener('click', () => { if(animationWriter) animationWriter.animateCharacter(); });
+        animationModal.addEventListener('click', (e) => { if(e.target === animationModal) closeAnimationModal(); });
+
+        // Initial Run
+        document.addEventListener('DOMContentLoaded', () => {
+             // Hiển thị tab flashcard mặc định
+             switchTab('flashcard');
+             init();
+        });
+
+    </script>
+</body>
+</html>
