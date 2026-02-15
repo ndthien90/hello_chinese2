@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flashcard HelloChinese Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Hanzi Writer -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7/dist/hanzi-writer.min.js"></script>
+
+    <style>
+        /* Font chữ tùy chỉnh */
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chinese-font {
+            font-family: 'KaiTi', 'Ma Shan Zheng', 'Noto Sans SC', serif;
+        }
+
+        /* Ẩn thanh cuộn nhưng vẫn cuộn được */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 3D Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Hiệu ứng lật mượt mà */
+        .flashcard-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Input Select */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <button onclick="window.history.back()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="font-extrabold text-gray-800 text-lg">Thẻ từ vựng</h1>
+        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm shadow-sm border border-orange-200">
+            <span id="streakCountDisplay">🔥</span>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar">
+        
+        <!-- Lesson Selector & Progress -->
+        <div class="mb-6 space-y-3">
+            <div class="relative">
+                <select id="lessonSelect" class="custom-select w-full bg-white border border-gray-200 text-gray-700 font-bold py-3 pl-4 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition cursor-pointer">
+                    <option value="1" selected>H1 Bài 1: 老师，您好！</option>
+                    <option value="2">H1 Bài 2: 谢谢你！</option>
+                    <option value="3">H1 Bài 3: 你叫什么名字？</option>
+                    <option value="4">H1 Bài 4: 她是我的汉语老师。</option>
+                    <option value="5">H1 Bài 5: 她女儿今年八岁。</option>
+                    <option value="6">H1 Bài 6: 我会说汉语。</option>
+                </select>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="flex items-center gap-3">
+                <div class="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progressFill" class="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+                <span id="cardCounter" class="text-xs font-bold text-gray-500 min-w-[3rem] text-right">0/0</span>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingIndicator" class="flex-1 flex flex-col items-center justify-center text-gray-400 py-20 hidden">
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-3"></div>
+            <p class="text-sm font-medium">Đang tải dữ liệu...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-center text-sm mb-4"></div>
+
+        <!-- Flashcard Area -->
+        <div id="flashcardContent" class="flex-1 flex flex-col justify-center relative perspective-1000 min-h-[400px]">
+            
+            <!-- Card Container -->
+            <div id="flashcard" class="flashcard w-full h-[450px] relative cursor-pointer group">
+                <div class="flashcard-inner w-full h-full transform-style-3d relative">
+                    
+                    <!-- FRONT SIDE -->
+                    <div class="absolute w-full h-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border-2 border-gray-100 flex flex-col items-center justify-center p-6 backface-hidden z-20">
+                        <!-- Top Actions -->
+                        <div class="absolute top-4 right-4 flex gap-2">
+                             <button id="animationBtn" class="w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 flex items-center justify-center transition shadow-sm" title="Tập viết">
+                                <i class="fas fa-pen-nib"></i>
+                            </button>
+                            <button id="audioBtn" class="w-10 h-10 rounded-full bg-green-50 hover:bg-green-100 text-green-600 flex items-center justify-center transition shadow-sm" title="Phát âm">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                        </div>
+
+                        <!-- Main Content -->
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                            <div id="chineseChar" class="chinese-font text-8xl text-gray-800 font-medium select-none transform group-hover:scale-105 transition duration-300">
+                                <!-- Character injected via JS -->
+                            </div>
+                            <div id="pinyin" class="text-2xl font-bold text-gray-500 tracking-wide mt-2">
+                                <!-- Pinyin injected via JS -->
+                            </div>
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-widest mt-4">Chạm để lật</p>
+                        </div>
+                    </div>
+
+                    <!-- BACK SIDE -->
+                    <div class="absolute w-full h-full bg-gradient-to-br from-blue-50 to-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border-2 border-blue-100 flex flex-col items-center justify-center p-6 backface-hidden rotate-y-180 z-10">
+                         <!-- Top Actions (Back) -->
+                         <div class="absolute top-4 right-4 flex gap-2">
+                            <button id="audioBtnBack" class="w-10 h-10 rounded-full bg-white hover:bg-gray-50 text-green-600 flex items-center justify-center transition shadow-sm border border-gray-100">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                        </div>
+
+                        <div class="text-center w-full space-y-6">
+                            <div>
+                                <h3 class="text-xs uppercase font-bold text-blue-400 mb-2 tracking-wider">Nghĩa của từ</h3>
+                                <p id="meaning" class="text-2xl font-bold text-gray-800 leading-snug">
+                                    <!-- Meaning injected via JS -->
+                                </p>
+                            </div>
+                            
+                            <div class="w-12 h-1 bg-blue-100 mx-auto rounded-full"></div>
+
+                            <div class="bg-white bg-opacity-60 rounded-xl p-4 border border-blue-50 shadow-sm">
+                                <h3 class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-wider text-left">Ví dụ:</h3>
+                                <div id="example" class="text-left space-y-1">
+                                    <!-- Example injected via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Controls Overlay -->
+            <div class="absolute bottom-6 left-0 w-full flex justify-between items-center px-6 pointer-events-none">
+                <button id="prevBtn" class="pointer-events-auto w-12 h-12 rounded-full bg-white text-gray-400 shadow-md border border-gray-100 hover:text-blue-500 hover:border-blue-200 transition flex items-center justify-center transform active:scale-95">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="shuffleBtn" class="pointer-events-auto w-10 h-10 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 hover:text-orange-500 transition flex items-center justify-center transform active:scale-95 text-sm" title="Trộn thẻ">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button id="nextBtn" class="pointer-events-auto w-14 h-14 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700 transition flex items-center justify-center transform active:scale-95 text-xl">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Tab Bar (App Style) -->
+    <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-blue-600 w-16">
+            <i class="fas fa-layer-group text-xl"></i>
+            <span class="text-[10px] font-medium">Thẻ</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-gamepad text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Game</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
+            <i class="fas fa-user text-xl group-hover:scale-110 transition"></i>
+            <span class="text-[10px] font-medium">Tôi</span>
+        </a>
+    </div>
+
+    <!-- Animation Modal (Re-styled) -->
+    <div id="animationModal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95" id="animationModalContent">
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Tập viết</h2>
+                    <p class="text-xs text-gray-500">Thứ tự nét chữ Hán</p>
+                </div>
+                <button id="closeModal" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Word Info -->
+            <div class="text-center mb-4">
+                <div id="animationWord" class="hidden"></div> <!-- Hidden, used for logic reference -->
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <span id="animationPinyin" class="text-lg font-bold text-blue-600"></span>
+                    <span class="text-gray-300">|</span>
+                    <span id="animationMeaning" class="text-gray-600 text-sm font-medium"></span>
+                </div>
+                
+                <!-- Character Breakdown / Tabs -->
+                <div id="characterTabs" class="flex justify-center gap-2 flex-wrap mb-4">
+                    <!-- Tabs generated by JS -->
+                </div>
+            </div>
+
+            <!-- Drawing Area -->
+            <div class="bg-white border-2 border-gray-100 rounded-3xl p-2 mb-6 shadow-inner flex justify-center items-center aspect-square max-w-[280px] mx-auto relative overflow-hidden">
+                <div id="animationTarget" class="w-full h-full flex items-center justify-center"></div>
+            </div>
+
+            <!-- Control -->
+            <button id="animateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition flex items-center justify-center gap-2">
+                <i class="fas fa-play"></i> Viết lại
+            </button>
+        </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="feedback" class="fixed top-20 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full shadow-lg text-sm font-bold transition-all duration-300 opacity-0 translate-y-[-20px] z-[60]"></div>
+
+    <script>
+        class ChineseFlashcardApp {
+            constructor() {
+                this.currentLesson = null;
+                this.currentCardIndex = 0;
+                this.isFlipped = false;
+                this.animationWriter = null;
+                this.isLoading = false;
+                this.lessonData = [];
+                this.currentAudio = null;
+                this.currentAnimationCharacterIndex = 0;
+                this.animationCharacters = [];
+
+                // Touch handling
+                this.startX = 0;
+                this.isSwiping = false;
+                this.swipeThreshold = 50;
+                this.isAnimationModalOpen = false;
+
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.autoLoadFirstLesson();
+            }
+
+            async autoLoadFirstLesson() {
+                document.getElementById('lessonSelect').value = '1';
+                await this.loadLesson('1');
+            }
+
+            setupEventListeners() {
+                // Select Lesson
+                document.getElementById('lessonSelect').addEventListener('change', (e) => {
+                    if (e.target.value) this.loadLesson(e.target.value);
+                });
+
+                // Buttons
+                document.getElementById('animationBtn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.openAnimationModal();
+                });
+                
+                // Audio handler wrapper to prevent propagation
+                const playAudioHandler = (e) => {
+                    e.stopPropagation();
+                    this.playCurrentAudio();
+                };
+                document.getElementById('audioBtn').addEventListener('click', playAudioHandler);
+                document.getElementById('audioBtnBack').addEventListener('click', playAudioHandler);
+
+                document.getElementById('prevBtn').addEventListener('click', () => this.previousCard());
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextCard());
+                document.getElementById('shuffleBtn').addEventListener('click', () => this.shuffleDeck());
+
+                // Flip Interaction
+                document.getElementById('flashcard').addEventListener('click', (e) => {
+                    if (!this.isSwiping) this.flipCard();
+                    this.isSwiping = false;
+                });
+
+                // Modal
+                const closeModal = () => this.closeAnimationModal();
+                document.getElementById('closeModal').addEventListener('click', closeModal);
+                document.getElementById('animationModal').addEventListener('click', (e) => {
+                    if (e.target === document.getElementById('animationModal')) closeModal();
+                });
+                document.getElementById('animateBtn').addEventListener('click', () => this.animateCharacter());
+
+                // Keyboard
+                document.addEventListener('keydown', (e) => {
+                    if (this.isAnimationModalOpen) return;
+                    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); this.flipCard(); }
+                    if (e.key === 'ArrowLeft') { e.preventDefault(); this.previousCard(); }
+                    if (e.key === 'ArrowRight') { e.preventDefault(); this.nextCard(); }
+                    if (e.key.toLowerCase() === 's') { e.preventDefault(); this.openAnimationModal(); }
+                    if (e.key.toLowerCase() === 'a') { e.preventDefault(); this.playCurrentAudio(); }
+                });
+
+                // Touch/Swipe
+                const container = document.getElementById('flashcard');
+                container.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+                container.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+                container.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+            }
+
+            handleTouchStart(e) {
+                if (this.isAnimationModalOpen || e.touches.length > 1) {
+                    this.isSwiping = false;
+                    return;
+                }
+                this.startX = e.touches[0].clientX;
+                this.isSwiping = false;
+            }
+
+            handleTouchMove(e) {
+                const currentX = e.touches[0].clientX;
+                const deltaX = currentX - this.startX;
+                if (Math.abs(deltaX) > 10) {
+                    this.isSwiping = true;
+                }
+            }
+
+            handleTouchEnd(e) {
+                if (!this.isSwiping) return;
+                const endX = e.changedTouches[0].clientX;
+                const deltaX = endX - this.startX;
+
+                if (deltaX > this.swipeThreshold) this.previousCard();
+                else if (deltaX < -this.swipeThreshold) this.nextCard();
+
+                this.isSwiping = false;
+                this.startX = 0;
+            }
+
+            async loadLesson(lessonNumber) {
+                this.setLoadingState(true);
+                this.currentLesson = lessonNumber;
+                
+                try {
+                    // Fetch data
+                    const response = await fetch(`data_flashcard/bai${lessonNumber}/bai${lessonNumber}.txt`);
+                    if (!response.ok) throw new Error(`Không thể tìm thấy bài học số ${lessonNumber}.`);
+                    
+                    const textData = await response.text();
+                    this.lessonData = this.parseTextData(textData, lessonNumber);
+                    
+                    if (this.lessonData.length === 0) throw new Error(`Bài học số ${lessonNumber} không có dữ liệu.`);
+                    
+                    this.currentCardIndex = 0;
+                    this.updateDisplay();
+                    this.showFlashcardContent();
+                    
+                } catch (error) {
+                    this.showError(`Không thể tải bài học: ${error.message}`);
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+
+            parseTextData(textData, lessonNumber) {
+                return textData.trim().split('\n').filter(line => line.trim()).map(line => {
+                    const parts = line.split('|');
+                    if (parts.length >= 6) {
+                        return {
+                            character: parts[0].trim(),
+                            pinyin: parts[1].trim(),
+                            meaning: parts[2].trim(),
+                            example: parts[3].trim(),
+                            examplePinyin: parts[4].trim(),
+                            exampleMeaning: parts[5].trim(),
+                            audioPath: `data_flashcard/bai${lessonNumber}/mp3/${parts[0].trim()}.mp3`
+                        };
+                    }
+                    return null;
+                }).filter(item => item !== null);
+            }
+
+            setLoadingState(loading) {
+                this.isLoading = loading;
+                document.getElementById('loadingIndicator').style.display = loading ? 'flex' : 'none';
+                document.getElementById('flashcardContent').style.display = loading ? 'none' : 'flex';
+                document.getElementById('lessonSelect').disabled = loading;
+            }
+
+            showError(message) {
+                const el = document.getElementById('errorMessage');
+                el.innerText = message;
+                el.classList.remove('hidden');
+                document.getElementById('flashcardContent').style.display = 'none';
+            }
+
+            showFlashcardContent() {
+                document.getElementById('errorMessage').classList.add('hidden');
+                document.getElementById('flashcardContent').style.display = 'flex';
+            }
+
+            updateDisplay() {
+                if (!this.lessonData.length) return;
+                
+                const card = this.lessonData[this.currentCardIndex];
+                
+                // Front
+                document.getElementById('chineseChar').textContent = card.character;
+                document.getElementById('pinyin').textContent = card.pinyin;
+                
+                // Back
+                document.getElementById('meaning').textContent = card.meaning;
+                document.getElementById('example').innerHTML = `
+                    <p class="text-lg chinese-font text-blue-800 mb-1">${card.example}</p>
+                    <p class="text-sm font-medium text-gray-600 mb-0.5">${card.examplePinyin}</p>
+                    <p class="text-xs text-gray-400 italic">${card.exampleMeaning}</p>
+                `;
+
+                // Progress
+                document.getElementById('cardCounter').innerText = `${this.currentCardIndex + 1}/${this.lessonData.length}`;
+                const progress = ((this.currentCardIndex + 1) / this.lessonData.length) * 100;
+                document.getElementById('progressFill').style.width = `${progress}%`;
+
+                // Reset Flip
+                this.isFlipped = false;
+                document.getElementById('flashcard').classList.remove('flipped');
+            }
+
+            flipCard() {
+                this.isFlipped = !this.isFlipped;
+                document.getElementById('flashcard').classList.toggle('flipped', this.isFlipped);
+            }
+
+            previousCard() {
+                this.currentCardIndex = (this.currentCardIndex - 1 + this.lessonData.length) % this.lessonData.length;
+                this.updateDisplay();
+            }
+
+            nextCard() {
+                this.currentCardIndex = (this.currentCardIndex + 1) % this.lessonData.length;
+                this.updateDisplay();
+            }
+
+            shuffleDeck() {
+                for (let i = this.lessonData.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [this.lessonData[i], this.lessonData[j]] = [this.lessonData[j], this.lessonData[i]];
+                }
+                this.currentCardIndex = 0;
+                this.updateDisplay();
+                this.showFeedback("Đã trộn thẻ!", "bg-orange-100 text-orange-600 border-orange-200");
+            }
+
+            async playCurrentAudio() {
+                if (!this.lessonData.length) return;
+                const card = this.lessonData[this.currentCardIndex];
+                await this.playAudio(card.audioPath, card.character);
+            }
+
+            async playAudio(audioPath, character) {
+                try {
+                    if (this.currentAudio) {
+                        this.currentAudio.pause();
+                        this.currentAudio.currentTime = 0;
+                    }
+
+                    this.currentAudio = new Audio(audioPath);
+                    this.currentAudio.play().catch(e => {
+                        console.warn(e);
+                        this.showFeedback("Không thể phát âm thanh", "bg-red-100 text-red-600");
+                    });
+
+                } catch (error) {
+                    this.showFeedback("Lỗi âm thanh", "bg-red-100 text-red-600");
+                }
+            }
+
+            // Animation Logic
+            openAnimationModal() {
+                if (!this.lessonData.length) return;
+                
+                const card = this.lessonData[this.currentCardIndex];
+                this.isAnimationModalOpen = true;
+                
+                document.getElementById('animationWord').textContent = card.character;
+                document.getElementById('animationPinyin').textContent = card.pinyin;
+                document.getElementById('animationMeaning').textContent = card.meaning;
+                
+                this.animationCharacters = [...card.character];
+                this.currentAnimationCharacterIndex = 0;
+                
+                this.generateCharacterTabs();
+                
+                const modal = document.getElementById('animationModal');
+                modal.classList.remove('hidden');
+                // Small timeout to allow display:block to apply before transition
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    const content = document.getElementById('animationModalContent');
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                    this.initializeAnimation(this.animationCharacters[0]);
+                }, 50);
+            }
+
+            generateCharacterTabs() {
+                const container = document.getElementById('characterTabs');
+                container.innerHTML = '';
+                
+                if (this.animationCharacters.length > 1) {
+                    this.animationCharacters.forEach((char, index) => {
+                        const tab = document.createElement('button');
+                        tab.className = `w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition ${index === 0 ? 'border-blue-500 text-blue-600 bg-blue-50' : 'border-gray-200 text-gray-400 hover:border-blue-300'}`;
+                        tab.textContent = char;
+                        tab.onclick = () => this.switchToCharacter(index);
+                        container.appendChild(tab);
+                    });
+                }
+            }
+
+            switchToCharacter(index) {
+                this.currentAnimationCharacterIndex = index;
+                const tabs = document.getElementById('characterTabs').children;
+                Array.from(tabs).forEach((tab, i) => {
+                    if (i === index) {
+                        tab.className = 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition border-blue-500 text-blue-600 bg-blue-50';
+                    } else {
+                        tab.className = 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition border-gray-200 text-gray-400 hover:border-blue-300';
+                    }
+                });
+                this.initializeAnimation(this.animationCharacters[index], false);
+            }
+
+            closeAnimationModal() {
+                const modal = document.getElementById('animationModal');
+                const content = document.getElementById('animationModalContent');
+                
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    this.isAnimationModalOpen = false;
+                    this.cleanupAnimationFast();
+                }, 300);
+            }
+
+            createGridBackground(svg, size) {
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                svg.appendChild(defs);
+                
+                const gridSize = size / 3; // 3x3 Grid style
+                const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                pattern.setAttribute('id', 'grid');
+                pattern.setAttribute('width', gridSize);
+                pattern.setAttribute('height', gridSize);
+                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                
+                // Miquan grid lines (Diagonal + Cross)
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('stroke', '#e5e7eb'); // gray-200
+                g.setAttribute('stroke-width', '1');
+                g.setAttribute('stroke-dasharray', '5,5');
+
+                // Cross
+                const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineV.setAttribute('x1', size/2);
+                lineV.setAttribute('y1', 0);
+                lineV.setAttribute('x2', size/2);
+                lineV.setAttribute('y2', size);
+                g.appendChild(lineV);
+
+                const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineH.setAttribute('x1', 0);
+                lineH.setAttribute('y1', size/2);
+                lineH.setAttribute('x2', size);
+                lineH.setAttribute('y2', size/2);
+                g.appendChild(lineH);
+                
+                // Diagonals
+                const lineD1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineD1.setAttribute('x1', 0);
+                lineD1.setAttribute('y1', 0);
+                lineD1.setAttribute('x2', size);
+                lineD1.setAttribute('y2', size);
+                g.appendChild(lineD1);
+
+                const lineD2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineD2.setAttribute('x1', size);
+                lineD2.setAttribute('y1', 0);
+                lineD2.setAttribute('x2', 0);
+                lineD2.setAttribute('y2', size);
+                g.appendChild(lineD2);
+
+                svg.appendChild(g);
+            }
+
+            async initializeAnimation(character, showLoading = true) {
+                this.cleanupAnimationFast();
+                if (showLoading) await new Promise(r => setTimeout(r, 50));
+                
+                const target = document.getElementById('animationTarget');
+                if (!target) return;
+                
+                const size = target.clientWidth;
+                
+                // Create SVG
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', size);
+                svg.setAttribute('height', size);
+                svg.setAttribute('id', 'hanzi-svg-target');
+                this.createGridBackground(svg, size);
+                
+                target.innerHTML = '';
+                target.appendChild(svg);
+                
+                try {
+                    this.animationWriter = HanziWriter.create('hanzi-svg-target', character, {
+                        width: size,
+                        height: size,
+                        padding: 10,
+                        strokeAnimationSpeed: 1,
+                        delayBetweenStrokes: 500,
+                        strokeColor: '#2563eb', // blue-600
+                        radicalColor: '#93c5fd', // blue-300
+                        outlineColor: '#e5e7eb', // gray-200
+                        showOutline: true,
+                        showCharacter: true
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            cleanupAnimationFast() {
+                if (this.animationWriter) {
+                    try { this.animationWriter.pauseAnimation(); } catch(e){}
+                    this.animationWriter = null;
+                }
+                const target = document.getElementById('animationTarget');
+                if (target) target.innerHTML = '';
+            }
+
+            animateCharacter() {
+                if (this.animationWriter) {
+                    this.animationWriter.animateCharacter();
+                }
+            }
+
+            showFeedback(message, classes) {
+                const fb = document.getElementById('feedback');
+                fb.innerText = message;
+                fb.className = `fixed top-20 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-lg text-sm font-bold transition-all duration-300 z-[60] ${classes}`;
+                fb.classList.remove('opacity-0', 'translate-y-[-20px]');
+                
+                setTimeout(() => {
+                    fb.classList.add('opacity-0', 'translate-y-[-20px]');
+                }, 2000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new ChineseFlashcardApp();
+        });
+    </script>
+</body>
+</html>

@@ -41,31 +41,13 @@
         }
 
         /* 3D Flip Card Styles */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        
-        .transform-style-3d {
-            transform-style: preserve-3d;
-        }
-        
-        .backface-hidden {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-        
-        .rotate-y-180 {
-            transform: rotateY(180deg);
-        }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
 
-        /* Hiệu ứng lật mượt mà */
-        .flashcard-inner {
-            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-
-        .flashcard.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
+        .flashcard-inner { transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
 
         /* Custom Input Select */
         .custom-select {
@@ -77,6 +59,33 @@
             -webkit-appearance: none;
             appearance: none;
         }
+
+        /* Custom Checkbox */
+        .custom-checkbox:checked {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .custom-checkbox:checked::after {
+            content: '✔';
+            display: block;
+            color: white;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+        }
+
+        /* Quiz Styles */
+        .quiz-option { transition: all 0.2s; }
+        .quiz-option.correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46 !important;
+        }
+        .quiz-option.wrong {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative">
@@ -86,17 +95,32 @@
         <button onclick="window.history.back()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition">
             <i class="fas fa-arrow-left text-lg"></i>
         </button>
-        <h1 class="font-extrabold text-gray-800 text-lg">Thẻ từ vựng</h1>
+        <h1 class="font-extrabold text-gray-800 text-lg">Học Từ Vựng</h1>
         <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm shadow-sm border border-orange-200">
             <span id="streakCountDisplay">🔥</span>
         </div>
     </div>
 
+    <!-- View Toggles (Tabs) -->
+    <div class="px-4 mt-3 sticky top-[60px] z-20 bg-gray-50 pb-2">
+        <div class="bg-gray-200 p-1 rounded-xl flex text-sm font-bold">
+            <button id="tabFlashcard" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('flashcard')">
+                <i class="fas fa-clone mr-1"></i> Thẻ
+            </button>
+            <button id="tabList" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('list')">
+                <i class="fas fa-list mr-1"></i> Danh sách
+            </button>
+            <button id="tabQuiz" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('quiz')">
+                <i class="fas fa-check-square mr-1"></i> Kiểm tra
+            </button>
+        </div>
+    </div>
+
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar">
+    <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar" id="mainContainer">
         
         <!-- Lesson Selector & Progress -->
-        <div class="mb-6 space-y-3">
+        <div class="mb-4 space-y-3" id="topControls">
             <div class="relative">
                 <select id="lessonSelect" class="custom-select w-full bg-white border border-gray-200 text-gray-700 font-bold py-3 pl-4 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition cursor-pointer">
                     <option value="1" selected>H1 Bài 1: 老师，您好！</option>
@@ -108,8 +132,25 @@
                 </select>
             </div>
             
-            <!-- Progress Bar -->
-            <div class="flex items-center gap-3">
+            <!-- Study Mode Filter Toggle (Global) -->
+            <div id="studyModeControl" class="flex items-center justify-between bg-orange-50 p-3 rounded-xl border border-orange-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-orange-800">Ôn tập trọng tâm</div>
+                        <div class="text-[10px] text-orange-600">Chỉ hiện từ chưa thuộc</div>
+                    </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="onlyWeakToggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                </label>
+            </div>
+
+            <!-- Progress Bar (Flashcard only) -->
+            <div id="flashcardProgressBar" class="flex items-center gap-3">
                 <div class="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
                     <div id="progressFill" class="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
                 </div>
@@ -118,7 +159,7 @@
         </div>
 
         <!-- Loading State -->
-        <div id="loadingIndicator" class="flex-1 flex flex-col items-center justify-center text-gray-400 py-20 hidden">
+        <div id="loadingIndicator" class="flex-1 flex-col items-center justify-center text-gray-400 py-20 hidden">
             <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-3"></div>
             <p class="text-sm font-medium">Đang tải dữ liệu...</p>
         </div>
@@ -126,17 +167,24 @@
         <!-- Error State -->
         <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-center text-sm mb-4"></div>
 
-        <!-- Flashcard Area -->
-        <div id="flashcardContent" class="flex-1 flex flex-col justify-center relative perspective-1000 min-h-[400px]">
+        <!-- VIEW 1: FLASHCARD AREA -->
+        <div id="flashcardView" class="flex-1 flex flex-col justify-center relative perspective-1000 min-h-[500px]">
             
+            <!-- Empty State for Study Mode -->
+            <div id="emptyState" class="hidden w-full h-full absolute bg-white rounded-3xl border-2 border-dashed border-green-300 flex flex-col items-center justify-center z-30 p-6 text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl mb-4">🎉</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Tuyệt vời!</h3>
+                <p class="text-gray-500 text-sm">Bạn đã thuộc hết các từ vựng này. Hãy chuyển sang danh sách đầy đủ hoặc reset để học lại.</p>
+            </div>
+
             <!-- Card Container -->
-            <div id="flashcard" class="flashcard w-full h-[450px] relative cursor-pointer group">
+            <div id="flashcard" class="flashcard w-full h-[360px] relative cursor-pointer group mb-16">
                 <div class="flashcard-inner w-full h-full transform-style-3d relative">
                     
                     <!-- FRONT SIDE -->
                     <div class="absolute w-full h-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border-2 border-gray-100 flex flex-col items-center justify-center p-6 backface-hidden z-20">
                         <!-- Top Actions -->
-                        <div class="absolute top-4 right-4 flex gap-2">
+                        <div class="absolute top-4 right-4 flex gap-2 z-30">
                              <button id="animationBtn" class="w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 flex items-center justify-center transition shadow-sm" title="Tập viết">
                                 <i class="fas fa-pen-nib"></i>
                             </button>
@@ -144,9 +192,9 @@
                                 <i class="fas fa-volume-up"></i>
                             </button>
                         </div>
-
+                        
                         <!-- Main Content -->
-                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4 pb-4 w-full">
                             <div id="chineseChar" class="chinese-font text-8xl text-gray-800 font-medium select-none transform group-hover:scale-105 transition duration-300">
                                 <!-- Character injected via JS -->
                             </div>
@@ -187,17 +235,131 @@
                 </div>
             </div>
 
-            <!-- Floating Controls Overlay -->
-            <div class="absolute bottom-6 left-0 w-full flex justify-between items-center px-6 pointer-events-none">
+            <!-- Unified Bottom Controls -->
+            <div class="absolute bottom-6 left-0 w-full flex justify-center items-center gap-6 px-4 z-40 pointer-events-none">
+                <!-- Prev -->
                 <button id="prevBtn" class="pointer-events-auto w-12 h-12 rounded-full bg-white text-gray-400 shadow-md border border-gray-100 hover:text-blue-500 hover:border-blue-200 transition flex items-center justify-center transform active:scale-95">
-                    <i class="fas fa-chevron-left"></i>
+                    <i class="fas fa-chevron-left text-lg"></i>
                 </button>
-                <button id="shuffleBtn" class="pointer-events-auto w-10 h-10 rounded-full bg-white text-gray-400 shadow-sm border border-gray-100 hover:text-orange-500 transition flex items-center justify-center transform active:scale-95 text-sm" title="Trộn thẻ">
-                    <i class="fas fa-random"></i>
+                
+                <!-- Shuffle -->
+                <button id="shuffleBtn" class="pointer-events-auto w-12 h-12 rounded-full bg-orange-50 text-orange-500 shadow-md border border-orange-100 hover:bg-orange-100 transition flex items-center justify-center transform active:scale-95" title="Trộn thẻ">
+                    <i class="fas fa-random text-lg"></i>
                 </button>
-                <button id="nextBtn" class="pointer-events-auto w-14 h-14 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700 transition flex items-center justify-center transform active:scale-95 text-xl">
-                    <i class="fas fa-chevron-right"></i>
+
+                <!-- Mark Memorized -->
+                <button id="markMemorizedBtn" class="pointer-events-auto w-12 h-12 rounded-full border border-gray-200 bg-white text-gray-300 shadow-md flex items-center justify-center transition transform active:scale-95" title="Đánh dấu đã thuộc">
+                    <i class="fas fa-check text-xl"></i>
                 </button>
+
+                <!-- Next -->
+                <button id="nextBtn" class="pointer-events-auto w-12 h-12 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700 transition flex items-center justify-center transform active:scale-95">
+                    <i class="fas fa-chevron-right text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: LIST VIEW -->
+        <div id="listView" class="w-full hidden flex-col gap-3">
+            <!-- Search/Info bar -->
+            <div class="bg-blue-50 p-3 rounded-lg text-xs text-blue-700 mb-2 flex justify-between items-center sticky top-0 z-10 shadow-sm border border-blue-100">
+                <span class="flex-1 mr-2"><i class="fas fa-info-circle mr-1"></i> Nhấn vào từ để tập viết.</span>
+                <label class="flex items-center gap-1.5 cursor-pointer bg-white px-2 py-1 rounded-md border border-blue-100 shadow-sm hover:bg-blue-50 transition">
+                    <span class="text-[10px] font-bold text-blue-600 whitespace-nowrap">Tất cả</span>
+                    <input type="checkbox" id="selectAllCheckbox" class="w-5 h-5 rounded border-2 border-blue-300 custom-checkbox focus:ring-0 transition cursor-pointer">
+                </label>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div id="paginationControls" class="flex justify-center items-center gap-3 py-2">
+                <!-- Controls injected via JS -->
+            </div>
+
+            <div id="vocabularyListContainer" class="flex flex-col gap-3">
+                <!-- List Items injected via JS -->
+            </div>
+        </div>
+
+        <!-- VIEW 3: QUIZ VIEW -->
+        <div id="quizView" class="w-full hidden flex-col items-center">
+            
+            <!-- Quiz Setup -->
+            <div id="quizSetup" class="w-full bg-white rounded-3xl p-6 shadow-md border border-gray-100 text-center mt-4">
+                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Kiểm tra từ vựng</h2>
+                <p class="text-gray-500 text-sm mb-6">Chọn số lượng câu hỏi</p>
+                
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <button class="quiz-count-btn btn-press py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition focus:ring-2 focus:ring-blue-200" data-count="10">10</button>
+                    <button class="quiz-count-btn btn-press py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition focus:ring-2 focus:ring-blue-200" data-count="20">20</button>
+                    <button class="quiz-count-btn btn-press py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition focus:ring-2 focus:ring-blue-200" data-count="all">Tất cả</button>
+                </div>
+
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
+                        <input type="checkbox" id="quizOnlyWeak" class="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 custom-checkbox focus:ring-blue-200">
+                        <span class="text-sm text-gray-600 font-bold">Chỉ từ chưa thuộc</span>
+                    </label>
+                </div>
+
+                <button id="startQuizBtn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition flex items-center justify-center gap-2">
+                    <i class="fas fa-play"></i> Bắt đầu làm bài
+                </button>
+            </div>
+
+            <!-- Quiz Active -->
+            <div id="quizActive" class="w-full hidden flex-col h-full">
+                <!-- Progress Header -->
+                <div class="flex justify-between items-center mb-6 px-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-gray-500">Câu hỏi</span>
+                        <span id="quizProgressText" class="text-lg font-bold text-blue-600">1/10</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                        <i class="fas fa-check text-green-500 text-xs"></i>
+                        <span id="quizScoreText" class="text-sm font-bold text-green-700">0</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 h-2 rounded-full mb-8 overflow-hidden">
+                    <div id="quizProgressBar" class="bg-blue-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-6 flex flex-col items-center justify-center min-h-[180px]">
+                        <div id="quizQuestionLabel" class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Từ vựng này là gì?</div>
+                        <div id="quizQuestionHanzi" class="chinese-font text-6xl text-gray-800 leading-tight"></div>
+                        <!-- Reveal Info -->
+                        <div id="quizQuestionReveal" class="mt-4 text-xl font-bold text-blue-600 h-8 transition-opacity duration-300 opacity-0"></div>
+                    </div>
+
+                    <!-- Options -->
+                    <div id="quizOptions" class="w-full grid grid-cols-1 gap-3">
+                        <!-- Options injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Result -->
+            <div id="quizResult" class="w-full hidden flex-col items-center justify-center py-10">
+                <div class="w-32 h-32 rounded-full bg-white border-8 border-blue-100 flex items-center justify-center text-4xl font-bold text-blue-600 shadow-sm mb-6" id="finalScoreCircle">
+                    0%
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Hoàn thành!</h2>
+                <p class="text-gray-500 mb-8" id="finalScoreDetail">...</p>
+                
+                <div class="w-full flex gap-3">
+                    <button onclick="app.switchTab('flashcard')" class="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200 transition">
+                        <i class="fas fa-home mr-1"></i> Trang chủ
+                    </button>
+                    <button id="retryQuizBtn" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition">
+                        <i class="fas fa-redo mr-1"></i> Làm lại
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -222,7 +384,7 @@
         </a>
     </div>
 
-    <!-- Animation Modal (Re-styled) -->
+    <!-- Animation Modal (Shared) -->
     <div id="animationModal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-[2rem] w-full max-w-sm p-6 shadow-2xl transform transition-all scale-95" id="animationModalContent">
             <!-- Header -->
@@ -238,17 +400,14 @@
 
             <!-- Word Info -->
             <div class="text-center mb-4">
-                <div id="animationWord" class="hidden"></div> <!-- Hidden, used for logic reference -->
+                <div id="animationWord" class="hidden"></div>
                 <div class="flex items-center justify-center gap-2 mb-2">
                     <span id="animationPinyin" class="text-lg font-bold text-blue-600"></span>
                     <span class="text-gray-300">|</span>
                     <span id="animationMeaning" class="text-gray-600 text-sm font-medium"></span>
                 </div>
-                
                 <!-- Character Breakdown / Tabs -->
-                <div id="characterTabs" class="flex justify-center gap-2 flex-wrap mb-4">
-                    <!-- Tabs generated by JS -->
-                </div>
+                <div id="characterTabs" class="flex justify-center gap-2 flex-wrap mb-4"></div>
             </div>
 
             <!-- Drawing Area -->
@@ -269,28 +428,57 @@
     <script>
         class ChineseFlashcardApp {
             constructor() {
-                this.currentLesson = null;
+                // State
+                this.lessonData = [];
+                this.activeData = []; 
+                this.memorizedWords = new Set();
+                
                 this.currentCardIndex = 0;
                 this.isFlipped = false;
-                this.animationWriter = null;
-                this.isLoading = false;
-                this.lessonData = [];
+                this.isStudyWeakMode = false;
+                this.currentPage = 1;
+                this.itemsPerPage = 50;
+                this.currentView = 'flashcard'; 
+
+                // Quiz State
+                this.quizQuestions = [];
+                this.quizCurrentIndex = 0;
+                this.quizScore = 0;
+                this.isQuizAnswering = false;
+                this.selectedQuizCount = 10;
+
+                // Media & Animation
                 this.currentAudio = null;
-                this.currentAnimationCharacterIndex = 0;
+                this.animationWriter = null;
                 this.animationCharacters = [];
+                this.isAnimationModalOpen = false;
 
                 // Touch handling
                 this.startX = 0;
                 this.isSwiping = false;
                 this.swipeThreshold = 50;
-                this.isAnimationModalOpen = false;
 
                 this.init();
             }
 
             init() {
+                this.loadMemorized();
                 this.setupEventListeners();
                 this.autoLoadFirstLesson();
+                
+                // Set default quiz selection visual
+                this.updateQuizCountVisuals(10);
+            }
+
+            loadMemorized() {
+                const saved = localStorage.getItem('hsk_memorized_set');
+                if (saved) {
+                    this.memorizedWords = new Set(JSON.parse(saved));
+                }
+            }
+
+            saveMemorized() {
+                localStorage.setItem('hsk_memorized_set', JSON.stringify([...this.memorizedWords]));
             }
 
             async autoLoadFirstLesson() {
@@ -299,95 +487,67 @@
             }
 
             setupEventListeners() {
-                // Select Lesson
-                document.getElementById('lessonSelect').addEventListener('change', (e) => {
-                    if (e.target.value) this.loadLesson(e.target.value);
+                // Navigation / Tabs
+                // Handled via HTML onclick="app.switchTab()" to keep it clean
+
+                // Lesson & Filter
+                document.getElementById('lessonSelect').addEventListener('change', (e) => this.loadLesson(e.target.value));
+                
+                document.getElementById('onlyWeakToggle').addEventListener('change', (e) => {
+                    this.isStudyWeakMode = e.target.checked;
+                    this.updateActiveData(); // Re-filter data
                 });
 
-                // Buttons
-                document.getElementById('animationBtn').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.openAnimationModal();
-                });
+                // Flashcard Controls
+                document.getElementById('animationBtn').addEventListener('click', (e) => { e.stopPropagation(); this.openAnimationModal(); });
                 
-                // Audio handler wrapper to prevent propagation
-                const playAudioHandler = (e) => {
-                    e.stopPropagation();
-                    this.playCurrentAudio();
-                };
+                const playAudioHandler = (e) => { e.stopPropagation(); this.playCurrentAudio(); };
                 document.getElementById('audioBtn').addEventListener('click', playAudioHandler);
                 document.getElementById('audioBtnBack').addEventListener('click', playAudioHandler);
 
                 document.getElementById('prevBtn').addEventListener('click', () => this.previousCard());
                 document.getElementById('nextBtn').addEventListener('click', () => this.nextCard());
-                document.getElementById('shuffleBtn').addEventListener('click', () => this.shuffleDeck());
+                document.getElementById('shuffleBtn').addEventListener('click', (e) => { e.stopPropagation(); this.shuffleDeck(); });
+                
+                // Flip & Touch
+                const card = document.getElementById('flashcard');
+                card.addEventListener('click', () => { if (!this.isSwiping) this.flipCard(); this.isSwiping = false; });
+                card.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+                card.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+                card.addEventListener('touchend', (e) => this.handleTouchEnd(e));
 
-                // Flip Interaction
-                document.getElementById('flashcard').addEventListener('click', (e) => {
-                    if (!this.isSwiping) this.flipCard();
-                    this.isSwiping = false;
+                // Mark Memorized (Flashcard)
+                document.getElementById('markMemorizedBtn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleMemorizedCurrentCard();
                 });
+
+                // List Controls
+                document.getElementById('selectAllCheckbox').addEventListener('change', (e) => this.toggleSelectAll(e.target.checked));
+
+                // Quiz Controls
+                document.querySelectorAll('.quiz-count-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const count = e.target.getAttribute('data-count');
+                        this.selectedQuizCount = count === 'all' ? 'all' : parseInt(count);
+                        this.updateQuizCountVisuals(count);
+                    });
+                });
+                document.getElementById('startQuizBtn').addEventListener('click', () => this.startQuiz());
+                document.getElementById('retryQuizBtn').addEventListener('click', () => this.resetQuizView());
 
                 // Modal
                 const closeModal = () => this.closeAnimationModal();
                 document.getElementById('closeModal').addEventListener('click', closeModal);
-                document.getElementById('animationModal').addEventListener('click', (e) => {
-                    if (e.target === document.getElementById('animationModal')) closeModal();
-                });
+                document.getElementById('animationModal').addEventListener('click', (e) => { if(e.target.id === 'animationModal') closeModal(); });
                 document.getElementById('animateBtn').addEventListener('click', () => this.animateCharacter());
-
-                // Keyboard
-                document.addEventListener('keydown', (e) => {
-                    if (this.isAnimationModalOpen) return;
-                    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); this.flipCard(); }
-                    if (e.key === 'ArrowLeft') { e.preventDefault(); this.previousCard(); }
-                    if (e.key === 'ArrowRight') { e.preventDefault(); this.nextCard(); }
-                    if (e.key.toLowerCase() === 's') { e.preventDefault(); this.openAnimationModal(); }
-                    if (e.key.toLowerCase() === 'a') { e.preventDefault(); this.playCurrentAudio(); }
-                });
-
-                // Touch/Swipe
-                const container = document.getElementById('flashcard');
-                container.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
-                container.addEventListener('touchmove', (e) => this.handleTouchMove(e));
-                container.addEventListener('touchend', (e) => this.handleTouchEnd(e));
             }
 
-            handleTouchStart(e) {
-                if (this.isAnimationModalOpen || e.touches.length > 1) {
-                    this.isSwiping = false;
-                    return;
-                }
-                this.startX = e.touches[0].clientX;
-                this.isSwiping = false;
-            }
-
-            handleTouchMove(e) {
-                const currentX = e.touches[0].clientX;
-                const deltaX = currentX - this.startX;
-                if (Math.abs(deltaX) > 10) {
-                    this.isSwiping = true;
-                }
-            }
-
-            handleTouchEnd(e) {
-                if (!this.isSwiping) return;
-                const endX = e.changedTouches[0].clientX;
-                const deltaX = endX - this.startX;
-
-                if (deltaX > this.swipeThreshold) this.previousCard();
-                else if (deltaX < -this.swipeThreshold) this.nextCard();
-
-                this.isSwiping = false;
-                this.startX = 0;
-            }
+            // --- DATA LOGIC (FILE FETCHING) ---
 
             async loadLesson(lessonNumber) {
                 this.setLoadingState(true);
-                this.currentLesson = lessonNumber;
-                
                 try {
-                    // Fetch data
                     const response = await fetch(`data_flashcard/bai${lessonNumber}/bai${lessonNumber}.txt`);
                     if (!response.ok) throw new Error(`Không thể tìm thấy bài học số ${lessonNumber}.`);
                     
@@ -396,12 +556,10 @@
                     
                     if (this.lessonData.length === 0) throw new Error(`Bài học số ${lessonNumber} không có dữ liệu.`);
                     
-                    this.currentCardIndex = 0;
-                    this.updateDisplay();
-                    this.showFlashcardContent();
+                    this.updateActiveData(); // Filter and setup views
                     
                 } catch (error) {
-                    this.showError(`Không thể tải bài học: ${error.message}`);
+                    this.showError(`Lỗi tải bài học: ${error.message}`);
                 } finally {
                     this.setLoadingState(false);
                 }
@@ -425,29 +583,84 @@
                 }).filter(item => item !== null);
             }
 
-            setLoadingState(loading) {
-                this.isLoading = loading;
-                document.getElementById('loadingIndicator').style.display = loading ? 'flex' : 'none';
-                document.getElementById('flashcardContent').style.display = loading ? 'none' : 'flex';
-                document.getElementById('lessonSelect').disabled = loading;
+            updateActiveData() {
+                // Filter based on Study Mode
+                if (this.isStudyWeakMode) {
+                    this.activeData = this.lessonData.filter(item => !this.memorizedWords.has(item.character));
+                } else {
+                    this.activeData = [...this.lessonData];
+                }
+
+                this.currentCardIndex = 0;
+                this.currentPage = 1;
+
+                // Update Views
+                this.updateFlashcardUI();
+                if (this.currentView === 'list') this.renderListView();
             }
 
-            showError(message) {
-                const el = document.getElementById('errorMessage');
-                el.innerText = message;
-                el.classList.remove('hidden');
-                document.getElementById('flashcardContent').style.display = 'none';
-            }
-
-            showFlashcardContent() {
-                document.getElementById('errorMessage').classList.add('hidden');
-                document.getElementById('flashcardContent').style.display = 'flex';
-            }
-
-            updateDisplay() {
-                if (!this.lessonData.length) return;
+            // --- TAB SWITCHING ---
+            switchTab(tabName) {
+                this.currentView = tabName;
                 
-                const card = this.lessonData[this.currentCardIndex];
+                // Hide all
+                document.getElementById('flashcardView').classList.add('hidden');
+                document.getElementById('listView').classList.add('hidden');
+                document.getElementById('quizView').classList.add('hidden');
+                document.getElementById('quizView').classList.remove('flex');
+
+                // Reset Tab Styles
+                ['tabFlashcard', 'tabList', 'tabQuiz'].forEach(id => {
+                    const btn = document.getElementById(id);
+                    btn.classList.replace('text-blue-600', 'text-gray-500');
+                    btn.classList.replace('bg-white', 'bg-transparent');
+                    btn.classList.remove('shadow-sm');
+                });
+
+                // Activate specific
+                const activeBtn = document.getElementById(tabName === 'flashcard' ? 'tabFlashcard' : tabName === 'list' ? 'tabList' : 'tabQuiz');
+                activeBtn.classList.replace('text-gray-500', 'text-blue-600');
+                activeBtn.classList.replace('bg-transparent', 'bg-white');
+                activeBtn.classList.add('shadow-sm');
+
+                const studyControl = document.getElementById('studyModeControl');
+                const progressBar = document.getElementById('flashcardProgressBar');
+
+                if (tabName === 'flashcard') {
+                    document.getElementById('flashcardView').classList.remove('hidden');
+                    studyControl.classList.remove('hidden');
+                    progressBar.classList.remove('hidden');
+                    this.updateActiveData(); 
+                } else if (tabName === 'list') {
+                    document.getElementById('listView').classList.remove('hidden');
+                    studyControl.classList.add('hidden');
+                    progressBar.classList.add('hidden');
+                    this.renderListView();
+                } else if (tabName === 'quiz') {
+                    document.getElementById('quizView').classList.remove('hidden');
+                    document.getElementById('quizView').classList.add('flex');
+                    studyControl.classList.add('hidden');
+                    progressBar.classList.add('hidden');
+                    this.resetQuizView();
+                }
+            }
+
+            // --- FLASHCARD LOGIC ---
+            updateFlashcardUI() {
+                const emptyState = document.getElementById('emptyState');
+                const mainCard = document.getElementById('flashcard');
+                
+                if (this.activeData.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    mainCard.classList.add('hidden');
+                    document.getElementById('cardCounter').textContent = "0/0";
+                    return;
+                }
+
+                emptyState.classList.add('hidden');
+                mainCard.classList.remove('hidden');
+
+                const card = this.activeData[this.currentCardIndex];
                 
                 // Front
                 document.getElementById('chineseChar').textContent = card.character;
@@ -461,14 +674,43 @@
                     <p class="text-xs text-gray-400 italic">${card.exampleMeaning}</p>
                 `;
 
+                // Update Memorized Button
+                const markBtn = document.getElementById('markMemorizedBtn');
+                const isMem = this.memorizedWords.has(card.character);
+                
+                markBtn.className = "pointer-events-auto w-12 h-12 rounded-full shadow-md flex items-center justify-center transition transform active:scale-95";
+                
+                if (isMem) {
+                    markBtn.classList.add('bg-green-500', 'text-white', 'border', 'border-green-500');
+                } else {
+                    markBtn.classList.add('bg-white', 'text-gray-300', 'border-2', 'border-gray-100', 'hover:bg-green-50', 'hover:text-green-500', 'hover:border-green-200');
+                }
+
                 // Progress
-                document.getElementById('cardCounter').innerText = `${this.currentCardIndex + 1}/${this.lessonData.length}`;
-                const progress = ((this.currentCardIndex + 1) / this.lessonData.length) * 100;
+                document.getElementById('cardCounter').innerText = `${this.currentCardIndex + 1}/${this.activeData.length}`;
+                const progress = ((this.currentCardIndex + 1) / this.activeData.length) * 100;
                 document.getElementById('progressFill').style.width = `${progress}%`;
 
-                // Reset Flip
                 this.isFlipped = false;
-                document.getElementById('flashcard').classList.remove('flipped');
+                mainCard.classList.remove('flipped');
+            }
+
+            toggleMemorizedCurrentCard() {
+                if (this.activeData.length === 0) return;
+                const char = this.activeData[this.currentCardIndex].character;
+                
+                if (this.memorizedWords.has(char)) {
+                    this.memorizedWords.delete(char);
+                } else {
+                    this.memorizedWords.add(char);
+                }
+                this.saveMemorized();
+                
+                if (this.isStudyWeakMode) {
+                    this.updateActiveData(); 
+                } else {
+                    this.updateFlashcardUI();
+                }
             }
 
             flipCard() {
@@ -477,113 +719,303 @@
             }
 
             previousCard() {
-                this.currentCardIndex = (this.currentCardIndex - 1 + this.lessonData.length) % this.lessonData.length;
-                this.updateDisplay();
+                if (this.activeData.length === 0) return;
+                this.currentCardIndex = (this.currentCardIndex - 1 + this.activeData.length) % this.activeData.length;
+                this.updateFlashcardUI();
             }
 
             nextCard() {
-                this.currentCardIndex = (this.currentCardIndex + 1) % this.lessonData.length;
-                this.updateDisplay();
+                if (this.activeData.length === 0) return;
+                this.currentCardIndex = (this.currentCardIndex + 1) % this.activeData.length;
+                this.updateFlashcardUI();
             }
 
             shuffleDeck() {
-                for (let i = this.lessonData.length - 1; i > 0; i--) {
+                if (this.activeData.length < 2) return;
+                for (let i = this.activeData.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
-                    [this.lessonData[i], this.lessonData[j]] = [this.lessonData[j], this.lessonData[i]];
+                    [this.activeData[i], this.activeData[j]] = [this.activeData[j], this.activeData[i]];
                 }
                 this.currentCardIndex = 0;
-                this.updateDisplay();
+                this.updateFlashcardUI();
                 this.showFeedback("Đã trộn thẻ!", "bg-orange-100 text-orange-600 border-orange-200");
             }
 
-            async playCurrentAudio() {
-                if (!this.lessonData.length) return;
-                const card = this.lessonData[this.currentCardIndex];
-                await this.playAudio(card.audioPath, card.character);
+            // --- LIST VIEW LOGIC ---
+            renderListView() {
+                const container = document.getElementById('vocabularyListContainer');
+                container.innerHTML = '';
+                
+                const listData = this.lessonData;
+                
+                if (listData.length === 0) {
+                    container.innerHTML = '<div class="text-center text-gray-400 py-10">Chưa có dữ liệu</div>';
+                    this.renderPagination(0);
+                    return;
+                }
+
+                const allMemorized = listData.length > 0 && listData.every(item => this.memorizedWords.has(item.character));
+                document.getElementById('selectAllCheckbox').checked = allMemorized;
+
+                const totalPages = Math.ceil(listData.length / this.itemsPerPage);
+                if (this.currentPage > totalPages) this.currentPage = totalPages;
+                if (this.currentPage < 1) this.currentPage = 1;
+
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                const pageItems = listData.slice(start, end);
+
+                pageItems.forEach(item => {
+                    const isMem = this.memorizedWords.has(item.character);
+                    const div = document.createElement('div');
+                    div.className = `bg-white p-3 rounded-xl shadow-sm border ${isMem ? 'border-green-100 bg-green-50/30' : 'border-gray-100'} flex items-center justify-between transition hover:shadow-md`;
+                    
+                    div.innerHTML = `
+                        <div class="flex items-center gap-4 flex-1 cursor-pointer" onclick="app.openWriterFromList('${item.character}')">
+                            <div class="min-w-[3rem] w-auto px-2 py-1 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-xl chinese-font text-blue-600 font-bold text-center whitespace-nowrap border border-blue-100">
+                                ${item.character}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-bold text-gray-800 text-lg leading-tight break-words">${item.pinyin}</div>
+                                <div class="text-sm text-gray-500 break-words leading-tight mt-0.5">${item.meaning}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center pl-2">
+                            <label class="cursor-pointer p-2">
+                                <input type="checkbox" class="w-6 h-6 rounded-md border-2 border-gray-300 custom-checkbox focus:ring-0 transition cursor-pointer" 
+                                    ${isMem ? 'checked' : ''} 
+                                    onchange="app.toggleMemorizedFromList('${item.character}')">
+                            </label>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+
+                this.renderPagination(totalPages);
             }
 
-            async playAudio(audioPath, character) {
-                try {
-                    if (this.currentAudio) {
-                        this.currentAudio.pause();
-                        this.currentAudio.currentTime = 0;
-                    }
+            renderPagination(totalPages) {
+                const controls = document.getElementById('paginationControls');
+                if (totalPages <= 1) {
+                    controls.innerHTML = '';
+                    controls.classList.add('hidden');
+                    return;
+                }
+                controls.classList.remove('hidden');
+                controls.innerHTML = `
+                    <button onclick="app.changePage(-1)" ${this.currentPage === 1 ? 'disabled' : ''} class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition"><i class="fas fa-chevron-left"></i></button>
+                    <span class="text-sm font-bold text-gray-600 px-2">${this.currentPage} / ${totalPages}</span>
+                    <button onclick="app.changePage(1)" ${this.currentPage === totalPages ? 'disabled' : ''} class="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition"><i class="fas fa-chevron-right"></i></button>
+                `;
+            }
 
-                    this.currentAudio = new Audio(audioPath);
-                    this.currentAudio.play().catch(e => {
-                        console.warn(e);
-                        this.showFeedback("Không thể phát âm thanh", "bg-red-100 text-red-600");
-                    });
+            changePage(delta) {
+                this.currentPage += delta;
+                this.renderListView();
+                document.getElementById('listView').scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
 
-                } catch (error) {
-                    this.showFeedback("Lỗi âm thanh", "bg-red-100 text-red-600");
+            toggleMemorizedFromList(char) {
+                if (this.memorizedWords.has(char)) this.memorizedWords.delete(char);
+                else this.memorizedWords.add(char);
+                this.saveMemorized();
+                this.renderListView();
+            }
+
+            toggleSelectAll(checked) {
+                this.lessonData.forEach(item => {
+                    if (checked) this.memorizedWords.add(item.character);
+                    else this.memorizedWords.delete(item.character);
+                });
+                this.saveMemorized();
+                this.renderListView();
+            }
+
+            openWriterFromList(char) {
+                const item = this.lessonData.find(i => i.character === char);
+                if (item) {
+                    this.openAnimationModal(item);
                 }
             }
 
-            // Animation Logic
-            openAnimationModal() {
-                if (!this.lessonData.length) return;
+            // --- QUIZ LOGIC ---
+            updateQuizCountVisuals(count) {
+                document.querySelectorAll('.quiz-count-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
+                    if (btn.getAttribute('data-count') == count) {
+                        btn.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-600');
+                    }
+                });
+            }
+
+            startQuiz() {
+                const onlyWeak = document.getElementById('quizOnlyWeak').checked;
+                let pool = onlyWeak ? this.lessonData.filter(i => !this.memorizedWords.has(i.character)) : [...this.lessonData];
+
+                if (pool.length < 4) {
+                    this.showFeedback("Cần ít nhất 4 từ để kiểm tra!", "bg-red-100 text-red-600");
+                    return;
+                }
+
+                pool.sort(() => 0.5 - Math.random());
+
+                let limit = pool.length;
+                if (this.selectedQuizCount !== 'all') {
+                    limit = Math.min(this.selectedQuizCount, pool.length);
+                }
+
+                this.quizQuestions = [];
+                for(let i=0; i<limit; i++) {
+                    const correct = pool[i];
+                    const distractors = this.lessonData.filter(x => x.character !== correct.character)
+                                            .sort(() => 0.5 - Math.random())
+                                            .slice(0, 3);
+                    
+                    const options = [correct, ...distractors].sort(() => 0.5 - Math.random());
+                    const type = Math.random() > 0.5 ? 'pinyin' : 'meaning';
+
+                    this.quizQuestions.push({ question: correct, options, type });
+                }
+
+                this.quizCurrentIndex = 0;
+                this.quizScore = 0;
                 
-                const card = this.lessonData[this.currentCardIndex];
+                document.getElementById('quizSetup').classList.add('hidden');
+                document.getElementById('quizResult').classList.add('hidden');
+                document.getElementById('quizResult').classList.remove('flex');
+                
+                const activeDiv = document.getElementById('quizActive');
+                activeDiv.classList.remove('hidden');
+                activeDiv.classList.add('flex');
+
+                this.renderQuizQuestion();
+            }
+
+            renderQuizQuestion() {
+                this.isQuizAnswering = false;
+                const q = this.quizQuestions[this.quizCurrentIndex];
+                
+                document.getElementById('quizProgressText').textContent = `${this.quizCurrentIndex + 1}/${this.quizQuestions.length}`;
+                document.getElementById('quizScoreText').textContent = this.quizScore;
+                document.getElementById('quizProgressBar').style.width = `${(this.quizCurrentIndex / this.quizQuestions.length) * 100}%`;
+
+                const label = document.getElementById('quizQuestionLabel');
+                label.textContent = q.type === 'pinyin' ? "Chọn Pinyin đúng" : "Chọn Nghĩa tiếng Việt";
+                
+                document.getElementById('quizQuestionHanzi').textContent = q.question.character;
+                
+                const reveal = document.getElementById('quizQuestionReveal');
+                reveal.textContent = '';
+                reveal.classList.add('opacity-0');
+
+                const optionsDiv = document.getElementById('quizOptions');
+                optionsDiv.innerHTML = '';
+                
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "quiz-option w-full bg-white border-2 border-gray-100 p-4 rounded-xl text-center hover:border-blue-200 hover:bg-blue-50 active:scale-[0.98] btn-press relative overflow-hidden transition-all duration-200";
+                    
+                    let content = q.type === 'pinyin' 
+                        ? `<div class="font-bold text-gray-800 text-xl">${opt.pinyin}</div>`
+                        : `<div class="font-medium text-gray-800 text-lg">${opt.meaning}</div>`;
+                    
+                    btn.innerHTML = content;
+                    btn.onclick = () => this.handleQuizAnswer(btn, opt, q);
+                    optionsDiv.appendChild(btn);
+                });
+            }
+
+            handleQuizAnswer(btn, selected, q) {
+                if (this.isQuizAnswering) return;
+                this.isQuizAnswering = true;
+
+                const isCorrect = selected.character === q.question.character;
+                
+                const reveal = document.getElementById('quizQuestionReveal');
+                reveal.textContent = q.type === 'pinyin' ? q.question.meaning : q.question.pinyin;
+                reveal.classList.remove('opacity-0');
+
+                if (isCorrect) {
+                    btn.classList.add('correct');
+                    this.quizScore++;
+                    document.getElementById('quizScoreText').textContent = this.quizScore;
+                } else {
+                    btn.classList.add('wrong');
+                    const optionsDiv = document.getElementById('quizOptions');
+                    const targetText = q.type === 'pinyin' ? q.question.pinyin : q.question.meaning;
+                    
+                    Array.from(optionsDiv.children).forEach(b => {
+                        if (b.innerText.includes(targetText)) b.classList.add('correct');
+                    });
+                }
+
+                setTimeout(() => {
+                    this.quizCurrentIndex++;
+                    if (this.quizCurrentIndex < this.quizQuestions.length) {
+                        this.renderQuizQuestion();
+                    } else {
+                        this.finishQuiz();
+                    }
+                }, 1500);
+            }
+
+            finishQuiz() {
+                document.getElementById('quizActive').classList.add('hidden');
+                document.getElementById('quizActive').classList.remove('flex');
+                
+                const resultDiv = document.getElementById('quizResult');
+                resultDiv.classList.remove('hidden');
+                resultDiv.classList.add('flex');
+
+                const percent = Math.round((this.quizScore / this.quizQuestions.length) * 100);
+                const circle = document.getElementById('finalScoreCircle');
+                circle.textContent = `${percent}%`;
+                
+                circle.className = `w-32 h-32 rounded-full bg-white border-8 flex items-center justify-center text-4xl font-bold shadow-sm mb-6 ${
+                    percent >= 80 ? 'border-green-100 text-green-600' : 
+                    percent >= 50 ? 'border-yellow-100 text-yellow-600' : 'border-red-100 text-red-600'
+                }`;
+
+                document.getElementById('finalScoreDetail').textContent = `Bạn trả lời đúng ${this.quizScore}/${this.quizQuestions.length} câu`;
+            }
+
+            resetQuizView() {
+                document.getElementById('quizResult').classList.add('hidden');
+                document.getElementById('quizResult').classList.remove('flex');
+                document.getElementById('quizActive').classList.add('hidden');
+                document.getElementById('quizActive').classList.remove('flex');
+                document.getElementById('quizSetup').classList.remove('hidden');
+                this.updateQuizCountVisuals(this.selectedQuizCount);
+            }
+
+            // --- ANIMATION & MEDIA ---
+            openAnimationModal(specificItem = null) {
+                const item = specificItem || this.activeData[this.currentCardIndex];
+                if (!item) return;
+
                 this.isAnimationModalOpen = true;
                 
-                document.getElementById('animationWord').textContent = card.character;
-                document.getElementById('animationPinyin').textContent = card.pinyin;
-                document.getElementById('animationMeaning').textContent = card.meaning;
+                document.getElementById('animationPinyin').textContent = item.pinyin;
+                document.getElementById('animationMeaning').textContent = item.meaning;
                 
-                this.animationCharacters = [...card.character];
-                this.currentAnimationCharacterIndex = 0;
-                
+                this.animationCharacters = [...item.character];
                 this.generateCharacterTabs();
                 
                 const modal = document.getElementById('animationModal');
                 modal.classList.remove('hidden');
-                // Small timeout to allow display:block to apply before transition
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
-                    const content = document.getElementById('animationModalContent');
-                    content.classList.remove('scale-95');
-                    content.classList.add('scale-100');
-                    this.initializeAnimation(this.animationCharacters[0]);
+                    document.getElementById('animationModalContent').classList.remove('scale-95');
+                    document.getElementById('animationModalContent').classList.add('scale-100');
+                    this.switchToCharacter(0);
                 }, 50);
-            }
-
-            generateCharacterTabs() {
-                const container = document.getElementById('characterTabs');
-                container.innerHTML = '';
-                
-                if (this.animationCharacters.length > 1) {
-                    this.animationCharacters.forEach((char, index) => {
-                        const tab = document.createElement('button');
-                        tab.className = `w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition ${index === 0 ? 'border-blue-500 text-blue-600 bg-blue-50' : 'border-gray-200 text-gray-400 hover:border-blue-300'}`;
-                        tab.textContent = char;
-                        tab.onclick = () => this.switchToCharacter(index);
-                        container.appendChild(tab);
-                    });
-                }
-            }
-
-            switchToCharacter(index) {
-                this.currentAnimationCharacterIndex = index;
-                const tabs = document.getElementById('characterTabs').children;
-                Array.from(tabs).forEach((tab, i) => {
-                    if (i === index) {
-                        tab.className = 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition border-blue-500 text-blue-600 bg-blue-50';
-                    } else {
-                        tab.className = 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition border-gray-200 text-gray-400 hover:border-blue-300';
-                    }
-                });
-                this.initializeAnimation(this.animationCharacters[index], false);
             }
 
             closeAnimationModal() {
                 const modal = document.getElementById('animationModal');
-                const content = document.getElementById('animationModalContent');
-                
                 modal.classList.add('opacity-0');
-                content.classList.remove('scale-100');
-                content.classList.add('scale-95');
-
+                document.getElementById('animationModalContent').classList.remove('scale-100');
+                document.getElementById('animationModalContent').classList.add('scale-95');
                 setTimeout(() => {
                     modal.classList.add('hidden');
                     this.isAnimationModalOpen = false;
@@ -591,54 +1023,26 @@
                 }, 300);
             }
 
-            createGridBackground(svg, size) {
-                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-                svg.appendChild(defs);
-                
-                const gridSize = size / 3; // 3x3 Grid style
-                const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-                pattern.setAttribute('id', 'grid');
-                pattern.setAttribute('width', gridSize);
-                pattern.setAttribute('height', gridSize);
-                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                
-                // Miquan grid lines (Diagonal + Cross)
-                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.setAttribute('stroke', '#e5e7eb'); // gray-200
-                g.setAttribute('stroke-width', '1');
-                g.setAttribute('stroke-dasharray', '5,5');
+            generateCharacterTabs() {
+                const container = document.getElementById('characterTabs');
+                container.innerHTML = '';
+                this.animationCharacters.forEach((char, index) => {
+                    const tab = document.createElement('button');
+                    tab.className = `w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition ${index === 0 ? 'border-blue-500 text-blue-600 bg-blue-50' : 'border-gray-200 text-gray-400 hover:border-blue-300'}`;
+                    tab.textContent = char;
+                    tab.onclick = () => this.switchToCharacter(index);
+                    container.appendChild(tab);
+                });
+            }
 
-                // Cross
-                const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                lineV.setAttribute('x1', size/2);
-                lineV.setAttribute('y1', 0);
-                lineV.setAttribute('x2', size/2);
-                lineV.setAttribute('y2', size);
-                g.appendChild(lineV);
-
-                const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                lineH.setAttribute('x1', 0);
-                lineH.setAttribute('y1', size/2);
-                lineH.setAttribute('x2', size);
-                lineH.setAttribute('y2', size/2);
-                g.appendChild(lineH);
-                
-                // Diagonals
-                const lineD1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                lineD1.setAttribute('x1', 0);
-                lineD1.setAttribute('y1', 0);
-                lineD1.setAttribute('x2', size);
-                lineD1.setAttribute('y2', size);
-                g.appendChild(lineD1);
-
-                const lineD2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                lineD2.setAttribute('x1', size);
-                lineD2.setAttribute('y1', 0);
-                lineD2.setAttribute('x2', 0);
-                lineD2.setAttribute('y2', size);
-                g.appendChild(lineD2);
-
-                svg.appendChild(g);
+            switchToCharacter(index) {
+                const tabs = document.getElementById('characterTabs').children;
+                Array.from(tabs).forEach((tab, i) => {
+                    tab.className = i === index 
+                        ? 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition border-blue-500 text-blue-600 bg-blue-50'
+                        : 'w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg font-bold chinese-font transition border-gray-200 text-gray-400 hover:border-blue-300';
+                });
+                this.initializeAnimation(this.animationCharacters[index], false);
             }
 
             async initializeAnimation(character, showLoading = true) {
@@ -647,50 +1051,54 @@
                 
                 const target = document.getElementById('animationTarget');
                 if (!target) return;
-                
                 const size = target.clientWidth;
                 
-                // Create SVG
                 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                svg.setAttribute('width', size);
-                svg.setAttribute('height', size);
-                svg.setAttribute('id', 'hanzi-svg-target');
+                svg.setAttribute('width', size); svg.setAttribute('height', size); svg.setAttribute('id', 'hanzi-svg-target');
                 this.createGridBackground(svg, size);
-                
                 target.innerHTML = '';
                 target.appendChild(svg);
                 
                 try {
                     this.animationWriter = HanziWriter.create('hanzi-svg-target', character, {
-                        width: size,
-                        height: size,
-                        padding: 10,
-                        strokeAnimationSpeed: 1,
-                        delayBetweenStrokes: 500,
-                        strokeColor: '#2563eb', // blue-600
-                        radicalColor: '#93c5fd', // blue-300
-                        outlineColor: '#e5e7eb', // gray-200
-                        showOutline: true,
-                        showCharacter: true
+                        width: size, height: size, padding: 10, strokeAnimationSpeed: 1, delayBetweenStrokes: 500,
+                        strokeColor: '#2563eb', radicalColor: '#93c5fd', outlineColor: '#e5e7eb', showOutline: true, showCharacter: true
                     });
-                } catch (e) {
-                    console.error(e);
-                }
+                    this.animationWriter.animateCharacter();
+                } catch (e) {}
+            }
+
+            createGridBackground(svg, size) {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('stroke', '#e5e7eb'); g.setAttribute('stroke-width', '1'); g.setAttribute('stroke-dasharray', '5,5');
+                const lines = [
+                    {x1: size/2, y1: 0, x2: size/2, y2: size}, {x1: 0, y1: size/2, x2: size, y2: size/2},
+                    {x1: 0, y1: 0, x2: size, y2: size}, {x1: size, y1: 0, x2: 0, y2: size}
+                ];
+                lines.forEach(l => {
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', l.x1); line.setAttribute('y1', l.y1); line.setAttribute('x2', l.x2); line.setAttribute('y2', l.y2);
+                    g.appendChild(line);
+                });
+                svg.appendChild(g);
             }
 
             cleanupAnimationFast() {
-                if (this.animationWriter) {
-                    try { this.animationWriter.pauseAnimation(); } catch(e){}
-                    this.animationWriter = null;
-                }
+                if (this.animationWriter) { try { this.animationWriter.pauseAnimation(); } catch(e){} this.animationWriter = null; }
                 const target = document.getElementById('animationTarget');
                 if (target) target.innerHTML = '';
             }
 
-            animateCharacter() {
-                if (this.animationWriter) {
-                    this.animationWriter.animateCharacter();
-                }
+            animateCharacter() { if (this.animationWriter) this.animationWriter.animateCharacter(); }
+
+            async playCurrentAudio() {
+                if (this.activeData.length === 0) return;
+                const card = this.activeData[this.currentCardIndex];
+                try {
+                    if (this.currentAudio) { this.currentAudio.pause(); this.currentAudio.currentTime = 0; }
+                    this.currentAudio = new Audio(card.audioPath);
+                    this.currentAudio.play().catch(() => this.showFeedback("Lỗi âm thanh", "bg-red-100 text-red-600"));
+                } catch { this.showFeedback("Lỗi file", "bg-red-100 text-red-600"); }
             }
 
             showFeedback(message, classes) {
@@ -698,16 +1106,39 @@
                 fb.innerText = message;
                 fb.className = `fixed top-20 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-lg text-sm font-bold transition-all duration-300 z-[60] ${classes}`;
                 fb.classList.remove('opacity-0', 'translate-y-[-20px]');
-                
-                setTimeout(() => {
-                    fb.classList.add('opacity-0', 'translate-y-[-20px]');
-                }, 2000);
+                setTimeout(() => fb.classList.add('opacity-0', 'translate-y-[-20px]'), 2000);
+            }
+
+            setLoadingState(loading) {
+                document.getElementById('loadingIndicator').style.display = loading ? 'flex' : 'none';
+                // Toggle between main content and loading
+                if (loading) {
+                    document.getElementById('flashcardView').classList.add('hidden');
+                    document.getElementById('listView').classList.add('hidden');
+                    document.getElementById('quizView').classList.add('hidden');
+                } else {
+                    // Restore current view
+                    this.switchTab(this.currentView);
+                }
+            }
+            
+            showError(msg) {
+                const el = document.getElementById('errorMessage');
+                el.innerText = msg; el.classList.remove('hidden');
+            }
+            
+            handleTouchStart(e) { if (!this.isAnimationModalOpen) this.startX = e.touches[0].clientX; this.isSwiping = false; }
+            handleTouchMove(e) { if (Math.abs(e.touches[0].clientX - this.startX) > 10) this.isSwiping = true; }
+            handleTouchEnd(e) {
+                if (!this.isSwiping) return;
+                const delta = e.changedTouches[0].clientX - this.startX;
+                if (delta > this.swipeThreshold) this.previousCard();
+                else if (delta < -this.swipeThreshold) this.nextCard();
+                this.isSwiping = false;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            new ChineseFlashcardApp();
-        });
+        const app = new ChineseFlashcardApp();
     </script>
 </body>
 </html>
