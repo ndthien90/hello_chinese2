@@ -88,7 +88,8 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative">
+<!-- THÊM style background-color ĐỂ SỬA LỖI NHÁY MÀU -->
+<body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative" style="background-color: #f9fafb;">
 
     <!-- Top Navigation Bar -->
     <div class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
@@ -102,15 +103,16 @@
     </div>
 
     <!-- View Toggles (Tabs) -->
-    <div class="px-4 mt-3 sticky top-[60px] z-20 bg-gray-50 pb-2">
-        <div class="bg-gray-200 p-1 rounded-xl flex text-sm font-bold">
+    <div class="px-4 mt-3 sticky top-[60px] z-20 bg-gray-50 pb-2" style="background-color: #f9fafb;">
+        <div class="bg-gray-200 p-1 rounded-xl flex text-sm font-bold" style="background-color: #e5e7eb;">
+            <!-- SỬA LỖI: Thêm bg-transparent cho các nút chưa active -->
             <button id="tabFlashcard" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('flashcard')">
-                <i class="fas fa-clone mr-1"></i> Thẻ
+                <i class="fas fa-clone mr-1"></i> Flashcard
             </button>
-            <button id="tabList" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('list')">
+            <button id="tabList" class="flex-1 py-2 rounded-lg bg-transparent text-gray-500 hover:text-gray-700 transition-all duration-300" onclick="app.switchTab('list')">
                 <i class="fas fa-list mr-1"></i> Danh sách
             </button>
-            <button id="tabQuiz" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('quiz')">
+            <button id="tabQuiz" class="flex-1 py-2 rounded-lg bg-transparent text-gray-500 hover:text-gray-700 transition-all duration-300" onclick="app.switchTab('quiz')">
                 <i class="fas fa-check-square mr-1"></i> Kiểm tra
             </button>
         </div>
@@ -168,7 +170,7 @@
         <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-center text-sm mb-4"></div>
 
         <!-- VIEW 1: FLASHCARD AREA -->
-        <div id="flashcardView" class="flex-1 flex flex-col justify-center relative perspective-1000 min-h-[500px]">
+        <div id="flashcardView" class="flex-1 flex flex-col justify-center relative perspective-1000 min-h-[360px]">
             
             <!-- Empty State for Study Mode -->
             <div id="emptyState" class="hidden w-full h-full absolute bg-white rounded-3xl border-2 border-dashed border-green-300 flex flex-col items-center justify-center z-30 p-6 text-center">
@@ -178,7 +180,7 @@
             </div>
 
             <!-- Card Container -->
-            <div id="flashcard" class="flashcard w-full h-[360px] relative cursor-pointer group mb-16">
+            <div id="flashcard" class="flashcard w-full h-[360px] relative cursor-pointer group mb-4">
                 <div class="flashcard-inner w-full h-full transform-style-3d relative">
                     
                     <!-- FRONT SIDE -->
@@ -228,6 +230,7 @@
                                 <h3 class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-wider text-left">Ví dụ:</h3>
                                 <div id="example" class="text-left space-y-1">
                                     <!-- Example injected via JS -->
+                                    <p class="text-gray-400 text-sm">Chưa có ví dụ</p>
                                 </div>
                             </div>
                         </div>
@@ -235,8 +238,8 @@
                 </div>
             </div>
 
-            <!-- Unified Bottom Controls -->
-            <div class="absolute bottom-6 left-0 w-full flex justify-center items-center gap-6 px-4 z-40 pointer-events-none">
+            <!-- Unified Bottom Controls (4 Buttons Row) -->
+            <div class="w-full flex justify-center items-center gap-6 px-4 z-40 mb-4">
                 <!-- Prev -->
                 <button id="prevBtn" class="pointer-events-auto w-12 h-12 rounded-full bg-white text-gray-400 shadow-md border border-gray-100 hover:text-blue-500 hover:border-blue-200 transition flex items-center justify-center transform active:scale-95">
                     <i class="fas fa-chevron-left text-lg"></i>
@@ -430,7 +433,7 @@
             constructor() {
                 // State
                 this.lessonData = [];
-                this.activeData = []; 
+                this.activeData = []; // Data after filtering (Study Mode)
                 this.memorizedWords = new Set();
                 
                 this.currentCardIndex = 0;
@@ -438,7 +441,7 @@
                 this.isStudyWeakMode = false;
                 this.currentPage = 1;
                 this.itemsPerPage = 50;
-                this.currentView = 'flashcard'; 
+                this.currentView = 'flashcard'; // flashcard, list, quiz
 
                 // Quiz State
                 this.quizQuestions = [];
@@ -507,6 +510,7 @@
 
                 document.getElementById('prevBtn').addEventListener('click', () => this.previousCard());
                 document.getElementById('nextBtn').addEventListener('click', () => this.nextCard());
+                // Shuffle logic now on bottom bar
                 document.getElementById('shuffleBtn').addEventListener('click', (e) => { e.stopPropagation(); this.shuffleDeck(); });
                 
                 // Flip & Touch
@@ -543,7 +547,7 @@
                 document.getElementById('animateBtn').addEventListener('click', () => this.animateCharacter());
             }
 
-            // --- DATA LOGIC (FILE FETCHING) ---
+            // --- DATA LOGIC ---
 
             async loadLesson(lessonNumber) {
                 this.setLoadingState(true);
@@ -607,7 +611,7 @@
                 document.getElementById('flashcardView').classList.add('hidden');
                 document.getElementById('listView').classList.add('hidden');
                 document.getElementById('quizView').classList.add('hidden');
-                document.getElementById('quizView').classList.remove('flex');
+                document.getElementById('quizView').classList.remove('flex'); // remove flex styling
 
                 // Reset Tab Styles
                 ['tabFlashcard', 'tabList', 'tabQuiz'].forEach(id => {
@@ -630,16 +634,21 @@
                     document.getElementById('flashcardView').classList.remove('hidden');
                     studyControl.classList.remove('hidden');
                     progressBar.classList.remove('hidden');
-                    this.updateActiveData(); 
+                    this.updateActiveData(); // Refresh to check if marks changed
                 } else if (tabName === 'list') {
                     document.getElementById('listView').classList.remove('hidden');
-                    studyControl.classList.add('hidden');
+                    studyControl.classList.add('hidden'); // List always shows all? Or follows filter? Let's follow filter for consistency or just show all. User requested list view has checkboxes. Usually list view shows ALL for management.
+                    // Let's force LIST view to show ALL items of lesson to allow checking/unchecking freely.
+                    // But if user requested study mode filter on list, we can support it. 
+                    // For now, let's keep List View showing ALL lesson data to serve as "Master List".
+                    // Actually, re-reading prompt: "trong danh sách thì có thể tích vào từ đã thuộc".
+                    // Let's show full list but update checks.
                     progressBar.classList.add('hidden');
                     this.renderListView();
                 } else if (tabName === 'quiz') {
                     document.getElementById('quizView').classList.remove('hidden');
                     document.getElementById('quizView').classList.add('flex');
-                    studyControl.classList.add('hidden');
+                    studyControl.classList.add('hidden'); // Quiz has its own filter logic display or implied
                     progressBar.classList.add('hidden');
                     this.resetQuizView();
                 }
@@ -678,12 +687,13 @@
                 const markBtn = document.getElementById('markMemorizedBtn');
                 const isMem = this.memorizedWords.has(card.character);
                 
-                markBtn.className = "pointer-events-auto w-12 h-12 rounded-full shadow-md flex items-center justify-center transition transform active:scale-95";
+                // Base classes without positioning
+                const baseClasses = "w-12 h-12 rounded-full shadow-md flex items-center justify-center transition active:scale-95";
                 
                 if (isMem) {
-                    markBtn.classList.add('bg-green-500', 'text-white', 'border', 'border-green-500');
+                    markBtn.className = `${baseClasses} border border-green-500 bg-green-500 text-white`;
                 } else {
-                    markBtn.classList.add('bg-white', 'text-gray-300', 'border-2', 'border-gray-100', 'hover:bg-green-50', 'hover:text-green-500', 'hover:border-green-200');
+                    markBtn.className = `${baseClasses} border-2 border-gray-100 bg-white text-gray-300 hover:bg-green-50 hover:text-green-500 hover:border-green-200`;
                 }
 
                 // Progress
@@ -706,10 +716,11 @@
                 }
                 this.saveMemorized();
                 
+                // If in Study Mode, remove card from view
                 if (this.isStudyWeakMode) {
-                    this.updateActiveData(); 
+                    this.updateActiveData(); // This will refresh deck and index
                 } else {
-                    this.updateFlashcardUI();
+                    this.updateFlashcardUI(); // Just update button state
                 }
             }
 
@@ -746,6 +757,7 @@
                 const container = document.getElementById('vocabularyListContainer');
                 container.innerHTML = '';
                 
+                // Show ALL lesson data in List View for management
                 const listData = this.lessonData;
                 
                 if (listData.length === 0) {
@@ -754,9 +766,11 @@
                     return;
                 }
 
+                // Check Master Checkbox
                 const allMemorized = listData.length > 0 && listData.every(item => this.memorizedWords.has(item.character));
                 document.getElementById('selectAllCheckbox').checked = allMemorized;
 
+                // Pagination
                 const totalPages = Math.ceil(listData.length / this.itemsPerPage);
                 if (this.currentPage > totalPages) this.currentPage = totalPages;
                 if (this.currentPage < 1) this.currentPage = 1;
@@ -819,7 +833,7 @@
                 if (this.memorizedWords.has(char)) this.memorizedWords.delete(char);
                 else this.memorizedWords.add(char);
                 this.saveMemorized();
-                this.renderListView();
+                this.renderListView(); // Re-render to update UI (backgrounds etc)
             }
 
             toggleSelectAll(checked) {
@@ -832,8 +846,11 @@
             }
 
             openWriterFromList(char) {
+                // Temporary mock index for animation modal to work
                 const item = this.lessonData.find(i => i.character === char);
                 if (item) {
+                    // Update internal pointer temporarily just for data retrieval in modal
+                    this.currentAnimationItem = item; 
                     this.openAnimationModal(item);
                 }
             }
@@ -842,6 +859,7 @@
             updateQuizCountVisuals(count) {
                 document.querySelectorAll('.quiz-count-btn').forEach(btn => {
                     btn.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
+                    // Check logic for 'all' vs numbers
                     if (btn.getAttribute('data-count') == count) {
                         btn.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-600');
                     }
@@ -849,7 +867,9 @@
             }
 
             startQuiz() {
+                // Read local checkbox state for Quiz
                 const onlyWeak = document.getElementById('quizOnlyWeak').checked;
+                
                 let pool = onlyWeak ? this.lessonData.filter(i => !this.memorizedWords.has(i.character)) : [...this.lessonData];
 
                 if (pool.length < 4) {
@@ -857,13 +877,16 @@
                     return;
                 }
 
+                // Shuffle
                 pool.sort(() => 0.5 - Math.random());
 
+                // Limit
                 let limit = pool.length;
                 if (this.selectedQuizCount !== 'all') {
                     limit = Math.min(this.selectedQuizCount, pool.length);
                 }
 
+                // Generate
                 this.quizQuestions = [];
                 for(let i=0; i<limit; i++) {
                     const correct = pool[i];
@@ -877,6 +900,7 @@
                     this.quizQuestions.push({ question: correct, options, type });
                 }
 
+                // Setup UI
                 this.quizCurrentIndex = 0;
                 this.quizScore = 0;
                 
@@ -895,19 +919,23 @@
                 this.isQuizAnswering = false;
                 const q = this.quizQuestions[this.quizCurrentIndex];
                 
+                // Update Progress
                 document.getElementById('quizProgressText').textContent = `${this.quizCurrentIndex + 1}/${this.quizQuestions.length}`;
                 document.getElementById('quizScoreText').textContent = this.quizScore;
                 document.getElementById('quizProgressBar').style.width = `${(this.quizCurrentIndex / this.quizQuestions.length) * 100}%`;
 
+                // Question Label & Text
                 const label = document.getElementById('quizQuestionLabel');
                 label.textContent = q.type === 'pinyin' ? "Chọn Pinyin đúng" : "Chọn Nghĩa tiếng Việt";
                 
                 document.getElementById('quizQuestionHanzi').textContent = q.question.character;
                 
+                // Hide Reveal
                 const reveal = document.getElementById('quizQuestionReveal');
                 reveal.textContent = '';
                 reveal.classList.add('opacity-0');
 
+                // Options
                 const optionsDiv = document.getElementById('quizOptions');
                 optionsDiv.innerHTML = '';
                 
@@ -931,6 +959,7 @@
 
                 const isCorrect = selected.character === q.question.character;
                 
+                // Reveal Info
                 const reveal = document.getElementById('quizQuestionReveal');
                 reveal.textContent = q.type === 'pinyin' ? q.question.meaning : q.question.pinyin;
                 reveal.classList.remove('opacity-0');
@@ -941,9 +970,11 @@
                     document.getElementById('quizScoreText').textContent = this.quizScore;
                 } else {
                     btn.classList.add('wrong');
+                    // Find correct button
                     const optionsDiv = document.getElementById('quizOptions');
                     const targetText = q.type === 'pinyin' ? q.question.pinyin : q.question.meaning;
                     
+                    // Simple text match might be risky if meanings are identical, but rare in this dataset
                     Array.from(optionsDiv.children).forEach(b => {
                         if (b.innerText.includes(targetText)) b.classList.add('correct');
                     });
@@ -971,6 +1002,7 @@
                 const circle = document.getElementById('finalScoreCircle');
                 circle.textContent = `${percent}%`;
                 
+                // Colorize
                 circle.className = `w-32 h-32 rounded-full bg-white border-8 flex items-center justify-center text-4xl font-bold shadow-sm mb-6 ${
                     percent >= 80 ? 'border-green-100 text-green-600' : 
                     percent >= 50 ? 'border-yellow-100 text-yellow-600' : 'border-red-100 text-red-600'
@@ -988,7 +1020,7 @@
                 this.updateQuizCountVisuals(this.selectedQuizCount);
             }
 
-            // --- ANIMATION & MEDIA ---
+            // --- ANIMATION & MEDIA (Reused) ---
             openAnimationModal(specificItem = null) {
                 const item = specificItem || this.activeData[this.currentCardIndex];
                 if (!item) return;
@@ -1011,6 +1043,8 @@
                 }, 50);
             }
 
+            // ... (Rest of Animation/Audio/Touch Logic similar to before) ...
+            
             closeAnimationModal() {
                 const modal = document.getElementById('animationModal');
                 modal.classList.add('opacity-0');
@@ -1111,22 +1145,12 @@
 
             setLoadingState(loading) {
                 document.getElementById('loadingIndicator').style.display = loading ? 'flex' : 'none';
-                // Toggle between main content and loading
-                if (loading) {
-                    document.getElementById('flashcardView').classList.add('hidden');
-                    document.getElementById('listView').classList.add('hidden');
-                    document.getElementById('quizView').classList.add('hidden');
-                } else {
-                    // Restore current view
-                    this.switchTab(this.currentView);
-                }
+                document.getElementById('mainContainer').style.display = loading ? 'none' : 'flex';
             }
-            
             showError(msg) {
                 const el = document.getElementById('errorMessage');
                 el.innerText = msg; el.classList.remove('hidden');
             }
-            
             handleTouchStart(e) { if (!this.isAnimationModalOpen) this.startX = e.touches[0].clientX; this.isSwiping = false; }
             handleTouchMove(e) { if (Math.abs(e.touches[0].clientX - this.startX) > 10) this.isSwiping = true; }
             handleTouchEnd(e) {
