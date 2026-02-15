@@ -1,0 +1,5001 @@
+=== HSK1 ===
+爱|ài|yêu
+八|bā|tám
+爸爸|bàba|bố
+杯子|bēizi|cốc, chén, ly, tách
+北京|Běijīng|Bắc Kinh
+本|běn|quyển, gốc, vốn, thân
+不客气|búkèqi|không có gì
+不|bù|không, chưa
+菜|cài|món ăn, thức ăn
+茶|chá|trà
+吃|chī|ăn
+出租车|chūzūchē|taxi
+打电话|dǎdiànhuà|gọi điện thoại
+大|dà|to, lớn
+的|de|của
+点|diǎn|điểm, giờ
+电脑|diànnǎo|máy vi tính
+电视|diànshì|truyền hình, tivi
+电影|diànyǐng|phim
+东西|dōngxi|đồ
+都|dōu|đều
+读|dú|đọc
+对不起|duìbuqǐ|xin lỗi
+多|duō|nhiều
+多少|duōshao|bao nhiêu, mấy
+儿子|érzi|con trai
+二|èr|hai
+饭店|fàndiàn|nhà hàng, khách
+飞机|fēijī|máy bay
+高兴|gāoxìng|vui vẻ, vui mừng
+个|gè|cái
+工作|gōngzuò|làm việc
+狗|gǒu|con chó
+汉语|hànyǔ|tiếng Hán
+好|hǎo|tốt, hay
+喝|hē|uống
+和|hé|và, với
+很|hěn|rất, lắm
+后面|hòumiàn|phía sau, mặt sau
+回|huí|lần, về, quay lại
+会|huì|hội, hợp
+火车站|huǒchēzhàn|nhà ga
+几|jǐ|mấy, vài
+岁|suì|tuổi
+家|jiā|nhà, gia đình
+叫|jiào|kêu, gọi
+今天|jīntiān|hôm nay
+九|jiǔ|chín
+开|kāi|mở, nở
+看|kàn|nhìn, xem
+看见|kànjiàn|nhìn thấy
+块|kuài|miếng, viên, bánh
+来|lái|đến, tới
+老师|lǎoshī|giáo viên
+了|le|rồi
+冷|lěng|lạnh
+里|lǐ|trong
+零|líng|số không
+六|liù|sáu
+妈妈|māma|mẹ
+吗|ma|à, ư
+买|mǎi|mua
+猫|māo|con mèo
+没|méi|chưa, không
+没关系|méiguānxi|không sao
+米饭|mǐfàn|cơm
+名字|míngzi|tên
+明天|míngtiān|ngày mai
+哪儿|nǎr|đâu, chỗ nào
+那|nà|nào
+呢|ne|thế, nhỉ, vậy, nhé, cơ
+能|néng|có thể
+你|nǐ|bạn, anh, chị, ông, bà
+你们|nǐmen|các bạn
+年|nián|năm
+女儿|nvér|con gái
+朋友|péngyou|bạn, bạn bè
+苹果|píngguǒ|quả táo
+七|qī|bảy
+钱|qián|tiền
+前面|qiánmiàn|phía trước
+请|qǐng|xin, mời
+去|qù|đi
+热|rè|nhiệt, nóng
+人|rén|người
+认识|rènshi|biết, nhận biết
+日|rì|ngày
+三|sān|ba
+商店|shāngdiàn|cửa hàng
+上|shàng|lên, đi, trên
+上午|shàngwǔ|buổi sáng
+少|shǎo|ít, trẻ
+什么|shénme|gì, cái gì
+十|shí|mười
+时候|shíhòu|lúc, khi
+是|shì|là
+书|shū|sách
+谁|sheí|ai
+水|shuǐ|nước
+水果|shuǐguǒ|hoa quả
+睡觉|shuìjiào|ngủ
+说话|shuōhuà|nói ra, nói chuyện
+四|sì|bốn
+他|tā|anh ấy, ông ấy
+她|tā|chị ấy, bà ấy
+他们|tāmen|bọn họ (chỉ đàn ông)
+她们|tāmen|bọn họ (chỉ phụ nữ)
+太|tài|cực, nhất, quá, lắm
+天气|tiānqì|thời tiết
+听|tīng|nghe
+同学|tóngxué|cùng học, bạn học
+我|wǒ|tôi, tớ, tao, ta
+我们|wǒmen|chúng tôi, chúng ta
+五|wǔ|năm
+喜欢|xǐhuan|thích
+下|xià|dưới, sau, thấp
+下午|xiàwǔ|buổi trưa
+下雨|xiàyǔ|trời mưa
+先生|xiānsheng|ngài, tiên sinh
+现在|xiànzài|bây giờ
+想|xiǎng|muốn
+小|xiǎo|nhỏ, bé
+小姐|xiǎojiě|tiểu thư, cô
+些|xiē|một ít, một vài
+写|xiě|viết
+谢谢|xièxie|cảm ơn
+星期|xīngqī|ngày thứ
+学生|xuéshēng|học sinh
+学习|xuéxí|học
+学校|xuéxiào|trường học
+一|yī|một
+衣服|yīfu|quần áo
+医生|yīshēng|bác sĩ
+医院|yīyuàn|bệnh viện
+椅子|yǐzi|ghế
+有|yǒu|có
+月|yuè|tháng, trăng
+在|zài|tồn tại, ở, tại
+再见|zàijiàn|tạm biệt
+怎么|zěnme|thế nào, sao, làm sao
+怎么样|zěnmeyàng|thế nào
+这|zhè|đây, này
+中国|Zhōngguó|Trung Quốc
+中午|zhōngwǔ|trưa
+住|zhù|ở, cư trú, dừng
+桌子|zhuōzi|bàn
+字|zì|chữ
+昨天|zuótiān|hôm qua
+做|zuò|làm
+坐|zuò|ngồi
+
+=== HSK2 ===
+吧|ba|nhé, nhá
+白|bái|trắng
+百|bǎi|trăm
+帮助|bāngzhù|cứu, giúp, giúp đỡ
+报纸|bàozhǐ|báo chí
+比|bǐ|so với…
+别|bié|khác, đừng, chia lìa
+长|cháng|dài, lớn
+唱歌|chànggē|hát
+出|chū|ra, xuất, đến
+穿|chuān|mặc, đội
+船|chuán|thuyền, tàu
+次|cì|lần
+从|cóng|từ, theo
+错|cuò|sai
+打篮球|dǎlánqiú|chơi bóng rổ
+大家|dàjiā|mọi người
+但是|dànshì|nhưng
+到|dào|đi đến
+地|de|trợ từ kết cấu
+得|de|được, mắc (bệnh)
+等|děng|chờ, đợi
+弟弟|dìdi|em trai
+第一|dìyī|thứ nhất
+对|duì|đối với
+房间|fángjiān|buồng, phòng
+非常|fēicháng|rất, đặc biệt
+分钟|fēnzhōng|phút
+服务员|fúwùyuán|phục vụ bàn
+高|gāo|cao
+告诉|gàosu|bảo, nói
+哥哥|gēge|anh trai
+给|gěi|đưa cho
+公共汽车|gōnggòngqìchē|xe bus
+公斤|gōngjīn|cân, ký
+公司|gōngsī|công ty
+贵|guì|đắt, quý
+过|guò|qua
+还|hái|vẫn (còn)
+孩子|háizi|trẻ em, trẻ con, em bé, con
+好吃|hǎochī|ngon
+号|hào|số, cỡ
+黑|hēi|màu đen
+红|hóng|đỏ
+欢迎|huānyíng|chào mừng, hoan nghênh
+回答|huídá|trả lời
+机场|jīchǎng|sân bay
+鸡蛋|jīdàn|trứng gà
+件|jiàn|chiếc, cái kiện
+教室|jiàoshì|lớp, phòng học
+姐姐|jiějie|chị gái
+介绍|jièshào|giới thiệu
+进|jìn|tiến, vào
+近|jìn|gần
+就|jiù|thì, liền, ngay
+觉得|juéde|cảm thấy, thấy
+咖啡|kāfēi|cà phê
+开始|kāishǐ|bắt đầu
+考试|kǎoshì|thi cử
+可能|kěnéng|có thể, có lẽ
+可以|kěyǐ|có thể
+课|kè|bài học
+快|kuài|nhanh
+快乐|kuàilè|hạnh phúc
+累|lèi|mệt
+离|lí|xa rời
+两|liǎng|hai
+路|lù|đường
+旅游|lǚyóu|du lịch
+慢|màn|chậm, tư từ
+忙|máng|bận
+每|měi|mỗi
+妹妹|mèimei|em gái
+男人|nánrén|con trai, đàn ông
+您|nín|ngài, ông
+牛奶|niúnǎi|sữa bò
+女人|nǚrén|con gái, phụ nữ
+旁边|pángbiān|bên cạnh
+跑步|pǎobù|chạy bộ
+便宜|piányi|rẻ
+票|piào|vé
+漂亮|piàoliang|xinh, đẹp
+妻子|qīzi|vợ
+起床|qǐchuáng|ngủ dậy
+千|qiān|nghìn, ngàn
+晴|qíng|trời nắng
+去年|qùnián|năm ngoái
+让|ràng|nhường, mới
+上班|shàngbān|đi làm
+身体|shēntǐ|cơ thể, thân thể
+生病|shēngbìng|ốm, sinh bệnh
+生日|shēngrì|sinh nhật
+时间|shíjiān|thời gian
+事情|shìqing|sự tình, sự việc
+手表|shǒubiǎo|đồng hồ
+送|sòng|tặng, đưa, tiễn
+所以|suǒyǐ|cho nên
+它|tā|nó
+踢足球|tīzúqiú|đá bóng
+题|tí|đề mục, đề
+跳舞|tiàowǔ|múa, nhảy, khiêu vũ
+外|wài|ngoài
+玩|wán|chơi
+完|wán|hết, xong
+晚上|wǎnshang|buổi tối
+喂|wèi|alô
+为什么|wèishénme|vì sao, tại sao
+问|wèn|hỏi
+问题|wèntí|vấn đề
+西瓜|xīguā|quả dưa hấu
+希望|xīwàng|hy vọng, mong muốn
+洗|xǐ|rửa, giặt, tẩy
+向|xiàng|hướng, bênh vực
+小时|xiǎoshí|tiếng, giờ
+笑|xiào|cười
+新|xīn|mới
+姓|xìng|họ (tên)
+休息|xiūxi|nghỉ, nghỉ ngơi
+雪|xuě|tuyết
+颜色|yánsè|màu sắc
+眼睛|yǎnjing|mắt
+羊肉|yángròu|thịt dê
+药|yào|thuốc
+要|yào|cần, sắp, muốn, phải
+也|yě|cũng
+已经|yǐjīng|đã, rồi
+一起|yīqǐ|cùng
+意思|yìsi|ý nghĩa
+阴|yīn|râm, trời râm
+因为|yīnwèi|bởi vì
+游泳|yóuyǒng|bơi
+右边|yòubian|bên phải
+鱼|yú|con cá
+元|yuán|đồng
+远|yuǎn|xa
+运动|yùndòng|vận động, thể thao
+再|zài|nữa, hãy, lại, tiếp tục
+早上|zǎoshang|buổi sáng
+张|zhāng|mở ra, trang, bức
+丈夫|zhàngfu|chồng
+找|zhǎo|tìm
+着|zhe|đang, đây, chứ nhé
+真|zhēn|thật, chính xác
+正在|zhèngzài|đang
+知道|zhīdào|biết, hiểu rõ
+准备|zhǔnbèi|chuẩn bị
+自行车|zìxíngchē|xe đạp
+走|zǒu|đi, đi bộ
+最|zuì|nhất
+左边|zuǒbian|bên trái
+
+=== HSK3 ===
+阿姨|āyí|dì
+矮|ǎi|thấp
+爱好|àihào|sở thích
+安静|ānjìng|yên tĩnh
+把|bǎ|cái (lượng từ cho vật có tay cầm)
+半|bàn|nửa
+班|bān|lớp
+搬|bān|chuyển, bê
+办法|bànfǎ|cách làm
+办公室|bàngōngshì|văn phòng
+帮忙|bāngmáng|giúp đỡ
+饱|bǎo|no
+包|bāo|gói
+被|bèi|bị, được
+北方|běifang|miền Bắc
+笔记本|bǐjìběn|máy tính xách tay
+比较|bǐjiào|tương đối, khá
+比赛|bǐsài|thi đấu, trận đấu
+必须|bìxū|nhất thiết
+鼻子|bízi|mũi
+变化|biànhuà|thay đổi
+别人|biérén|người khác
+冰箱|bīngxiāng|tủ lạnh
+不但……而且……|bùdàn……érqiě……|không những……mà còn
+菜单|càidān|thực đơn
+参加|cānjiā|tham gia
+草|cǎo|cỏ
+层|céng|tầng
+差|chā|kém
+超市|chāoshì|siêu thị
+衬衫|chènshān|áo sơ mi
+成绩|chéngjì|thành tích
+城市|chéngshì|thành phố
+迟到|chídào|đến muộn
+除了|chúle|trừ…..ra
+船|chuán|thuyền
+春|chūn|xuân
+词典|cídiǎn|từ điển
+聪明|cōngmíng|thông minh
+打扫|dǎsǎo|quét dọn
+打算|dǎsuàn|dự định
+带|dài|mang theo
+蛋糕|dàngāo|bánh ga tô
+担心|dānxīn|lo lắng
+当然|dāngrán|đương nhiên
+灯|dēng|đèn
+地|dì|trợ từ
+地方|dìfāng|nơi, địa phương
+地铁|dìtiě|tàu điện ngầm
+地图|dìtú|bản đồ
+电梯|diàntī|thang máy
+电子邮件|diànzǐyóujiàn|hòm thư điện tử
+东|dōng|phía đông
+冬|dōng|mùa đông
+动物|dòngwù|động vật
+段|duàn|đoạn
+短|duǎn|ngắn
+锻炼|duànliàn|rèn luyện
+多么|duōme|biết bao
+饿|è|đói
+耳朵|ěrduo|tai
+发|fā|phát
+发烧|fāshāo|sốt
+发现|fāxiàn|phát hiện
+放|fàng|đặt, để
+方便|fāngbiàn|tiện lợi
+放心|fàngxīn|yên tâm
+分|fēn|phút
+附近|fùjìn|phụ cận
+复习|fùxí|ôn tập
+干净|gānjìng|sạch sẽ
+感冒|gǎnmào|cúm
+感兴趣|gǎnxìngqù|có hứng thú
+刚才|gāngcái|lúc nãy
+个子|gèzi|dáng dấp
+跟|gēn|cùng với
+根据|gēnjù|căn cứ
+更|gèng|càng
+公斤|gōngjīn|kg
+公园|gōngyuán|công viên
+故事|gùshi|câu chuyện
+刮风|guāfēng|gió thổi
+关|guān|đóng, tắt
+关系|guānxì|quan hệ
+关心|guānxīn|quan tâm
+关于|guānyú|về….
+过|guò|đã từng
+国家|guójiā|nước, quốc gia
+过去|guòqù|quá khứ, qua đó
+还|hái|vẫn
+害怕|hàipà|sợ hãi
+还是|háishì|hay là, vẫn
+黑板|hēibǎn|bảng đen
+后来|hòulái|sau này
+护照|hùzhào|hộ chiếu
+画|huà|tranh
+花|huā|tiêu (động từ)
+花|huā|hoa (danh từ)
+坏|huài|xấu, hỏng
+换|huàn|đổi
+环境|huánjìng|môi trường
+欢迎|huānyíng|hoan nghênh
+黄河|huánghé|Hoàng Hà
+回答|huídá|trả lời
+会议|huìyì|hội nghị, họp
+或者|huòzhě|hoặc
+极|jí|cực
+记得|jìdé|nhớ
+几乎|jīhū|dường như, gần như
+机会|jīhuì|cơ hội
+季节|jìjié|mùa
+检查|jiǎnchá|kiểm tra
+简单|jiǎndān|đơn giản
+健康|jiànkāng|khỏe mạnh
+见面|jiànmiàn|gặp mặt
+讲|jiǎng|giảng, kể
+教|jiào|dạy
+脚|jiǎo|chân
+角|jiǎo|hào
+借|jiè|mượn
+接|jiē|tiếp, đón
+街道|jiēdào|đường phố
+结婚|jiéhūn|kết hôn
+解决|jiějué|giải quyết
+节目|jiémù|tiết mục
+节日|jiérì|ngày lễ
+结束|jiéshù|kết thúc
+经常|jīngcháng|thường xuyên
+经过|jīngguò|đi qua, trải qua
+经理|jīnglǐ|giám đốc
+旧|jiù|cũ
+久|jiǔ|lâu
+句子|jùzi|câu
+决定|juédìng|quyết định
+刻|kè|khắc
+渴|kě|khát
+可爱|kěài|đáng yêu
+客人|kèrén|khách
+空调|kōngtiáo|điều hòa
+口|kǒu|miệng
+哭|kū|khóc
+裤子|kùzi|quần
+筷子|kuàizi|đũa
+蓝|lán|màu xanh lam
+老|lǎo|già
+离开|líkāi|rời đi
+历史|lìshǐ|lịch sử
+礼物|lǐwù|quà
+脸|liǎn|khuôn mặt
+练习|liànxí|bài tập
+辆|liàng|cái (lượng từ dành cho xe)
+了解|liǎojiě|tìm hiểu
+聊天|liáotiān|buôn chuyện
+邻居|línjū|hàng xóm
+留学|liúxué|du học
+楼|lóu|tòa nhà
+绿|lǜ|màu xanh lục
+马|mǎ|ngựa
+马上|mǎshàng|ngay lập tức
+满意|mǎnyì|mãn nguyện, hài lòng
+帽子|màozi|mũ
+米|mǐ|mét
+面包|miànbāo|bánh mì
+明白|míngbái|hiểu
+拿|ná|cầm
+奶奶|nǎinǎi|bà nội
+南|nán|phía nam
+难|nán|khó
+难过|nánguò|buồn
+年级|niánjí|năm thứ
+年轻|niánqīng|trẻ trung
+鸟|niǎo|chim
+努力|nǔlì|nỗ lực
+爬山|páshān|leo núi
+盘子|pánzi|cái đĩa
+胖|pàng|béo
+啤酒|píjiǔ|bia
+皮鞋|píxié|giày da
+瓶子|píngzi|cái bình
+骑|qí|cưỡi, đi, lái (xe đạp, xe máy)
+起飞|qǐfēi|cất cánh
+奇怪|qíguài|kì quặc
+起来|qǐlái|thức dậy
+其实|qíshí|thực ra
+其他|qítā|khác
+清楚|qīngchǔ|rõ ràng
+请假|qǐngjià|xin nghỉ
+秋|qiū|mùa thu
+裙子|qúnzi|váy
+然后|ránhòu|sau đó
+热情|rèqíng|nhiệt tình
+认为|rènwéi|cho rằng
+认真|rènzhēn|chăm chỉ
+容易|róngyì|dễ dàng
+如果|rúguǒ|nếu
+伞|sǎn|ô
+上网|shàngwǎng|lên mạng
+生气|shēngqì|tức giận
+声音|shēngyīn|âm thanh
+试|shì|thử
+世界|shìjiè|thế giới
+瘦|shòu|gầy
+树|shù|cây
+舒服|shūfu|thoải mái, dễ chịu
+叔叔|shūshu|chú
+数学|shùxué|toán học
+刷牙|shuāyá|đánh răng
+双|shuāng|đôi
+水平|shuǐpíng|trình độ
+司机|sījī|lái xe
+太阳|tàiyáng|mặt trời
+特别|tèbié|đặc biệt
+疼|téng|đau
+提高|tígāo|nâng cao
+体育|tǐyù|thể dục
+甜|tián|ngọt
+条|tiáo|con, chiếc
+同事|tóngshì|đồng nghiệp
+同意|tóngyì|đồng ý
+头发|tóufà|tóc
+突然|tūrán|đột nhiên
+图书馆|túshūguǎn|thư viện
+腿|tuǐ|chân
+万|wàn|vạn
+碗|wǎn|bát
+完成|wánchéng|hoàn thành
+忘记|wàngjì|quên
+为|wéi|vì
+位|wèi|vị
+为了|wèile|để
+文化|wénhuà|văn hóa
+西|xī|phía tây
+习惯|xíguàn|quen, thói quen
+洗手间|xǐshǒujiān|phòng vệ sinh
+洗澡|xǐzǎo|tắm rửa
+夏|xià|mùa hè
+先|xiān|trước tiên
+像|xiàng|giống
+向|xiàng|hướng về
+香蕉|xiāngjiāo|chuối
+相信|xiāngxìn|tin tưởng
+小心|xiǎoxīn|cẩn thận
+校长|xiàozhǎng|hiệu trưởng
+新闻|xīnwén|tin tức
+新鲜|xīnxiān|tươi mới
+信用卡|xìnyòngkǎ|thẻ tín dụng
+行李箱|xínglǐxiāng|va li
+熊猫|xióngmāo|gấu trúc
+需要|xūyào|cần thiết
+选择|xuǎnzé|chọn lựa
+要求|yāoqiú|yêu cầu
+爷爷|yéye|ông nội
+一般|yībān|bình thường
+一边|yībiān|một bên
+一定|yīdìng|nhất định
+一共|yīgòng|tổng cộng
+一会儿|yíhuìr|một lúc
+以前|yǐqián|trước đây
+一样|yíyàng|giống nhau
+一直|yìzhí|cứ
+银行|yínháng|ngân hàng
+饮料|yǐnliào|đồ uống
+音乐|yīnyuè|âm nhạc
+应该|yīnggāi|nên
+影响|yǐngxiǎng|ảnh hưởng
+用|yòng|dùng
+又|yòu|lại
+有名|yǒumíng|nổi tiếng
+游戏|yóuxì|trò chơi
+遇到|yùdào|gặp được
+元|yuán|đồng
+愿意|yuànyì|bằng lòng
+越|yuè|càng
+月亮|yuèliàng|mặt trăng
+站|zhàn|trạm, bến
+张|zhāng|Trương, cái, tấm
+长（动词）|zhǎng（dòngcí）|lớn
+照顾|zhàogù|chăm sóc
+着急|zháojí|sốt ruột, vội vàng
+照片|zhàopiàn|ảnh
+照相机|zhàoxiàngjī|máy ảnh
+只|zhī|chỉ
+只（量词）|zhī|con (lượng từ cho con vật)
+只有……才……|zhǐyǒu……cái……|chỉ có…mới…
+种（量词）|zhǒng（liàngcí）|loại
+中间|zhōngjiān|ở giữa
+重要|zhòngyào|quan trọng
+周末|zhōumò|cuối tuần
+注意|zhùyì|chú ý
+准备|zhǔnbèi|chuẩn bị
+字|zì|chữ
+自己|zìjǐ|bản thân
+综合|zōnghé|tổng hợp
+坐|zuò|ngồi
+昨天|zuótiān|hôm qua
+作业|zuòyè|bài tập
+
+=== HSK4 ===
+爱情|àiqíng|tình yêu
+按照|ànzhào|dựa vào, theo
+按时|ànshí|đúng hạn
+安排|ānpái|sắp xếp
+安全|ānquán|an toàn
+百分之|bǎifēnzhī|phần trăm (%)
+饼干|bǐnggān|bánh
+部分|bùfèn|bộ phận, phần
+遍|biàn|lần, lượt
+表示|biǎoshì|biểu thị, cho thấy
+表演|biǎoyǎn|biểu diễn
+表格|biǎogé|bảng biểu
+表扬|biǎoyáng|tuyên dương
+笨|bèn|ngốc nghếch
+毕业|bìyè|tốt nghiệp
+比如|bǐrú|ví dụ như
+棒|bàng|cây gậy
+标准|biāozhǔn|tiêu chuẩn
+本来|běnlái|vốn có
+抱歉|bàoqiàn|xin lỗi
+抱|bào|ôm
+报名|bàomíng|đăng kí
+并且|bìngqiě|đồng thời
+博士|bóshì|tiến sĩ
+包子|bāozi|bánh bao
+倍|bèi|lần
+保证|bǎozhèng|đảm bảo, cam đoan
+保护|bǎohù|che chở, bảo vệ
+不过|bùguò|nhưng
+不管|bùguǎn|bất kể
+不得不|bùdébù|đành
+不仅|bùjǐn|không những
+擦|cā|lau
+餐厅|cāntīng|căng tin, nhà ăn
+长江|Chángjiāng|Trường Giang
+长城|Chángchéng|Trường Thành
+错误|cuòwù|sai lầm
+重新|chóngxīn|làm lại
+超过|chāoguò|vượt trên
+诚实|chéngshí|trung thực
+词语|cíyǔ|từ ngữ
+粗心|cūxīn|thô lỗ, cẩu thả
+窗户|chuānghù|cửa sổ
+猜|cāi|đoán
+材料|cáiliào|tài liệu
+抽烟|chōuyān|hút thuốc
+成功|chénggōng|thành công
+成为|chéngwéi|trở thành
+差不多|chàbùduō|gần như
+尝|cháng|nếm thử
+存|cún|giữ, tiết kiệm, tồn
+场|chǎng|trận, suất
+吃惊|chījīng|ngạc nhiên
+参观|cānguān|tham quan
+厨房|chúfáng|phòng bếp
+厕所|cèsuǒ|phòng vệ sinh
+出生|chūshēng|ra đời
+出现|chūxiàn|xuất hiện
+出差|chūchāi|đi công tác
+出发|chūfā|xuất phát
+传真|chuánzhēn|fax, bản fax
+从来|cónglái|từ trước đến nay
+乘坐|chéngzuò|ngồi xe
+答案|dáàn|đáp án
+道歉|dàoqiàn|xin lỗi
+调查|diàochá|điều tra
+肚子|dùzi|bụng
+等|děng|vân vân
+短信|duǎnxìn|tin nhắn
+登机牌|dēngjīpái|thẻ lên tàu
+掉|diào|rơi
+打针|dǎzhēn|tiêm
+打招呼|dǎzhāohū|chào hỏi
+打折|dǎzhé|giảm giá
+打扰|dǎrǎo|làm phiền
+打扮|dǎbàn|trau chuốt, trang điểm
+打印|dǎyìn|in ấn
+戴|dài|đeo
+得意|déyì|đắc ý
+得|de|trợ từ
+当时|dāngshí|lúc đó
+当|dāng|làm
+底|dǐ|đáy
+导游|dǎoyóu|hướng dẫn viên du lịch
+对面|duìmiàn|đối diện
+对话|duìhuà|hội thoại, đối thoại
+对于|duìyú|về (vấn đề gì đó)
+大约|dàyuē|khoảng
+大概|dàgài|khoảng
+大夫|dàifū|bác sĩ, đại phu
+大使馆|dàshǐguǎn|đại sứ quán
+堵车|dǔchē|tắc đường
+地球|dìqiú|địa cầu
+地点|dìdiǎn|địa điểm
+地址|dìzhǐ|địa chỉ
+动作|dòngzuò|động tác
+到底|dàodǐ|cuối cùng
+到处|dàochù|khắp nơi
+刀|dāo|cái dao
+倒|dǎo|đổ, ngã
+低|dī|thấp
+丢|diū|mất
+儿童|értóng|trẻ con
+而|ér|còn
+发生|fāshēng|xảy ra
+负责|fùzé|phụ trách
+翻译|fānyì|phiên dịch
+符合|fúhé|phù hợp
+父亲|fùqīn|bố
+烦恼|fánnǎo|phiền não
+法律|fǎlǜ|pháp luật
+方面|fāngmiàn|phương diện
+方法|fāngfǎ|phương pháp
+方向|fāngxiàng|phương hướng
+放松|fàngsōng|thư giãn
+放暑假|fàngshǔjià|nghỉ hè
+放弃|fàngqì|vứt bỏ, từ bỏ
+房东|fángdōng|chủ nhà
+富|fù|giàu
+复杂|fùzá|phức tạp
+复印|fùyìn|phô tô
+否则|fǒuzé|nếu không thì
+发展|fāzhǎn|phát triển
+反对|fǎnduì|phản đối
+份|fèn|phần
+付款|fùkuǎn|thanh toán
+丰富|fēngfù|phong phú
+改变|gǎibiàn|thay đổi
+鼓励|gǔlì|cổ vũ
+高速公路|gāosùgōnglù|đường cao tốc
+顾客|gùkè|khách hàng
+逛|guàng|đi dạo
+过程|guòchéng|quá trình
+赶|gǎn|đuổi theo
+购物|gòuwù|mua sắm
+规定|guīdìng|qui định
+观众|guānzhòng|khán giả
+胳膊|gēbo|cánh tay
+管理|guǎnlǐ|quản lý
+果汁|guǒzhī|nước hoa quả
+敢|gǎn|dám
+故意|gùyì|cố ý
+挂|guà|treo
+感谢|gǎnxiè|cảm ơn
+感觉|gǎnjué|cảm giác
+感情|gǎnqíng|tình cảm
+感动|gǎndòng|cảm động
+广播|guǎngbō|phát thanh
+广告|guǎnggào|quảng cáo
+干杯|gānbēi|cạn ly
+干|gān|khô
+工资|gōngzī|lương
+够|gòu|đủ
+国际|guójì|quốc tế
+国籍|guójí|quốc tịch
+各|gè|các
+功夫|gōngfū|công phu
+刚|gāng|vừa mới
+关键|guānjiàn|quan trọng
+共同|gòngtóng|giống nhau
+公里|gōnglǐ|km
+光|guāng|chỉ, hết
+估计|gūjì|ước lượng
+海洋|hǎiyáng|đại dương
+获得|huòdé|giành được
+航班|hángbān|chuyến bay
+盒子|hézi|cái hộp
+火|huǒ|lửa
+活泼|huópō|hoạt bát
+活动|huódòng|hoạt động
+汗|hàn|mồ hôi
+护士|hùshì|y tá
+怀疑|huáiyí|nghi ngờ
+寒假|hánjià|kì nghỉ đông
+害羞|hàixiū|xấu hổ
+好处|hǎochù|cái tốt
+好像|hǎoxiàng|dường như
+回忆|huíyì|hồi ức, nhớ lại
+后悔|hòuhuǐ|hối hận
+合适|héshì|thích hợp
+合格|hégé|đạt yêu cầu
+号码|hàomǎ|số
+厚|hòu|dày
+互联网|hùliánwǎng|mạng internet
+互相|hùxiāng|lẫn nhau
+积极|jījí|tích cực
+骄傲|jiāoào|tự hào, kiêu ngạo
+饺子|jiǎozi|sủi cảo
+降落|jiàngluò|hạ cánh
+降低|jiàngdī|hạ thấp
+镜子|jìngzi|kính
+郊区|jiāoqū|ngoại ô
+进行|jìnxíng|tiến hành
+距离|jùlí|khoảng cách
+记者|jìzhě|phóng viên
+计划|jìhuà|kế hoạch
+警察|jǐngchá|cảnh sát
+解释|jiěshì|giải thích
+节约|jiéyuē|tiết kiệm
+节|jié|tiết
+聚会|jùhuì|tụ tập
+继续|jìxù|tiếp tục
+结果|jiéguǒ|kết quả
+经验|jīngyàn|kinh nghiệm
+经济|jīngjì|kinh tế
+经历|jīnglì|trải qua, kinh qua
+紧张|jǐnzhāng|căng thẳng
+精彩|jīngcǎi|hấp dẫn
+竟然|jìngrán|mà lại
+竞争|jìngzhēng|cạnh tranh
+究竟|jiūjìng|rốt cuộc
+积累|jīlěi|tích lũy
+禁止|jìnzhǐ|cấm
+激动|jīdòng|xúc động
+景色|jǐngsè|cảnh sắc
+既然|jìrán|đã….
+教育|jiàoyù|giáo dục
+教授|jiàoshòu|giáo sư
+接着|jiēzhe|tiếp theo
+接受|jiēshòu|tiếp nhận
+拒绝|jùjué|từ chối
+技术|jìshù|kỹ thuật
+建议|jiànyì|kiến nghị
+尽管|jǐnguǎn|tuy rằng
+将来|jiānglái|tương lai
+寄|jì|gửi
+家具|jiājù|đồ gia dụng
+奖金|jiǎngjīn|học bổng
+基础|jīchǔ|cơ sở, căn bản
+坚持|jiānchí|kiên trì
+及时|jíshí|kịp thời
+即使|jíshǐ|cho dù
+加班|jiābān|tăng ca
+加油站|jiāyóuzhàn|cây xăng
+减肥|jiǎnféi|giảm béo
+减少|jiǎnshǎo|cắt giảm
+假|jiǎ|giả
+价格|jiàgé|giá cả
+京剧|jīngjù|kinh kịch
+交通|jiāotōng|giao thông
+交流|jiāoliú|giao lưu
+交|jiāo|giao
+举行|jǔxíng|tổ chức
+举办|jǔbàn|tổ chức
+举|jǔ|giơ, nâng
+开玩笑|kāiwánxiào|đùa
+苦|kǔ|khổ, đắng
+肯定|kěndìng|khẳng định
+考虑|kǎolǜ|suy nghĩ
+空气|kōngqì|không khí
+空|kōng|trống rỗng
+科学|kēxué|khoa học
+矿泉水|kuàngquánshuǐ|nước khoáng
+看法|kànfǎ|quan điểm
+烤鸭|kǎoyā|vịt quay
+棵|kē|lượng từ cho cây
+恐怕|kǒngpà|e rằng
+开心|kāixīn|vui vẻ
+客厅|kètīng|phòng khách
+困难|kùnnán|khó khăn
+困|kùn|buồn ngủ
+咳嗽|késou|ho
+可是|kěshì|nhưng
+可惜|kěxī|đáng tiếc
+可怜|kělián|đáng thương
+垃圾桶|lājītǒng|thùng rác
+零钱|língqián|tiền lẻ
+连|lián|liên kết, nối
+辣|là|cay
+联系|liánxì|liên hệ
+老虎|lǎohǔ|hổ
+礼貌|lǐmào|lễ phép, lịch sự
+礼拜天|lǐbàitiān|chủ nhật
+留|liú|lưu lại, ở lại
+理解|lǐjiě|lý giải, hiểu
+理想|lǐxiǎng|lý tưởng
+理发|lǐfà|cắt tóc
+浪费|làngfèi|lãng phí
+浪漫|làngmàn|lãng mạn
+流行|liúxíng|thịnh hành
+流利|liúlì|lưu loát
+来自|láizì|đến từ
+来得及|láidejí|kịp
+来不及|láibùjí|không kịp
+旅行|lǚxíng|du lịch
+拉|lā|kéo
+懒|lǎn|lười biếng
+律师|lǜshī|luật sư
+另外|lìngwài|ngoài ra, còn lại
+厉害|lìhài|lợi hại
+力气|lìqì|sức lực
+凉快|liángkuài|mát mẻ
+冷静|lěngjìng|bình tĩnh
+俩|liǎ|hai người
+例如|lìrú|ví dụ
+乱|luàn|loạn
+麻烦|máfan|phiền phức, làm phiền
+马虎|mǎhu|qua loa
+迷路|mílù|lạc đường
+美丽|měilì|đẹp
+秒|miǎo|giây
+目的|mùdì|mục đích
+满|mǎn|đầy
+民族|mínzú|dân tộc
+毛巾|máojīn|khăn bông
+毛|máo|lông
+母亲|mǔqin|mẹ
+梦|mèng|giấc mơ, mơ
+密码|mìmǎ|mật khẩu
+免费|miǎnfèi|miễn phí
+耐心|nàixīn|nhẫn nại
+难道|nándào|lẽ nào
+难受|nánshòu|buồn
+能力|nénglì|năng lực
+暖和|nuǎnhuo|ấm áp
+弄|nòng|làm
+年龄|niánlíng|tuổi tác
+内容|nèiróng|nội dung
+内|nèi|bên trong
+偶尔|ǒuěr|đôi khi
+排队|páiduì|xếp hàng
+骗|piàn|lừa
+陪|péi|cùng
+葡萄|pútáo|nho
+脾气|píqì|tính khí
+篇|piān|lượng từ cho bài viết
+破|pò|rách, nổ
+皮肤|pífū|da
+普遍|pǔbiàn|phổ biến
+普通话|pǔtōnghuà|tiếng phổ thông
+排列|páiliè|liệt kê
+批评|pīpíng|phê bình
+平时|píngshí|bình thường
+判断|pànduàn|phán đoán
+乒乓球|pīngpāngqiú|bóng bàn
+其次|qícì|tiếp theo
+轻松|qīngsōng|thoải mái
+轻|qīng|nhẹ
+缺点|quēdiǎn|khuyết điểm
+缺少|quēshǎo|thiếu
+签证|qiānzhèng|visa
+穷|qióng|nghèo
+确实|quèshí|thật sự
+气候|qìhòu|khí hậu
+桥|qiáo|cầu
+敲|qiāo|gõ
+情况|qíngkuàng|tình hình
+巧克力|qiǎokèlì|sô cô la
+取|qǔ|lấy
+却|què|lại
+千万|qiānwàn|nhất thiết
+区别|qūbié|khác biệt
+其中|qízhōng|trong đó
+全部|quánbù|toàn bộ
+亲戚|qīnqi|họ hàng
+然而|ránér|vậy mà
+热闹|rènào|náo nhiệt
+日记|rìjì|nhật kí
+扔|rēng|ném
+入口|rùkǒu|cửa vào
+任务|rènwù|nhiệm vụ
+任何|rènhé|bất kì
+仍然|réngrán|vẫn
+散步|sànbù|tản bộ
+首都|shǒudū|thủ đô
+首先|shǒuxiān|đầu tiên
+顺序|shùnxù|thứ tự
+顺利|shùnlì|thuận lợi
+顺便|shùnbiàn|nhân tiện
+随着|suízhe|cùng với
+随便|suíbiàn|tùy tiện, tự nhiên
+酸|suān|chua
+速度|sùdù|tốc độ
+适应|shìyìng|thích nghi
+适合|shìhé|thích hợp
+输|shū|thua
+说明|shuōmíng|nói rõ
+稍微|shāowēi|một chút
+社会|shèhuì|xã hội
+硕士|shuòshì|thạc sĩ
+省|shěng|tỉnh thành
+申请|shēnqǐng|xin
+生活|shēnghuó|cuộc sống
+生意|shēngyì|kinh doanh
+生命|shēngmìng|tính mạng
+甚至|shènzhì|thậm chí
+熟悉|shúxī|quen thuộc
+深|shēn|sâu
+沙发|shāfā|ghế sô pha
+死|sǐ|chết
+森林|sēnlín|rừng sâu
+是否|shìfǒu|liệu có phải
+数量|shùliàng|số lượng
+数字|shùzi|con cố
+收拾|shōushí|dọn dẹp
+收入|shōurù|thu nhập
+收|shōu|nhận
+所有|suǒyǒu|tất cả
+师傅|shīfù|sư phụ
+帅|shuài|đẹp trai
+实际|shíjì|thực tế
+实在|shízài|thật sự
+孙子|sūnzi|cháu trai
+失败|shībài|thất bại
+失望|shīwàng|thất vọng
+塑料袋|sùliàodài|túi ni lông
+商量|shāngliáng|thương lượng, bàn bạc
+售货员|shòuhuòyuán|nhân viên bán vé
+受到|shòudào|nhận được
+受不了|shòubùliǎo|không chịu nổi
+十分|shífēn|vô cùng
+勺子|sháozi|cái thìa
+剩|shèng|thừa
+使用|shǐyòng|sử dụng
+使|shǐ|khiến cho
+伤心|shāngxīn|tổn thương
+世纪|shìjì|thế kỉ
+台|tái|cái, chiếc
+通过|tōngguò|thông qua
+通知|tōngzhī|thông báo
+躺|tǎng|nằm
+趟|tàng|chuyến
+谈|tán|nói chuyện
+讨论|tǎolùn|thảo luận
+讨厌|tǎoyàn|ghét
+脱|tuō|cởi
+糖|táng|đường
+特点|tèdiǎn|đặc điểm
+汤|tāng|canh
+条件|tiáojiàn|điều kiện
+提醒|tíxǐng|nhắc nhở
+提前|tíqián|trước thời hạn
+提供|tígōng|cung cấp
+提|tí|đề ra
+推迟|tuīchí|kéo dài thời gian
+推|tuī|đẩy
+挺|tǐng|rất
+抬|tái|ngẩng
+态度|tàidù|thái độ
+弹钢琴|tángāngqín|chơi piano
+填空|tiánkòng|điền trống
+同时|tóngshí|đồng thời
+同情|tóngqíng|đồng tình
+停|tíng|dừng
+袜子|wàzi|tất chân
+误会|wùhuì|hiểu lầm
+网站|wǎngzhàn|trang mạng
+网球|wǎngqiú|tennis
+温度|wēndù|nhiệt độ
+污染|wūrǎn|ô nhiễm
+无论|wúlùn|bất luận
+无聊|wúliáo|nhàm chán
+无|wú|không
+文章|wénzhāng|bài văn
+往往|wǎngwǎng|thường (quá khứ)
+完全|wánquán|hoàn toàn
+味道|wèidào|mùi vị
+危险|wēixiǎn|nguy hiểm
+卫生间|wèishēngjiān|phòng vệ sinh
+西红柿|xīhóngshì|cà chua
+香|xiāng|thơm
+醒|xǐng|tỉnh
+辛苦|xīnkǔ|vất vả
+详细|xiángxì|tỉ mỉ
+许多|xǔduō|rất nhiều
+行|xíng|được
+羡慕|xiànmù|ngưỡng mộ
+笑话|xiàohuà|truyện cười
+相同|xiāngtóng|giống nhau
+相反|xiāngfǎn|ngược lại
+现金|xiànjīn|tiền mặt
+消息|xiāoxi|thông tin, tin
+橡皮|xiàngpí|cục tẩy
+效果|xiàoguǒ|hiệu quả
+性格|xìnggé|tính cách
+性别|xìngbié|giới tính
+心情|xīnqíng|tâm trạng
+幸福|xìngfú|hạnh phúc
+小说|xiǎoshuō|tiểu thuyết
+小吃|xiǎochī|đồ ăn vặt
+小伙子|xiǎohuǒzi|anh chàng
+学期|xuéqī|học kì
+响|xiǎng|kêu
+咸|xián|mặn
+吸引|xīyǐn|thu hút
+兴奋|xīngfèn|hưng phấn, hứng khởi
+修理|xiūlǐ|sửa chữa
+信息|xìnxī|thông tin
+信心|xìnxīn|niềm tin
+信封|xìnfēng|bức thư
+压力|yālì|áp lực
+预习|yùxí|chuẩn bị trước
+页|yè|trang mạng
+阳光|yángguāng|ánh nắng
+阅读|yuèdú|đọc hiểu
+钥匙|yàoshi|chìa khóa
+邮局|yóujú|bưu điện
+邀请|yāoqǐng|mời
+赢|yíng|thắng
+语言|yǔyán|ngôn ngữ
+语法|yǔfǎ|ngữ pháp
+要是|yàoshì|nếu
+艺术|yìshù|nghệ thuật
+羽毛球|yǔmáoqiú|cầu lông
+约会|yuēhuì|hẹn, cuộc hẹn
+研究|yánjiū|nghiên cứu
+眼镜|yǎnjìng|kính mắt
+盐|yán|muối
+由于|yóuyú|do
+由|yóu|do
+牙膏|yágāo|kem đánh răng
+演员|yǎnyuán|diễn viên
+演出|yǎnchū|buổi diễn
+永远|yǒngyuǎn|mãi mãi
+样子|yàngzi|dáng ngoài,bề ngoài
+有趣|yǒuqù|hứng thú
+意见|yìjiàn|ý kiến
+愉快|yúkuài|vui vẻ
+引起|yǐnqǐ|dẫn đến, gây ra
+应聘|yìngpìn|ứng tuyển
+幽默|yōumò|hài hước
+尤其|yóuqí|đặc biệt là
+因此|yīncǐ|cho nên
+呀|yā|a
+叶子|yèzi|chiếc lá
+友谊|yǒuyì|hữu nghị
+友好|yǒuhǎo|hữu hảo
+原谅|yuánliàng|tha thứ
+原来|yuánlái|hóa ra, vốn, cũ
+原因|yuányīn|nguyên nhân
+印象|yìnxiàng|ấn tượng
+勇敢|yǒnggǎn|dũng cảm
+养成|yǎngchéng|nuôi dưỡng, hình thành
+允许|yǔnxǔ|cho phép
+优秀|yōuxiù|ưu tú
+优点|yōudiǎn|ưu điểm
+以为|yǐwéi|tưởng rằng
+以|yǐ|lấy
+亚洲|Yàzhōu|châu Á
+云|yún|mây
+于是|yúshì|thế là
+也许|yěxǔ|có lẽ
+严重|yánzhòng|nghiêm trọng
+严格|yángé|nghiêm khắc
+与|yǔ|và
+一切|yīqiè|tất cả
+杂志|zázhì|tạp chí
+重视|zhòngshì|coi trọng
+重点|zhòngdiǎn|trọng điểm
+重|zhòng|nặng
+转|zhuǎn|chuyển
+赚|zhuàn|kiếm
+质量|zhìliàng|chất lượng
+责任|zérèn|trách nhiệm
+证明|zhèngmíng|chứng minh
+著名|zhùmíng|nổi tiếng
+至少|zhìshǎo|chí ít
+自然|zìrán|tự nhiên
+自信|zìxìn|tự tin
+脏|zāng|bẩn
+职业|zhíyè|nghề nghiệp
+租|zū|thuê
+祝贺|zhùhè|chúc mừng
+知识|zhīshí|tri thức, kiến thức
+真正|zhēnzhèng|thật
+直接|zhíjiē|trực tiếp
+照|zhào|chiếu
+正确|zhèngquè|chính xác
+正式|zhèngshì|chính thức
+正常|zhèngcháng|bình thường
+正好|zhènghǎo|vừa hay
+植物|zhíwù|thực vật
+最好|zuìhǎo|tốt nhất
+暂时|zànshí|tạm thời
+整理|zhěnglǐ|chỉnh sửa
+支持|zhīchí|ủng hộ
+指|zhǐ|chỉ
+招聘|zhāopìn|tuyển dụng
+总结|zǒngjié|tổng kết
+座位|zuòwèi|chỗ ngồi
+座|zuò|tòa
+左右|zuǒyòu|khoảng
+尊重|zūnzhòng|tôn trọng
+增加|zēngjiā|tăng thêm
+咱们|zánmen|chúng ta
+周围|zhōuwéi|xung quanh
+只要|zhǐyào|chỉ cần
+只好|zhǐhǎo|đành
+占线|zhànxiàn|máy bận
+准确|zhǔnquè|chính xác
+准时|zhǔnshí|đúng giờ
+值得|zhídé|đáng
+作者|zuòzhě|tác gia
+作用|zuòyòng|tác dụng
+作家|zuòjiā|tác gia
+仔细|zǐxì|cẩn thận
+之|zhī|chi
+主意|zhǔyì|chủ ý
+专门|zhuānmén|chuyên môn
+专业|zhuānyè|chuyên ngành
+
+=== HSK5 ===
+哎|āi|thán từ
+唉|āi|thán từ
+爱护|àihù|yêu thương, giữ gìn
+爱惜|àixī|quý trọng
+爱心|àixīn|lòng tốt
+安装|ānzhuāng|lắp đặt
+岸|àn|bờ
+暗|àn|tối
+熬夜|áoyè|thức đêm
+把握|bǎwò|nắm chắc
+摆|bǎi|bày
+办理|bànlǐ|làm (thủ tục)
+傍晚|bàngwǎn|chiều muộn
+包裹|bāoguǒ|bưu kiện
+包含|bāohán|bao hàm
+包括|bāokuò|bao gồm
+薄|báo|mỏng
+宝贝|bǎobèi|bảo bối
+宝贵|bǎoguì|quí báu
+保持|bǎochí|duy trì
+保留|bǎoliú|bảo lưu
+保险|bǎoxiǎn|bảo hiểm
+报到|bàodào|điểm danh
+报道|bàodào|đưa tin, bản tin
+报告|bàogào|báo cáo
+报社|bàoshè|tòa soạn báo
+抱怨|bàoyuàn|trách móc
+背|bèi|học thuộc
+悲观|bēiguān|bi quan
+背景|bèijǐng|bối cảnh
+被子|bèizi|chăn
+本科|běnkē|trình độ đại học
+本领|běnlǐng|bản lĩnh
+本质|běnzhì|bản chất
+比例|bǐlì|tỉ lệ
+彼此|bǐcǐ|lẫn nhau, với nhau, cả hai
+必然|bìrán|tất yếu
+必要|bìyào|cần thiết, cần
+避免|bìmiǎn|tránh
+编辑|biānjí|biên tập
+鞭炮|biānpào|pháo
+便|biàn|liền
+辩论|biànlùn|biện luận
+标点|biāodiǎn|dấu
+标志|biāozhì|đánh dấu
+表达|biǎodá|diễn đạt
+表面|biǎomiàn|bề mặt, bề ngoài
+表明|biǎomíng|cho thấy
+表情|biǎoqíng|biểu cảm
+表现|biǎoxiàn|biểu hiện
+冰激凌|bīngjīlíng|kem
+病毒|bìngdú|vi rút
+玻璃|bōlí|thủy tinh
+播放|bōfàng|phát sóng
+脖子|bózi|cổ
+博物馆|bówùguǎn|bảo tàng
+补充|bǔchōng|bổ sung
+不安|búān|bất an
+不断|búduàn|không ngừng
+不见得|bújiàndé|chưa chắc
+不耐烦|búnàifán|chán nản
+不然|búrán|nếu không thì
+不如|búrú|không bằng
+不要紧|búyàojǐn|không sao
+不足|búzú|không đủ
+布|bù|vải
+步骤|bùzhòu|bước
+部门|bùmén|ban ngành
+财产|cáichǎn|tài sản
+采访|cǎifǎng|phỏng vấn
+采取|cǎiqǔ|chọn, dùng
+彩虹|cǎihóng|cầu vồng
+踩|cǎi|giẫm
+参考|cānkǎo|tham khảo
+参与|cānyù|can dự
+惭愧|cánkuì|hổ thẹn
+操场|cāochǎng|sân vận động
+操心|cāoxīn|lo lắng
+册|cè|quyển
+测验|cèyàn|thí nghiệm
+曾经|céngjīng|đã từng
+叉子|chāzi|cái dĩa, cái xiên, cái nĩa
+差距|chājù|sự khác biệt
+插|chā|cắm
+拆|chāi|gỡ, dỡ
+产品|chǎnpǐn|sản phẩm
+产生|chǎnshēng|sản sinh, nảy sinh
+长途|chángtú|đường dài
+常识|chángshí|thường thức
+抄|chāo|chép
+超级|chāojí|siêu cấp
+朝|cháo|về hướng
+潮湿|cháoshī|ẩm ướt
+吵|chǎo|ồn ào
+吵架|chǎojià|cãi vã
+炒|chǎo|xào
+车库|chēkù|nhà xe
+车厢|chēxiāng|toa tàu
+彻底|chèdǐ|triệt để
+沉默|chénmò|im lặng
+趁|chèn|nhân
+称|chēng|cân
+称呼|chēnghū|xưng hô
+称赞|chēngzàn|tán thưởng
+成分|chéngfèn|thành phần
+成果|chéngguǒ|thành quả
+成就|chéngjiù|thành tựu
+成立|chénglì|thành lập
+成人|chéngrén|người lớn
+成熟|chéngshú|thành thục
+成语|chéngyǔ|thành ngữ
+成长|chéngzhǎng|trưởng thành
+诚恳|chéngkěn|thành khẩn
+承担|chéngdān|chịu trách nhiệm
+承认|chéngrèn|thừa nhận
+承受|chéngshòu|chịu đựng
+程度|chéngdù|trình độ
+程序|chéngxù|trình tự
+吃亏|chīkuī|thiệt thòi
+池塘|chítáng|ao hồ
+迟早|chízǎo|sớm muộn
+持续|chíxù|kéo dài
+尺子|chǐzi|thước đo
+翅膀|chìbǎng|cánh
+冲|chōng|xông, xô đẩy
+充分|chōngfèn|đầy đủ
+充满|chōngmǎn|tràn đầy
+重复|chóngfù|lặp lại
+宠物|chǒngwù|thú cưng
+抽屉|chōutì|ngăn kéo
+抽象|chōuxiàng|trừu tượng
+丑|chǒu|xấu
+臭|chòu|thối
+出版|chūbǎn|xuất bản
+出口|chūkǒu|lối ra, cửa ra
+出色|chūsè|xuất sắc
+出示|chūshì|xuất trình
+出席|chūxí|tham dự
+初级|chūjí|sơ cấp
+除非|chúfēi|trừ phi
+除夕|chúxī|giao thừa
+处理|chǔlǐ|xử lý
+传播|chuánbō|lan truyền, lây lan
+传染|chuánrǎn|nhiễm
+传说|chuánshuō|truyền thuyết
+传统|chuántǒng|truyền thống
+窗帘|chuānglián|rèm cửa
+闯|chuǎng|xông vào, xông lên
+创造|chuàngzào|sáng tạo
+吹|chuī|thổi
+词汇|cíhuì|từ vựng
+辞职|cízhí|từ chức, bỏ việc
+此外|cǐwài|ngoài ra
+次要|cìyào|thứ yếu
+刺激|cìjī|kích thích
+匆忙|cōngmáng|vội vàng
+从此|cóngcǐ|từ đó
+从而|cóngér|cho nên
+从前|cóngqián|từ trước
+从事|cóngshì|theo đuổi
+粗糙|cūcāo|thô ráp
+促进|cùjìn|xúc tiến
+促使|cùshǐ|thúc đẩy
+醋|cù|giấm
+催|cuī|giục
+存在|cúnzài|tồn tại
+措施|cuòshī|sách lược, chính sách
+答应|dāyìng|hứa
+达到|dádào|đạt đến
+打工|dǎgōng|làm thêm
+打交道|dǎjiāodào|kết bạn
+打喷嚏|dǎpēntì|hắt xì
+打听|dǎtīng|hỏi thăm
+大方|dàfāng|phóng khoáng
+大厦|dàshà|tòa nhà
+大象|dàxiàng|voi
+大型|dàxíng|lớn (qui mô)
+呆|dāi|ở lì, ở
+代表|dàibiǎo|đại diện
+代替|dàitì|thay thế
+贷款|dàikuǎn|vay tiền
+待遇|dàiyù|đãi ngộ
+担任|dānrèn|đảm nhiệm
+单纯|dānchún|đơn thuần,ngây thơ
+单调|dāndiào|đơn điệu
+单独|dāndú|đơn độc
+单位|dānwèi|đơn vị
+单元|dānyuán|đơn nguyên, cụm
+耽误|dānwù|bỏ lỡ
+胆小鬼|dǎnxiǎoguǐ|kẻ nhát gan
+淡|dàn|nhạt
+当地|dāngdì|địa phương
+当心|dāngxīn|để tâm, lưu tâm
+挡|dǎng|chắn
+导演|dǎoyǎn|đạo diễn
+导致|dǎozhì|gây ra
+岛屿|dǎoyǔ|đảo
+倒霉|dǎoméi|xui xẻo
+到达|dàodá|đến
+道德|dàodé|đạo đức
+道理|dàolǐ|đạo lí, bài học
+登记|dēngjì|đăng kí
+等待|děngdài|đợi, chờ đợi
+等于|děngyú|bằng
+滴|dī|giọt
+的确|díquè|đúng, thật (phó từ)
+敌人|dírén|kẻ địch
+地道|dìdào|chuẩn bản địa (ngôn ngữ, món ăn)
+地理|dìlǐ|địa lý
+地区|dìqū|khu vực
+地毯|dìtǎn|thảm
+地位|dìwèi|địa vị
+地震|dìzhèn|động đất
+递|dì|truyền
+点心|diǎnxīn|điểm tâm
+电池|diànchí|pin
+电台|diàntái|đài truyền hình
+钓|diào|câu (cá)
+顶|dǐng|đội, cái (lượng từ cho mũ)
+动画片|dònghuàpiàn|phim hoạt hình
+冻|dòng|đông cứng
+洞|dòng|hang động
+豆腐|dòufǔ|đậu phụ
+逗|dòu|trêu
+独立|dúlì|độc lập
+独特|dútè|độc đáo
+度过|dùguò|trải qua (thời kì, thời gian)
+断|duàn|đoạn, đứt
+堆|duī|đống
+对比|duìbǐ|đối chiếu
+对待|duìdài|đối đãi
+对方|duìfāng|đối phương
+对手|duìshǒu|đối thủ
+对象|duìxiàng|đối tượng
+兑换|duìhuàn|đổi
+吨|dūn|tấn
+蹲|dūn|quì
+顿|dùn|bữa
+多亏|duōkuī|thiệt cho ai đó
+多余|duōyú|thừa thãi
+朵|duǒ|bông
+躲藏|duǒcáng|trốn
+恶劣|èliè|khắc nghiệt, hà khắc
+耳环|ěrhuán|khuyên tai
+发表|fābiǎo|phát biểu, đăng, ra mắt (tác phẩm)
+发愁|fāchóu|phát buồn, chán
+发达|fādá|phát đạt, phát triển
+发抖|fādǒu|run rẩy
+发挥|fāhuī|phát huy
+发明|fāmíng|phát minh
+发票|fāpiào|hóa đơn giá trị gia tăng
+发言|fāyán|phát biểu (ý kiến)
+罚款|fákuǎn|phạt tiền
+法院|fǎyuàn|tòa án
+翻|fān|lật, giở
+繁荣|fánróng|phồn vinh
+反而|fǎnér|ngược lại
+反复|fǎnfù|lặp đi lặp lại
+反应|fǎnyìng|phản ứng
+反映|fǎnyìng|phản ánh
+反正|fǎnzhèng|dù sao thì
+范围|fànwéi|phạm vi
+方|fāng|phương
+方案|fāngàn|phương án
+方式|fāngshì|phương thức
+妨碍|fángài|trở ngại, cản trở
+仿佛|fǎngfú|dường như
+非|fēi|phi, không
+肥皂|féizào|bánh xà phòng
+废话|fèihuà|lời nói thừa thãi
+分别|fēnbié|phân biệt, lần lượt, xa nhau
+分布|fēnbù|phân bố
+分配|fēnpèi|chia sẻ, phân chia, phân công
+分手|fēnshǒu|chia tay
+分析|fēnxī|phân tích
+纷纷|fēnfēn|lũ lượt
+奋斗|fèndòu|phấn đấu
+风格|fēnggé|phong cách
+风景|fēngjǐng|phong cảnh
+风俗|fēngsú|phong tục
+风险|fēngxiǎn|mạo hiểm, hiểm nguy
+疯狂|fēngkuáng|điên rồ
+讽刺|fěngcì|châm biếm
+否定|fǒudìng|phủ định
+否认|fǒurèn|phủ nhận
+扶|fú|vịn
+服装|fúzhuāng|phục trang, quần áo
+幅|fú|bức (lượng từ cho tranh)
+辅导|fǔdǎo|phụ đạo, bổ trợ
+妇女|fùnǚ|phụ nữ
+复制|fùzhì|copy
+改革|gǎigé|cải cách
+改进|gǎijìn|cải tiến
+改善|gǎishàn|cải thiện
+改正|gǎizhèng|đính chính
+盖|gài|đậy
+概括|gàikuò|khái quát
+概念|gàiniàn|khái niệm
+干脆|gāncuì|dứt khoát
+干燥|gānzào|khô ráo, khô hanh
+赶紧|gǎnjǐn|mau chóng
+赶快|gǎnkuài|mau chóng
+感激|gǎnjī|cảm kích, biết ơn
+感受|gǎnshòu|cảm nhận
+感想|gǎnxiǎng|cảm tưởng, suy nghĩ
+干活儿|gànhuóér|lao động
+钢铁|gāngtiě|sắt thép
+高档|gāodàng|cao cấp
+高级|gāojí|cao cấp
+搞|gǎo|làm
+告别|gàobié|từ biệt
+格外|géwài|đặc biệt
+隔壁|gébì|sát vách, ngay cạnh
+个别|gèbié|cá biệt
+个人|gèrén|cá nhân
+个性|gèxìng|cá tính
+各自|gèzì|tự, mỗi
+根|gēn|lượng từ: sợi, cành, khúc, ngón
+根本|gēnběn|vốn
+工厂|gōngchǎng|xưởng, xí nghiệp
+工程师|gōngchéngshī|kỹ sư
+工具|gōngjù|công cụ
+工人|gōngrén|công nhân
+工业|gōngyè|công nghiệp
+公布|gōngbù|công bố
+公开|gōngkāi|công khai
+公平|gōngpíng|công bằng
+公寓|gōngyù|chung cư
+公元|gōngyuán|công nguyên
+公主|gōngzhǔ|công chúa
+功能|gōngnéng|công năng
+恭喜|gōngxǐ|chúc mừng
+贡献|gòngxiàn|cống hiến
+沟通|gōutōng|trao đổi, thấu hiểu
+构成|gòuchéng|tạo thành, cấu thành
+姑姑|gūgu|cô
+姑娘|gūniang|cô gái
+古代|gǔdài|cổ đại
+古典|gǔdiǎn|cổ điển
+股票|gǔpiào|cổ phiếu
+骨头|gǔtou|xương
+鼓舞|gǔwǔ|cổ vũ
+鼓掌|gǔzhǎng|vỗ tay
+固定|gùdìng|cố định
+挂号|guàhào|xếp số
+乖|guāi|ngoan
+拐弯|guǎiwān|rẽ
+怪不得|guàibùdé|chẳng trách
+关闭|guānbì|đóng
+观察|guānchá|quan sát
+观点|guāndiǎn|quan điểm
+观念|guānniàn|quan niệm
+官|guān|quan
+管子|guǎnzi|cái ống
+冠军|guànjūn|quán quân
+光滑|guānghuá|bóng mượt
+光临|guānglín|đến, có mặt
+光明|guāngmíng|quang minh, sáng sủa
+光盘|guāngpán|đĩa CD, VCD,DVD
+广场|guǎngchǎng|quảng trường
+广大|guǎngdà|quảng đại, rộng lớn
+广泛|guǎngfàn|rộng khắp
+归纳|guīnà|tóm tắt
+规矩|guīju|qui tắc
+规律|guīlǜ|qui luật
+规模|guīmó|qui mô
+规则|guīzé|nội qui
+柜台|guìtái|quầy ba
+滚|gǔn|cút, cuộn
+锅|guō|nồi
+国庆节|guóqìngjié|quốc khánh
+国王|guówáng|quốc vương
+果然|guǒrán|quả nhiên
+果实|guǒshí|quả thật
+过分|guòfèn|quá đáng
+过敏|guòmǐn|mẫn cảm, dị ứng
+过期|guòqī|quá hạn
+哈|hā|ha ha
+海关|hǎiguān|hải quan
+海鲜|hǎixiān|hải sản
+喊|hǎn|hét
+行业|hángyè|ngành nghề
+豪华|háohuá|sang trọng
+好客|hàokè|hiếu khách
+好奇|hàoqí|hiếu kì
+合法|héfǎ|hợp pháp
+合理|hélǐ|hợp lý
+合同|hétóng|hợp đồng
+合影|héyǐng|chụp ảnh chung, chụp ảnh tập thể
+合作|hézuò|hợp tác
+何必|hébì|hà tất
+何况|hékuàng|huống hồ
+和平|hépíng|hòa bình
+核心|héxīn|trọng tâm
+恨|hèn|hận
+猴子|hóuzi|khỉ
+后背|hòubèi|phía sau
+后果|hòuguǒ|hậu quả
+呼吸|hūxī|hít thở
+忽然|hūrán|bỗng nhiên
+忽视|hūshì|không coi trọng (kinh tế, ngành nghề, vấn đề nhỏ, nghiên cứu)
+胡说|húshuō|nói nhăng quậy
+胡同|hútòng|ngõ, hẻm
+壶|hú|bình, ấm
+蝴蝶|húdié|con bướm
+糊涂|hútú|hồ đồ
+花生|huāshēng|lạc
+划|huá|chèo (thuyền)
+华裔|huáyì|hoa kiều
+滑|huá|trượt, trơn
+化学|huàxué|hóa học
+话题|huàtí|chủ đề
+怀念|huáiniàn|hoài niệm
+怀孕|huáiyùn|mang bầu
+缓解|huǎnjiě|thả lỏng, giảm
+幻想|huànxiǎng|hoang tưởng
+慌张|huāngzhāng|hoảng sợ, rối rắm, rối
+黄金|huángjīn|vàng
+灰|huī|màu xám
+灰尘|huīchén|tro bụi
+灰心|huīxīn|nản lòng
+挥|huī|vẫy
+恢复|huīfù|hồi phục, khôi phục
+汇率|huìlǜ|tỷ giá
+婚礼|hūnlǐ|hôn lễ
+婚姻|hūnyīn|hôn nhân
+活跃|huóyuè|sôi nổi
+火柴|huǒchái|diêm
+伙伴|huǒbàn|bạn đồng hành
+或许|huòxǔ|có lẽ
+机器|jīqì|máy móc
+肌肉|jīròu|cơ bắp
+基本|jīběn|cơ bản, căn bản
+激烈|jīliè|khốc liệt, kịch liệt
+及格|jígé|đạt điểm qua
+极其|jíqí|cực kì
+急忙|jímáng|vội vàng
+急诊|jízhěn|cấp cứu
+集合|jíhé|tập hợp
+集体|jítǐ|tập thể
+集中|jízhōng|tập trung
+计算|jìsuàn|tính toán
+记录|jìlù|ghi chép
+记忆|jìyì|ký ức
+纪录|jìlù|kỷ lục
+纪律|jìlǜ|kỷ luật
+纪念|jìniàn|kỉ niệm
+系领带|jìlǐngdài|thắt cà vạt
+寂寞|jìmò|cô đơn
+夹子|jiāzi|cái kẹp
+家庭|jiātíng|gia đình
+家务|jiāwù|việc nhà
+家乡|jiāxiāng|quê hương
+嘉宾|jiābīn|khách mời
+甲|jiǎ|giáp
+假如|jiǎrú|giả dụ
+假设|jiǎshè|giả thuyết
+假装|jiǎzhuāng|giả vờ
+价值|jiàzhí|giá trị
+驾驶|jiàshǐ|lái xe
+嫁|jià|gả chồng
+坚决|jiānjué|kiên quyết
+坚强|jiānqiáng|kiên cường
+肩膀|jiānbǎng|bờ vai
+艰巨|jiānjù|khó khăn (công việc, nhiệm vụ)
+艰苦|jiānkǔ|gian khổ, gian khóa
+兼职|jiānzhí|kiêm nhiệm
+捡|jiǎn|nhặt
+剪刀|jiǎndāo|cái kéo
+简历|jiǎnlì|sơ yếu lý lịch
+简直|jiǎnzhí|gần như
+建立|jiànlì|thành lập (tổ chức, trường học), thiết lập (quan hệ)
+建设|jiànshè|dựng xây, xây dựng
+建筑|jiànzhù|công trình xây dưng, (công ty) xây dựng, (ngành) xây dựng
+健身|jiànshēn|tập thể dục
+键盘|jiànpán|bàn phím
+讲究|jiǎngjiū|coi trọng
+讲座|jiǎngzuò|buổi diễn thuyết
+酱油|jiàngyóu|xì dầu
+交换|jiāohuàn|trao đổi
+交际|jiāojì|giao tiếp
+交往|jiāowǎng|đi lại, giao thiệp
+浇|jiāo|tưới nước
+胶水|jiāoshuǐ|keo dán
+角度|jiǎodù|góc độ
+狡猾|jiǎohuá|giảo hoạt
+教材|jiàocái|giao trình
+教练|jiàoliàn|huấn luyện viên
+教训|jiàoxùn|giáo huấn, bài học
+阶段|jiēduàn|giai đoạn
+结实|jiēshi|chắc chắn
+接触|jiēchù|tiếp xúc
+接待|jiēdài|tiếp đãi
+接近|jiējìn|tiếp cận
+节省|jiéshěng|tiết kiệm
+结构|jiégòu|kết cấu
+结合|jiéhé|kết hợp
+结论|jiélùn|kết luận
+结账|jiézhàng|thanh toán
+戒|jiè|cai (thuốc, rượu, nghiện)
+戒指|jièzhǐ|nhẫn
+届|jiè|khóa
+借口|jièkǒu|cớ, lí do
+金属|jīnshǔ|kim loại
+尽快|jǐnkuài|mau chóng
+尽量|jǐnliàng|cố gắng
+紧急|jǐnjí|cấp bách
+谨慎|jǐnshèn|cẩn thận, thận trọng
+尽力|jìnlì|dốc hết sức
+进步|jìnbù|tiến bộ
+进口|jìnkǒu|nhập khẩu
+近代|jìndài|cận đại
+经典|jīngdiǎn|kinh điển
+经商|jīngshāng|kinh doanh
+经营|jīngyíng|kinh doanh (cửa hàng), vận hành (công ty)
+精力|jīnglì|tinh lực
+精神|jīngshén|tinh thần
+酒吧|jiǔbā|quán ba
+救|jiù|cứu
+救护车|jiùhùchē|xe cứu thương
+舅舅|jiùjiù|cậu (em mẹ)
+居然|jūrán|không ngờ lại
+桔子|júzi|quýt
+巨大|jùdà|lớn (thành tựu, thay đổi, ảnh hưởng, tác hại)
+具备|jùbèi|chuẩn bị đủ, có đủ (tư cách, điều kiện, tinh lực)
+具体|jùtǐ|cụ thể
+俱乐部|jùlèbù|câu lạc bộ
+据说|jùshuō|nghe nói, nghe đồn
+捐|juān|quyên góp
+决赛|juésài|trận chung kết
+决心|juéxīn|quyết tâm
+角色|juésè|nhân vật
+绝对|juéduì|tuyệt đối
+军事|jūnshì|quân sự
+均匀|jūnyún|bình quân, trung bình
+卡车|kǎchē|xe tải
+开发|kāifā|phát triển (hệ thống, ngành nghề, kĩ thuật, sản phẩm)
+开放|kāifàng|mở cửa
+开幕式|kāimùshì|lễ khai mạc
+开水|kāishuǐ|nước sôi
+砍|kǎn|chặt, chém
+看不起|kànbùqǐ|coi khinh
+看望|kànwàng|đi thăm
+靠|kào|dựa dẫm, dựa vào
+颗|kē|quả (lượng từ)
+可见|kějiàn|cho thấy (đứng đầu vế câu thứ hai)
+可靠|kěkào|đáng tin cậy
+可怕|kěpà|đáng sợ
+克|kè|gram
+克服|kèfú|khắc phục
+刻苦|kèkǔ|khắc khổ, chịu khó
+客观|kèguān|khách quan
+课程|kèchéng|môn học
+空间|kōngjiān|không gian
+空闲|kòngxián|rảnh rỗi (thời gian)
+控制|kòngzhì|kiềm chế (cảm xúc, tình cảm), kiểm soát
+口味|kǒuwèi|khẩu vị
+夸|kuā|khen
+夸张|kuāzhāng|phóng đại
+会计|kuàìjì|kế toán
+宽|kuān|rộng
+昆虫|kūnchóng|côn trùng
+扩大|kuòdà|mở rộng (phạm vi, khoảng cách, thị trường)
+辣椒|làjiāo|ớt
+拦|lán|ngăn, chặn
+烂|làn|nát, loét, rách, thối rữa
+朗读|lǎngdú|đọc to
+劳动|láodòng|lao động
+劳驾|láojià|làm ơn, xin phiền
+老百姓|lǎobǎixìng|lão bách tính
+老板|lǎobǎn|ông chủ
+老婆|lǎopó|bà xã
+老实|lǎoshí|thật thà
+老鼠|lǎoshǔ|con chuột
+姥姥|lǎolǎo|bà ngoại
+乐观|lèguān|lạc quan
+雷|léi|sấm
+类型|lèixíng|loại hình
+冷淡|lěngdàn|lãnh đạm, lạnh nhạt, lạnh lùng
+厘米|límǐ|cm
+离婚|líhūn|li hôn
+梨|lí|quả lê
+理论|lǐlùn|lý luận
+理由|lǐyóu|lí do
+力量|lìliàng|sức mạnh
+立即|lìjí|lập tức
+立刻|lìkè|lập tức
+利润|lìrùn|lợi nhuận
+利息|lìxī|lợi tức
+利益|lìyì|lợi ích
+利用|lìyòng|tận dụng, lợi dụng
+连忙|liánmáng|vội vã
+连续|liánxù|liên tục
+联合|liánhé|liên hiệp
+恋爱|liànài|yêu đương
+良好|liánghǎo|tốt đẹp
+粮食|liángshí|lương thực
+亮|liàng|sáng
+了不起|liǎobùqǐ|giỏi giang
+列车|lièchē|tàu hỏa
+临时|línshí|lâm thời, thời vụ, tạm thời
+灵活|línghuó|linh hoạt
+铃|líng|chuông
+零件|língjiàn|linh kiện
+零食|língshí|đồ ăn vặt
+领导|lǐngdǎo|lãnh đạo
+领域|lǐngyù|lĩnh vực
+浏览|liúlǎn|đọc lướt
+流传|liúchuán|lưu truyền, lan truyền
+流泪|liúlèi|rơi lệ
+龙|lóng|rồng
+漏|lòu|dột
+陆地|lùdì|lục địa, đất liền
+陆续|lùxù|lục tục, liên tiếp
+录取|lùqǔ|tuyển chọn
+录音|lùyīn|ghi âm
+轮流|lúnliú|luân lưu, thay phiên
+论文|lùnwén|luận văn
+逻辑|luójí|logic
+落后|luòhòu|lạc hậu
+骂|mà|mắng mỏ
+麦克风|màikèfēng|microphone
+馒头|mántóu|bánh bao không nhân, màn thầu
+满足|mǎnzú|đáp ứng (yêu cầu, điều kiện, tính tò mò, lòng tham)
+毛病|máobìng|tật xấu, lỗi
+矛盾|máodùn|mâu thuẫn
+冒险|màoxiǎn|mạo hiểm
+贸易|màoyì|thương mại
+眉毛|méimáo|lông mày
+媒体|méitǐ|truyền thông, báo chí
+煤炭|méitàn|than
+美术|měishù|mỹ thuật
+魅力|mèilì|sức hút
+梦想|mèngxiǎng|ước mơ
+秘密|mìmì|bí mật
+秘书|mìshū|thư ký
+密切|mìqiè|mật thiết
+蜜蜂|mìfēng|con ong
+面对|miànduì|đối mặt (chứng cứ, tương lai, khủng hoảng, thách thức), đối diện
+面积|miànjī|diện tích
+面临|miànlín|đứng trước (khó khăn, nguy hiểm, thách thức)
+苗条|miáotiáo|thon thả
+描写|miáoxiě|miêu tả
+敏感|mǐngǎn|nhạy cảm
+名牌|míngpái|thương hiệu nổi tiếng
+名片|míngpiàn|danh thiếp
+名胜古迹|míngshènggǔjì|danh lam thắng cảnh
+明确|míngquè|rõ ràng, rành mạch
+明显|míngxiǎn|rõ ràng
+明星|míngxīng|minh tinh
+命令|mìnglìng|mệnh lệnh
+命运|mìngyùn|vận mệnh
+摸|mō|sờ
+模仿|mófǎng|bắt chước
+模糊|móhu|mơ hồ
+模特|mótè|người mẫu
+摩托车|mótuōchē|xe máy
+陌生|mòshēng|lạ lẫm
+某|mǒu|nào đó
+木头|mùtóu|khúc gỗ
+目标|mùbiāo|mục tiêu
+目录|mùlù|mục lục
+目前|mùqián|trước mắt, hiện nay
+哪怕|nǎpà|cho dù
+难怪|nánguài|chẳng trách
+难免|nánmiǎn|khó tránh
+脑袋|nǎodài|não
+内部|nèibù|nội bộ
+内科|nèikē|khoa nội
+嫩|nèn|mềm, non
+能干|nénggàn|được việc
+能源|néngyuán|tài nguyên
+嗯|ńg|ừ, ừm
+年代|niándài|thời đại
+年纪|niánjì|tuổi tác
+念|niàn|đọc
+宁可|nìngkě|thà
+牛仔裤|niúzǎikù|quần bò
+农村|nóngcūn|nông thôn
+农民|nóngmín|nông dân
+农业|nóngyè|nông nghiệp
+浓|nóng|nồng, đậm
+女士|nǚshì|quý cô, quý bà
+欧洲|ōuzhōu|châu Âu
+偶然|ǒurán|ngẫu nhiên
+拍|pāi|vỗ
+派|pài|cử, phái
+盼望|pànwàng|mong chờ
+培训|péixùn|bồi dưỡng, tập huấn
+培养|péiyǎng|nuôi dưỡng, hình thành
+赔偿|péicháng|bồi thường
+佩服|pèifú|khâm phục
+配合|pèihé|phối hợp
+盆|pén|chậu
+碰|pèng|gặp phải
+批|pī|loạt, lô (lượng từ)
+批准|pīzhǔn|phê chuẩn, đồng ý
+披|pī|khoác
+疲劳|píláo|mệt mỏi
+匹|pǐ|con (lượng từ cho ngựa)
+片|piàn|chiếc, lát, mảnh (lượng từ cho lá, bánh mì, đất đai )
+片面|piànmiàn|phiến diện
+飘|piāo|bay
+拼音|pīnyīn|phiên âm
+频道|píndào|kênh
+平|píng|bằng, đều
+平安|píngān|bình an
+平常|píngcháng|bình thường
+平等|píngděng|bình đẳng
+平方|píngfāng|bình phương
+平衡|pínghéng|cân bằng
+平静|píngjìng|bình tĩnh
+平均|píngjūn|trung bình, bình quân
+评价|píngjià|đánh giá
+凭|píng|dựa vào
+迫切|pòqiè|cấp bách
+破产|pòchǎn|phá sản
+破坏|pòhuài|phá hoại
+期待|qīdài|kỳ vọng
+期间|qījiān|khoảng thời gian
+其余|qíyú|còn lại
+奇迹|qíjì|kỳ tích
+企业|qǐyè|nhà máy, xí nghiệp
+启发|qǐfā|gợi mở, gợi ý
+气氛|qìfēn|không khí (cuộc họp, buổi tiệc)
+汽油|qìyóu|xăng
+谦虚|qiānxū|khiêm tốn
+签|qiān|ký (tên)
+前途|qiántú|tiền đồ
+浅|qiǎn|nhạt
+欠|qiàn|nợ
+枪|qiāng|súng
+强调|qiángdiào|nhấn mạnh
+强烈|qiángliè|mãnh liệt, mạnh mẽ
+墙|qiáng|tường
+抢|qiǎng|cướp
+悄悄|qiāoqiāo|lặng lẽ
+瞧|qiáo|liếc nhìn
+巧妙|qiǎomiào|khéo léo
+切|qiè|cắt
+亲爱|qīnài|thân yêu
+亲切|qīnqiè|thân thiết
+亲自|qīnzì|tự thân
+勤奋|qínfèn|cần cù
+青|qīng|màu xanh non
+青春|qīngchūn|thanh xuân
+青少年|qīngshàonián|thanh thiếu niên
+轻视|qīngshì|coi khinh, khinh thường
+轻易|qīngyì|dễ dàng (làm trạng ngữ), khinh suất
+清淡|qīngdàn|thanh đạm
+情景|qíngjǐng|cảnh tượng
+情绪|qíngxù|tâm trạng
+请求|qǐngqiú|thỉnh cầu
+庆祝|qìngzhù|chúc mừng
+球迷|qiúmí|người hâm mộ bóng
+趋势|qūshì|xu thế
+取消|qǔxiāo|hủy bỏ
+娶|qǔ|lấy (vợ)
+去世|qùshì|tạ thế
+圈|quān|vòng
+权力|quánlì|quyền lực
+权利|quánlì|quyền lợi
+全面|quánmiàn|toàn diện
+劝|quàn|khuyên
+缺乏|quēfá|thiếu
+确定|quèdìng|xác định
+确认|quèrèn|xác nhận
+群|qún|đám
+燃烧|ránshāo|đốt cháy
+绕|rào|vòng vèo
+热爱|rèài|yêu (cuộc sống, học sinh, thiên nhiên, âm nhạc, bạn bè, người thân)
+热烈|rèliè|nhiệt liệt
+热心|rèxīn|nhiệt tình (người, người bạn), nhiệt huyết
+人才|réncái|nhân tài
+人口|rénkǒu|dân số
+人类|rénlèi|loài người
+人民币|rénmínbì|nhân dân tệ
+人生|rénshēng|đời người
+人事|rénshì|nhân sự
+人物|rénwù|nhân vật
+人员|rényuán|nhân viên
+忍不住|rěnbùzhù|không nhịn được
+日常|rìcháng|thường ngày
+日程|rìchéng|lịch trình
+日历|rìlì|quyển lịch
+日期|rìqī|ngày tháng
+日用品|rìyòngpǐn|đồ dùng
+日子|rìzi|ngày
+如何|rúhé|như thế nào
+如今|rújīn|hiện nay
+软|ruǎn|mềm
+软件|ruǎnjiàn|phần mềm
+弱|ruò|yếu ớt
+洒|sǎ|vãi, vung
+嗓子|sǎngzi|cổ họng
+色彩|sècǎi|màu sắc
+杀|shā|giết
+沙漠|shāmò|sa mạc
+沙滩|shātān|bãi cát
+傻|shǎ|ngốc nghếch
+晒|shài|phơi, tắm nắng
+删除|shānchú|xóa bỏ
+闪电|shǎndiàn|chớp
+扇子|shànzi|cái quạt
+善良|shànliáng|lương thiện, hiền lành
+善于|shànyú|giỏi về việc gì đó
+伤害|shānghài|làm hại
+商品|shāngpǐn|sản phẩm
+商务|shāngwù|thương gia (hạng, khoang),
+商业|shāngyè|thương mại
+上当|shàngdàng|mắc lừa
+蛇|shé|rắn
+舍不得|shěbùdé|không nỡ lòng
+设备|shèbèi|thiết bị
+设计|shèjì|thiết kế
+设施|shèshī|cơ sở vật chất
+射击|shèjī|bắn
+摄影|shèyǐng|quay phim, chụp ảnh
+伸|shēn|vươn, duỗi, kéo dài
+身材|shēncái|cơ thể, dáng
+身份|shēnfèn|thân phận
+深刻|shēnkè|sâu sắc
+神话|shénhuà|thần thoại
+神秘|shénmì|thần bí
+升|shēng|thăng, lên, lít (đơn vị đo thể tích)
+生产|shēngchǎn|sản xuất
+生动|shēngdòng|sinh động
+生长|shēngzhǎng|sinh trưởng, lớn
+声调|shēngdiào|thanh điệu
+绳子|shéngzi|dây thừng
+省略|shěnglüè|tỉnh lược
+胜利|shènglì|thắng lợi
+失眠|shīmián|mất ngủ
+失去|shīqù|mất đi
+失业|shīyè|thất nghiệp
+诗|shī|thơ
+狮子|shīzi|sư tử
+湿润|shīrùn|ẩm ướt
+石头|shítou|hòn đá
+时差|shíchā|lệch múi giờ
+时代|shídài|thời đại
+时刻|shíkè|khoảnh khắc
+时髦|shímáo|mốt
+时期|shíqī|thời kì
+时尚|shíshàng|thời thượng
+实话|shíhuà|lời nói thật
+实践|shíjiàn|thực tiễn
+实习|shíxí|thực tập
+实现|shíxiàn|thực hiện (kế hoạch, nguyện vọng, ước mơ)
+实验|shíyàn|thí nghiệm
+实用|shíyòng|hữu ích
+食物|shíwù|đồ ăn
+使劲儿|shǐjìnér|ra sức, lấy sức
+始终|shǐzhōng|từ đầu đến cuối
+士兵|shìbīng|binh sĩ
+市场|shìchǎng|chợ
+似的|shìde|giống như….
+事实|shìshí|sự thật
+事物|shìwù|sự vật
+事先|shìxiān|trước khi việc xảy ra
+试卷|shìjuàn|bài thi
+收获|shōuhuò|thu hoạch
+收据|shōujù|giấy biên nhận
+手工|shǒugōng|thủ công
+手术|shǒushù|phẫu thuật
+手套|shǒutào|găng tay
+手续|shǒuxù|thủ tục
+手指|shǒuzhǐ|ngón tay
+首|shǒu|đầu
+寿命|shòumìng|tuổi thọ
+受伤|shòushāng|bị thương
+书架|shūjià|giá sách
+梳子|shūzi|cái lược
+舒适|shūshì|thoải mái
+输入|shūrù|nhập
+蔬菜|shūcài|rau xanh
+熟练|shúliàn|thành thục
+属于|shǔyú|thuộc về
+鼠标|shǔbiāo|chuột máy tính
+数|shǔ|đếm
+数据|shùjù|số liệu
+数码|shùmǎ|kỹ thuật số
+摔倒|shuāidǎo|ngã nhào
+甩|shuǎi|vung, hất, bỏ lại
+双方|shuāngfāng|hai bên, song phương
+税|shuì|thuế
+说不定|shuōbùdìng|chưa biết chừng
+说服|shuōfú|thuyết phục
+丝绸|sīchóu|tơ lụa
+丝毫|sīháo|một chút (dùng dạng phủ định)
+私人|sīrén|tư nhân
+思考|sīkǎo|suy nghĩ
+思想|sīxiǎng|tư tưởng
+撕|sī|xé
+似乎|sìhū|dường như
+搜索|sōusuǒ|tìm kiếm
+宿舍|sùshè|ký túc xá
+随身|suíshēn|mang theo người
+随时|suíshí|bất cứ lúc nào
+随手|suíshǒu|tiện tay
+碎|suì|vỡ vụn
+损失|sǔnshī|tổn thất
+缩短|suōduǎn|thu hẹp (khoảng cách), rút ngắn (thời gian), cắt ngắn (câu chuyện)
+所|suǒ|trợ từ
+锁|suǒ|khóa
+台阶|táijiē|bậc thềm, bậc
+太极拳|tàijíquán|thái cực quyền
+太太|tàitai|vợ
+谈判|tánpàn|đàm phán
+坦率|tǎnshuài|thẳng thắn
+烫|tàng|bỏng
+逃|táo|chạy trốn
+逃避|táobì|trốn tránh
+桃|táo|đào
+淘气|táoqì|tinh nghịch
+讨价还价|tǎojiàhuánjià|mặc cả
+套|tào|bộ (quần áo), căn (nhà)
+特色|tèsè|đặc sắc
+特殊|tèshū|đặc biệt, đặc thù (quan hệ, nghi lễ, yêu cầu, đãi ngộ)
+特征|tèzhēng|đặc trưng
+疼爱|téngài|chiều chuộng, yêu chiều
+提倡|tíchàng|đề xướng
+提纲|tígāng|đề cương
+提问|tíwèn|hỏi
+题目|tímù|đề mục
+体会|tǐhuì|cảm nhận
+体贴|tǐtiē|sống tình cảm, chu đáo
+体现|tǐxiàn|thể hiện
+体验|tǐyàn|trải nghiệm
+天空|tiānkōng|bầu trời
+天真|tiānzhēn|hồn nhiên
+调皮|tiáopí|nghịch ngợm
+调整|tiáozhěng|điều chỉnh
+挑战|tiǎozhàn|thách thức, thử thách, thách
+通常|tōngcháng|thông thường
+统一|tǒngyī|thống nhất
+痛苦|tòngkǔ|đau khổ
+痛快|tòngkuài|sung sướng
+偷|tōu|ăn trộm
+投入|tóurù|đút vào, đầu tư vào,
+投资|tóuzī|đầu tư
+透明|tòumíng|trong suốt
+突出|tūchū|làm nổi bật
+土地|tǔdì|đất đai
+土豆|tǔdòu|khoai tây
+吐|tǔ/tù|nhổ, nôn
+兔子|tùzi|con thỏ
+团|tuán|cuộn
+推辞|tuīcí|từ chối
+推广|tuīguǎng|cuộn (danh từ)
+推荐|tuījiàn|tiến cử
+退|tuì|lùi
+退步|tuìbù|lùi bước
+退休|tuìxiū|nghỉ hưu
+歪|wāi|xiên (nghiêng)
+外公|wàigōng|ông ngoại
+外交|wàijiāo|ngoại giao
+完美|wánměi|hoàn hảo
+完善|wánshàn|hoàn thiện
+完整|wánzhěng|hoàn chỉnh
+玩具|wánjù|đồ chơi
+万一|wànyī|vạn nhất, nhỡ
+王子|wángzǐ|vua
+网络|wǎngluò|mạng internet
+往返|wǎngfǎn|khứ hồi
+危害|wēihài|nguy hại
+威胁|wēixié|uy hiếp
+微笑|wēixiào|mỉm cười
+违反|wéifǎn|vi phạm
+围巾|wéijīn|khăn
+围绕|wéirào|xoay quanh, bao quanh, quay quanh
+唯一|wéiyī|duy nhất
+维修|wéixiū|sửa chữa
+伟大|wěidà|vĩ đại
+尾巴|wěibā|cái đuôi
+委屈|wěiqu|tủi thân
+未必|wèibì|chưa chắc
+未来|wèilái|tương lai
+位于|wèiyú|nằm ở (vị trí địa lý)
+位置|wèizhì|vị trí
+胃|wèi|dạ dày
+胃口|wèikǒu|khẩu vị
+温暖|wēnnuǎn|ấm áp
+温柔|wēnróu|hiền dịu
+文件|wénjiàn|tài liệu
+文具|wénjù|đồ dùng học tập
+文明|wénmíng|văn minh
+文学|wénxué|văn học
+文字|wénzì|văn tự
+闻|wén|ngửi
+吻|wěn|hôn
+稳定|wěndìng|ổn định
+问候|wènhòu|hỏi thăm
+卧室|wòshì|phòng ngủ
+握手|wòshǒu|bắt tay
+屋子|wūzi|căn nhà
+无奈|wúnài|bó tay, không có cách nào
+无数|wúshù|vô số
+无所谓|wúsuǒwèi|không quan tâm, không để ý
+武术|wǔshù|võ thuật
+勿|wù|đừng
+物理|wùlǐ|vật lý
+物质|wùzhì|vật chất
+雾|wù|sương mù
+吸取|xīqǔ|hút, rút ra (bài học kinh nghiệm)
+吸收|xīshōu|thẩm thấu, ngấm
+戏剧|xìjù|kịch
+系|xì|khoa, hệ
+系统|xìtǒng|hệ thống
+细节|xìjié|tình tiết
+瞎|xiā|mù
+下载|xiàzǎi|tải
+吓|xià|dọa
+夏令营|xiàlìngyíng|trại
+鲜艳|xiānyàn|tươi tắn
+显得|xiǎndé|lộ rõ
+显然|xiǎnrán|hiển nhiên, rõ ràng
+显示|xiǎnshì|hiển thị, cho thấy, tôn lên
+县|xiàn|huyện
+现代|xiàndài|hiện đại
+现实|xiànshí|hiện thực
+现象|xiànxiàng|hiện tượng
+限制|xiànzhì|hạn chế, giới hạn
+相处|xiāngchǔ|ở cùng nhau, tiếp xúc nhiều
+相当|xiāngdāng|tương đối
+相对|xiāngduì|tương đối
+相关|xiāngguān|liên quan
+相似|xiāngsì|giống
+香肠|xiāngcháng|xúc xích
+享受|xiǎngshòu|hưởng thụ
+想念|xiǎngniàn|nhớ nhung
+想象|xiǎngxiàng|tưởng tượng
+项|xiàng|hạng, môn (thể thao)
+项链|xiàngliàn|dây chuyền
+项目|xiàngmù|hạng mục
+象棋|xiàngqí|cờ tướng
+象征|xiàngzhēng|tượng trưng
+消费|xiāofèi|tiêu dùng
+消化|xiāohuà|tiêu hóa
+消极|xiāojí|tiêu cực
+消失|xiāoshī|biến mất
+销售|xiāoshòu|bán
+小麦|xiǎomài|lúa mạch
+小气|xiǎoqì|keo kiệt
+孝顺|xiàoshùn|hiếu thảo
+效率|xiàolǜ|hiệu suất
+歇|xiē|nghỉ ngơi
+斜|xié|nghiêng, chéo
+写作|xiězuò|viết
+血|xiě|máu
+心理|xīnlǐ|tâm lý
+心脏|xīnzàng|tim
+欣赏|xīnshǎng|thưởng thức, đánh giá cao
+信号|xìnhào|tín hiệu
+信任|xìnrèn|tín nhiệm
+行动|xíngdòng|hành động
+行人|xíngrén|người đi đường
+行为|xíngwéi|hành vi
+形成|xíngchéng|hình thành
+形容|xíngróng|hình dung
+形式|xíngshì|hình thức
+形势|xíngshì|tình hình
+形象|xíngxiàng|hình tượng
+形状|xíngzhuàng|hình dáng, dáng
+幸亏|xìngkuī|may mà
+幸运|xìngyùn|may mắn
+性质|xìngzhì|tính chất
+兄弟|xiōngdì|huynh đệ
+胸|xiōng|ngực
+休闲|xiūxián|nhàn hạ, thoải mái
+修改|xiūgǎi|sửa lỗi (văn bản)
+虚心|xūxīn|khiêm tốn
+叙述|xùshù|kể, thuật
+宣布|xuānbù|tuyên bố
+宣传|xuānchuán|tuyên truyền
+学历|xuélì|trình độ
+学术|xuéshù|học thuật
+学问|xuéwèn|học vấn
+寻找|xúnzhǎo|tìm kiếm
+询问|xúnwèn|hỏi han
+训练|xùnliàn|huấn luyện
+迅速|xùnsù|nhanh chóng, nhanh
+押金|yājīn|tiền cọc
+牙齿|yáchǐ|răng
+延长|yáncháng|kéo dài (thời gian)
+严肃|yánsù|nghiêm túc
+演讲|yǎnjiǎng|diễn thuyết
+宴会|yànhuì|yến tiệc
+阳台|yángtái|ban công
+痒|yǎng|ngứa
+样式|yàngshì|kiểu dáng
+腰|yāo|lưng
+摇|yáo|lắc
+咬|yǎo|cắn
+要不|yàobù|nếu không thì
+业务|yèwù|nghiệp vụ
+业余|yèyú|nghiệp dư
+夜|yè|đêm
+一辈子|yíbèizi|một đời người
+一旦|yídàn|một khi
+一律|yílǜ|nhất loạt
+一再|yízài|nhiều lần
+一致|yízhì|thống nhất
+依然|yīrán|vẫn như xưa
+移动|yídòng|di động
+移民|yímín|di dân
+遗憾|yíhàn|hối tiếc
+疑问|yíwèn|nghi vấn, nghi ngờ
+乙|yǐ|ất
+以及|yǐjí|và
+以来|yǐlái|trở lại đây (thời gian)
+亿|yì|trăm triệu
+义务|yìwù|nghĩa vụ
+议论|yìlùn|nghị luận
+意外|yìwài|ngoài ý muốn
+意义|yìyì|ý nghĩa
+因而|yīnér|cho nên
+因素|yīnsù|nhân tố
+银|yín|bạc
+印刷|yìnshuā|in ấn
+英俊|yīngjùn|tuấn tú
+英雄|yīngxióng|anh hùng
+迎接|yíngjiē|nghênh đón
+营养|yíngyǎng|dinh dưỡng
+营业|yíngyè|kinh doanh
+影子|yǐngzi|cái bóng
+应付|yìngfù|ứng phó
+应用|yìngyòng|ứng dụng
+硬|yìng|cứng
+硬件|yìngjiàn|phần cứng
+拥抱|yōngbào|ôm, ôm ấp
+拥挤|yōngjǐ|chen chúc, đông đúc
+勇气|yǒngqì|dũng khí
+用功|yònggōng|dụng công, công phu
+用途|yòngtú|cách dùng
+优惠|yōuhuì|ưu đãi
+优美|yōuměi|trang nhã, thanh lịch, thanh nhã, đẹp, xinh xắn
+优势|yōushì|ưu thế
+悠久|yōujiǔ|lâu đời
+犹豫|yóuyù|do dự
+油炸|yóuzhá|chiên giòn
+游览|yóulǎn|du ngoạn, thưởng ngoạn
+有利|yǒulì|có lợi
+幼儿园|yòuéryuán|nhà trẻ
+娱乐|yúlè|giải trí
+语气|yǔqì|ngữ khí
+玉米|yùmǐ|ngô
+预报|yùbào|dự báo
+预订|yùdìng|đặt trước, dự định trước
+预防|yùfáng|phòng, phòng chống
+元旦|yuándàn|nguyên đán
+员工|yuángōng|nhân công
+原料|yuánliào|nguyên liệu
+原则|yuánzé|nguyên tắc
+圆|yuán|hình tròn
+愿望|yuànwàng|nguyện vọng
+乐器|yuèqì|nhạc cụ
+晕|yūn|say (xe)
+运气|yùnqì|vận may
+运输|yùnshū|vận tải
+运用|yùnyòng|vận dụng
+灾害|zāihài|thiên tai
+再三|zàisān|hết lần này đến lần khác
+在乎|zàihū|để ý
+在于|zàiyú|ở chỗ
+赞成|zànchéng|tán thành
+赞美|zànměi|ca tụng
+糟糕|zāogāo|tồi tệ
+造成|zàochéng|gây nên
+则|zé|qui tắc, qui phạm
+责备|zébèi|trách cứ
+摘|zhāi|hái
+窄|zhǎi|hẹp
+粘贴|zhāntiē|dính, dán
+展开|zhǎnkāi|xòe ra, triển khai
+展览|zhǎnlǎn|triển lãm
+占|zhàn|chiếm
+战争|zhànzhēng|chiến tranh
+长辈|zhǎngbèi|tiền bối
+涨|zhàng|tăng lên (giá cả, lương)
+掌握|zhǎngwò|nắm vững
+账户|zhànghù|tài khoản
+招待|zhāodài|chiêu đãi
+着火|zháohuǒ|bắt lửa, bén lửa
+着凉|zháoliáng|nhiễm lạnh
+召开|zhàokāi|triệu tập (cuộc họp)
+照常|zhàocháng|như thường lệ
+哲学|zhéxué|triết học
+针对|zhēnduì|nhằm (tổ chức, người, vấn đề)
+珍惜|zhēnxī|trân trọng
+真实|zhēnshí|chân thực
+诊断|zhěnduàn|chẩn đoán
+阵|zhèn|trận (chiến đấu, chiến tranh), khoảng thời gian, mùi hương
+振动|zhèndòng|trấn động
+争论|zhēnglùn|tranh luận
+争取|zhēngqǔ|tranh thủ (ủng hộ, ý kiến)
+征求|zhēngqiú|trưng cầu (ý kiến, ý kiến phản hồi), xin (ý kiến lãnh đạo, đồng ý)
+睁|zhēng|mở to mắt, trợn mắt
+整个|zhěnggè|cả, toàn bộ
+整齐|zhěngqí|gọn gàng, ngăn nắp
+整体|zhěngtǐ|tổng thể
+正|zhèng|đứng (trái )
+证件|zhèngjiàn|giấy tờ
+证据|zhèngjù|chứng cứ
+政府|zhèngfǔ|chính phủ
+政治|zhèngzhì|chính trị
+挣|zhèng|tranh, giành
+支|zhī|chiếc (lượng từ cho bút…)
+支票|zhīpiào|ngân phiếu
+执照|zhízhào|giấy phép
+直|zhí|thẳng
+指导|zhǐdǎo|chỉ đạo
+指挥|zhǐhuī|chỉ huy
+至今|zhìjīn|đến nay
+至于|zhìyú|còn như…..
+志愿者|zhìyuànzhě|tình nguyện viên
+制定|zhìdìng|lập ra, thiết lập, xây dựng, lập (chính sách, qui định, kế hoạch, sách lược, phương án)
+制度|zhìdù|chế độ, chính sách
+制造|zhìzào|sản xuất
+制作|zhìzuò|làm, chế tạo
+治疗|zhìliáo|điều trị
+秩序|zhìxù|trật tự
+智慧|zhìhuì|trí tuệ
+中介|zhōngjiè|môi giới, trung gian
+中心|zhōngxīn|trung tâm
+中旬|zhōngxún|trung tuần
+种类|zhǒnglèi|chủng loại
+重大|zhòngdà|trọng đại, lớn
+重量|zhòngliàng|trọng lượng
+周到|zhōudào|chu đáo
+猪|zhū|con lợn
+竹子|zhúzi|cây trúc
+逐步|zhúbù|từng bước
+逐渐|zhújiàn|dần dần
+主持|zhǔchí|dẫn (chương trình),
+主动|zhǔdòng|chủ động
+主观|zhǔguān|chủ quan
+主人|zhǔrén|chủ nhân
+主任|zhǔrèn|chủ nhiệm
+主题|zhǔtí|chủ đề
+主席|zhǔxí|chủ tịch
+主张|zhǔzhāng|ý tưởng, ý kiến
+煮|zhǔ|luộc, đun
+注册|zhùcè|đăng kí
+祝福|zhùfú|chúc phúc
+抓|zhuā|bắt, véo
+抓紧|zhuājǐn|(tay) nắm chắc, tranh thủ (thời gian)
+专家|zhuānjiā|chuyên gia
+专心|zhuānxīn|chuyên tâm
+转变|zhuǎnbiàn|chuyển biến
+转告|zhuǎngào|chuyển lời
+装|zhuāng|đựng, chứa
+装饰|zhuāngshì|trang hoàng, trang trí
+装修|zhuāngxiū|sửa nội thất
+状况|zhuàngkuàng|tình trạng
+状态|zhuàngtài|trạng thái
+撞|zhuàng|va vào, đâm vào
+追|zhuī|đuổi theo
+追求|zhuīqiú|theo đuổi
+咨询|zīxún|tư vấn
+姿势|zīshì|tư thế
+资格|zīgé|tư cách
+资金|zījīn|vốn (tiền)
+资料|zīliào|tư liệu
+资源|zīyuán|nguồn tài nguyên
+紫|zǐ|màu tím
+自从|zìcóng|từ khi….
+自动|zìdòng|tự động
+自豪|zìháo|tự hào, kiêu ngạo
+自觉|zìjué|tự giác
+自私|zìsī|ích kỉ
+自由|zìyóu|tự do
+自愿|zìyuàn|tình nguyện, tự nguyện
+字母|zìmǔ|chữ cái
+字幕|zìmù|phụ đề
+综合|zōnghé|tổng hợp
+总裁|zǒngcái|giám đốc
+总共|zǒnggòng|tổng cộng
+总理|zǒnglǐ|thủ tướng
+总算|zǒngsuàn|rốt cuộc
+总统|zǒngtǒng|tổng thống
+总之|zǒngzhī|tóm lại
+阻止|zǔzhī|ngăn chặn, ngăn cản
+组|zǔ|tổ, cụm, nhóm
+组成|zǔchéng|tổ thành
+组合|zǔhé|tổ hợp, tổ hợp thành, nhóm
+组织|zǔzhī|tổ chức
+最初|zuìchū|ban đầu
+醉|zuì|say, say đắm
+尊敬|zūnjìng|tôn kính, kính trọng
+遵守|zūnshǒu|tuân thủ
+作品|zuòpǐn|tác phẩm
+作为|zuòwéi|coi là, làm, là
+作文|zuòwén|bài viết
+
+=== HSK6 ===
+暧昧|àimèi|yêu đương, tình yêu, mập mờ
+爱戴|àidài|yêu thương, tình yêu thương
+癌症|áizhèng|ung thư
+挨|āi/ái|sát cạnh, lần lượt, chịu
+爱不释手|àibùshìshǒu|quyến luyến không rời, thích mê
+安置|ānzhì|sắp xếp, sắp đặt, bố trí
+案件|ànjiàn|vụ án
+案例|ànlì|án mẫu
+按摩|ànmó|xoa bóp
+暗示|ànshì|ám chỉ, ra hiệu
+安宁|ānníng|yên ổn, thoải mái (tâm hồn)
+熬|áo|nấu, đun (thuốc), chịu đựng, thức
+奥秘|àomì|huyền bí
+凹凸|āotū|lỗi lõm
+安详|ānxiáng|ung dung, khoan thai
+昂贵|ángguì|đắt tiền, xa xỉ
+颁布|bānbù|ban hành
+霸道|bàdào|bá đạo, lấn át, độc tài
+败坏|bàihuài|hủy hoại, suy đồi
+罢工|bàgōng|bãi công
+疤|bā|vết thương
+摆脱|bǎituō|thoát khỏi
+掰|bāi|bẻ
+拜访|bàifǎng|thăm, đến thăm
+拜托|bàituō|nhờ, nhờ vả
+拜年|bàinián|chúc tết
+拔苗助长|bámiáozhùzhǎng|giục tốc bất đạt
+把手|bǎshǒu|tay nắm cửa
+把关|bǎguān|canh giữ, nắm chắc (chất lượng), kiểm định
+扒|bā|nắm chắc
+巴结|bājie|nịnh bợ
+巴不得|bābùdé|những mong sao
+颁发|bānfā|trao tặng (giải thưởng, phần thưởng)
+绑架|bǎngjià|bắt cóc
+磅|bàng|pound (đơn vị đo cân nặng)
+版本|bǎnběn|phiên bản
+榜样|bǎngyàng|tấm gương
+斑|bān|vết (sẹo, chàm, bẩn)
+扮演|bànyǎn|đóng vai, sắm vai
+半途而废|bàntúérfèi|bỏ cuộc giữa chừng
+包装|bāozhuāng|đóng gói, hộp, kiện hàng, lăng xê (ca sĩ, diễn viên)
+包袱|bāofu|tay nải, gánh nặng
+保障|bǎozhàng|bảo vệ (quyền lợi, tài sản, tính mạng, sự an toàn), bảo hiểm
+保养|bǎoyǎng|bảo dưỡng (xe cộ, máy móc), chăm sóc (cơ thê)
+保卫|bǎowèi|bảo vệ, giữ gìn (hòa bình, chủ quyền, đất nước, trật tự trị an)
+保守|bǎoshǒu|giữ kín (bí mật), bảo thủ
+保姆|bǎomǔ|bảo mẫu
+保密|bǎomì|giữ bí mật, bảo mật
+保管|bǎoguǎn|bảo quản, nhân viên kho
+饱经沧桑|bǎojīngcāngsāng|trải qua bao sóng gió
+饱和|bǎohé|bão hòa
+伴侣|bànlǚ|bạn đời
+伴随|bànsuí|đồng hành
+包围|bāowéi|bao quanh, bao vây
+包庇|bāobì|bao che, che đậy, lấp liếm
+保重|bǎozhòng|bảo trọng
+报仇|bàochóu|báo thù
+报酬|bàochóu|thù lao
+报答|bàodá|báo đáp, trả ơn
+报复|bàofù|trả thù
+报警|bàojǐng|báo cảnh sát
+报销|bàoxiāo|thanh toán chi phí
+抱负|bàofù|hoài bão
+暴力|bàolì|bạo lực
+暴露|bàolù|lộ rõ (kết hợp danh từ), lộ ra (không nói về bí mật)
+曝光|bàoguāng|lộ hết ra, phơi bày (việc ẩn khuất, việc xấu)
+爆发|bàofā|bùng nổ (chiến tranh, bạo lực)
+爆炸|bàozhà|nổ, nổ tung
+贝壳|bèiké|vỏ (ốc, sò, hến, ngao)
+被告|bèigào|bị cáo
+被动|bèidòng|bị động
+背诵|bèisòng|đọc thuộc
+背叛|bèipàn|phản bội
+本钱|běnqián|tiền vốn
+本能|běnnéng|bản năng
+悲惨|bēicǎn|bi thảm,
+悲哀|bēiāi|đau lòng , đau xót ( hiện tượng xã hội, người thân mất đi)
+奔驰|bēnchí|chạy băng băng
+奔波|bēnbō|bôn ba, chạy đi chạy lại (giữa hai nơi)
+备忘录|bèiwànglù|bản ghi nhớ
+备份|bèifèn|cóp py thêm (phần mềm, tài liệu)
+卑鄙|bēibǐ|bỉ ổi
+北极|běijí|Bắc cực
+鼻涕|bítì|nước mũi
+闭塞|bìsè|tắc nghẽn, bế tắc
+鄙视|bǐshì|khinh thường
+逼迫|bīpò|bắt buộc
+迸发|bèngfā|bung ra, rộ lên, khơi gợi
+蹦|bèng|nhảy bật, bật
+笨拙|bènzhuō|vụng về
+甭|béng|không cần
+比重|bǐzhòng|tỉ trọng
+比方|bǐfāng|ví dụ
+比喻|bǐyù|phép so sánh
+本身|běnshēn|tự nó (dành cho vật, sự việc)
+本人|běnrén|chính bản thân ai
+本事|běnshi|bản lĩnh
+弊病|bìbìng|mặt hạn chế, cái xấu, tệ nạn
+崩溃|bēngkuì|tan vỡ, sụp đổ
+鞭策|biāncè|đôn đốc, đốc thúc
+遍布|biànbù|phân bố, rải rác
+边缘|biānyuán|vùng ven
+边疆|biānjiāng|biên cương, biên ải
+边界|biānjiè|đường biên giới
+边境|biānjìng|biên thùy
+辨认|biànrèn|nhận biết
+贬低|biǎndī|hạ thấp (cô ấy, phụ nữ, tính quan trọng, công việc)
+贬义|biǎnyì|nghĩa xấu
+臂|bì|cánh tay
+编织|biānzhī|đan lát
+扁|biǎn|dẹt, bẹt
+弊端|bìduān|sai lầm (gây tổn thất)
+变迁|biànqiān|thay đổi (thời đại, nhân sự, quan điểm, ngữ âm, khí hậu)
+部署|bùshǔ|phân công (nhiệm vụ, nhân lực)
+部位|bùwèi|bộ phận
+辫子|biànzi|bím tóc
+辩证|biànzhèng|biện chứng
+辩解|biànjiě|giải thích (do bị hiểu nhầm hoặc chỉ trích)
+辩护|biànhù|biện hộ
+表态|biǎotài|tỏ thái độ rõ ràng
+表彰|biǎozhāng|tuyên dương, biểu dương
+表决|biǎojué|biểu quyết, bầu
+补贴|bǔtiē|trợ cấp
+补救|bǔjiù|cứu vãn
+补偿|bǔcháng|bồi thường, bù đắp
+薄弱|bóruò|yếu đuối (ý chí), yếu (binh lực, sức mạnh)
+濒临|bīnlín|kề cận, giáp
+波涛|bōtāo|sóng to
+波浪|bōlàng|sóng
+步伐|bùfá|nhịp bước, bước chân
+标题|biāotí|tiêu đề
+标记|biāojì|kí hiệu, dấu
+标本|biāoběn|tiêu bản, mẫu vật
+播种|bōzhǒng|gieo hạt
+搏斗|bódòu|vật lộn
+捕捉|bǔzhuō|bắt, tóm, chộp
+拨|bō|gạt, đẩy
+憋|biē|kìm nén, nín nhịn
+并非|bìngfēi|không chắc
+并列|bìngliè|ngang hàng
+布置|bùzhì|bày biện, bố trí (công việc), giao (bài tập về nhà)
+布局|bùjú|bố cục
+布告|bùgào|thông báo
+哺乳|bǔrǔ|nuôi bằng sữa mẹ
+变质|biànzhì|hỏng, hư (đồ ăn)
+变故|biàngù|biến cố, tai nạn
+博览会|bólǎnhuì|hội chợ
+博大精深|bódàjīngshēn|uyên bác, uyên thâm (học thức, học vấn, tư tưởng) thâm thúy (văn hóa)
+剥削|bōxuē|bóc lột
+别致|biézhì|khác biệt
+别扭|bièniu|không thuận, không thông, khúc mắc
+别墅|biéshù|biệt thự
+冰雹|bīngbáo|mưa đá
+便条|biàntiáo|giấy nhớ
+便利|biànlì|tiện lợi cho (người dân, mọi người)
+便于|biànyú|tiện cho việc (học tập, vệ sinh, thảo luận)
+伯母|bómǔ|bác gái
+丙|bǐng|bính
+不顾|bùgù|bất chấp
+不言而喻|bùyánéryù|rõ mồn một
+不禁|bùjīn|không kiềm được
+不相上下|bùxiāngshàngxià|ngang tài ngang sức
+不由得|bùyóudé|đành phải
+不止|bùzhǐ|không chỉ (một lần )
+不时|bùshí|đôi khi, thỉnh thoảng
+不料|bùliào|không ngờ
+不敢当|bùgǎndāng|không dám
+不择手段|bùzéshǒuduàn|không từ thủ đoạn
+不愧|bùkuì|xứng đáng
+不惜|bùxī|không tiếc
+不得已|bùdéyǐ|bất đắc dĩ
+不屑一顾|bùxièyīgù|không đáng quan tâm
+不妨|bùfáng|đừng ngại
+不堪|bùkān|quá mức chịu đựng
+不可思议|bùkěsīyì|không thể tưởng tượng nổi
+不免|bùmiǎn|không tránh khỏi
+不像话|bùxiànghuà|chẳng ra làm sao cả
+馋|chán|thèm, ham
+颤抖|chàndǒu|run rẩy
+雌雄|cíxióng|thắng bại, sống mái
+除|chú|trừ, chia (phép tính)
+陈述|chénshù|tường trình, trần thuật
+陈旧|chénjiù|lỗi thời, cũ kĩ
+陈列|chénliè|trưng bày, bày
+阐述|chǎnshù|trình bày
+锤|chuí|cái búa
+钞票|chāopiào|tờ tiền
+重叠|chóngdié|lặp lại
+采集|cǎijí|hái lượm, thu thập
+采购|cǎigòu|mua, thu mua
+采纳|cǎinà|tiếp nhận, tiếp thu
+迟钝|chídùn|chậm chạp (hành động, phản ứng, hoạt động)
+迟缓|chíhuǎn|chậm, chậm lại
+迟疑|chíyí|lưỡng lự
+超越|chāoyuè|vượt qua, vượt (đối thủ, thời gian, tuổi tác, thành tựu)
+赤道|chìdào|xích đạo
+赤字|chìzì|bội chi
+财政|cáizhèng|tài chính
+财富|cáifù|tài sản, sự giàu có
+财务|cáiwù|tài vụ
+诧异|chàyì|kinh ngạc
+诚挚|chéngzhì|chân thành
+触犯|chùfàn|xâm phạm (luật, quyền), xúc phạm
+裁缝|cáiféng|may vá
+裁员|cáiyuán|giảm biên chế, cắt giảm nhân viên
+裁判|cáipàn|trọng tài
+衬托|chèntuō|làm nổi bật
+草率|cǎoshuài|qua loa, vội vàng (quyết định)
+草案|cǎoàn|bản thảo
+苍白|cāngbái|trắng bệch
+船舶|chuánbó|thuyền bè
+舱|cāng|khoang, buồng (trên tàu, máy bay)
+脆弱|cuìruò|yếu đuối, yếu mềm, mỏng manh
+缠绕|chánrào|quấn, quấn quanh
+纯粹|chúncuì|nguyên chất, đơn thuần là
+纯洁|chúnjié|trong sạch (tâm hồn, tổ chức, đội ngũ)
+粗鲁|cūlǔ|thô lỗ
+筹备|chóubèi|chuẩn bị, trù bị
+策略|cèlüè|sách lược
+策划|cèhuà|vạch ra, chuẩn bị, lên kế hoạch
+窜|cuàn|lủi, chuồn, chạy toán loạn
+穿越|chuānyuè|xuyên qua, vượt qua
+稠密|chóumì|dày đặc
+称心如意|chènxīnrúyì|vừa lòng hợp ý
+称号|chēnghào|danh hiệu
+秤|chèng|cân
+磋商|cuōshāng|hội ý, trao đổi, bàn bạc
+磁带|cídài|băng từ
+盛|chéng|chứa, đựng
+畅销|chàngxiāo|bán chạy
+畅通|chàngtōng|thông suốt
+炊烟|chuīyān|khói
+灿烂|cànlàn|xán lạn
+澄清|chéngqīng|làm rõ
+潮流|cháoliú|trào lưu
+测量|cèliáng|đo lường, đo
+沉闷|chénmèn|trầm tính, buồn tẻ, tẻ ngắt
+沉重|chénzhòng|nặng nề, nặng trĩu
+沉着|chénzhuó|bình thản
+沉淀|chéndiàn|kết tủa, lắng
+沉思|chénsī|trầm ngâm suy tư
+残酷|cánkù|tàn khốc, tàn nhẫn
+残疾|cánjí|tàn tật
+残留|cánliú|tan dư
+残忍|cánrěn|tàn nhẫn
+次序|cìxù|thứ tự
+次品|cìpǐn|loại hai, thứ phẩm
+橙|chéng|cam
+柴油|cháiyóu|dầu diesel
+查获|cháhuò|khám xét, khám (thuốc phiện, ma túy)
+朝代|cháodài|triều đại
+昌盛|chāngshèng|hưng thịnh, hưng vượng
+敞开|chǎngkāi|mở toang, mở (lòng)
+操练|cāoliàn|thao luyện
+操纵|cāozòng|thao túng, khống chế
+操劳|cāoláo|chăm chỉ làm việc
+操作|cāozuò|thao tác, vận hành (máy móc)
+撤销|chèxiāo|hủy, bãi bỏ, hủy bỏ (bản án, phán quyết, tội danh), cách chức, tước (giấy phép)
+撤退|chètuì|lui, rút lui (binh)
+摧残|cuīcán|tàn phá, phá hủy
+搓|cuō|xoay, xoắn, vặn
+搀|chān|trộn, lẫn, nâng, đỡ
+插座|chāzuò|o cắm
+挫折|cuòzhé|thất bại, trở ngại
+持久|chíjiǔ|dài lâu, lâu dài
+承诺|chéngnuò|cam kết, lời hứa
+承包|chéngbāo|thầu, nhận thầu
+承办|chéngbàn|đăng cai, đứng ra tổ chức
+才干|cáigàn|năng lực, tài cán
+成本|chéngběn|chi phí, giá thành
+成效|chéngxiào|hiệu quả (đạt được)
+成心|chéngxīn|cố tình, cố ý
+成天|chéngtiān|suốt ngày
+成员|chéngyuán|thành viên
+成交|chéngjiāo|đạt thỏa thuận
+慈祥|cíxiáng|hiền từ, hiền hậu (ánh mắt, nụ cười, khuôn mặt)
+慈善|císhàn|từ thiện
+惩罚|chéngfá|trừng phạt
+彩票|cǎipiào|vé xổ số
+床单|chuángdān|ga giường
+差别|chābié|sự khác biệt
+巢穴|cháoxué|tổ, hang, tổ ấm
+川流不息|chuānliúbùxī|dòng chảy không ngừng, tấp nập
+崇高|chónggāo|cao cả
+崇敬|chóngjìng|ngợi ca, thán phục, khâm phục
+崇拜|chóngbài|sùng bái, tôn sùng
+岔|chà|rẽ, ngoặt
+层次|céngcì|trình tự, cấp độ
+层出不穷|céngchūbùqióng|tầng tầng lớp lớp
+尝试|chángshì|thử, nếm trải
+处置|chǔzhì|xử trí, xử lý
+处境|chǔjìng|cảnh ngộ, hoàn cảnh
+处分|chǔfèn|trừng phạt
+城堡|chéngbǎo|thành lũy
+垂直|chuízhí|vuông góc
+场面|chǎngmiàn|cảnh
+场所|chǎngsuǒ|nơi
+场合|chǎnghé|trường hợp, hoàn cảnh, nơi
+嘲笑|cháoxiào|nhạo báng
+嘈杂|cáozá|ồn ào
+喘气|chuǎnqì|hổn hển, thở dốc
+呈现|chéngxiàn|bày ra (cảnh tượng)
+吹牛|chuīniú|nói phét
+吹捧|chuīpěng|tâng bốc, ca tụng
+吃苦|chīkǔ|chịu khổ
+吃力|chīlì|tốn sức
+参谋|cānmóu|tham mưu
+参照|cānzhào|tham khảo, đối chiếu
+刺|cì|đâm, chích, chọc
+刹那|chànà|chốc lát, chớp mắt
+初步|chūbù|bước đầu
+创立|chuànglì|sáng lập, xây dựng (hệ thống, lý luận, chính quyền, đảng)
+创新|chuàngxīn|sáng tạo
+创作|chuàngzuò|sáng tác, xây dựng (dùng trong tác phẩm nghệ thu, hội họa, tiểu thuyết)
+创业|chuàngyè|lập nghiệp, sáng nghiệp
+出身|chūshēn|xuất thân
+出路|chūlù|đường ra
+出神|chūshén|xuất thần
+出息|chūxī|tiền đồ, triển vọng
+出卖|chūmài|bán, bán rẻ
+凑合|còuhé|tập hợp, gom góp
+冲突|chōngtū|xung đột, mâu thuân
+冲动|chōngdòng|bồng bột, xốc nổi, manh động
+冲击|chōngjī|xô vào, đập vào, xung kích
+充足|chōngzú|đầy đủ
+充沛|chōngpèi|dồi dào, dạt dào
+充当|chōngdāng|đảm đương (vị trí
+充实|chōngshí|tăng cường, bổ sung cho đủ
+储蓄|chǔxù|gửi tiết kiệm
+储存|chǔcún|cất, giữ (tiền, tư liệu)
+储备|chǔbèi|dự trữ, để dành (ngoại hối,vàng, lương thực, thức ăn)
+偿还|chánghuán|trả nợ
+倡议|chàngyì|sáng kiến
+倡导|chàngdǎo|khởi xướng, mở đầu
+侧面|cèmiàn|mặt nghiêng
+伺候|cìhòu|hầu hạ, phục dịch
+传达|chuándá|truyền đạt
+传授|chuánshòu|truyền thụ
+传单|chuándān|truyền đơn, tờ rơi
+仓库|cāngkù|kho
+仓促|cāngcù|vội vã (chỉ thời gian hay hành động)
+从容|cóngróng|ung dung, khoan thai
+产业|chǎnyè|sản nghiệp
+乘|chéng|đáp (chuyến tàu,
+串|chuàn|chuỗi
+丛|cóng|bụi, lùm, khóm
+丑恶|chǒuè|xấu xa
+颠簸|diānbǒ|lắc lư, tròng trành
+颠倒|diāndǎo|đảo ngược
+顿时|dùnshí|lâp tức
+雕塑|diāosù|tượng
+雕刻|diāokè|điêu khắc
+陡峭|dǒuqiào|dốc thẳng đứng
+队伍|duìwǔ|đội ngũ
+逮捕|dàibǔ|bắt giữ
+递增|dìzēng|tăng dần
+达成|dáchéng|đạt được
+蹬|dēng|đạp, giẫm
+跌|diē|ngã, té, rơi
+赌博|dǔbó|cờ bạc
+调动|diàodòng|điều động
+诞辰|dànchén|sinh nhât
+诞生|dànshēng|ra đời, sinh ra
+蛋白质|dànbáizhì|protein
+董事长|dǒngshìzhǎng|chủ tịch hội đồng quản trị
+胆怯|dǎnqiè|nhút nhát
+答辩|dábiàn|bảo vệ (luận văn)
+答复|dáfù|trả lời
+等级|děngjí|đẳng cấp, cấp bậc
+等候|děnghòu|chờ đợi
+端正|duānzhèng|đoan chính (hành vi, thái độ, ngũ quan, phẩm hạnh)
+端午节|duānwǔjié|tết Đoan Ngọ
+端|duān|bưng, đầu mút
+稻谷|dàogǔ|hạt thóc
+短促|duǎncù|ngắn ngủi, ngắn gọn
+瞪|dèng|trợn mắt, trợn trừng
+督促|dūcù|đôn đốc
+盯|dīng|nhìn chằm chằm
+盗窃|dàoqiè|trộm cướp
+登陆|dēnglù|đổ bộ, lên bờ
+登录|dēnglù|đăng nhập
+电源|diànyuán|nguồn điện
+独裁|dúcái|độc tài
+点缀|diǎnzhuì|tô điểm
+灯笼|dēnglóng|đèn lồng
+淡水|dànshuǐ|nước ngọt
+淡季|dànjì|trái mùa
+毒品|dúpǐn|ma túy, thuốc phiện
+歹徒|dǎitú|tên vô lại, kẻ xấu
+档次|dàngcì|đẳng cấp, thứ bậc
+档案|dàngàn|hồ sơ
+栋|dòng|xà ngang, tòa nhà
+杜绝|dùjué|chắn đứng (tham ô, lãng phí….)
+断绝|duànjué|đoạn tuyệt, cắt đứt (mối quan hệ)
+断定|duàndìng|dám chắc
+斗争|dòuzhēng|đấu tranh
+敌视|díshì|thù địch
+搭配|dāpèi|kết hợp
+搭档|dādàng|hợp tác, người hợp tác
+搭|dā|mắc, vắt, đắp, đáp
+捣乱|dǎoluàn|phá đám, quấy rối
+担保|dānbǎo|dám cá, đảm bảo
+抵达|dǐdá|đến nơi
+抵抗|dǐkàng|chống lại, chống cự
+抵制|dǐzhì|ngăn chặn
+打量|dǎliang|thăm dò, phân tích (đối thủ, đối phương)
+打猎|dǎliè|săn bắn
+打架|dǎjià|đánh nhau, đánh lộn
+打官司|dǎguānsī|kiện tụng
+打包|dǎbāo|đóng hộp
+打击|dǎjī|đả kích
+打仗|dǎzhàng|đánh nhau (chiến tranh)
+惦记|diànjì|nghĩ đến
+怠慢|dàimàn|lạnh nhạt, thờ ơ
+得罪|dézuì|đắc tội
+得天独厚|détiāndúhòu|được ưu ái
+得力|délì|được lợi, đắc lực
+得不偿失|débùchángshī|lợi ít hại nhiều, lợi bất cập hại
+当面|dāngmiàn|trước mặt
+当选|dāngxuǎn|trúng cử
+当场|dāngchǎng|tại chỗ
+当务之急|dāngwùzhījí|việc cấp bách
+当前|dāngqián|hiện nay
+当初|dāngchū|lúc đầu
+当代|dāngdài|đương đại
+当事人|dāngshìrén|đương sự
+带领|dàilǐng|dẫn dắt
+导航|dǎoháng|chỉ đường, dẫn đường (hệ thống )
+导弹|dǎodàn|tên lửa
+导向|dǎoxiàng|hướng dẫn
+对联|duìlián|câu đối
+对策|duìcè|đối sách
+对立|duìlì|đối lập
+对称|duìchèn|đối xứng
+对照|duìzhào|đối chiếu
+对抗|duìkàng|chống đối, đối kháng
+对应|duìyìng|tương ứng
+对付|duìfù|đối phó
+定期|dìngqī|định kì
+定义|dìngyì|định nghĩa
+奠定|diàndìng|đặt, làm cho chắc
+大致|dàzhì|khoảng, chính, chung
+大臣|dàchén|đại thần
+大肆|dàsì|không kiêng dè, không kiêng nể, vô tội vạ
+大意|dàyì|đại ý, sơ ý
+大体|dàtǐ|nhìn chung
+大伙儿|dàhuǒr|mọi người
+大不了|dàbùliǎo|chẳng qua, chỉ là
+多元化|duōyuánhuà|đa nguyên hóa
+堵塞|dǔsè|tắc nghẽn
+堤坝|dībà|đề điều, đê đập
+堕落|duòluò|trượt dốc (con người)
+堆积|duījī|đắp đống
+垫|diàn|đệm, cái lót
+地质|dìzhì|địa chất
+地步|dìbù|bước, mức
+地势|dìshì|địa thế
+哆嗦|duōsuo|run cầm cập, run lẩy bẩy
+吊|diào|móc, treo
+叼|diāo|ngoạm, ngậm
+叮嘱|dīngzhǔ|căn dặn, dặn dò
+动静|dòngjìng|động tĩnh
+动身|dòngshēn|khởi hành, lên đường
+动荡|dòngdàng|biến động, gợn sóng
+动脉|dòngmài|động mạch
+动机|dòngjī|động cơ
+动手|dòngshǒu|bắt tay làm
+动态|dòngtài|động thái
+动员|dòngyuán|huy động
+动力|dònglì|động lực
+冻结|dòngjié|đông cứng
+典礼|diǎnlǐ|nghi lễ
+典型|diǎnxíng|điển hình
+兜|dōu|túi
+党|dǎng|đảng
+兑现|duìxiàn|thực hiện (lời hứa), đổi tiền mặt (ngân phiếu)
+倒闭|dǎobì|đóng cửa, phá sản
+代理|dàilǐ|đại diện, đại lý
+代价|dàijià|giá phải trả
+丢人|diūrén|mất mặt
+丢三落四|diūsānlàsì|hay quên, quên trước quên sau
+东道主|dōngdàozhǔ|chủ nhà
+东张西望|dōngzhāngxīwàng|nhìn đông nhìn tây, nhìn quanh
+丁|dīng|đinh
+额外|éwài|ngoài định mức
+遏制|èzhì|kiềm chế, chặn đứng
+而已|éryǐ|mà thôi
+恶心|ěxīn|buồn nôn
+恶化|èhuà|xấu đi
+恩怨|ēnyuàn|ân oán
+二氧化碳|èryǎnghuàtàn|CO2
+飞跃|fēiyuè|nhảy vọt
+飞翔|fēixiáng|bay
+飞禽走兽|fēiqínzǒushòu|chim muông
+风趣|fēngqù|thú vị, dí dỏm
+风气|fēngqì|lối sống, nếp sống
+风暴|fēngbào|gió bão
+风度|fēngdù|phong độ
+风土人情|fēngtǔrénqíng|phong tục tập quán
+风味|fēngwèi|phong vị, mùi vị
+风光|fēngguāng|phong cảnh
+非法|fēifǎ|phi pháp
+附属|fùshǔ|thuộc, thuộc về
+附和|fùhè|hùa theo, phụ họa
+附件|fùjiàn|phụ kiện, đính kèm
+防治|fángzhì|phòng và chữa bệnh
+防止|fángzhǐ|ngăn ngừa, ngăn chặn
+防御|fángyù|phòng ngự
+防守|fángshǒu|phòng thủ
+锋利|fēnglì|sắc, nhọn, sắc bén, sắc sảo
+逢|féng|gặp gỡ
+辐射|fúshè|bức xạ
+辅助|fǔzhù|phò trợ
+赋予|fùyǔ|trao, trao cho (trọng trách, sứ mệnh)
+贩卖|fànmài|buôn lậu
+负担|fùdān|gánh (trách nhiệm, chi phí, công việc), gánh nặng
+诽谤|fěibàng|phỉ báng
+访问|fǎngwèn|đến thăm
+覆盖|fùgài|che phủ, bao phủ
+范畴|fànchóu|phạm trù
+腹泻|fùxiè|ỉa chảy
+腐败|fǔbài|ôi thiu, thối nát
+腐蚀|fǔshí|ăn mòn, bào mòn
+腐烂|fǔlàn|hoại tử, thối rữa, thối nát
+腐朽|fǔxiǔ|mục, mục ruỗng
+肺|fèi|phổi
+肥沃|féiwò|phì nhiêu, màu mỡ
+纺织|fǎngzhī|dệt
+繁殖|fánzhí|sinh sôi, phồn thực
+繁忙|fánmáng|bận rộn, nhộn nhịp
+繁华|fánhuá|phồn hoa
+繁体字|fántǐzì|chữ phồn thể
+粉色|fěnsè|màu hồng
+粉碎|fěnsuì|vỡ vụn, vỡ tan tành
+粉末|fěnmò|bụi, phấn, bột
+符号|fúhào|dấu, ký hiệu
+福气|fúqì|tốt phúc, có phúc
+福利|fúlì|phúc lợi
+番|fān|lật, giở
+泛滥|fànlàn|tràn, tràn lan
+法人|fǎrén|pháp nhân
+沸腾|fèiténg|sôi sùng sục (nước), sục sôi
+服气|fúqì|chịu thua, chịu phục
+服从|fúcóng|phục tùng
+方针|fāngzhēn|phương châm
+方言|fāngyán|tiếng địa phương
+方圆|fāngyuán|chu vi hình tròn
+方位|fāngwèi|phương hướng, phương vị
+敷衍|fūyǎn|qua quýt, hời hợt, cầm cự
+放射|fàngshè|chiếu sáng, phóng
+放大|fàngdà|phóng to
+抚摸|fǔmō|xoa
+抚养|fǔyǎng|nuôi dưỡng
+愤怒|fènnù|phẫn nộ
+废除|fèichú|xóa bỏ (chế độ, phí, qui ước)
+废寝忘食|fèiqǐnwàngshí|quên ăn quên ngủ
+废墟|fèixū|hoang tàn
+幅度|fúdù|biên độ
+封闭|fēngbì|đóng cửa(không được hoạt động), đóng,
+封锁|fēngsuǒ|phong tỏa
+封建|fēngjiàn|phong kiến
+富裕|fùyù|giàu có
+奉献|fèngxiàn|hiến dâng, tinh thần hi sinh
+夫妇|fūfù|phụ nữ
+夫人|fūrén|phu nhân
+复活|fùhuó|sống lại (miêu tả sự khôi phục)
+复兴|fùxīng|phục hưng
+坟墓|fénmù|mộ phần
+吩咐|fēnfù|căn dặn
+否决|fǒujué|phủ quyết
+发财|fācái|phát tài
+发誓|fāshì|thề
+发觉|fājué|nhận ra, phát hiện
+发行|fāxíng|phát hành (sách, đĩa CD)
+发育|fāyù|phát triển (cơ thể)
+发炎|fāyán|viêm (họng, mắt, răng, vết thương)
+发扬|fāyáng|phát huy
+发布|fābù|công bố
+发射|fāshè|bắn
+发呆|fādāi|đờ người ra, đơ ra
+发动|fādòng|phát động
+反驳|fǎnbó|phản bác
+反馈|fǎnkuì|phản hồi
+反面|fǎnmiàn|phản diện, mặt sau
+反问|fǎnwèn|phản vấn, hỏi vặn lại
+反抗|fǎnkàng|phản kháng
+反感|fǎngǎn|ác cảm
+反思|fǎnsī|suy ngẫm
+反常|fǎncháng|bất thường
+反射|fǎnshè|phản chiếu
+反之|fǎnzhī|ngược lại
+副|fù|phó, phụ
+分量|fènliàng|trọng lượng, sức nặng
+分辨|fēnbiàn|phân biệt
+分解|fēnjiě|phân ly, phân tích
+分裂|fēnliè|tách ra, phân tách
+分红|fēnhóng|tiền thưởng
+分泌|fēnmì|bài tiết, tiết ra
+分歧|fēnqí|bất đồng (quan điểm), khác nhau
+分明|fēnmíng|rõ ràng, phân minh
+分散|fēnsàn|phân tán
+分寸|fēncùn|đúng mực, có chừng mực
+凡是|fánshì|phàm là
+俯视|fǔshì|nhìn xuống
+俘虏|fúlǔ|bắt tù binh, tù binh
+丰盛|fēngshèng|đầy đủ, phong phú (thức ăn thức uống)
+丰满|fēngmǎn|sung túc, đầy đủ, đầy ắp, đầy đặn
+丰收|fēngshōu|được mùa
+鼓动|gǔdòng|hưởng ứng, vận động
+鸽子|gēzi|bồ câu
+高超|gāochāo|cao siêu
+高潮|gāocháo|cao trào
+高涨|gāozhǎng|dâng cao, tăng cao
+高明|gāomíng|cao minh
+高峰|gāofēng|đỉnh (hình sin), cao điểm
+高尚|gāoshàng|cao thượng
+骨干|gǔgàn|cốt cán
+顾问|gùwèn|cố vấn
+顾虑|gùlǜ|băn khoăn, phân vân
+革命|gémìng|cách mạng
+雇佣|gùyōng|thuê
+隔阂|géhé|bất hòa
+隔离|gélí|cách li
+钩子|gōuzi|cái móc
+钙|gài|canxi
+过问|guòwèn|hỏi han quá nhiều
+过瘾|guòyǐn|đã đời, thỏa nguyện
+过滤|guòlǜ|lọc
+过渡|guòdù|quá độ (giai đoạn)
+过度|guòdù|quá mức
+过奖|guòjiǎng|quá khen
+过失|guòshī|lỗi lầm, sai lầm
+过于|guòyú|quá mức
+辜负|gūfù|phụ lòng
+轨道|guǐdào|đường ray
+跪|guì|quì
+跟随|gēnsuí|theo
+跟踪|gēnzōng|theo dấu
+跟前|gēnqián|bên cạnh, ngay sát
+贵族|guìzú|quí tộc
+贯彻|guànchè|quán triệt
+规范|guīfàn|qui phạm, mẫu mực
+规章|guīzhāng|bản qui định
+规格|guīgé|qui cách
+规划|guīhuà|qui hoạch
+观光|guānguāng|ngắm, tham quan
+股份|gǔfèn|cổ phần
+股东|gǔdōng|cổ đông
+耕地|gēngdì|trồng trọt
+罐|guàn|hộp, vại, lọ
+纲领|gānglǐng|cương lĩnh
+管辖|guǎnxiá|quản lý
+稿件|gǎojiàn|bản thảo
+盖章|gàizhāng|đóng dấu
+疙瘩|gēda|mụn, da gà
+灌溉|guàngài|tưới tiêu
+港湾|gǎngwān|bến đỗ, bến thuyền
+港口|gǎngkǒu|hải cảng
+歌颂|gēsòng|ca tụng
+棍棒|gùnbàng|gậy gộc, côn, gậy
+格式|géshì|quy cách, cách thức
+格局|géjú|mô hình
+根源|gēnyuán|nguồn cơn, gốc rễ
+根深蒂固|gēnshēndìgù|thâm căn cố đế
+果断|guǒduàn|quyết đoán
+构思|gòusī|ý tưởng, phác thảo
+杠杆|gànggǎn|đòn bẩy
+更正|gēngzhèng|sửa (chữ, thông tin)
+更新|gēngxīn|đổi mới, làm mới
+故障|gùzhàng|sự cố
+故乡|gùxiāng|quê hương
+攻击|gōngjī|công kích
+攻克|gōngkè|công phá, phá đảo
+改良|gǎiliáng|cải tạo
+搁|gē|đặt, để
+拐杖|guǎizhàng|gậy chống
+感染|gǎnrǎn|nhiễm
+感慨|gǎnkǎi|xúc động
+惯例|guànlì|thông lệ, lệ, qui ước
+恭敬|gōngjìng|cung kính
+归还|guīhuán|trả về
+归根到底|guīgēndàodǐ|xét đến cùng
+广阔|guǎngkuò|rộng lớn
+干预|gānyù|can dự
+干涉|gānshè|can thiệp
+干旱|gānhàn|khô hạn
+干扰|gānrǎo|làm nhiễu, cản trở (ảnh hưởng xấu), nhiễu
+干劲|gànjìn|tinh thần hăng hái
+巩固|gǒnggù|củng cố
+工艺品|gōngyìpǐn|đồ mỹ nghệ
+岗位|gǎngwèi|cương vị
+尴尬|gāngà|bối rối
+宫殿|gōngdiàn|cung điện
+官方|guānfāng|chính thức
+孤立|gūlì|cô lập, tách rời
+孤独|gūdú|cô độc
+姑且|gūqiě|tạm, tạm thời
+国防|guófáng|quốc phòng
+国务院|guówùyuàn|chính phủ
+固然|gùrán|tuy rằng
+固有|gùyǒu|vốn có
+固执|gùzhí|cố chấp
+固体|gùtǐ|thể rắn
+告辞|gàocí|cáo từ
+告诫|gàojiè|khuyên bảo
+各抒己见|gèshūjǐjiàn|phát biểu ý kiến
+古董|gǔdǒng|đồ cổ
+古怪|gǔguài|kì quái,
+勾结|gōujié|câu kết
+功效|gōngxiào|công hiệu
+功劳|gōngláo|công lao
+割|gē|cắt, gặt
+关照|guānzhào|giúp đỡ
+关怀|guānhuái|quan tâm
+共鸣|gòngmíng|sự đồng cảm, cộng hưởng
+共计|gòngjì|tính tổng
+共和国|gònghéguó|nước Cộng hòa
+公道|gōngdào|phải chăng (giá cả), nói cho công bằng
+公证|gōngzhèng|công chứng
+公认|gōngrèn|công nhận
+公然|gōngrán|rõ ràng
+公民|gōngmín|công dân
+公正|gōngzhèng|công bằng (đối xử, giải quyết)
+公式|gōngshì|công thức
+公安局|gōngānjú|sở công an
+公告|gōnggào|thông cáo
+公务|gōngwù|công vụ
+公关|gōngguān|quan hệ công chúng
+光辉|guānghuī|vầng hào quang, ánh hào quang
+光荣|guāngróng|vinh quang
+光芒|guāngmáng|tia sáng, lấp lánh
+光彩|guāngcǎi|ánh sáng,
+供给|gōngjǐ|cung cấp
+供不应求|gōngbùyìngqiú|cung không đủ cầu
+个体|gètǐ|cá thể, cá nhâ
+黄昏|huánghūn|hoàng hôn
+还原|huányuán|quay về trạng thái cũ
+辉煌|huīhuáng|huy hoàng
+轰动|hōngdòng|chấn động, náo động
+贿赂|huìlù|hối lộ
+货币|huòbì|tiền
+豪迈|háomài|khí phách hào hùng
+话筒|huàtǒng|microphone
+行列|hángliè|hàng lối
+荤|hūn|đồ mặn (trái nghĩa đồ chay)
+荒谬|huāngmiù|hoang vu
+荒唐|huāngtáng|hoang đường
+荒凉|huāngliáng|hoang sơ
+花蕾|huālěi|nụ hoa
+花瓣|huābàn|cánh hoa
+航行|hángxíng|vận chuyển, đi
+航空|hángkōng|hàng không
+航天|hángtiān|hàng không vũ trụ
+胡须|húxū|râu
+胡乱|húluàn|loạn xạ
+耗费|hàofèi|hao tổn
+罕见|hǎnjiàn|hiếm thấy
+缓和|huǎnhé|hòa dịu
+皇帝|huángdì|hoàng đề
+皇后|huánghòu|hoàng hậu
+痕迹|hénjì|dấu vết, vết tích
+画蛇添足|huàshétiānzú|vẽ rắn thêm chân
+环节|huánjié|phân đoạn, mắt xích, vòng
+狠心|hěnxīn|nhẫn tâm
+烘|hōng|sấy, nướng
+火药|huǒyào|thuốc súng
+火箭|huǒjiàn|tên lửa
+火焰|huǒyàn|pháo hoa
+湖泊|húpō|hồ nước
+混淆|hùnxiáo|lẫn lộn
+混浊|húnzhuó|đục (trái nghĩa trong)
+混合|hùnhé|hộn hợp
+混乱|hùnluàn|hỗn loạn
+海滨|hǎibīn|ven biển
+海拔|hǎibá|mực nước biển
+浑身|húnshēn|khắp người
+活该|huógāi|đáng đời
+活力|huólì|sức sống
+洪水|hóngshuǐ|cơn lũ, hồng thủy
+汇报|huìbào|báo cáo (cấp trên)
+毫米|háomǐ|milimet
+毫无|háowú|không hề
+毁灭|huǐmiè|hủy diệt
+欢乐|huānlè|vui vẻ
+横|héng|ngang
+晃|huǎng|lắc, rung
+昏迷|hūnmí|hôn mê
+捍卫|hànwèi|bảo vệ
+挥霍|huīhuò|phung phí
+患者|huànzhě|người bệnh
+悔恨|huǐhèn|ân hận, hối lỗi
+恨不得|hènbùdé|hận chẳng được
+恍然大悟|huǎngrándàwù|bỗng nhiên tỉnh ngộ, hiểu ra
+忽略|hūlüè|bỏ qua
+寒暄|hánxuān|tâm tình
+宏观|hóngguān|vĩ mô
+宏伟|hóngwěi|to lớn
+回顾|huígù|nhìn lại, xem lại (vấn đề), hồi tưởng
+回避|huíbì|né tránh
+回收|huíshōu|thu hồi
+回报|huíbào|báo đáp
+嘿|hēi|ôi, ủa
+嗨|hāi|ê, này
+喉咙|hóulóng|cổ họng
+哼|hēng|rên, rên rỉ
+哄|hǒng|dỗ dành
+和谐|héxié|hòa bình, yên ổn, hợp
+和解|héjiě|hòa giải
+和蔼|héǎi|hòa nhã
+和睦|hémù|hòa thuận
+和气|héqì|hòa hợp
+呼啸|hūxiào|rú rít
+呼唤|hūhuàn|gọi
+呼吁|hūyù|kêu gọi
+呵|hē|oa (sự ngạc nhiên)
+吼|hǒu|gào to
+含糊|hánhù|hàm hồ, mơ hồ
+含义|hányì|hàm nghĩa
+后顾之忧|hòugùzhīyōu|nỗi lo về sau
+后勤|hòuqín|hậu cần
+后代|hòudài|đời sau
+合算|hésuàn|được lợi, không đắt
+合成|héchéng|hợp thành
+合并|hébìng|ghép, hợp lại
+合伙|héhuǒ|làm chung
+号召|hàozhào|hiệu triệu
+华侨|huáqiáo|hoa kiều
+华丽|huálì|hoa lệ
+化验|huàyàn|xét nghiệm
+化肥|huàféi|phân bón
+化石|huàshí|hóa thạch
+化妆|huàzhuāng|hóa trang
+划分|huàfēn|phân chia, chia
+候选|hòuxuǎn|(người được) đề cử, ứng cử
+会晤|huìwù|gặp mặt (ngữ cảnh trang trọng)
+饥饿|jīè|đói khát
+颈椎|jǐngzhuī|cổ
+鞠躬|jūgōng|cúi người, khom lưng
+集团|jítuán|tập đoàn
+降临|jiànglín|đến, tới
+阶层|jiēcéng|tầng lớp
+间隔|jiàngé|cách nhau
+间谍|jiàndié|gián điệp
+间接|jiànjiē|gián tiếp
+镜头|jìngtóu|ống kính
+锦上添花|jǐnshàngtiānhuā|dệt hoa trên gấm
+鉴定|jiàndìng|đánh giá, giám định
+鉴别|jiànbié|phân biệt (thật giả)
+鉴于|jiànyú|xét thấy, xem xét
+金融|jīnróng|tiền tệ
+酒精|jiǔjīng|cồn
+迹象|jìxiàng|dấu hiệu
+进而|jìnér|tiến tới
+进攻|jìngōng|tấn công
+进展|jìnzhǎn|tiến triển
+进化|jìnhuà|tiến hóa
+近来|jìnlái|gần đây (thời gian)
+较量|jiàoliàng|đọ sức
+践踏|jiàntà|giẫm đạp, giày xéo
+记载|jìzǎi|ghi chép
+记性|jìxìng|trí nhớ
+讥笑|jīxiào|chê cười
+计较|jìjiào|so đo
+警惕|jǐngtì|cảnh giác
+警告|jǐnggào|cảnh cáo
+解雇|jiěgù|đuổi việc
+解除|jiěchú|bỏ, giải trừ, xua tan
+解散|jiěsàn|giải tán
+解放|jiěfàng|giải phóng
+解剖|jiěpōu|giải phẫu
+解体|jiětǐ|giải thể
+角落|jiǎoluò|góc
+觉醒|juéxǐng|tỉnh ngộ, thức tỉnh
+觉悟|juéwù|giác ngộ, tỉnh ngộ, thức tỉnh
+见闻|jiànwén|hiểu biết, trải nghiệm
+见解|jiànjiě|kiến giải, cách nhìn
+见多识广|jiànduōshíguǎng|hiểu rộng biết nhiều
+见义勇为|jiànyìyǒngwéi|thấy chuyện bất bình chẳng tha
+茎|jīng|thân cây, cọng, sợi
+节奏|jiézòu|tiêt tấu, nhịp
+节制|jiézhì|tiết chế
+艰难|jiānnán|gian nan
+舰艇|jiàntǐng|hàng không mẫu hạm, tàu sân bay
+聚精会神|jùjīnghuìshén|tập trung tinh thần
+缴纳|jiǎonà|nộp, đóng (phí, tiền)
+继承|jìchéng|thừa kế
+绝望|juéwàng|tuyệt vọng
+给予|jǐyǔ|cho
+结算|jiésuàn|kết toán
+结晶|jiéjīng|kết tinh,
+结局|jiéjú|kết cục
+经费|jīngfèi|kinh phí
+经纬|jīngwěi|kinh tuyến và vĩ tuyến
+纪要|jìyào|biên bản (hội nghị)
+级别|jíbié|cấp bậc
+纠纷|jiūfēn|tranh chấp
+纠正|jiūzhèng|sửa chữa (sai lầm)
+紧迫|jǐnpò|cấp bách
+精通|jīngtōng|tinh thông
+精致|jīngzhì|tinh tế
+精简|jīngjiǎn|cắt bớt
+精确|jīngquè|chuẩn xác, chính xác
+精益求精|jīngyìqiújīng|đã giỏi còn muốn giỏi hơn
+精打细算|jīngdǎxìsuàn|tính toán tỉ mỉ, tính toán chi li, tính toán cẩn thận
+精心|jīngxīn|cẩn thận, chu đáo
+精密|jīngmì|chính xác, tỉ mỉ
+精华|jīnghuá|tinh hoa
+籍贯|jíguàn|nguyên quán
+简陋|jiǎnlòu|xập xệ, tồi tàn
+简要|jiǎnyào|sơ lược
+简化|jiǎnhuà|đơn giản hóa
+简体字|jiǎntǐzì|chữ giản thể
+竭尽全力|jiéjìnquánlì|dốc hết sức, dốc toàn lực
+竞选|jìngxuǎn|vận động tranh cử
+竞赛|jìngsài|thi đấu, thi đua
+监视|jiānshì|theo dõi
+监督|jiāndū|giám sát
+监狱|jiānyù|nhà tù
+皆|jiē|đều
+疾病|jíbìng|bệnh tật
+界限|jièxiàn|ranh giới
+煎|jiān|rán
+焦点|jiāodiǎn|tâm điểm
+焦急|jiāojí|lo lắng, sốt ruột
+激情|jīqíng|hăng hái
+激发|jīfā|khơi gợi
+激励|jīlì|khích lệ
+溅|jiàn|bắn tung tóe
+浸泡|jìnpào|ngâm
+津津有味|jīnjīnyǒuwèi|say sưa, ngon lành
+沮丧|jǔsàng|buồn rầu, buồn bã
+检验|jiǎnyàn|kiểm nghiệm
+检讨|jiǎntǎo|kiểm điểm
+桨|jiǎng|mái chèo
+极限|jíxiàn|cực điểm
+极端|jíduān|cực đoan
+杰出|jiéchū|kiệt xuất
+机遇|jīyù|thời cơ
+机灵|jīlíng|thông minh lanh lợi
+机械|jīxiè|máy móc
+机构|jīgòu|kết cấu
+机智|jīzhì|tinh nhanh
+机密|jīmì|cơ mật
+机动|jīdòng|cơ động, gắn máy
+晋升|jìnshēng|nâng (lương, cấp bậc)
+敬礼|jìnglǐ|chào hỏi
+敬业|jìngyè|mẫn cán
+教养|jiàoyǎng|gia giáo, dạy dỗ
+救济|jiùjì|cứu tế
+搅拌|jiǎobàn|khuấy, quấy
+揭露|jiēlù|phơi bày
+接连|jiēlián|liên tiếp
+据悉|jùxī|được biết
+拣|jiǎn|chọn lựa
+拘留|jūliú|tạm giam
+拘束|jūshù|cấm đoán, ép buộc, bó buộc
+技巧|jìqiǎo|kĩ xảo
+截至|jiézhì|tính đến, cho đến
+截止|jiézhǐ|kết thúc, đóng
+戒备|jièbèi|sẵn sàng chiến đấu (trạng thái), đề phòng (tâm lí)
+惊讶|jīngyà|kinh ngạc
+惊奇|jīngqí|sửng sốt
+惊动|jīngdòng|kinh động
+急躁|jízào|sốt ruột
+急功近利|jígōngjìnlì|ăn xổi ở thì
+急剧|jíjù|nhanh chóng
+急切|jíqiè|cấp thiết
+急于求成|jíyúqiúchéng|mong muốn nhanh thành công
+忌讳|jìhuì|kiêng kị
+居民|jūmín|cư dân
+居住|jūzhù|sống
+局面|júmiàn|cục diện
+局限|júxiàn|giới hạn
+局部|júbù|cục bộ
+局势|júshì|thế cuộc, tình hình (chính trị, quân sự)
+就近|jiùjìn|lân cận (phó từ)
+就职|jiùzhí|nhận chức
+就业|jiùyè|có việc làm
+尖锐|jiānruì|sắc nhọn
+尖端|jiānduān|mũi nhọn
+将近|jiāngjìn|gần, xấp xỉ
+将就|jiāngjiù|chịu đựng, chấp nhận
+将军|jiāngjūn|tướng quân
+寄托|jìtuō|gửi gắm
+寂静|jìjìng|yên tĩnh
+家常|jiācháng|đời thường, ngày thường
+家属|jiāshǔ|gia quyến
+家喻户晓|jiāyùhùxiǎo|nhà nhà đều biết
+家伙|jiāhuǒ|anh chàng
+季度|jìdù|quí
+季军|jìjūn|giải ba
+嫉妒|jídù|đố kị, ghen tị
+娇气|jiāoqì|ẻo lả
+奖赏|jiǎngshǎng|tặng thưởng
+奖励|jiǎnglì|phần thưởng, thưởng
+夹杂|jiāzá|xen lẫn, pha trộn
+境界|jìngjiè|cảnh giới
+基金|jījīn|quĩ
+基地|jīdì|căn cứ địa
+基因|jīyīn|gen
+坚韧|jiānrèn|vững chắc
+坚硬|jiānyìng|cứng
+坚实|jiānshí|chắc chắn
+坚定|jiāndìng|kiên định
+坚固|jiāngù|kiên cố
+咀嚼|jǔjué|nhai, nghiền
+君子|jūnzǐ|quân tử
+吉祥|jíxiáng|cát tường
+及早|jízǎo|sớm, nhanh chóng
+卷|juǎn|cuộn, cuộn tròn
+即将|jíjiāng|sắp
+即便|jíbiàn|dù
+加工|jiāgōng|gia công
+加剧|jiājù|trầm trọng thêm, gia tăng
+剪彩|jiǎncǎi|cắt băng khánh thành
+剧烈|jùliè|mạnh, dữ dội
+剧本|jùběn|kịch bản
+剑|jiàn|kiếm
+决策|juécè|quyết sách
+军队|jūnduì|quân đội
+兢兢业业|jīngjīngyèyè|cần cù chăm chỉ
+僵硬|jiāngyìng|rắn chắc
+健全|jiànquán|kiện toàn, khỏe mạnh
+借鉴|jièjiàn|học hỏi
+借助|jièzhù|nhờ vào
+倔强|juéjiàng|quật cường
+侥幸|jiǎoxìng|ăn may
+佳肴|jiāyáo|món ngon
+交涉|jiāoshè|đàm phán, điều đình
+交易|jiāoyì|giao dịch
+交叉|jiāochā|giao nhau
+交代|jiāodài|bàn giao, nhắn nhủ, căn dặn
+井|jǐng|giếng
+举足轻重|jǔzúqīngzhòng|vị thế trung tâm, ảnh hưởng đến toàn cục
+举动|jǔdòng|cử động, hành động
+举世瞩目|jǔshìzhǔmù|gây chú ý
+靠拢|kàolǒng|lại gần, tiến gần
+跨|kuà|vượt, sải bước
+课题|kètí|đề bài
+苦涩|kǔsè|khổ sở
+苦尽甘来|kǔjìngānlái|khổ tận cam lai
+考验|kǎoyàn|thử thách, sự thử thách
+考核|kǎohé|sát hạch
+考察|kǎochá|khảo sát
+考古|kǎogǔ|khảo cổ
+筐|kuāng|giỏ, sọt
+空隙|kòngxì|khe hở
+空虚|kōngxū|trống rỗng (tinh thần), sáo rộng (từ ngữ, lời văn)
+空白|kòngbái|trống không
+空洞|kōngdòng|lỗ hổng, hang, sáo rỗng(nội dung)
+空想|kōngxiǎng|ảo tưởng
+空前绝后|kōngqiánjuéhòu|chưa từng có
+科目|kēmù|môn học
+磕|kē|đập
+砍伐|kǎnfá|chặt phá
+矿产|kuàngchǎn|khoáng sản
+看待|kàndài|nhìn nhận
+渴望|kěwàng|khát vọng
+款待|kuǎndài|khoản đãi
+款式|kuǎnshì|kiểu cách, kiểu dáng
+框架|kuàngjià|khung, sườn
+枯萎|kūwěi|khô héo, héo
+枯燥|kūzào|khô hanh
+旷课|kuàngkè|trốn học
+捆绑|kǔnbǎng|trói, buộc, trói buộc
+挎|kuà|cắp, đeo, vác
+抗议|kàngyì|kháng nghị
+扩散|kuòsàn|khuếch tán, lan rộng
+扩张|kuòzhāng|mở rộng, bành trướng
+扩充|kuòchōng|tăng thêm, bổ sung
+扣|kòu|móc, nút thắt, khuy áo
+扛|káng|gánh
+慷慨|kāngkǎi|hào phóng
+恳切|kěnqiè|khẩn thiết
+恐惧|kǒngjù|sợ hãi
+恐怖|kǒngbù|khổng bố, kinh dị (phim, truyện)
+恐吓|kǒnghè|đe dọa
+快活|kuàihuó|vui sướng, sung sướng, nhảy nhót hát
+开除|kāichú|khai trừ
+开阔|kāikuò|rộng mở (tầm nhìn), mở rộng, rộng thênh thang, bao la
+开采|kāicǎi|khai thác (tài nguyên)
+开辟|kāipì|mở (đường), lập ra (kỷ nguyên,), mở ra (lĩnh vực mới,con đường mới)
+开朗|kāilǎng|lạc quan, yêu đời
+开明|kāimíng|khai sáng, tiến bộ
+开支|kāizhī|trả tiền, chi tiêu
+开拓|kāituò|khai khẩn
+开展|kāizhǎn|triển khai (công việc, cuộc vận động, hoạt động), mở rộng
+宽敞|kuānchang|rộng rãi
+宽容|kuānróng|khoan dung
+客户|kèhù|khách hàng
+孔|kǒng|lỗ
+坑|kēng|vũng, hố
+啃|kěn|gặm, rỉa
+哭泣|kūqì|khóc lóc
+可观|kěguān|khả quan
+可行|kěxíng|khả thi
+可恶|kěwù|đáng ghét
+可口|kěkǒu|vừa miệng
+口音|kǒuyīn|giọng nói
+口腔|kǒuqiāng|khoang miệng
+口气|kǒuqì|khẩu khí
+口头|kǒutóu|miệng (bài tập, truyền miệng, giao ước)
+卡通|kǎtōng|truyện tranh, phim hoạt hình
+勘探|kāntàn|thăm dò (dầu mỏ, khoáng sản)
+刻不容缓|kèbùrónghuǎn|vô cùng cấp bách, không thể trì hoãn
+刊登|kāndēng|đăng (báo)
+刊物|kānwù|tạp chí, báo
+况且|kuàngqiě|huống hồ
+克制|kèzhì|kiềm chế (tính khí), dè chừng
+侃侃而谈|kǎnkǎnértán|nói năng đĩnh đạc
+亏损|kuīsǔn|hao tổn
+亏待|kuīdài|xử tệ, đối đãi kém
+黎明|límíng|rạng đông, rạng sáng
+领袖|lǐngxiù|lãnh tụ
+领悟|lǐngwù|lĩnh hội, hiểu ra
+领土|lǐngtǔ|lãnh thổ
+领先|lǐngxiān|dẫn đầu
+领会|lǐnghuì|lĩnh hội
+领事馆|lǐngshìguǎn|lãnh sự quán
+雷达|léidá|radar
+零星|língxīng|vụn vặt, lác đác, rải rác
+隆重|lóngzhòng|long trọng
+里程碑|lǐchéngbēi|cột mốc đường, mốc cây số
+连锁|liánsuǒ|chuỗi (cửa hàng, nhà hàng)
+连年|liánnián|hàng năm, nhiều năm liền
+连同|liántóng|kéo theo, kể cả, gộp lại
+辽阔|liáokuò|bát ngát, bao la
+轮船|lúnchuán|tàu thủy
+轮胎|lúntāi|lốp xe
+轮廓|lúnkuò|đường viền, đường bao
+谅解|liàngjiě|thông cảm
+论证|lùnzhèng|luận chứng
+论坛|lùntán|diễn dàn
+蜡烛|làzhú|nến
+落成|luòchéng|khánh thành
+落实|luòshí|đầy đủ chu đáo
+良心|liángxīn|lương tâm
+联络|liánluò|liên lạc
+联盟|liánméng|liên minh
+联欢|liánhuān|liên hoan
+联想|liánxiǎng|liên tưởng
+聋哑|lóngyǎ|câm điếc
+络绎不绝|luòyìbùjué|lũ lượt kéo đến
+粒|lì|hạt
+类似|lèisì|na ná, tương tự, giống
+笼罩|lǒngzhào|che lấp, bao phủ, che phủ
+立足|lìzú|chỗ đứng, ở vào (hoàn cảnh)
+立方|lìfāng|lập phương
+立场|lìchǎng|lập trường
+立体|lìtǐ|không gian ba chiều
+立交桥|lìjiāoqiáo|cầu vượt
+礼节|lǐjié|lễ tiết
+礼尚往来|lǐshàngwǎnglái|lễ thượng vãng lai, có đi có lại mới toại lòng nhau, ông đưa chân giò, bà thò chai rượu
+留神|liúshén|thận trọng (với ai), cẩn trọng, để ý cẩn thận
+留恋|liúliàn|lưu luyến
+留念|liúniàn|lưu niệm
+理睬|lǐcǎi|để ý, quan tâm
+理直气壮|lǐzhíqìzhuàng|cây ngay không sợ chết đứng
+理智|lǐzhì|lý trí
+理所当然|lǐsuǒdāngrán|lẽ đương nhiên
+狼狈|lángbèi|lang bái, chật vật, khốn khổ
+狼吞虎咽|lángtūnhǔyàn|ăn lấy ăn để
+牢骚|láosāo|hậm hực
+牢固|láogù|chắc chắn (kết cấu, móng, nền tảng)
+炉灶|lúzào|bếp nấu
+灵魂|línghún|linh hồn
+灵敏|língmǐn|nhạy, nhạy bén, thính
+灵感|línggǎn|linh cảm
+溜|liū|trượt
+淋|lín|ướt
+流露|liúlù|lộ rõ
+流通|liútōng|lưu thông
+流浪|liúlàng|lang thang, bụi đời
+流氓|liúmáng|lưu manh
+栏目|lánmù|chuyên mục
+来源|láiyuán|nguồn gốc
+来历|láilì|lai lịch
+晾|liàng|hong, phơi
+搂|lōu|ôm
+掠夺|lüèduó|cướp đoạt
+捞|lāo|vớt, mò
+懒惰|lǎnduò|lười biếng
+愣|lèng|ngây ra, sững sờ
+廉洁|liánjié|liêm khiết
+履行|lǚxíng|thực thi (chức trách), thực hiện (lời hứa)
+屡次|lǚcì|nhiều lần
+垄断|lǒngduàn|lũng đoạn
+喇叭|lǎbā|kèn, còi, loa
+啰唆|luōsuō|rườm rà, lắm lời
+啦|lā|đấy, nhé, à, này
+唠叨|láodao|lảm nhảm, lải nhải
+吝啬|lìnsè|keo kiệt
+历来|lìlái|từ trước đến nay, từ xa xưa trở lại đây
+历代|lìdài|đời đời
+力求|lìqiú|cố gắng, phấn đấu
+力所能及|lìsuǒnéngjí|làm hết khả năng
+力争|lìzhēng|cố gắng, phấn đấu
+利害|lìhài|lợi hại, giỏi
+列举|lièjǔ|liệt kê, nêu ra
+凌晨|língchén|sáng sớm
+冷酷|lěngkù|lạnh lùng
+冷落|lěngluò|ghẻ lạnh, lạnh nhạt, vắng vẻ
+冷却|lěngquè|làm lạnh
+例外|lìwài|ngoại lệ
+伶俐|línglì|lanh lợi
+乐趣|lèqù|niềm vui
+乐意|lèyì|cam tâm tình nguyện làm việc gì đó
+临床|línchuáng|lâm sàng
+默默|mòmò|lặng thầm
+麻醉|mázuì|gây tê
+麻痹|mábì|bệnh liệt
+麻木|mámù|tê
+魔鬼|móguǐ|ma quỉ
+魔术|móshù|ảo thuật
+面貌|miànmào|diện mạo
+面子|miànzi|mặt, thể diện
+迷惑|míhuò|mê hoặc, mơ hồ
+迷信|míxìn|mê tín
+迷人|mírén|khiến người khác say đắm, mê hồn
+迈|mài|đi bước dài
+谜语|míyǔ|câu đố
+谋求|móuqiú|tìm kiếm, mưu cầu
+蚂蚁|mǎyǐ|kiến
+藐视|miǎoshì|coi thường
+蔓延|mànyán|lây lan
+蔑视|mièshì|miệt thị
+萌芽|méngyá|manh nha, mầm non
+莫名其妙|mòmíngqímiào|không hiểu ra sao cả, không sao nói rõ được, ù ù cạc cạc
+茫茫|mángmáng|mênh mông, mù mịt
+茫然|mángrán|(dáng vẻ) mơ hồ
+茂盛|màoshèng|tươi tốt, xanh tươi
+膜|mó|mặt nạ
+脉搏|màibó|mạch
+美观|měiguān|mỹ quan
+美满|měimǎn|mỹ mãn, đầy đủ
+美妙|měimiào|tuyệt vời
+磨合|móhé|chạy thử
+码头|mǎtóu|bến tàu
+瞄准|miáozhǔn|ngắm chuẩn, xác định rõ
+眯|mī|nheo mắt
+盲目|mángmù|mù quáng
+目睹|mùdǔ|mắt thấy
+目光|mùguāng|ánh mắt
+猛烈|měngliè|dữ dội, mãnh liệt
+灭亡|mièwáng|diệt vong
+漫长|màncháng|dài đằng đẵng
+漫画|mànhuà|truyện tranh
+渺小|miǎoxiǎo|nhỏ bé, sự nhỏ bé
+沐浴|mùyù|tắm rửa
+民间|mínjiān|dân gian
+民主|mínzhǔ|dân chủ
+母语|mǔyǔ|tiếng mẹ đẻ
+模范|mófàn|mô phạm
+模样|móyàng|bộ dạng
+模式|móshì|mô thức
+模型|móxíng|mô hình
+棉花|miánhuā|bông
+枚|méi|cái, tấm
+明智|míngzhì|sáng suốt
+明明|míngmíng|rõ ràng
+敏锐|mǐnruì|sắc sảo
+敏捷|mǐnjié|nhanh nhạy, minh mẫn
+摸索|mōsuǒ|lần sờ, tìm
+摩擦|mócā|cọ xát
+描绘|miáohuì|miêu tả, vẽ ra
+抹杀|mǒshā|bôi
+慢性|mànxìng|mãn tính
+忙碌|mánglù|bận rộn
+弥补|míbǔ|bù đắp
+弥漫|mímàn|ngào ngạt, lan tỏa
+密度|mìdù|mật độ
+密封|mìfēng|niêm phong
+媒介|méijiè|môi giới
+墨水儿|mòshuǐr|mực
+埋葬|máizàng|mai táng
+埋没|máimò|chôn giấu
+埋怨|mányuàn|oán trách, oán hận
+埋伏|máifú|mai phục
+嘛|ma|thôi, mà
+命名|mìngmíng|đặt tên
+名额|míngé|số người
+名誉|míngyù|danh dự
+名次|míngcì|thứ tự
+名副其实|míngfùqíshí|danh bất hư truyền
+勉强|miǎnqiǎng|miễn cưỡng
+勉励|miǎnlì|khích lệ, động viê
+冒犯|màofàn|mạo phạm
+冒充|màochōng|đội lốt, giả mạo
+免疫|miǎnyì|miễn dịch
+免得|miǎndé|để tránh
+难能可贵|nánnéngkěguì|vô cùng đáng quí
+难得|nándé|khó có được
+难堪|nánkān|lúng túng, ngượng ngùng
+逆行|nìxíng|đi ngược chiều
+虐待|nüèdài|ngược đãi
+能量|néngliàng|năng lượng
+耐用|nàiyòng|bền
+纽扣儿|niǔkòur|cúc áo
+纳闷儿|nàmènr|bồn chồn, lo lắng
+浓厚|nónghòu|đậm nét, dày đặc
+捏|niē|túm, nhúp
+挪|nuó|di chuyển
+拿手|náshǒu|sở trường
+拧|níng|vặn, vắt
+拟定|nǐdìng|vạch ra
+扭转|niǔzhuǎn|xoay, quay
+恼火|nǎohuǒ|nổi cáu
+年度|niándù|năm
+宁肯|nìngkěn|thà, thà rằng
+宁愿|nìngyuàn|thà, thà rằng
+奴隶|núlì|nô lệ
+南辕北辙|nányuánběizhé|nghĩ một đằng làm một nẻo, nói một đằng làm một nẻo
+凝视|níngshì|nhìn đăm đăm
+凝聚|níngjù|ngưng tụ, hội tụ
+凝固|nínggù|cứng lại, đông đặc
+农历|nónglì|âm lịch
+内涵|nèihán|nội hàm
+内幕|nèimù|nội tình
+内在|nèizài|nội tại
+殴打|ōudǎ|ẩu đả, đánh nhau
+哦|ó|ồ, ố, á
+呕吐|ǒutù|nôn mửa
+偶像|ǒuxiàng|thần tượng
+魄力|pòlì|kiên quyết, quyết đoán
+飘扬|piāoyáng|tung bay, phất phơ
+频繁|pínfán|thường xuyên, nhiều lần
+频率|pínlǜ|tần suất
+颇|pō|rất, tương đối
+铺|pù|cửa hàng
+配套|pèitào|đồng bộ
+配备|pèibèi|phân phối
+配偶|pèiǒu|vợ, chồng
+迫害|pòhài|bức hại
+迫不及待|pòbùjídài|vội vã (không thể chờ đợi)
+趴|pā|nằm bò, nằm sấp
+贫困|pínkùn|nghèo, nghèo đói (kinh tế)
+贫乏|pínfá|nghèo nàn (kinh tế, trí tưởng tượng, tài nguyên), non nớt (kinh nghiệm)
+评论|pínglùn|bình luận
+评估|pínggū|đánh giá
+譬如|pìrú|ví dụ
+破例|pòlì|phá lệ
+盘旋|pánxuán|vòng quanh, lượn vòng
+盆地|péndì|thung lũng
+皮革|pígé|thuộc da
+疲惫|píbèi|mệt nhọc
+疲倦|píjuàn|thiếu ngủ, ủ rũ
+畔|pàn|bờ, bên (sông hồ, đường xá)
+片断|piànduàn|mẩu, đoạn
+片刻|piànkè|chốc lát
+烹饪|pēngrèn|nấu nướng
+瀑布|pùbù|thác nước
+漂浮|piāofú|trôi, nổi, bập bềnh
+派遣|pàiqiǎn|cử, phái
+派别|pàibié|phe phái
+泼|pō|hắt, giội
+泡沫|pàomò|bong bóng
+朴素|pǔsù|giản dị, mộc mạc
+朴实|pǔshí|thành thật, chất phác
+普及|pǔjí|phổ biến
+攀登|pāndēng|leo, trèo
+撇|piě|phẩy
+排除|páichú|bài trừ
+排练|páiliàn|tập
+排斥|páichì|bài xích
+排放|páifàng|thải ra
+捧|pěng|bưng, nâng, bê
+拼搏|pīnbó|đấu tranh
+拼命|pīnmìng|liều mạng, liều mình
+抛弃|pāoqì|vứt bỏ,quẳng đi
+批发|pīfā|bán buôn
+批判|pīpàn|phê phán
+扑|pū|bổ nhào
+徘徊|páihuái|cận kề, do dự
+庞大|pángdà|quá lớn (thể tích, chi tiêu, bộ máy)
+平面|píngmiàn|mặt, bề mặt
+平行|píngxíng|song song
+平庸|píngyōng|tầm thường
+平坦|píngtǎn|bằng phẳng
+平原|píngyuán|đồng bằng
+平凡|píngfán|thường, bình thường
+屏障|píngzhàng|rào chắn
+屏幕|píngmù|màn hình
+屁股|pìgu|mông
+培育|péiyù|bồi dưỡng
+坡|pō|sườn dốc, dốc
+品质|pǐnzhì|phẩm chất
+品种|pǐnzhǒng|giống, chủng loại
+品德|pǐndé|đức hạnh
+品尝|pǐncháng|nếm thử
+劈|pī/pǐ|bổ, chẻ
+判决|pànjué|phán quyết
+偏见|piānjiàn|phiến diện, thành kiến
+偏差|piānchā|sai lệch
+偏僻|piānpì|hẻo lánh, xa xôi
+偏偏|piānpiān|cố ý, lại
+齐心协力|qíxīnxiélì|đồng tâm hiệp lực
+齐全|qíquán|đầy đủ
+驱逐|qūzhú|trục xuất
+锲而不舍|qièérbùshě|miệt mài, kiên nhẫn
+钦佩|qīnpèi|khâm phục
+迄今为止|qìjīnwéizhǐ|đến nay
+迁徙|qiānxǐ|chuyển dịch
+迁就|qiānjiù|chiều theo
+趣味|qùwèi|hứng thú
+起草|qǐcǎo|viết bản thảo
+起码|qǐmǎ|chí ít
+起源|qǐyuán|bắt nguồn
+起哄|qǐhòng|đùa giỡn, giỡn cợt
+起初|qǐchū|lúc đầu
+起伏|qǐfú|gợn sóng
+谴责|qiǎnzé|lên án
+谦逊|qiānxùn|khiêm tốn
+请示|qǐngshì|xin chỉ thị
+请柬|qǐngjiǎn|thiệp mời
+请教|qǐngjiào|thỉnh giáo
+请帖|qǐngtiě|thiệp mời
+翘|qiào|vênh, vểnh
+群众|qúnzhòng|quần chúng
+缺陷|quēxiàn|khiếm khuyết
+缺席|quēxí|vắng mặt
+缺口|quēkǒu|chỗ hổng
+签署|qiānshǔ|ký tên
+窍门|qiàomén|bí quyết
+确立|quèlì|thiết lập
+确切|quèqiè|chính xác
+确信|quèxìn|tin chắc
+确保|quèbǎo|bảo đảm chắc chắn
+瘸|qué|què quặt
+犬|quǎn|chó, khuyển
+牵扯|qiānchě|liên lụy, kéo theo
+牵制|qiānzhì|giữ chân (quân sự)
+牵|qiān|kéo
+潜移默化|qiányímòhuà|dần dà thay đổi
+潜水|qiánshuǐ|lặn
+潜力|qiánlì|tiềm lực
+渠道|qúdào|kênh, con đường
+清除|qīngchú|quét sạch
+清醒|qīngxǐng|tỉnh táo, tỉnh lại
+清真|qīngzhēn|trong sáng, chất phác
+清理|qīnglǐ|dọn dẹp
+清澈|qīngchè|trong veo
+清洁|qīngjié|sạch sẽ, vệ sinh
+清晰|qīngxī|rõ ràng, rõ (phát âm, mọi vật)
+清晨|qīngchén|sáng sớm
+洽谈|qiàtán|thương thảo
+气魄|qìpò|khí phách
+气质|qìzhì|khí chất
+气象|qìxiàng|khí tượng
+气色|qìsè|khí sắc
+气概|qìgài|khí chất
+气味|qìwèi|mùi
+气压|qìyā|áp suất khí quyển
+气势|qìshì|khí thế
+气功|qìgōng|khí công
+歧视|qíshì|kì thị
+欺骗|qīpiàn|lừa gạt
+欺负|qīfù|bắt nạt
+桥梁|qiáoliáng|nhịp cầu, cầu
+权衡|quánhéng|cân nhắc, suy tính
+权威|quánwēi|quyền uy
+期限|qīxiàn|kì hạn
+期望|qīwàng|kì vọng
+曲折|qūzhé|khúc khuỷu, quanh co
+曲子|qǔzi|bản nhạc
+晴朗|qínglǎng|trong xanh, nắng đẹp (bầu trời, thời tiết)
+旗袍|qípáo|áo sườn xám
+旗帜|qízhì|cờ quạt
+掐|qiā|véo, kẹp
+拳头|quántóu|nắm đấm
+抢救|qiǎngjiù|giải thoát
+抢劫|qiǎngjié|cướp
+情节|qíngjié|tình tiết
+情理|qínglǐ|lẽ phải, tình lý
+情报|qíngbào|tính báo
+情形|qíngxíng|tình hình
+恰当|qiàdàng|phù hợp
+恰巧|qiàqiǎo|vừa khéo
+恰到好处|qiàdàohǎochù|vừa đúng lúc
+强迫|qiǎngpò|ép buộc
+强制|qiángzhì|cưỡng chế
+岂有此理|qǐyǒucǐlǐ|lẽ nào lại như vậy
+屈服|qūfú|khuất phục
+奇妙|qímiào|kì diệu
+圈套|quāntào|cái bẫy
+器材|qìcái|khí tài
+器官|qìguān|cơ quan
+启蒙|qǐméng|vỡ lòng, nhập môn
+启程|qǐchéng|khởi hành
+启示|qǐshì|gợi mở
+启事|qǐshì|thông báo (vật rơi, tìm người)
+取缔|qǔdì|cấm chỉ
+千方百计|qiānfāngbǎijì|trăm phương nghìn kế
+区域|qūyù|khu vực
+区分|qūfēn|phân biệt
+勤劳|qínláo|chịu thương chịu khó
+勤俭|qínjiǎn|cần cù, tiết kiệm
+前景|qiánjǐng|tương lai
+前提|qiántí|tiền đề
+切实|qièshí|thiết thực, thực sự
+凄凉|qīliáng|lạnh lẽo
+全局|quánjú|toàn cục
+全力以赴|quánlìyǐfù|dốc hết sức lực
+倾斜|qīngxié|xiêu, vẹo, lệch, nghiêng
+倾听|qīngtīng|lắng nghe
+倾向|qīngxiàng|nghiêng về phía (ý kiến)
+侵略|qīnlüè|xâm lược
+侵犯|qīnfàn|xâm phạm, can thiệp
+企图|qǐtú|mưu đồ
+亲热|qīnrè|thân mật
+亲密|qīnmì|thân thiết
+乞丐|qǐgài|ăn mày
+丘陵|qiūlíng|đồi núi
+饶恕|ráoshù|tha thứ
+让步|ràngbù|nhượng bộ, nhường
+认定|rèndìng|nhận định, cho rằng
+认可|rènkě|công nhận
+融洽|róngqià|hòa hợp, hòa thuận
+融化|rónghuà|tan chảy
+荣誉|róngyù|vinh dự, vẻ vang, niềm vinh dự
+荣幸|róngxìng|vinh hạnh
+若干|ruògān|một vài
+热门|rèmén|sốt, cơn sốt (hiện tượng, chủ đề)
+热泪盈眶|rèlèiyíngkuàng|nước mắt lưng tròng
+溶解|róngjiě|hòa tan
+柔和|róuhé|dịu dàng
+染|rǎn|nhiễm
+日益|rìyì|ngày càng
+日新月异|rìxīnyuèyì|biến chuyển từng ngày, mỗi ngày một khác
+揉|róu|nhào, nặn
+扰乱|rǎoluàn|quấy nhiễu, hỗn loạn
+惹祸|rěhuò|rước họa,gây tai họa
+忍耐|rěnnài|nhẫn nại
+忍受|rěnshòu|nhẫn nhịn
+弱点|ruòdiǎn|điểm yếu
+容貌|róngmào|dung mạo
+容纳|róngnà|chứa
+容忍|róngrěn|tha thứ
+容器|róngqì|thùng chứa
+嚷|rǎng|kêu, gào
+儒家|rújiā|Nho gia
+任重道远|rènzhòngdàoyuǎn|gánh nặng đường xa
+任意|rènyì|tự ý
+任性|rènxìng|tùy hứng
+任命|rènmìng|bổ nhiệm
+仍旧|réngjiù|như xưa, như cũ
+仁慈|réncí|nhân từ
+人间|rénjiān|nhân gian
+人道|réndào|nhân đạo
+人质|rénzhì|con tin
+人格|réngé|nhân cách
+人性|rénxìng|nhân tính
+人工|réngōng|nhân tạo
+人家|rénjiā|người ta
+人士|rénshì|nhân sĩ
+人为|rénwéi|do con người
+骚扰|sāorǎo|quấy rối
+首饰|shǒushì|trang sức
+首要|shǒuyào|hàng đầu, quan trọng nhất
+闪烁|shǎnshuò|nhấp nháy, lấp lánh
+释放|shìfàng|phóng thích
+逝世|shìshì|tạ thế
+适宜|shìyí|thích hợp
+试验|shìyàn|thí nghiệm
+试图|shìtú|tính toán, thử, định
+识别|shíbié|phân biệt
+设置|shèzhì|lắp đặt
+设立|shèlì|lập, thiết lập (tổ
+设想|shèxiǎng|tưởng tượng
+视频|shìpín|đoạn clip
+视野|shìyě|tầm nhìn
+视线|shìxiàn|tầm mắt
+视力|shìlì|thị lực
+衰退|shuāituì|thoái hóa (chức năng)
+衰老|shuāilǎo|già nua, lão hóa
+舒畅|shūchàng|khoan khoái, dễ chịu
+舌头|shétóu|lưỡi
+胜负|shèngfù|thắng thua
+耍|shuǎ|chơi bời
+绅士|shēnshì|quí ông
+筛选|shāixuǎn|sàng lọc, chọn lọc
+竖|shù|thẳng đứng
+私自|sīzì|một mình lén lút
+神经|shénjīng|thần kinh
+神气|shénqì|thần sắc, thần khí
+神态|shéntài|thần thái
+神奇|shénqí|thần kỳ
+神圣|shénshèng|thần thánh
+神仙|shénxiān|thần tiên
+社区|shèqū|cộng đồng
+示范|shìfàn|làm mẫu
+示意|shìyì|tỏ ý, ra hiệu
+示威|shìwēi|thị uy
+石油|shíyóu|dầu mỏ
+瞬间|shùnjiān|trong nháy mắt
+省会|shěnghuì|thủ phủ
+盛行|shèngxíng|thịnh hành
+盛情|shèngqíng|thịnh tình, hậu hĩnh
+盛开|shèngkāi|nở rộ (hoa)
+盛产|shèngchǎn|sản xuất nhiều
+疏远|shūyuǎn|xa lạ
+疏忽|shūhū|sơ suất
+申报|shēnbào|trình báo
+生锈|shēngxiù|rỉ sét
+生育|shēngyù|sinh nở, sinh đẻ
+生肖|shēngxiào|con giáp
+生疏|shēngshū|mới lạ
+生理|shēnglǐ|sinh lý
+生物|shēngwù|sinh vật
+生机|shēngjī|sức sống
+生效|shēngxiào|có hiệu lực
+生态|shēngtài|sinh thái
+生存|shēngcún|sinh tồn
+率领|shuàilǐng|dẫn đầu
+牲畜|shēngchù|gia súc
+爽快|shuǎngkuài|sảng khoái, dễ chịu
+渗透|shèntòu|thẩm thấu
+深沉|shēnchén|trầm (giọng nói), thầm lặng
+深情厚谊|shēnqínghòuyì|nghĩa tình sâu đậm
+深奥|shēnào|cao siêu
+涮火锅|shuànhuǒguō|lẩu nhúng
+涉及|shèjí|đề cập
+水龙头|shuǐlóngtóu|vòi nước
+水泥|shuǐní|bùn đất
+水利|shuǐlì|thủy lợi
+死亡|sǐwáng|chết, tử vong
+梢|shāo|ngọn
+树立|shùlì|xây dựng (gương sáng, hình tượng đẹp)
+束缚|shùfù|trói buộc, buộc
+束|shù|bó lại
+是非|shìfēi|thị phi
+时而|shíér|đôi khi
+时机|shíjī|thời cơ
+时常|shícháng|thường
+时光|shíguāng|thời khắc
+时事|shíshì|thời sự
+施展|shīzhǎn|thể hiện (tài năng)
+施加|shījiā|gây, làm (áp lực, ảnh hưởng)
+斯文|sīwén|nho nhã, nhã nhặn
+数额|shùé|hạn mức
+散文|sǎnwén|tản văn
+散布|sànbù|phát tán, lan truyền (tin đồn)
+散发|sànfā|tỏa ra (mùi, hương)
+收音机|shōuyīnjī|đài
+收藏|shōucáng|sưu tầm
+收缩|shōusuō|co lại
+收益|shōuyì|hưởng lợi
+擅长|shàncháng|sở trường
+擅自|shànzì|tự ý, tùy tiện
+撒谎|sāhuǎng|nói dối
+摄氏度|shèshìdù|độ C
+授予|shòuyǔ|trao tặng
+捎|shāo|mang hộ, mang giùm
+拾|shí|nhặt, mót
+手艺|shǒuyì|tay nghề, kĩ thuật
+手法|shǒufǎ|thủ pháp
+手势|shǒushì|cử chỉ
+慎重|shènzhòng|thận trọng
+思维|sīwéi|tư duy
+思索|sīsuǒ|suy nghĩ, nghĩ ngợi
+思念|sīniàn|nhớ nhung
+师范|shīfàn|sư phạm
+山脉|shānmài|dãy núi
+尸体|shītǐ|thi thể
+尚且|shàngqiě|kể cả
+审美|shěnměi|thẩm mỹ
+审理|shěnlǐ|thẩm lý (vụ án)
+审查|shěnchá|thẩm tra
+审判|shěnpàn|thẩm phán
+实质|shízhì|thực chất
+实行|shíxíng|thực thi
+实施|shíshī|thi hành (luật, kế hoạch, cấm vận)
+实惠|shíhuì|ưu đãi
+实力|shílì|thực lực
+实事求是|shíshìqiúshì|tinh thần cầu thị
+守护|shǒuhù|bảo vệ
+嫂子|sǎozi|chị dâu
+奢侈|shēchǐ|xa hoa
+失踪|shīzōng|mất dấu, mất tích
+失误|shīwù|lỗi lầm, sai lầm
+失事|shīshì|sự số (máy bay, thuyền), gặp nạn
+声誉|shēngyù|danh tiếng
+声明|shēngmíng|tuyên bố
+声势|shēngshì|thanh thế
+啥|shá|cái gì
+商标|shāngbiāo|nhãn hiệu
+哨|shào|sáo, đồn, trạm gác
+呻吟|shēnyín|rên rỉ
+司法|sīfǎ|tư pháp
+司令|sīlìng|tư lệnh
+受罪|shòuzuì|chịu tội
+双胞胎|shuāngbāotāi|sinh đôi
+十足|shízú|đầy đủ
+势必|shìbì|tất phải, buộc phải
+势力|shìlì|thế lực
+刹车|shāchē|phanh xe
+使命|shǐmìng|sứ mệnh
+伤脑筋|shāngnǎojīn|hại não, đau đầu
+事项|shìxiàng|hạng mục công việc
+事迹|shìjì|câu chuyện lịch sử
+事故|shìgù|tai nạn, sự cố
+事态|shìtài|tình hình
+事务|shìwù|công việc, sự vụ
+事件|shìjiàn|sự việc
+事业|shìyè|sự nghiệp
+书面|shūmiàn|văn bản
+书记|shūjì|bí thư
+书籍|shūjí|sách
+书法|shūfǎ|thư pháp
+丧失|sàngshī|mất đi, mất mát
+世代|shìdài|thế hệ
+上进|shàngjìn|tiến bộ
+上级|shàngjí|cấp trên
+上瘾|shàngyǐn|nghiện
+上游|shàngyóu|thượng du
+上任|shàngrèn|nhậm chức
+饲养|sìyǎng|nuôi
+隧道|suìdào|đường hầm
+随意|suíyì|tùy ý
+随即|suíjí|ngay lập tức
+诉讼|sùsòng|tố tụng, kiện tụng
+苏醒|sūxǐng|tỉnh lại
+艘|sōu|chiếc, con (tàu thuyền)
+肆无忌惮|sìwújìdàn|không kiêng nể
+耸|sǒng|đứng thẳng
+索性|suǒxìng|dứt khoát
+索取|suǒqǔ|đòi lại, đòi
+素食|sùshí|thực phẩm chay
+素质|sùzhì|tố chất
+算数|suànshù|giữ lời hứa
+损坏|sǔnhuài|tổn thất
+岁月|suìyuè|tuổi tác, năm thắng
+寺庙|sìmiào|đền chùa
+塑造|sùzào|miêu tả, đắp nặn, xây dựng
+四肢|sìzhī|tứ chi
+俗话|súhuà|tục ngữ
+题材|tícái|đề tài
+陶醉|táozuì|ngất ngây
+陶瓷|táocí|gốm sứ
+铜|tóng|đồng
+通货膨胀|tōnghuòpéngzhàng|lạm phát
+通讯|tōngxùn|thông tấn
+通缉|tōngjī|truy nã
+通用|tōngyòng|thông dụng
+通俗|tōngsú|thông thường
+途径|tújìng|con đường, cách thức
+透露|tòulù|tiết lộ
+踏实|tāshí|thiết thực, bình yên
+跳跃|tiàoyuè|nhảy vọt
+贪污|tānwū|tham ô
+贪婪|tānlán|tham lam
+调解|tiáojiě|hòa giải
+调节|tiáojié|điều chỉnh
+调料|tiáoliào|gia vị
+调和|tiáohé|hòa giải
+调剂|tiáojì|điều tiết
+讨好|tǎohǎo|nịnh bợ
+舔|tiǎn|liếm
+脱离|tuōlí|tách rời
+统计|tǒngjì|thống kê
+统统|tǒngtǒng|tất cả
+统筹兼顾|tǒngchóujiāngù|tính toán mọi bề
+统治|tǒngzhì|thống trị
+童话|tónghuà|cổ tích
+突破|tūpò|đột phá
+秃|tū|trọc, trụi
+瘫痪|tānhuàn|bại liệt, liệt
+田野|tiányě|đồng ruộng
+田径|tiánjìng|điền kinh
+特长|tècháng|sở trường
+特意|tèyì|đặc biệt làm riêng
+特定|tèdìng|được chỉ định
+滔滔不绝|tāotāobùjué|thao thao bất tuyệt
+淘汰|táotài|đào thải, loại
+涂抹|túmǒ|bôi, quét, thoa
+泰斗|tàidǒu|Thái Đẩu (núi Thái và sao Bắc đẩu), bậc thánh nhân
+椭圆|tuǒyuán|hình bầu dục
+条约|tiáoyuē|hiệp ước
+条理|tiáolǐ|trật tự, thứ tự rõ ràng
+条款|tiáokuǎn|điều khoản
+摊|tān|sạp, cửa hàng
+提议|tíyì|đề nghị
+提示|tíshì|đưa ra, nêu lên
+提炼|tíliàn|lọc (dầu)
+提拔|tíbá|đề bạt
+推销|tuīxiāo|bán
+推论|tuīlùn|suy luận
+推翻|tuīfān|lật đổ
+推理|tuīlǐ|suy lý
+推测|tuīcè|suy đoán
+探讨|tàntǎo|thảo luận
+探索|tànsuǒ|khám phá
+探测|tàncè|thăm dò
+探望|tànwàng|đi thăm
+掏|tāo|móc, đào
+挺拔|tǐngbá|thẳng tắp
+挑衅|tiǎoxìn|khiêu khích
+挑拨|tiǎobō|chọc phá
+挑剔|tiāotī|kén chọn
+拖延|tuōyán|kéo dài
+投降|tóuxiáng|đầu hàng
+投诉|tóusù|kiện tụng
+投票|tóupiào|đấu thầu
+投机|tóujī|hiểu nhau
+投掷|tóuzhì|ném, vứt, quăng
+托运|tuōyùn|ủy thác vận chuyển
+徒弟|túdì|đồ đệ
+弹性|tánxìng|tính đàn hồi
+妥当|tuǒdàng|thỏa đáng
+妥善|tuǒshàn|ổn thỏa, tốt đẹp
+妥协|tuǒxié|thỏa hiệp
+太空|tàikōng|vũ trụ
+天赋|tiānfù|năng khiếu
+天生|tiānshēng|bẩm sinh
+天然气|tiānránqì|khí đốt tự nhiên
+天文|tiānwén|thiên văn
+天才|tiāncái|thiên tài
+天堂|tiāntáng|thiên đường
+天伦之乐|tiānlúnzhīlè|hạnh phúc gia đình
+塔|tǎ|tháp
+塌|tā|sập
+坦白|tǎnbái|thẳng thắn
+土壤|tǔrǎng|đất
+图案|túàn|hình vẽ
+团结|tuánjié|đoàn kết
+团圆|tuányuán|đoàn viên
+团体|tuántǐ|đoàn thể
+唾弃|tuòqì|nhổ vào mặt
+吞吞吐吐|tūntūntǔtǔ|lắp ba lắp bắp
+同胞|tóngbāo|đồng bào
+同志|tóngzhì|đồng chí
+叹气|tànqì|tiếng thở dài
+台风|táifēng|bão
+停顿|tíngdùn|ngừng, tạm ngừng
+停滞|tíngzhì|đọng lại
+停泊|tíngbó|cập bến, đỗ
+倘若|tǎngruò|nếu
+体面|tǐmiàn|thể diện
+体谅|tǐliàng|lượng thứ, châm trước
+体裁|tǐcái|thể loại
+体系|tǐxì|hệ thống
+体积|tǐjī|thể tích
+亭子|tíngzi|đình trú mưa
+顽强|wánqiáng|ngoan cường
+顽固|wángù|ngoan cố, bướng bỉnh
+问世|wènshì|ra mắt, ra đời, chào đời
+违背|wéibèi|vi phạm
+误解|wùjiě|hiểu lầm
+误差|wùchā|lỗi
+诬陷|wūxiàn|hãm hại
+蔚蓝|wèilán|xanh da trời
+舞蹈|wǔdǎo|vũ đạo
+维生素|wéishēngsù|vitamin
+维持|wéichí|duy trì
+维护|wéihù|bảo vệ
+窝|wō|tổ, ổ
+畏惧|wèijù|sợ hãi, sợ sệt
+瓦解|wǎjiě|tan rã
+玩意儿|wányìr|đồ chơi
+玩弄|wánnòng|chơi đùa
+物资|wùzī|vật liệu
+物美价廉|wùměijiàlián|hàng đẹp giá rẻ
+物业|wùyè|sản nghiệp
+温带|wēndài|ôn đới
+温和|wēnhé|ôn hòa
+污蔑|wūmiè|phỉ báng
+歪曲|wāiqū|xuyên tạc
+武装|wǔzhuāng|vũ trang
+武器|wǔqì|vũ khí
+武侠|wǔxiá|võ hiệp
+未免|wèimiǎn|tránh khỏi
+无非|wúfēi|chẳng qua, không ngoài
+无辜|wúgū|vô tội
+无赖|wúlài|tên vô lại, kẻ du côn
+无能为力|wúnéngwéilì|bất lực
+无耻|wúchǐ|vô liêm sỉ
+无精打采|wújīngdǎcǎi|mặt mày ủ rũ
+无穷无尽|wúqióngwújìn|vô cùng vô tận
+无知|wúzhī|không biết, vô tri
+无理取闹|wúlǐqǔnào|vô cớ gây sự
+无比|wúbǐ|vô cùng
+无忧无虑|wúyōuwúlǜ|vô lo vô nghĩ
+无微不至|wúwēibùzhì|chu đáo tỉ mỉ
+无动于衷|wúdòngyúzhōng|thờ ơ, không chút động lòng
+无偿|wúcháng|không hoàn lại
+文雅|wényǎ|nho nhã
+文艺|wényì|văn nghệ
+文献|wénxiàn|tài liệu lịch sử
+文物|wénwù|văn vật
+文凭|wénpíng|văn bằng
+挽救|wǎnjiù|cứu vớt
+挽回|wǎnhuí|cứu vãn
+挖掘|wājué|khai quật
+慰问|wèiwèn|thăm hỏi
+惋惜|wǎnxī|xót thương, thương tiếc
+微观|wēiguān|vi mô
+微不足道|wēibùzúdào|không đáng để nhắc tới
+往常|wǎngcháng|mọi khi
+往事|wǎngshì|chuyện trước kia
+完毕|wánbì|hoàn tất
+完备|wánbèi|chuẩn bị đầy đủ
+娃娃|wáwa|búp bê
+威风|wēifēng|uy phong
+威望|wēiwàng|danh vọng
+威力|wēilì|uy lực
+威信|wēixìn|uy tín
+委托|wěituō|ủy thác
+委员|wěiyuán|ủy viên
+妄想|wàngxiǎng|mơ tưởng
+外表|wàibiǎo|bề ngoài
+外行|wàiháng|ngoài ngành
+外界|wàijiè|bên ngoài
+外向|wàixiàng|hướng ngoại
+喂（动词）|wèi（dòngcí）|a lô
+唯独|wéidú|độc nhất
+哇|wā|oa oa, oe oe
+危机|wēijī|khủng hoảng
+卫星|wèixīng|vệ tinh
+务必|wùbì|nhất thiết phải
+侮辱|wǔrǔ|sỉ nhục
+伪造|wěizào|giả mạo
+乌黑|wūhēi|đen kịt
+为难|wéinán|làm khó
+为期|wéiqī|kỳ hạn
+丸|wán|viên
+万分|wànfēn|vô cùng
+鲜明|xiānmíng|tươi sáng
+馅儿|xiànr|nhân bánh
+须知|xūzhī|những điều cần biết
+霞|xiá|ráng mây
+需求|xūqiú|nhu cầu
+雪上加霜|xuěshàngjiāshuāng|thêm dầu vào lửa
+雄厚|xiónghòu|hùng hậu
+雄伟|xióngwěi|hùng vĩ
+陷阱|xiànjǐng|cạm bẫy
+陷害|xiànhài|hãm hại
+陷入|xiànrù|lầm vào, rơi vào
+闲话|xiánhuà|lời đồn thổi
+镶嵌|xiāngqiàn|khảm
+销毁|xiāohuǐ|tiêu hủy
+酗酒|xùjiǔ|nghiện rượu
+选拔|xuǎnbá|tuyển chọn
+选手|xuǎnshǒu|tuyển thủ
+选举|xuǎnjǔ|bầu cử
+辛勤|xīnqín|siêng năng
+贤惠|xiánhuì|hiền thục
+谢绝|xièjué|khước từ, từ chối khéo
+许可|xǔkě|cho phép
+袭击|xíjī|tập kích
+衔接|xiánjiē|gắn liền, nối tiếp
+行政|xíngzhèng|hành chính
+血压|xuèyā|huyết áp
+虚荣|xūróng|hư vinh
+虚假|xūjiǎ|giả dối
+虚伪|xūwěi|giả tạo
+薪水|xīnshuǐ|tiền lương
+膝盖|xīgài|đầu gối
+腥|xīng|tanh
+胸膛|xiōngtáng|lồng ngực
+胸怀|xiōnghuái|tấm lòng
+肖像|xiàoxiàng|chân dung
+羞耻|xiūchǐ|xấu hổ
+绣|xiù|thêu
+细菌|xìjūn|vi khuẩn
+细致|xìzhì|tinh tế, tỉ mỉ
+细胞|xìbāo|tế bào
+线索|xiànsuǒ|manh mối
+纤维|xiānwéi|sợi
+系列|xìliè|hàng loạt
+相辅相成|xiāngfǔxiāngchéng|bổ trợ cho nhau
+相等|xiāngděng|ngang bằng
+相应|xiāngyìng|tương ứng
+相差|xiāngchà|khác nhau
+相声|xiàngshēng|một loại hình kịch truyền thống
+畜牧|xùmù|du mục
+现状|xiànzhuàng|hiện trạng
+现成|xiànchéng|có sẵn, vốn có
+现场|xiànchǎng|hiện trường
+狭隘|xiáài|hẹp, hẹp hòi
+狭窄|xiázhǎi|nhỏ hẹp
+牺牲|xīshēng|hi sinh
+熏陶|xūntáo|hun đúc
+熄灭|xīmiè|dập tắt
+炫耀|xuànyào|khoe khoang
+潇洒|xiāosǎ|thoải mái
+溪|xī|suối
+消除|xiāochú|loại bỏ, loại trừ
+消防|xiāofáng|chữa cháy
+消耗|xiāohào|tiêu hao
+消灭|xiāomiè|tiêu diệt
+消毒|xiāodú|khử độc
+泄露|xièlòu|rò rỉ
+泄气|xièqì|nhụt chí, nản lòng
+汹涌|xiōngyǒng|cuồn cuộn
+欣欣向荣|xīnxīnxiàngróng|phát triển thịnh vượng
+欣慰|xīnwèi|mừng vui thanh thản
+显著|xiǎnzhù|nổi bật, rõ rệt
+昔日|xīrì|trước kia
+旋转|xuánzhuàn|quay tròn
+旋律|xuánlǜ|giai điệu
+新颖|xīnyǐng|mới lạ, mới mẻ
+新陈代谢|xīnchéndàixiè|đổi cũ thay mới
+新郎|xīnláng|chú rể
+新娘|xīnniáng|cô dâu
+效益|xiàoyì|lợi ích
+携带|xiédài|xách theo
+掀起|xiānqǐ|vén, mở
+想方设法|xiǎngfāngshèfǎ|trăm phương ngàn kế
+悬殊|xuánshū|cách biệt lớn
+悬挂|xuánguà|treo
+悬念|xuánniàn|thương nhớ
+悬崖峭壁|xuányáqiàobì|vách núi cheo leo
+性能|xìngnéng|tính năng
+性感|xìnggǎn|gợi cảm
+性命|xìngmìng|tính mạng
+心血|xīnxuè|tâm huyết
+心眼儿|xīnyǎnr|trong lòng
+心疼|xīnténg|đau lòng, xót
+心甘情愿|xīngānqíngyuàn|cam tâm tình nguyện
+心灵|xīnlíng|tâm hồn
+心态|xīntài|tâm trạng
+心得|xīndé|tâm đắc
+循环|xúnhuán|tuần hoàn
+循序渐进|xúnxùjiànjìn|lần lượt từng bước
+形态|xíngtài|hình thái
+弦|xián|dây cung, dây đàn
+序言|xùyán|lời nói đầu
+巷|xiàng|ngõ
+巡逻|xúnluó|tuần tra
+峡谷|xiágǔ|hẻm núi, khe sâu
+屑|xiè|vụn, nhỏ
+小心翼翼|xiǎoxīnyìyì|cẩn thận từng li
+寻觅|xúnmì|tìm kiếm
+宪法|xiànfǎ|hiến pháp
+宣誓|xuānshì|tuyên thệ
+宣扬|xuānyáng|tuyên truyền
+学说|xuéshuō|học thuyết
+学位|xuéwèi|học vị
+嫌疑|xiányí|nghi ngờ
+嫌|xián|chê bai
+媳妇|xífù|con dâu
+夕阳|xīyáng|mặt trời lặn
+嗅觉|xiùjué|khứu giác
+喧哗|xuānhuá|to mồm
+喜闻乐见|xǐwénlèjiàn|vui tai vui mắt
+喜悦|xǐyuè|niềm vui mừng, vui mừng
+响应|xiǎngyìng|trả lời, đáp ứng
+响亮|xiǎngliàng|vang dội
+向来|xiànglái|từ trước đến nay
+向往|xiàngwǎng|hướng về
+向导|xiàngdǎo|hướng dẫn
+协调|xiétiáo|phối hợp
+协议|xiéyì|thỏa thuận
+协商|xiéshāng|hiệp thương
+协助|xiézhù|trợ giúp, giúp đỡ
+协会|xiéhuì|hiệp hội
+削弱|xuēruò|suy yếu, làm suy yếu
+削|xiāo|cắt
+刑事|xíngshì|hình sự
+凶手|xiōngshǒu|hung thủ
+凶恶|xiōngè|hung ác
+兴高采烈|xìnggāocǎiliè|vui vẻ hào hứng
+兴隆|xīnglóng|hưng thịnh, thịnh vượng
+兴致勃勃|xìngzhìbóbó|cực kỳ cao hứng
+兴旺|xīngwàng|hưng vượng
+先进|xiānjìn|tiên tiến
+先前|xiānqián|trước kia
+修建|xiūjiàn|tu bổ
+修复|xiūfù|sửa
+修养|xiūyǎng|tu dưỡng
+信赖|xìnlài|tin cậy
+信誉|xìnyù|danh dự và lòng tin
+信念|xìnniàn|tâm niệm
+信仰|xìnyǎng|tín ngưỡng
+乡镇|xiāngzhèn|làng mạc
+习俗|xísú|tập tục
+下属|xiàshǔ|thuộc hạ, cấp dưới
+鸦雀无声|yāquèwúshēng|lặng im không nói
+验证|yànzhèng|nghiệm chứng
+验收|yànshōu|nghiệm thu
+饮食|yǐnshí|ẩm thực
+预言|yùyán|lời tiên tri
+预算|yùsuàn|dự toán
+预期|yùqī|trông mong, liệu trước
+预料|yùliào|dự liệu
+预先|yùxiān|trước, sẵn
+预兆|yùzhào|điềm báo
+音响|yīnxiǎng|loa
+隐蔽|yǐnbì|giấu
+隐约|yǐnyuē|lờ mờ, láng máng
+隐私|yǐnsī|chuyện riêng tư
+隐瞒|yǐnmán|che giấu
+隐患|yǐnhuàn|hiểm họa
+阴谋|yīnmóu|âm mưu
+野蛮|yěmán|man rợ
+野心|yěxīn|dã tâm
+酝酿|yùnniàng|lên men
+遥远|yáoyuǎn|xa xôi
+遥控|yáokòng|điều khiển từ xa
+遗留|yíliú|để lại, truyền lại
+遗失|yíshī|mất
+遗传|yíchuán|di truyền
+遗产|yíchǎn|di sản
+运行|yùnxíng|vận hành
+运算|yùnsuàn|tính toán
+迎面|yíngmiàn|trước mặt, đối diện
+踊跃|yǒngyuè|nhảy nhót, nhảy lên
+谣言|yáoyán|lời đồn
+诱惑|yòuhuò|mê hoặc
+言论|yánlùn|ngôn luận
+要素|yàosù|yếu tố
+要点|yàodiǎn|điểm chính
+要命|yàomìng|mất mạng
+衣裳|yīshang|quần áo
+蕴藏|yùncáng|chất chứa, chứa đựng
+英明|yīngmíng|anh minh
+英勇|yīngyǒng|anh dũng
+舆论|yúlùn|dư luận
+耀眼|yàoyǎn|chói mắt
+翼|yì|cánh
+羽绒服|yǔróngfú|áo lông vũ
+缘故|yuángù|nguyên cớ
+约束|yuēshù|bó buộc
+眼色|yǎnsè|sắc mặt
+眼神|yǎnshén|ánh mắt
+眼光|yǎnguāng|cách nhìn
+盈利|yínglì|tiền lãi
+疑惑|yíhuò|nghi hoặc
+用户|yònghù|người sử dụng
+玉|yù|ngọc
+犹如|yóurú|như
+烟花爆竹|yānhuābàozhú|pháo nổ đì đùng
+炎热|yánrè|nóng bức
+演绎|yǎnyì|diễn dịch
+演奏|yǎnzòu|diễn tấu
+演变|yǎnbiàn|diễn biến
+演习|yǎnxí|diễn tập
+源泉|yuánquán|nguồn, cội nguồn
+渔民|yúmín|ngư dân
+淹没|yānmò|chìm ngậ
+液体|yètǐ|chất lỏng
+涌现|yǒngxiàn|trào dâng, tuôn ra
+沿海|yánhǎi|duyên hải
+油腻|yóunì|ngấy, béo ngậy
+油漆|yóuqī|sơn dầu
+永恒|yǒnghéng|vĩnh hằng
+氧气|yǎngqì|ô xy
+毅然|yìrán|kiên quyết
+毅力|yìlì|nghị lực
+欲望|yùwàng|dục vọng
+样品|yàngpǐn|sản phẩm mẫu
+有条不紊|yǒutiáobùwěn|có thứ tự chặt chẽ
+摇滚|yáogǔn|nhạc rock
+摇摆|yáobǎi|lắc lư
+掩饰|yǎnshì|che giấu
+掩盖|yǎngài|che lấp, che
+掩护|yǎnhù|bảo vệ
+拥有|yōngyǒu|có
+拥护|yōnghù|bào vệ
+愚蠢|yúchǔn|ngu xuẩn
+愚昧|yúmèi|ngu muội
+意识|yìshí|ý thức
+意料|yìliào|dự liệu
+意志|yìzhì|ý chí
+意图|yìtú|ý đồ
+意味着|yìwèizhe|có nghĩa là
+意向|yìxiàng|ý đồ, mục đích
+愈|yù|càng, thắng, khỏi bệnh
+忧郁|yōuyù|buồn thương, sầu muộn
+引用|yǐnyòng|trích dẫn
+引擎|yǐnqíng|động cơ
+引导|yǐndǎo|hướng dẫn
+异常|yìcháng|khác thường
+延续|yánxù|liên tục
+延期|yánqī|kéo dài thời hạn
+延伸|yánshēn|vươn ra
+庸俗|yōngsú|dung tục
+应酬|yìngchóu|tiệc xã giao
+应邀|yìngyāo|nhận lời mời
+幼稚|yòuzhì|ngây thơ, khờ dại
+岳母|yuèmǔ|mẹ vợ
+岩石|yánshí|nham thạch
+寓言|yùyán|truyện ngụ ngôn
+宇宙|yǔzhòu|vũ trụ
+孕育|yùnyù|mang thai
+婴儿|yīngér|em bé
+圆满|yuánmǎn|viên mãn, tốt đẹp
+园林|yuánlín|lâm viên, vườn
+原理|yuánlǐ|nguyên lí
+原始|yuánshǐ|nguyên thủy
+原告|yuángào|nguyên cáo
+原先|yuánxiān|ban đầu
+厌恶|yànwù|ghét
+压迫|yāpò|áp bức
+压缩|yāsuō|nén
+压榨|yāzhà|đàn áp (công nhân, người nghèo), ép
+压抑|yāyì|sự đè nén, đè nén
+压岁钱|yāsuìqián|tiền mừng tuổi
+压制|yāzhì|trấn áp(cuộc biểu tình)
+勇于|yǒngyú|dám làm….
+冤枉|yuānwǎng|oan uổng
+元首|yuánshǒu|nguyên thủ
+元素|yuánsù|nguyên tố
+元宵节|yuánxiāojié|tết Nguyên tiêu
+依靠|yīkào|chỗ dựa
+依赖|yīlài|dựa dẫm
+依旧|yījiù|như xưa
+依据|yījù|căn cứ
+依托|yītuō|dựa vào, nhờ
+优越|yōuyuè|ưu việt
+优胜劣汰|yōushèngliètài|mạnh được yếu thua
+优异|yōuyì|xuất sắc
+优先|yōuxiān|ưu tiên
+仪式|yíshì|nghi thức
+仪器|yíqì|máy đo
+以致|yǐzhì|dẫn đến
+以至|yǐzhì|thế nên
+以往|yǐwǎng|trước kia
+以免|yǐmiǎn|để tránh
+以便|yǐbiàn|để tiện
+亦|yì|cũng
+亚军|yàjūn|á quân
+乐谱|yuèpǔ|bản nhạc
+严禁|yánjìn|nghiêm cấm
+严峻|yánjùn|cam go, khắt khe
+严寒|yánhán|lạnh
+严密|yánmì|nghiêm ngặt
+严厉|yánlì|nghiêm khắc
+与日俱增|yǔrìjùzēng|tăng lên từng ngày
+一贯|yīguàn|nhaất quán
+一目了然|yīmùliǎorán|rõ ràng, dễ nhìn
+一流|yīliú|hạng nhất
+一度|yīdù|một lần
+一帆风顺|yīfānfēngshùn|thuận buồm xuôi gió
+一如既往|yīrújìwǎng|vẫn như xưa
+一向|yīxiàng|luôn luôn
+一举两得|yījǔliǎngdé|nhất cử lưỡng tiện
+一丝不苟|yīsībùgǒu|không hề cẩu thả
+熨|yùn|bàn là
+驻扎|zhùzhā|đóng quân
+震撼|zhènhàn|bị sốc, chấn động
+震惊|zhènjīng|chấn động (dư luận, thế giới)
+障碍|zhàngài|trở ngại
+阻碍|zǔài|cản trở
+阻挠|zǔnáo|cản trở, ngăn chặn
+阻拦|zǔlán|ngăn cản
+阵容|zhènróng|đội hình
+阵地|zhèndì|trận địa
+镇静|zhènjìng|bình tĩnh
+镇定|zhèndìng|chấn tĩnh
+铸造|zhùzào|đúc
+钻研|zuānyán|nghiên cứu chuyên sâu
+钻石|zuànshí|kim cương
+重心|zhòngxīn|trọng tâm
+郑重|zhèngzhòng|trịnh trọng
+遵循|zūnxún|tuân theo
+遮挡|zhēdǎng|đỡ, che
+遭遇|zāoyù|gặp phải
+遭殃|zāoyāng|gặp tai ương
+遭受|zāoshòu|chịu
+造型|zàoxíng|tạo hình
+逐年|zhúnián|từng năm
+追究|zhuījiū|truy cứu
+追悼|zhuīdào|truy điệu
+转达|zhuǎndá|truyền đạt
+转让|zhuǎnràng|chuyển nhượng
+转移|zhuǎnyí|dịch chuyển
+转折|zhuǎnzhé|chuyển ngoặt, chuyển hướng
+踪迹|zōngjì|dấu tích
+足以|zúyǐ|đủ để…..
+走私|zǒusī|buôn lâu
+走漏|zǒulòu|tiết lộ, rò rỉ
+走廊|zǒuláng|hành lang
+赠送|zèngsòng|tặng
+赞叹|zàntàn|khen ngợi
+赞助|zànzhù|tài trợ
+资深|zīshēn|thâm niên
+资本|zīběn|tư bản
+资助|zīzhù|viện trợ
+资产|zīchǎn|tư sản
+贼|zéi|kẻ trộm
+责怪|zéguài|trách móc
+诸位|zhūwèi|chư vị
+诈骗|zhàpiàn|lừa gạt
+证实|zhèngshí|chứng minh
+证书|zhèngshū|giấy chứng nhận, bằng
+装备|zhuāngbèi|trang bị
+装卸|zhuāngxiè|tháo lắp, bốc dỡ
+衷心|zhōngxīn|lòng trung thành
+蒸发|zhēngfā|bốc hơi
+著作|zhùzuò|tác phẩm
+舟|zhōu|thuyền
+致辞|zhìcí|đọc diễn văn
+致力|zhìlì|dốc sức
+致使|zhìshǐ|khiến cho, làm cho
+自满|zìmǎn|tự mãn
+自发|zìfā|tự phát
+自卑|zìbēi|tự ti
+自力更生|zìlìgēngshēng|tự lực cánh sinh
+自主|zìzhǔ|tự chủ
+脂肪|zhīfáng|mỡ
+肿瘤|zhǒngliú|sưng vù
+职能|zhínéng|chức năng
+职务|zhíwù|chức vụ
+职位|zhíwèi|chức vị
+罪犯|zuìfàn|tội phạm
+终身|zhōngshēn|suốt đời
+终究|zhōngjiū|cuối cùng
+终点|zhōngdiǎn|cuối cùng
+终止|zhōngzhǐ|chấm dứt
+纵横|zònghéng|ngang dọc
+糟蹋|zāotà|lãng phí, làm hại
+粥|zhōu|cháo
+章程|zhāngchéng|điều lệ
+租赁|zūlìn|cho thuê, thuê
+种植|zhòngzhí|trồng
+种族|zhǒngzú|chủng tộc
+种子|zhǒngzi|hạt giống
+祖父|zǔfù|ông nội
+祖国|zǔguó|tổ quốc
+祖先|zǔxiān|tổ tiên
+砸|zá|đập, nện, đánh
+砖|zhuān|gạch
+知足常乐|zhīzúchánglè|biết đủ thường vui
+知觉|zhījué|tri giác
+瞻仰|zhānyǎng|chiêm ngưỡng
+着重|zhuózhòng|nhấn mạnh
+着迷|zháomí|say sưa, mê
+着手|zhuóshǒu|bắt tay vào việc
+着想|zhuóxiǎng|lo nghĩ
+眨|zhǎ|nháy
+真相|zhēnxiàng|chân tướng
+真理|zhēnlǐ|chân lý
+真挚|zhēnzhì|chân thành
+直播|zhíbō|truyền hình trực tiếp
+直径|zhíjìng|đường kính
+皱纹|zhòuwén|nếp nhăn
+症状|zhèngzhuàng|triệu chứng
+琢磨|zhuómó|gọt giũa, vắt óc suy nghĩ
+珍贵|zhēnguì|quí báu, quí giá
+珍稀|zhēnxī|trân trọng
+珍珠|zhēnzhū|ngọc trai
+照耀|zhàoyào|chiếu sáng
+照样|zhàoyàng|như thường lệ
+灾难|zāinàn|thiên tai
+滞留|zhìliú|ngưng lại, dừng lại
+滋润|zīrùn|ẩm ướt
+滋味|zīwèi|hương vị, mùi vị
+渣|zhā|cặn
+注重|zhùzhòng|chú trọng
+注释|zhùshì|chú thích
+注视|zhùshì|nhìn chằm chừm
+注射|zhùshè|tiêm
+沾光|zhānguāng|thơm lây
+沼泽|zhǎozé|đầm lầy
+治理|zhìlǐ|quản lý
+治安|zhìān|trị an
+殖民地|zhímíndì|thuộc địa
+正负|zhèngfù|chính phụ
+正规|zhèngguī|chính qui
+正经|zhèngjīng|nghiêm túc, chăm chỉ
+正气|zhèngqì|nếp sống lành mạnh, môi trường lành mạnh
+正月|zhēngyuè|tháng giêng
+正当|zhèngdàng|chính đáng
+正宗|zhèngzōng|đúng, chuẩn
+正义|zhèngyì|chính nghĩa
+棕色|zōngsè|màu nâu
+栽培|zāipéi|vun trồng, vun xới
+株|zhū|cây
+枝|zhī|cành cây, nhánh cây
+枕头|zhěntou|gối
+杂技|zájì|xiếc
+杂交|zájiāo|lai giống, lai ghép
+朝气蓬勃|zhāoqìpéngbó|bừng bừng khí thế
+暂且|zànqiě|tạm thời
+智能|zhìnéng|thông minh (điện thoại)
+智商|zhìshāng|IQ
+智力|zhìlì|trí lực, trí khôn
+昼夜|zhòuyè|ngày đêm
+斩钉截铁|zhǎndīngjiétiě|kiên quyết, không do dự
+斟酌|zhēnzhuó|suy nghĩ kĩ, xem xét kĩ lưỡng
+整顿|zhěngdùn|chỉnh đốn
+政策|zhèngcè|chính sách
+政权|zhèngquán|chính quyền
+支配|zhīpèi|chi phối, sắp xếp
+支流|zhīliú|nhánh sông
+支柱|zhīzhù|trụ chống
+支撑|zhīchēng|chống đỡ, xoay xở
+支援|zhīyuán|ủng hộ, chi viện
+支出|zhīchū|chi tiêu
+攒|zǎn|kiếm
+摘要|zhāiyào|đề cương
+揍|zòu|đánh, đập vỡ
+振奋|zhènfèn|hào hứng, hưng phấn
+振兴|zhènxīng|chấn hưng
+挣扎|zhēngzhá|vũng vẫy, đấu tranh
+指责|zhǐzé|chỉ trích
+指示|zhǐshì|cho thấy, báo hiệu
+指甲|zhǐjiǎ|móng tay
+指标|zhǐbiāo|mức, chỉ tiêu
+指望|zhǐwàng|trông chờ
+指定|zhǐdìng|chỉ định
+指南针|zhǐnánzhēn|la bàn
+指令|zhǐlìng|chỉ thị, mệnh lệnh
+拽|zhuài/zhuāi|dắt, quăng
+招标|zhāobiāo|đấu thầu
+招收|zhāoshōu|tuyển sinh, tuyển dụng
+拄|zhǔ|chống (gậy)
+折腾|zhēteng|trằn trọc, dày vò
+折磨|zhémó|giày vò
+折|zhé|gấp
+执行|zhíxíng|chấp hành
+执着|zhízhuó|cố chấp
+扎实|zhāshí|vững chắc, chắc chắn
+扎|zhā|chích, châm, đâm
+战略|zhànlüè|chiến lược
+战术|zhànshù|chiến thuật
+战斗|zhàndòu|chiến đấu
+战役|zhànyì|chiến dịch
+总而言之|zǒngéryánzhī|nói tóm lại
+总和|zǒnghé|tổng
+忠诚|zhōngchéng|trung thành
+忠实|zhōngshí|trung thực
+志气|zhìqì|chí khí
+征服|zhēngfú|chinh phục
+征收|zhēngshōu|trưng thu
+座右铭|zuòyòumíng|lời răn dạy, khẩu hiệu
+庄重|zhuāngzhòng|trang trọng
+庄稼|zhuāngjià|hoa màu
+庄严|zhuāngyán|trang nghiêm
+幢|zhuàng|tòa (nhà)
+帐篷|zhàngpéng|lều trại
+州|zhōu|châu lục
+崭新|zhǎnxīn|mới mẻ
+展示|zhǎnshì|trưng bày, thể hiện
+展现|zhǎnxiàn|tái hiện, thể hiện
+展望|zhǎnwàng|triển vọng
+尊严|zūnyán|tôn nghiêm
+宰|zǎi|giết, mổ, làm thịt
+宗旨|zōngzhǐ|tôn chỉ
+宗教|zōngjiào|tôn giáo
+子弹|zǐdàn|viên đạn
+姿态|zītài|tư thế, điệu bộ
+壮观|zhuàngguān|đồ sộ
+壮烈|zhuàngliè|lừng lẫy, oanh liệt
+壮丽|zhuànglì|tráng lệ
+增添|zēngtiān|tăng lên
+坠|zhuì|trĩu xuống, rơi
+在意|zàiyì|để ý
+噪音|zàoyīn|tạp âm
+嘴唇|zuǐchún|môi
+嘱咐|zhǔfù|căn dặn
+咋|zǎ|sao, thế nào
+周边|zhōubiān|xung quanh
+周转|zhōuzhuǎn|quay vòng (vốn)
+周期|zhōuqī|chu kỳ
+周折|zhōuzhé|trục trặc
+周年|zhōunián|đầy năm
+周密|zhōumì|chặt chẽ, kĩ lưỡng
+占领|zhànlǐng|chiếm lĩnh
+占据|zhànjù|chiếm
+卓越|zhuóyuè|lỗi lạc
+助理|zhùlǐ|trợ lý
+助手|zhùshǒu|trợ thủ
+制裁|zhìcái|trừng phạt
+制约|zhìyuē|kìm hãm
+制止|zhìzhǐ|ngăn chặn, chắn đứng
+制服|zhìfú|đồng phục
+准则|zhǔnzé|chuẩn mực
+再接再厉|zàijiēzàilì|không ngừng cố gắng
+值班|zhíbān|trực ban
+债券|zhàiquàn|công trái
+侦探|zhēntàn|trinh thám
+侄子|zhízi|cháu
+作风|zuòfēng|tác phong
+作息|zuòxī|làm việc và nghỉ ngơi
+作弊|zuòbì|gian lận
+作废|zuòfèi|bỏ phí
+住宅|zhùzhái|nhà ở
+传记|zhuànjì|truyện ký
+众所周知|zhòngsuǒzhōuzhī|mọi người đều biết
+争议|zhēngyì|tranh luận
+争端|zhēngduān|tranh chấp
+争气|zhēngqì|không chịu thua kém
+争夺|zhēngduó|tranh đoạt
+争先恐后|zhēngxiānkǒnghòu|tranh lên trước
+之际|zhījì|trong hoàn cảnh
+主管|zhǔguǎn|chủ quản
+主流|zhǔliú|xu hướng chính
+主权|zhǔquán|chủ quyền
+主导|zhǔdǎo|chủ đạo
+主办|zhǔbàn|đăng cai
+主义|zhǔyì|chủ nghĩa
+中立|zhōnglì|trung lập
+中断|zhōngduàn|ngắt quãng, gián đoạn
+做主|zuòzhǔ|làm chủ, tự quyết định
+中央|zhōngyāng|trung ương
+专题|zhuāntí|chuyên đề
+专长|zhuāncháng|chuyên môn
+专程|zhuānchéng|đặc biệt (chuyến đi)
+专利|zhuānlì|bằng sáng chế

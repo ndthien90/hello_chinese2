@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ Chuẩn hóa Pinyin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .code-font { font-family: 'Consolas', 'Monaco', monospace; }
+        .tab-active { border-bottom: 2px solid #16a34a; color: #16a34a; font-weight: bold; background-color: #f0fdf4; }
+        .tab-inactive { color: #64748b; hover:text-slate-800; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <i class="fa-solid fa-spell-check"></i>
+                Công cụ Chuẩn hóa Pinyin
+            </h1>
+            <span class="text-sm bg-blue-500 px-3 py-1 rounded-full">JSON & TXT Converter</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Left Column: Input -->
+        <div class="flex-1 flex flex-col min-h-[500px]">
+            <div class="bg-white rounded-t-lg border border-slate-200 p-3 flex justify-between items-center bg-slate-100">
+                <label class="font-semibold text-slate-700">Dữ liệu đầu vào (Input)</label>
+                <div class="space-x-2">
+                    <button onclick="loadSample()" class="text-xs text-blue-600 hover:text-blue-800 underline">Nạp mẫu thử</button>
+                    <button onclick="clearInput()" class="text-xs text-red-500 hover:text-red-700 underline">Xóa</button>
+                </div>
+            </div>
+            <textarea id="inputData" class="flex-grow w-full p-4 border border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none code-font text-sm resize-none" placeholder='Dán danh sách từ vựng của bạn vào đây. Ví dụ:
+HSK1: [
+  { "hanzi": "爱", "pinyin": "ài", "meaning": "yêu" }
+],
+HSK2: [
+  { "hanzi": "吧", "pinyin": "ba", "meaning": "nhé, đi" }
+]'></textarea>
+        </div>
+
+        <!-- Middle Column: Actions -->
+        <div class="flex flex-col justify-center items-center gap-4 py-4 lg:py-0 w-full lg:w-48">
+            <div class="w-full space-y-3">
+                <button onclick="processPinyin('json')" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 font-medium text-sm">
+                    <i class="fa-solid fa-code"></i>
+                    Sửa JSON
+                </button>
+                
+                <button onclick="processPinyin('txt')" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 font-medium text-sm">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Xuất ra TXT
+                </button>
+            </div>
+
+            <div class="text-slate-500 text-xs text-center">
+                <p>Chọn <b class="text-blue-600">Sửa JSON</b> để giữ nguyên định dạng code.</p>
+                <div class="my-2 border-t border-slate-300"></div>
+                <p>Chọn <b class="text-green-600">Xuất ra TXT</b> để phân loại theo nhóm (HSK1, HSK2...) và tạo danh sách: <br><code class="bg-slate-200 px-1">Từ|Pinyin|Nghĩa</code></p>
+            </div>
+        </div>
+
+        <!-- Right Column: Output -->
+        <div class="flex-1 flex flex-col min-h-[500px]">
+            <!-- Output Tabs -->
+            <div class="flex border-b border-slate-200 bg-white rounded-t-lg">
+                <button id="tabJson" class="flex-1 py-3 text-sm font-semibold tab-active transition-colors" onclick="switchTab('json')">Kết quả (Output)</button>
+            </div>
+
+            <div class="bg-white border-x border-slate-200 p-2 flex justify-between items-center bg-slate-50 border-b">
+                <span id="outputLabel" class="text-xs font-semibold text-slate-500">Định dạng: JSON/JS Object</span>
+                <div class="flex items-center gap-2">
+                    <div id="statusMsg" class="text-xs font-bold text-green-600 hidden">Đã xử lý xong!</div>
+                    <button onclick="copyOutput()" class="text-xs bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 px-3 py-1 rounded shadow-sm transition-colors">
+                        <i class="fa-regular fa-copy"></i> Sao chép
+                    </button>
+                </div>
+            </div>
+            <textarea id="outputData" readonly class="flex-grow w-full p-4 border border-slate-300 bg-white focus:outline-none code-font text-sm text-slate-700 resize-none"></textarea>
+        </div>
+    </main>
+
+    <!-- Statistics & Preview Section -->
+    <section class="container mx-auto px-4 pb-8">
+        <div class="bg-white rounded-lg shadow border border-slate-200 p-4">
+            <h3 class="text-md font-bold text-slate-700 mb-3 border-b pb-2">Thống kê thay đổi</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-blue-50 p-3 rounded text-center">
+                    <div class="text-xs text-slate-500 uppercase">Tổng số dòng</div>
+                    <div id="statTotal" class="text-xl font-bold text-blue-700">0</div>
+                </div>
+                <div class="bg-green-50 p-3 rounded text-center">
+                    <div class="text-xs text-slate-500 uppercase">Đã sửa Pinyin</div>
+                    <div id="statFixed" class="text-xl font-bold text-green-700">0</div>
+                </div>
+                <div class="bg-yellow-50 p-3 rounded text-center">
+                    <div class="text-xs text-slate-500 uppercase">Không thay đổi</div>
+                    <div id="statUnchanged" class="text-xl font-bold text-yellow-700">0</div>
+                </div>
+            </div>
+            
+            <h4 class="text-sm font-semibold text-slate-600 mb-2">Xem trước 5 thay đổi gần nhất:</h4>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                        <tr>
+                            <th class="px-4 py-2">Hán tự</th>
+                            <th class="px-4 py-2 text-red-500">Pinyin cũ</th>
+                            <th class="px-4 py-2 text-green-600">Pinyin mới</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewBody" class="bg-white border-b">
+                        <tr>
+                            <td colspan="3" class="px-4 py-2 text-center text-slate-400 italic">Chưa có dữ liệu xử lý</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script Logic -->
+    <script>
+        const sampleData = `HSK1: [
+    { "hanzi": "爱", "pinyin": "ài", "meaning": "yêu" },
+    { "hanzi": "爸爸", "pinyin": "bà ba", "meaning": "bố" },
+    { "hanzi": "杯子", "pinyin": "bēi zi", "meaning": "cốc, chén, ly, tách" }
+],
+HSK2: [
+    { "hanzi": "吧", "pinyin": "ba", "meaning": "nhé, đi" },
+    { "hanzi": "百", "pinyin": "bǎi", "meaning": "trăm" },
+    { "hanzi": "帮 助", "pinyin": "bāng zhù", "meaning": "giúp đỡ" }
+]`;
+
+        let currentMode = 'json'; // json | txt
+
+        function loadSample() {
+            document.getElementById('inputData').value = sampleData;
+        }
+
+        function clearInput() {
+            document.getElementById('inputData').value = '';
+            document.getElementById('outputData').value = '';
+            resetStats();
+        }
+
+        function resetStats() {
+            document.getElementById('statTotal').innerText = '0';
+            document.getElementById('statFixed').innerText = '0';
+            document.getElementById('statUnchanged').innerText = '0';
+            document.getElementById('previewBody').innerHTML = '<tr><td colspan="3" class="px-4 py-2 text-center text-slate-400 italic">Chưa có dữ liệu xử lý</td></tr>';
+            document.getElementById('statusMsg').classList.add('hidden');
+        }
+
+        function processPinyin(mode) {
+            currentMode = mode;
+            const input = document.getElementById('inputData').value;
+            if (!input.trim()) {
+                alert("Vui lòng dán dữ liệu vào ô Input trước.");
+                return;
+            }
+
+            // Visual feedback for active mode
+            const outputLabel = document.getElementById('outputLabel');
+            if (mode === 'json') {
+                outputLabel.innerText = "Định dạng: JSON/JS Object (Đã sửa Pinyin)";
+                processJsonMode(input);
+            } else {
+                outputLabel.innerText = "Định dạng: TXT (Phân loại theo nhóm)";
+                processTxtMode(input);
+            }
+
+            // Show success message
+            const statusMsg = document.getElementById('statusMsg');
+            statusMsg.classList.remove('hidden');
+            setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+        }
+
+        // --- Logic Xử lý JSON (Giữ nguyên định dạng, chỉ xóa space pinyin) ---
+        function processJsonMode(input) {
+            let fixedCount = 0;
+            let totalCount = 0;
+            
+            // Regex tìm pinyin
+            const regex = /(["']?pinyin["']?\s*:\s*)(["'])(.*?)\2/gi;
+
+            const output = input.replace(regex, (match, p1, quote, content) => {
+                totalCount++;
+                const cleanContent = content.replace(/\s+/g, ''); 
+
+                if (content !== cleanContent) {
+                    fixedCount++;
+                }
+                return `${p1}${quote}${cleanContent}${quote}`;
+            });
+
+            document.getElementById('outputData').value = output;
+            updateStats(totalCount, fixedCount, input, output, regex);
+        }
+
+        // --- Logic Xử lý TXT (Có phân nhóm HSK) ---
+        function processTxtMode(input) {
+            let fixedCount = 0;
+            let totalCount = 0;
+            const lines = [];
+            
+            // Regex đa năng:
+            // Nhóm 1: Bắt tiêu đề (Ví dụ: HSK1, list_words, v.v...) trước dấu hai chấm và dấu mở ngoặc vuông
+            // Nhóm 2: Bắt nội dung object {...}
+            const tokenRegex = /(?:(["']?[\w\d]+["']?)\s*:\s*\[)|(?:\{([^{}]*)\})/g;
+            
+            let match;
+            let hasFoundAnyData = false;
+            let isFirstHeader = true;
+
+            while ((match = tokenRegex.exec(input)) !== null) {
+                // Trường hợp 1: Tìm thấy tiêu đề nhóm (ví dụ: HSK1: [ )
+                if (match[1]) {
+                    const header = match[1].replace(/["']/g, ''); // Xóa ngoặc kép nếu có
+                    
+                    // Thêm khoảng trắng trước header (trừ header đầu tiên)
+                    if (!isFirstHeader) {
+                        lines.push(""); 
+                    }
+                    lines.push(`=== ${header} ===`);
+                    isFirstHeader = false;
+                } 
+                // Trường hợp 2: Tìm thấy object từ vựng (ví dụ: { "hanzi":... } )
+                else if (match[2]) {
+                    const blockContent = match[2];
+                    const hanzi = extractValue(blockContent, 'hanzi');
+                    const pinyin = extractValue(blockContent, 'pinyin');
+                    const meaning = extractValue(blockContent, 'meaning');
+
+                    if (hanzi && pinyin && meaning) {
+                        totalCount++;
+                        hasFoundAnyData = true;
+                        
+                        const cleanPinyin = pinyin.replace(/\s+/g, '');
+                        if (pinyin !== cleanPinyin) {
+                            fixedCount++;
+                        }
+
+                        lines.push(`${hanzi}|${cleanPinyin}|${meaning}`);
+                    }
+                }
+            }
+
+            if (!hasFoundAnyData) {
+                document.getElementById('outputData').value = "Không tìm thấy dữ liệu hợp lệ.\nVui lòng kiểm tra format đầu vào.\nHỗ trợ format:\nHSK1: [ {hanzi:..., pinyin:..., meaning:...} ]";
+            } else {
+                document.getElementById('outputData').value = lines.join('\n');
+            }
+
+            // Cập nhật thống kê
+            document.getElementById('statTotal').innerText = totalCount;
+            document.getElementById('statFixed').innerText = fixedCount;
+            document.getElementById('statUnchanged').innerText = totalCount - fixedCount;
+            
+            // Update preview table (Vẫn dùng logic JSON để hiển thị diff)
+             const regexForDiff = /(["']?pinyin["']?\s*:\s*)(["'])(.*?)\2/gi;
+             const dummyOutputForDiff = input.replace(regexForDiff, (m, p1, q, c) => `${p1}${q}${c.replace(/\s+/g, '')}${q}`);
+             updatePreviewTable(input, dummyOutputForDiff, regexForDiff);
+        }
+
+        function extractValue(text, key) {
+            // Regex tìm value của một key cụ thể: key : "value"
+            const regex = new RegExp(`["']?${key}["']?\\s*:\\s*(["'])(.*?)\\1`, 'i');
+            const match = text.match(regex);
+            return match ? match[2] : null;
+        }
+
+        function updateStats(total, fixed, original, modified, regex) {
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statFixed').innerText = fixed;
+            document.getElementById('statUnchanged').innerText = total - fixed;
+            updatePreviewTable(original, modified, regex);
+        }
+
+        function updatePreviewTable(originalText, newText, regex) {
+            const tbody = document.getElementById('previewBody');
+            tbody.innerHTML = '';
+            let count = 0;
+            const lines = originalText.split('\n');
+            
+            for(let line of lines) {
+                if(count >= 5) break;
+                if(line.match(regex)) {
+                    const pinyinMatch = /(["']?pinyin["']?\s*:\s*)(["'])(.*?)\3/i.exec(line);
+                    const hanziMatch = /(["']?hanzi["']?\s*:\s*)(["'])(.*?)\2/i.exec(line);
+                    
+                    if (pinyinMatch) {
+                        const oldPinyin = pinyinMatch[3];
+                        const newPinyin = oldPinyin.replace(/\s+/g, '');
+                        
+                        if (oldPinyin !== newPinyin) {
+                            const hanzi = hanziMatch ? hanziMatch[3] : "???";
+                            const row = `
+                                <tr class="border-b hover:bg-slate-50 transition">
+                                    <td class="px-4 py-2 font-medium text-slate-800">${hanzi}</td>
+                                    <td class="px-4 py-2 text-red-500 line-through decoration-red-300">${oldPinyin}</td>
+                                    <td class="px-4 py-2 text-green-600 font-bold">${newPinyin}</td>
+                                </tr>
+                            `;
+                            tbody.insertAdjacentHTML('beforeend', row);
+                            count++;
+                        }
+                    }
+                }
+            }
+            if (count === 0) {
+                 tbody.innerHTML = '<tr><td colspan="3" class="px-4 py-2 text-center text-slate-500">Dữ liệu đã chuẩn hoặc không tìm thấy pinyin cần sửa.</td></tr>';
+            }
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('outputData');
+            output.select();
+            output.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            
+            const btn = document.querySelector('button[onclick="copyOutput()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Đã chép';
+            btn.classList.add('bg-green-200', 'text-green-800');
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-green-200', 'text-green-800');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
