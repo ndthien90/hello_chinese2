@@ -88,7 +88,6 @@
         }
     </style>
 </head>
-<!-- FIX 1: Thêm style background-color để tránh nháy trắng lúc mở app -->
 <body class="bg-gray-50 min-h-screen flex flex-col max-w-md mx-auto shadow-2xl border-x border-gray-100 relative" style="background-color: #f9fafb;">
 
     <!-- Top Navigation Bar -->
@@ -97,17 +96,17 @@
             <i class="fas fa-arrow-left text-lg"></i>
         </button>
         <h1 class="font-extrabold text-gray-800 text-lg">Học Từ Vựng</h1>
-        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm shadow-sm border border-orange-200">
-            <span id="streakCountDisplay">🔥</span>
+        <!-- CẬP NHẬT: Thay đổi icon ngọn lửa thành phần trăm tiến độ -->
+        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-xs shadow-sm border border-blue-200" id="lessonProgressContainer">
+            <span id="lessonProgressDisplay">0%</span>
         </div>
     </div>
 
     <!-- View Toggles (Tabs) -->
-    <!-- FIX 1: Thêm style nền cho container tabs -->
     <div class="px-4 mt-3 sticky top-[60px] z-20 bg-gray-50 pb-2" style="background-color: #f9fafb;">
         <div class="bg-gray-200 p-1 rounded-xl flex text-sm font-bold" style="background-color: #e5e7eb;">
             <button id="tabFlashcard" class="flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300" onclick="app.switchTab('flashcard')">
-                <i class="fas fa-clone mr-1"></i> Flashcard
+                <i class="fas fa-clone mr-1"></i> Thẻ
             </button>
             <button id="tabList" class="flex-1 py-2 rounded-lg bg-transparent text-gray-500 hover:text-gray-700 transition-all duration-300" onclick="app.switchTab('list')">
                 <i class="fas fa-list mr-1"></i> Danh sách
@@ -119,11 +118,9 @@
     </div>
 
     <!-- Main Content Area -->
-    <!-- FIX 2: Thêm class 'relative' để chứa loading overlay -->
     <div class="flex-1 flex flex-col p-4 pb-24 overflow-y-auto no-scrollbar relative" id="mainContainer">
         
-        <!-- Loading Overlay (Thay thế Loading cũ) -->
-        <!-- FIX 2: Dùng absolute để phủ lên nội dung thay vì ẩn nội dung đi (tránh nháy layout) -->
+        <!-- Loading Overlay -->
         <div id="loadingIndicator" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm hidden rounded-xl">
             <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-3"></div>
             <p class="text-sm font-medium text-gray-500">Đang tải dữ liệu...</p>
@@ -232,7 +229,6 @@
                                 <h3 class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-wider text-left">Ví dụ:</h3>
                                 <div id="example" class="text-left space-y-1">
                                     <!-- Example injected via JS -->
-                                    <p class="text-gray-400 text-sm">Chưa có ví dụ</p>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +298,7 @@
                     <button class="quiz-count-btn btn-press py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition focus:ring-2 focus:ring-blue-200" data-count="all">Tất cả</button>
                 </div>
 
-                <div class="flex items-center justify-center gap-2 mb-6">
+                <div class="flex items-center justify-center gap-2 mb-6 text-sm text-gray-600">
                     <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
                         <input type="checkbox" id="quizOnlyWeak" class="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 custom-checkbox focus:ring-blue-200">
                         <span class="text-sm text-gray-600 font-bold">Chỉ từ chưa thuộc</span>
@@ -579,10 +575,29 @@
 
                 this.currentCardIndex = 0;
                 this.currentPage = 1;
+                
+                // Update lesson progress when active data changes
+                this.updateLessonProgress();
 
                 // Update Views
                 this.updateFlashcardUI();
                 if (this.currentView === 'list') this.renderListView();
+            }
+
+            // --- NEW: Calculate and update lesson progress percentage ---
+            updateLessonProgress() {
+                if (!this.lessonData || this.lessonData.length === 0) {
+                    document.getElementById('lessonProgressDisplay').textContent = '0%';
+                    return;
+                }
+                
+                let count = 0;
+                this.lessonData.forEach(item => {
+                    if (this.memorizedWords.has(item.character)) count++;
+                });
+                
+                const percent = Math.round((count / this.lessonData.length) * 100);
+                document.getElementById('lessonProgressDisplay').textContent = `${percent}%`;
             }
 
             // --- TAB SWITCHING ---
@@ -595,16 +610,19 @@
                 document.getElementById('quizView').classList.add('hidden');
                 document.getElementById('quizView').classList.remove('flex'); // remove flex styling
 
-                // Define classes for Active and Inactive states
-                // Active: Không có hover:text-gray-700 để tránh xung đột màu
-                const activeClass = "flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300";
-                // Inactive: Có hover:text-gray-700
+                // Reset Tab Styles
+                // FIX: Add bg-transparent directly to inactive buttons so that switch is correct
+                // and avoid hover state confusion.
                 const inactiveClass = "flex-1 py-2 rounded-lg bg-transparent text-gray-500 hover:text-gray-700 transition-all duration-300";
+                const activeClass = "flex-1 py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all duration-300";
 
-                // Apply classes directly to ensure clean state
-                document.getElementById('tabFlashcard').className = (tabName === 'flashcard') ? activeClass : inactiveClass;
-                document.getElementById('tabList').className = (tabName === 'list') ? activeClass : inactiveClass;
-                document.getElementById('tabQuiz').className = (tabName === 'quiz') ? activeClass : inactiveClass;
+                document.getElementById('tabFlashcard').className = inactiveClass;
+                document.getElementById('tabList').className = inactiveClass;
+                document.getElementById('tabQuiz').className = inactiveClass;
+
+                // Activate specific
+                const activeBtnId = tabName === 'flashcard' ? 'tabFlashcard' : tabName === 'list' ? 'tabList' : 'tabQuiz';
+                document.getElementById(activeBtnId).className = activeClass;
 
                 const studyControl = document.getElementById('studyModeControl');
                 const progressBar = document.getElementById('flashcardProgressBar');
@@ -616,13 +634,13 @@
                     this.updateActiveData(); // Refresh to check if marks changed
                 } else if (tabName === 'list') {
                     document.getElementById('listView').classList.remove('hidden');
-                    studyControl.classList.add('hidden');
+                    studyControl.classList.add('hidden'); // List always shows all? Or follows filter? Let's follow filter for consistency or just show all. User requested list view has checkboxes. Usually list view shows ALL for management.
                     progressBar.classList.add('hidden');
                     this.renderListView();
                 } else if (tabName === 'quiz') {
                     document.getElementById('quizView').classList.remove('hidden');
                     document.getElementById('quizView').classList.add('flex');
-                    studyControl.classList.add('hidden');
+                    studyControl.classList.add('hidden'); // Quiz has its own filter logic display or implied
                     progressBar.classList.add('hidden');
                     this.resetQuizView();
                 }
@@ -657,7 +675,7 @@
                     <p class="text-xs text-gray-400 italic">${card.exampleMeaning}</p>
                 `;
 
-                // Update Memorized Button State Only
+                // Update Memorized Button
                 const markBtn = document.getElementById('markMemorizedBtn');
                 const isMem = this.memorizedWords.has(card.character);
                 
@@ -689,6 +707,7 @@
                     this.memorizedWords.add(char);
                 }
                 this.saveMemorized();
+                this.updateLessonProgress(); // Update progress circle
                 
                 // If in Study Mode, remove card from view
                 if (this.isStudyWeakMode) {
@@ -760,7 +779,7 @@
                     
                     div.innerHTML = `
                         <div class="flex items-center gap-4 flex-1 cursor-pointer" onclick="app.openWriterFromList('${item.character}')">
-                            <div class="min-w-[3rem] w-auto px-2 py-1 h-12 rounded-lg bg-blue-10 flex items-center justify-center text-2xl chinese-font text-blue-600  text-center whitespace-nowrap ">
+                            <div class="min-w-[3rem] w-auto px-2 py-1 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-xl chinese-font text-blue-600 font-bold text-center whitespace-nowrap border border-blue-100">
                                 ${item.character}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -807,6 +826,7 @@
                 if (this.memorizedWords.has(char)) this.memorizedWords.delete(char);
                 else this.memorizedWords.add(char);
                 this.saveMemorized();
+                this.updateLessonProgress(); // Update progress circle
                 this.renderListView(); // Re-render to update UI (backgrounds etc)
             }
 
@@ -816,6 +836,7 @@
                     else this.memorizedWords.delete(item.character);
                 });
                 this.saveMemorized();
+                this.updateLessonProgress(); // Update progress circle
                 this.renderListView();
             }
 
@@ -1117,18 +1138,10 @@
                 setTimeout(() => fb.classList.add('opacity-0', 'translate-y-[-20px]'), 2000);
             }
 
-            // MODIFIED: setLoadingState uses overlay instead of hiding content to prevent flash
             setLoadingState(loading) {
-                const overlay = document.getElementById('loadingIndicator');
-                if (loading) {
-                    overlay.classList.remove('hidden');
-                } else {
-                    overlay.classList.add('hidden');
-                    // Restore tab view logic if needed, but not necessary if we don't hide
-                    this.switchTab(this.currentView);
-                }
+                document.getElementById('loadingIndicator').style.display = loading ? 'flex' : 'none';
+                document.getElementById('mainContainer').style.display = loading ? 'none' : 'flex';
             }
-            
             showError(msg) {
                 const el = document.getElementById('errorMessage');
                 el.innerText = msg; el.classList.remove('hidden');
