@@ -312,13 +312,7 @@
         </div>
     </div>
 
-    <!-- Bottom Tab Bar -->
-    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center z-40 pb-6 md:pb-3">
-        <a href="index.html" class="flex flex-col items-center gap-1 text-blue-600 w-16"><i class="fas fa-home text-xl"></i><span class="text-[10px] font-medium">Home</span></a>
-        <a href="study.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16"><i class="fas fa-book-open text-xl"></i><span class="text-[10px] font-medium">Học</span></a>
-        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16"><i class="fas fa-gamepad text-xl"></i><span class="text-[10px] font-medium">Game</span></a>
-        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16"><i class="fas fa-user text-xl"></i><span class="text-[10px] font-medium">Tôi</span></a>
-    </div>
+
 
     <script>
         const fullVocabularyData = {
@@ -5357,6 +5351,7 @@
         const mainCard = document.getElementById('mainCard');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         const paginationControls = document.getElementById('paginationControls');
+        const totalProgressDisplay = document.getElementById('totalProgress');
 
         // Modal
         const animationModal = document.getElementById('animationModal');
@@ -5392,7 +5387,12 @@
                 if (memorizedWords.has(word.hanzi)) memorizedCount++;
             });
             const percent = Math.round((memorizedCount / total) * 100);
-            document.getElementById('totalProgress').textContent = `${percent}%`;
+                        totalProgressDisplay.textContent = `${percent}%`;
+            
+            // Color code progress
+            if(percent < 30) totalProgressDisplay.className = "w-10 h-10 flex items-center justify-center text-xs font-bold bg-gray-100 rounded-full text-gray-500";
+            else if (percent < 70) totalProgressDisplay.className = "w-10 h-10 flex items-center justify-center text-xs font-bold bg-blue-100 rounded-full text-blue-600";
+            else totalProgressDisplay.className = "w-10 h-10 flex items-center justify-center text-xs font-bold bg-green-100 rounded-full text-green-600";
         }
 
         function updateActiveVocabulary() {
@@ -5558,7 +5558,7 @@
                 
                 el.innerHTML = `
                     <div class="flex items-center gap-4 flex-1 cursor-pointer" onclick="openWriterForWord('${item.hanzi}')">
-                        <div class="min-w-[3rem] w-auto px-2 py-1 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-xl chinese-font text-blue-600 text-center whitespace-nowrap">
+                        <div class="min-w-[3rem] w-auto px-2 py-1 h-12 rounded-lg bg-blue-10 flex items-center justify-center text-2xl chinese-font text-blue-600 text-center whitespace-nowrap">
                             ${item.hanzi}
                         </div>
                         <div class="flex-1 min-w-0">
