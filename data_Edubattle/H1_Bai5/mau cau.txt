@@ -1,76 +1,158 @@
-他有一个妹妹。|Anh ấy có một em gái.
-她家有一辆汽车。|Nhà cô ấy có một chiếc ô tô.
-我有两本汉语书。|Tôi có hai cuốn sách tiếng Hán.
-我有一个美国朋友。|Tôi có một người bạn Mỹ.
-学校有很多学生。|Trường học có rất nhiều học sinh.
-我没有妹妹。|Tôi không có em gái.
-他家没有猫。|Nhà anh ấy không có mèo.
-你家有冰箱吗？|Nhà bạn có tủ lạnh không?
-她有手机吗？|Cô ấy có điện thoại di động không?
-你家有狗吗？|Nhà bạn có chó không?
-我家没有狗，我家只有猫。|Nhà tôi không có chó, nhà tôi chỉ có mèo thôi.
-他只有一个弟弟。|Anh ấy chỉ có một em trai.
-我家只有一只猫。|Nhà tôi chỉ có một con mèo.
-我只有一个朋友。|Tôi chỉ có một người bạn.
-我们班只有十五个学生。|Lớp chúng tôi chỉ có mười lăm học sinh.
+你有姐姐吗？|Bạn có chị gái không?
+我没有姐姐。|Tôi không có chị gái.
+他没有妹妹。|Anh ấy không có em gái.
+我家没有猫。|Nhà tôi không có mèo.
+他家没有狗。|Nhà anh ấy không có chó.
+他家没有猪。|Nhà anh ấy không có lợn.
+他有妹妹吗？|Anh ấy có em gái không?
+他有哥哥吗？|Anh ấy có anh trai không?
 他有弟弟吗？|Anh ấy có em trai không?
-你有几个日本朋友？|Bạn có mấy người bạn Nhật Bản?
-我没有日本朋友，我只有一个泰国朋友。|Tôi không có bạn Nhật Bản, tôi chỉ có một người bạn Thái Lan.
-你有几本英语书？|Bạn có mấy cuốn sách tiếng Anh?
-我没有英语书，我只有一本韩语书。|Tôi không có sách tiếng Anh, tôi chỉ có một cuốn sách tiếng Hàn.
-他有几个妹妹？|Anh ấy có mấy người em gái?
-我没有妹妹，我只有一个姐姐。|Tôi không có em gái, tôi chỉ có một chị gái.
-你家有几辆汽车？|Nhà bạn có mấy chiếc ô tô?
-我家没有汽车，我家只有一辆摩托车。|Nhà tôi không có ô tô, nhà tôi chỉ có một chiếc xe máy.
-她有几个孩子？|Cô ấy có mấy người con?
-他有俩个孩子，一个儿子一个女儿。|Anh ấy có hai người con, một con trai một con gái.
-他们有几个儿子？|Họ có mấy người con trai?
-他们有三个儿子。|Họ có ba người con trai.
-他们没有儿子，他们只有一个女儿。|Họ không có con trai, họ chỉ có một con gái.
-他们有几个女儿？|Họ có mấy người con gái?
-他们有两个女儿。|Họ có hai người con gái.
-他们没有女儿，他们只有一个儿子。|Họ không có con gái, họ chỉ có một con trai.
-你有兄弟姐妹吗？|Bạn có anh chị em không?
-我没有兄弟姐妹，我是独生子。|Tôi không có anh chị em, tôi là con một.
+他有姐姐吗？|Anh ấy có chị gái không?
+他有手机吗？|Anh ấy có điện thoại di động không?
+你家有狗吗？|Nhà bạn có chó không?
+他喜欢旅游。|Anh ấy thích du lịch.
+我有一个哥哥。|Tôi có một anh trai.
+他家没有冰箱。|Nhà anh ấy không có tủ lạnh.
+我家没有电脑。|Nhà tôi không có máy tính.
+他家没有汽车。|Nhà anh ấy không có ô tô.
+你有英语书吗？|Bạn có sách tiếng Anh không?
+你有汉语书吗？|Bạn có sách tiếng Hán không?
+你有德语书吗？|Bạn có sách tiếng Đức không?
+他有法语书吗？|Anh ấy có sách tiếng Pháp không?
+他有日语书吗？|Anh ấy có sách tiếng Nhật không?
+他有韩语书吗？|Anh ấy có sách tiếng Hàn không?
+我有两双拖鞋。|Tôi có hai đôi dép lê.
+我有一把雨伞。|Tôi có một cái ô/dù.
+他有一个妹妹。|Anh ấy có một em gái.
+他家有一只狗。|Nhà anh ấy có một con chó.
+他家有两只猫。|Nhà anh ấy có hai con mèo.
+我们家都有狗。|Nhà chúng tôi đều có chó.
+他们家都有猫。|Nhà họ đều có mèo.
+你有几个弟弟？|Bạn có mấy em trai?
+你家有几只猫？|Nhà bạn có mấy con mèo?
+他家有几只狗？|Nhà anh ấy có mấy con chó?
+他有几个朋友？|Anh ấy có mấy người bạn?
+他有几个妹妹？|Anh ấy có mấy em gái?
+他有几个孩子？|Anh ấy có mấy đứa con?
 你有什么爱好？|Sở thích của bạn là gì?
 我喜欢看电影。|Tôi thích xem phim.
 他有什么爱好？|Sở thích của anh ấy là gì?
-他喜欢旅游。|Anh ấy thích du lịch.
-你妹妹有什么爱好？|Em gái bạn có sở thích gì?
-我妹妹喜欢看书。|Em gái tôi thích đọc sách.
-他姐姐有什么爱好？|Sở thích của chị gái anh ấy là gì?
-她姐姐喜欢听音乐。|Chị gái cô ấy thích nghe nhạc.
+我也喜欢旅游。|Tôi cũng thích du lịch.
 你家有几口人？|Nhà bạn có mấy người?
-我家有四口人：爸爸、妈妈、弟弟和我。|Nhà tôi có bốn người: bố, mẹ, em trai và tôi.
-你们班有多少个学生？|Lớp các bạn có bao nhiêu học sinh?
-我们班有三十个学生。|Lớp chúng tôi có ba mươi học sinh.
-你们班有多少个男生？|Lớp các bạn có bao nhiêu học sinh nam?
-我们班有二十个男生。|Lớp chúng tôi có hai mươi học sinh nam.
-你今年几岁了？|Bạn năm nay mấy tuổi rồi? (Hỏi trẻ nhỏ)
-我今年八岁了。|Tôi năm nay tám tuổi rồi.
-你今年多大了？|Bạn năm nay bao nhiêu tuổi rồi? (Hỏi người lớn/thanh niên)
-我今年二十岁了。|Tôi năm nay hai mươi tuổi rồi.
-你的汉语老师今年多大了？|Giáo viên tiếng Hán của bạn năm nay bao nhiêu tuổi rồi?
-我的汉语老师今年三十岁了。|Giáo viên tiếng Hán của tôi năm nay ba mươi tuổi rồi.
-你的英语老师今年多大了？|Giáo viên tiếng Anh của bạn năm nay bao nhiêu tuổi rồi?
-我的英语老师今年四十五岁了。|Giáo viên tiếng Anh của tôi năm nay bốn mươi lăm tuổi rồi.
+他家有几口人？|Nhà anh ấy có mấy người?
+你今年几岁了？|Năm nay bạn mấy tuổi rồi? (Hỏi trẻ con)
+我今年八岁了。|Năm nay tôi tám tuổi rồi.
+你今年多大了？|Năm nay bạn bao nhiêu tuổi rồi? (Hỏi người lớn)
+我们都没有弟弟。|Chúng tôi đều không có em trai.
+他们都没有哥哥。|Bọn họ đều không có anh trai.
+你有韩国朋友吗？|Bạn có bạn Hàn Quốc không?
+他有中国朋友吗？|Anh ấy có bạn Trung Quốc không?
+他有泰国朋友吗？|Anh ấy có bạn Thái Lan không?
+他有美国朋友吗？|Anh ấy có bạn Mỹ không?
+你有兄弟姐妹吗？|Bạn có anh chị em không?
+他有兄弟姐妹吗？|Anh ấy có anh chị em không?
+他家有两辆汽车。|Nhà anh ấy có hai chiếc ô tô.
+我家有四张桌子。|Nhà tôi có bốn cái bàn.
+我家有三台电脑。|Nhà tôi có ba cái máy tính.
+他家也有一只狗。|Nhà anh ấy cũng có một con chó.
+他家也有两只猫。|Nhà anh ấy cũng có hai con mèo.
+我有两本汉语书。|Tôi có hai quyển sách tiếng Hán.
+我只有一个哥哥。|Tôi chỉ có một người anh trai.
+我家只有一只猫。|Nhà tôi chỉ có một con mèo.
+你有几本英语书？|Bạn có mấy quyển sách tiếng Anh?
+你家有几辆汽车？|Nhà bạn có mấy chiếc ô tô?
+他们有几个儿子？|Bọn họ có mấy người con trai?
+他们有几个女儿？|Bọn họ có mấy người con gái?
+他们有两个女儿。|Bọn họ có hai người con gái.
+你有兄弟姐妹吗？|Bạn có anh chị em không?
+我妈妈喜欢做饭。|Mẹ tôi thích nấu ăn.
+我姐姐喜欢做饭。|Chị tôi thích nấu ăn.
+我妹妹喜欢看书。|Em gái tôi thích đọc sách.
+他们都喜欢跳舞。|Bọn họ đều thích khiêu vũ/nhảy múa.
+我今年二十岁了。|Năm nay tôi hai mươi tuổi rồi.
+我朋友有一个哥哥。|Bạn tôi có một người anh trai.
+我有一个美国朋友。|Tôi có một người bạn Mỹ.
+他有两个中国朋友。|Anh ấy có hai người bạn Trung Quốc.
+你有几个中国朋友？|Bạn có mấy người bạn Trung Quốc?
+他有几个越南朋友？|Anh ấy có mấy người bạn Việt Nam?
+他有几个日本朋友？|Anh ấy có mấy người bạn Nhật Bản?
+他只有一个弟弟。|Anh ấy chỉ có một em trai.
+我只有一个朋友。|Tôi chỉ có một người bạn.
+你有几个日本朋友？|Bạn có mấy người bạn Nhật Bản?
+我只有一本韩语书。|Tôi chỉ có một cuốn sách tiếng Hàn.
+他们都有一个儿子。|Họ đều có một người con trai.
+你爸爸有什么爱好？|Bố bạn có sở thích gì?
+你妈妈有什么爱好？|Mẹ bạn có sở thích gì?
+我爸爸喜欢看报纸。|Bố tôi thích đọc báo.
+你妹妹有什么爱好？|Em gái bạn có sở thích gì?
+他姐姐有什么爱好？|Chị gái anh ấy có sở thích gì?
+他姐姐喜欢听音乐。|Chị gái anh ấy thích nghe nhạc.
+我们都喜欢喝果汁。|Chúng tôi đều thích uống nước ép trái cây.
+我妹妹今年三岁了。|Em gái tôi năm nay ba tuổi rồi.
+我弟弟今年五岁了。|Em trai tôi năm nay năm tuổi rồi.
+他妹妹今年八岁了。|Em gái anh ấy năm nay tám tuổi rồi.
+你哥哥今年多大了？|Anh trai bạn năm nay bao nhiêu tuổi rồi?
+你姐姐今年多大了？|Chị gái bạn năm nay bao nhiêu tuổi rồi?
+他哥哥今年多大了？|Anh trai anh ấy năm nay bao nhiêu tuổi rồi?
 你爸爸今年多大了？|Bố bạn năm nay bao nhiêu tuổi rồi?
-我爸爸今年四十岁了。|Bố tôi năm nay bốn mươi tuổi rồi.
-你爷爷奶奶今年多大了？|Ông bà nội bạn năm nay bao nhiêu tuổi rồi?
-我爷爷今年六十八岁了。|Ông nội tôi năm nay sáu mươi tám tuổi rồi.
+你爷爷今年多大了？|Ông nội bạn năm nay bao nhiêu tuổi rồi?
+你朋友有兄弟姐妹吗？|Bạn của bạn có anh chị em không?
+你爸爸有兄弟姐妹吗？|Bố bạn có anh chị em không?
+他妈妈有兄弟姐妹吗？|Mẹ anh ấy có anh chị em không?
+我有一个蓝色的书包。|Tôi có một chiếc cặp sách màu xanh lam.
+我有两双黄色的拖鞋。|Tôi có hai đôi dép lê màu vàng.
+我有一把蓝色的雨伞。|Tôi có một cái ô màu xanh dương.
+我有两把黑色的雨伞。|Tôi có hai cái ô màu đen.
+他有三把红色的雨伞。|Anh ấy có ba cái ô màu đỏ.
+我家有两只黑色的猫。|Nhà tôi có hai con mèo đen.
+他家有一只黄色的狗。|Nhà anh ấy có một con chó màu vàng.
+我们班有三十个学生。|Lớp chúng tôi có 30 học sinh.
+他们班有十五个女生。|Lớp họ có 15 nữ sinh.
+你的朋友家有几口人？|Nhà bạn của bạn có mấy người?
+你们班有多少个学生？|Lớp các bạn có bao nhiêu học sinh?
+我们班有三十个学生。|Lớp chúng tôi có 30 học sinh.
+你们班有多少个男生？|Lớp các bạn có bao nhiêu nam sinh?
+你妹妹今年几岁了？|Em gái bạn năm nay mấy tuổi rồi?
 你弟弟今年几岁了？|Em trai bạn năm nay mấy tuổi rồi?
-我弟弟今年九岁了。|Em trai tôi năm nay chín tuổi rồi.
-你家的狗今年几岁了？|Chó nhà bạn năm nay mấy tuổi rồi?
-我家的狗今年三岁了。|Chó nhà tôi năm nay ba tuổi rồi.
-你家的猫今年几岁了？|Mèo nhà bạn năm nay mấy tuổi rồi?
-我家的狗今年两岁了。|Chó nhà tôi năm nay hai tuổi rồi.
-你的中国朋友家有几口人？|Nhà bạn bè Trung Quốc của bạn có mấy người?
-你的中国朋友今年多大了？|Bạn bè Trung Quốc của bạn năm nay bao nhiêu tuổi rồi?
-他是我们的法语老师，他今年二十八岁了。|Anh ấy là giáo viên tiếng Pháp của chúng tôi, anh ấy năm nay hai mươi tám tuổi rồi.
-这是张老师的女儿，她今年二十岁了。|Đây là con gái thầy Trương, cô ấy năm nay hai mươi tuổi rồi.
-那是我的日本朋友，他家有三口人。|Đó là bạn bè Nhật Bản của tôi, nhà anh ấy có ba người.
-那是我朋友的爷爷，他今年七十五岁了。|Đó là ông nội của bạn tôi, ông ấy năm nay bảy mươi lăm tuổi rồi.
-这是我朋友的奶奶，奶奶今年八十岁了。|Đây là bà nội của bạn tôi, bà năm nay tám mươi tuổi rồi.
-
-
-
+他妹妹今年几岁了？|Em gái anh ấy năm nay mấy tuổi rồi?
+我爸爸今年四十岁了。|Bố tôi năm nay 40 tuổi rồi.
+我妹妹一个黄色的书包。|Em gái tôi có một cái cặp sách màu vàng.
+我弟弟有一个泰国朋友。|Em trai tôi có một người bạn Thái Lan.
+我爸爸有两个日本朋友。|Bố tôi có hai người bạn Nhật Bản.
+他们班有十五个男生。|Lớp họ có 15 nam sinh.
+我们学校有三十位老师。|Trường chúng tôi có 30 giáo viên.
+我的中国朋友喜欢做饭。|Bạn người Trung Quốc của tôi thích nấu ăn.
+你们班有多少个女生？|Lớp các bạn có bao nhiêu nữ sinh?
+我哥哥今年二十一岁了。|Anh trai tôi năm nay 21 tuổi rồi.
+我姐姐今年二十一岁了。|Chị gái tôi năm nay 21 tuổi rồi.
+他哥哥今年二十一岁了。|Anh trai anh ấy năm nay 21 tuổi rồi.
+我爷爷今年六十八岁了。|Ông nội tôi năm nay 68 tuổi rồi.
+我弟弟有一个绿色的书包。|Em trai tôi có một cái cặp màu xanh lá cây.
+我朋友有一把绿色的雨伞。|Bạn tôi có một cái ô màu xanh lá cây.
+我姐姐有两把紫色的雨伞。|Chị gái tôi có hai cái ô màu tím.
+我弟弟有一个红色的杯子。|Em trai tôi có một cái cốc màu đỏ.
+我姐姐有两双黄色的拖鞋。|Chị tôi có hai đôi dép lê màu vàng.
+我姐姐有两个紫色的杯子。|Chị tôi có hai cái cốc màu tím.
+他们都有一个蓝色的书包。|Họ đều có một cái cặp sách màu xanh dương.
+我的中国朋友有两个弟弟。|Bạn Trung Quốc của tôi có hai em trai.
+他的英国朋友有三个妹妹。|Bạn Anh của anh ấy có ba em gái.
+他的韩国朋友有一个姐姐。|Bạn Hàn Quốc của anh ấy có một chị gái.
+我的汉语老师有两个孩子。|Giáo viên tiếng Hán của tôi có hai người con.
+他的法语老师有两个女儿。|Giáo viên tiếng Pháp của anh ấy có hai con gái.
+他的德语老师有三个儿子。|Giáo viên tiếng Đức của anh ấy có ba con trai.
+我们班只有十五个学生。|Lớp chúng tôi chỉ có 15 học sinh.
+你的汉语老师有什么爱好？|Giáo viên tiếng Hán của bạn có sở thích gì?
+你的中国朋友有什么爱好？|Bạn Trung Quốc của bạn có sở thích gì?
+你的德国朋友有什么爱好？|Bạn Đức của bạn có sở thích gì?
+我的德国朋友喜欢喝啤酒。|Bạn Đức của tôi thích uống bia.
+你的泰国朋友家有几口人？|Gia đình bạn Thái Lan của bạn có mấy người?
+你的中国朋友家有几口人？|Gia đình bạn Trung Quốc của bạn có mấy người?
+你的韩国朋友家有几口人？|Gia đình bạn Hàn Quốc của bạn có mấy người?
+你的汉语老师今年多大了？|Giáo viên tiếng Hán của bạn năm nay bao nhiêu tuổi?
+你的英语老师今年多大了？|Giáo viên tiếng Anh của bạn năm nay bao nhiêu tuổi?
+你的越南朋友有兄弟姐妹吗？|Bạn Việt Nam của bạn có anh chị em không?
+我的越南语老师有两个孩子。|Giáo viên tiếng Việt của tôi có hai người con.
+我的汉语老师今年三十岁了。|Giáo viên tiếng Hán của tôi năm nay 30 tuổi rồi.
+我没有妹妹，我只有一个姐姐。|Tôi không có em gái, tôi chỉ có một chị gái.
+我没有兄弟姐妹，我是独生子。|Tôi không có anh chị em, tôi là con một (trai).
+我的英语老师今年四十五岁了。|Giáo viên tiếng Anh của tôi năm nay 45 tuổi rồi.

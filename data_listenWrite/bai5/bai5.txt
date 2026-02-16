@@ -1,0 +1,162 @@
+你有姐姐吗？|Nǐ yǒu jiějie ma?|Bạn có chị gái không?
+我没有姐姐。|Wǒ méiyǒu jiějie.|Tôi không có chị gái.
+他没有妹妹。|Tā méiyǒu mèimei.|Anh ấy không có em gái.
+我家没有猫。|Wǒ jiā méiyǒu māo.|Nhà tôi không có mèo.
+他家没有狗。|Tā jiā méiyǒu gǒu.|Nhà anh ấy không có chó.
+他家没有猪。|Tā jiā méiyǒu zhū.|Nhà anh ấy không có lợn.
+他有妹妹吗？|Tā yǒu mèimei ma?|Anh ấy có em gái không?
+他有哥哥吗？|Tā yǒu gēge ma?|Anh ấy có anh trai không?
+他有弟弟吗？|Tā yǒu dìdi ma?|Anh ấy có em trai không?
+他有姐姐吗？|Tā yǒu jiějie ma?|Anh ấy có chị gái không?
+他有手机吗？|Tā yǒu shǒujī ma?|Anh ấy có điện thoại di động không?
+你家有狗吗？|Nǐ jiā yǒu gǒu ma?|Nhà bạn có chó không?
+他喜欢旅游。|Tā xǐhuan lǚyóu.|Anh ấy thích du lịch.
+我有一个哥哥。|Wǒ yǒu yī ge gēge.|Tôi có một anh trai.
+他家没有冰箱。|Tā jiā méiyǒu bīngxiāng.|Nhà anh ấy không có tủ lạnh.
+我家没有电脑。|Wǒ jiā méiyǒu diànnǎo.|Nhà tôi không có máy tính.
+他家没有汽车。|Tā jiā méiyǒu qìchē.|Nhà anh ấy không có ô tô.
+你有英语书吗？|Nǐ yǒu Yīngyǔ shū ma?|Bạn có sách tiếng Anh không?
+你有汉语书吗？|Nǐ yǒu Hànyǔ shū ma?|Bạn có sách tiếng Hán không?
+你有德语书吗？|Nǐ yǒu Déyǔ shū ma?|Bạn có sách tiếng Đức không?
+他有法语书吗？|Tā yǒu Fǎyǔ shū ma?|Anh ấy có sách tiếng Pháp không?
+他有日语书吗？|Tā yǒu Rìyǔ shū ma?|Anh ấy có sách tiếng Nhật không?
+他有韩语书吗？|Tā yǒu Hányǔ shū ma?|Anh ấy có sách tiếng Hàn không?
+我有两双拖鞋。|Wǒ yǒu liǎng shuāng tuōxié.|Tôi có hai đôi dép lê.
+我有一把雨伞。|Wǒ yǒu yī bǎ yǔsǎn.|Tôi có một cái ô/dù.
+他有一个妹妹。|Tā yǒu yīgè mèimei.|Anh ấy có một em gái.
+他家有一只狗。|Tā jiā yǒu yī zhǐ gǒu.|Nhà anh ấy có một con chó.
+他家有两只猫。|Tā jiā yǒu liǎng zhī māo.|Nhà anh ấy có hai con mèo.
+我们家都有狗。|Wǒmen jiā dōu yǒu gǒu.|Nhà chúng tôi đều có chó.
+他们家都有猫。|Tāmen jiā dōu yǒu māo.|Nhà họ đều có mèo.
+你有几个弟弟？|Nǐ yǒu jǐ gè dìdi?|Bạn có mấy em trai?
+你家有几只猫？|Nǐ jiā yǒu jǐ zhī māo?|Nhà bạn có mấy con mèo?
+他家有几只狗？|Tā jiā yǒu jǐ zhī gǒu?|Nhà anh ấy có mấy con chó?
+他有几个朋友？|Tā yǒu jǐ gè péngyǒu?|Anh ấy có mấy người bạn?
+他有几个妹妹？|Tā yǒu jǐ gè mèimei?|Anh ấy có mấy em gái?
+他有几个孩子？|Tā yǒu jǐ gè háizi?|Anh ấy có mấy đứa con?
+你有什么爱好？|Nǐ yǒu shénme àihào?|Sở thích của bạn là gì?
+我喜欢看电影。|Wǒ xǐhuān kàn diànyǐng.|Tôi thích xem phim.
+他有什么爱好？|Tā yǒu shénme àihào?|Sở thích của anh ấy là gì?
+我也喜欢旅游。|Wǒ yě xǐhuān lǚyóu.|Tôi cũng thích du lịch.
+你家有几口人？|Nǐ jiā yǒu jǐ kǒu rén?|Nhà bạn có mấy người?
+他家有几口人？|Tā jiā yǒu jǐ kǒu rén?|Nhà anh ấy có mấy người?
+你今年几岁了？|Nǐ jīnnián jǐ suì le?|Năm nay bạn mấy tuổi rồi? (Hỏi trẻ con)
+我今年八岁了。|Wǒ jīnnián bā suì le.|Năm nay tôi tám tuổi rồi.
+你今年多大了？|Nǐ jīnnián duō dà le?|Năm nay bạn bao nhiêu tuổi rồi? (Hỏi người lớn)
+我们都没有弟弟。|Wǒmen dōu méiyǒu dìdi.|Chúng tôi đều không có em trai.
+他们都没有哥哥。|Tāmen dōu méiyǒu gēge.|Bọn họ đều không có anh trai.
+你有韩国朋友吗？|Nǐ yǒu Hánguó péngyǒu ma?|Bạn có bạn Hàn Quốc không?
+他有中国朋友吗？|Tā yǒu Zhōngguó péngyǒu ma?|Anh ấy có bạn Trung Quốc không?
+他有泰国朋友吗？|Tā yǒu Tàiguó péngyǒu ma?|Anh ấy có bạn Thái Lan không?
+他有美国朋友吗？|Tā yǒu Měiguó péngyǒu ma?|Anh ấy có bạn Mỹ không?
+你有兄弟姐妹吗？|Nǐ yǒu xiōngdì jiěmèi ma?|Bạn có anh chị em không?
+他有兄弟姐妹吗？|Tā yǒu xiōngdì jiěmèi ma?|Anh ấy có anh chị em không?
+他家有两辆汽车。|Tā jiā yǒu liǎng liàng qìchē.|Nhà anh ấy có hai chiếc ô tô.
+我家有四张桌子。|Wǒ jiā yǒu sì zhāng zhuōzi.|Nhà tôi có bốn cái bàn.
+我家有三台电脑。|Wǒ jiā yǒu sān tái diànnǎo.|Nhà tôi có ba cái máy tính.
+他家也有一只狗。|Tā jiā yě yǒu yī zhī gǒu.|Nhà anh ấy cũng có một con chó.
+他家也有两只猫。|Tā jiā yě yǒu liǎng zhī māo.|Nhà anh ấy cũng có hai con mèo.
+我有两本汉语书。|Wǒ yǒu liǎng běn Hànyǔ shū.|Tôi có hai quyển sách tiếng Hán.
+我只有一个哥哥。|Wǒ zhǐyǒu yīgè gēge.|Tôi chỉ có một người anh trai.
+我家只有一只猫。|Wǒ jiā zhǐyǒu yī zhī māo.|Nhà tôi chỉ có một con mèo.
+你有几本英语书？|Nǐ yǒu jǐ běn Yīngyǔ shū?|Bạn có mấy quyển sách tiếng Anh?
+你家有几辆汽车？|Nǐ jiā yǒu jǐ liàng qìchē?|Nhà bạn có mấy chiếc ô tô?
+他们有几个儿子？|Tāmen yǒu jǐ gè érzi?|Bọn họ có mấy người con trai?
+他们有几个女儿？|Tāmen yǒu jǐ gè nǚ'ér?|Bọn họ có mấy người con gái?
+他们有两个女儿。|Tāmen yǒu liǎng gè nǚ'ér.|Bọn họ có hai người con gái.
+你有兄弟姐妹吗？|Nǐ yǒu xiōngdì jiěmèi ma?|Bạn có anh chị em không?
+我妈妈喜欢做饭。|Wǒ māma xǐhuān zuò fàn.|Mẹ tôi thích nấu ăn.
+我姐姐喜欢做饭。|Wǒ jiějie xǐhuān zuò fàn.|Chị tôi thích nấu ăn.
+我妹妹喜欢看书。|Wǒ mèimei xǐhuān kàn shū.|Em gái tôi thích đọc sách.
+他们都喜欢跳舞。|Tāmen dōu xǐhuān tiàowǔ.|Bọn họ đều thích khiêu vũ/nhảy múa.
+我今年二十岁了。|Wǒ jīnnián èrshí suì le.|Năm nay tôi hai mươi tuổi rồi.
+我朋友有一个哥哥。|Wǒ péngyǒu yǒu yīgè gēge.|Bạn tôi có một người anh trai.
+我有一个美国朋友。|Wǒ yǒu yīgè Měiguó péngyǒu.|Tôi có một người bạn Mỹ.
+他有两个中国朋友。|Tā yǒu liǎng gè Zhōngguó péngyou.|Anh ấy có hai người bạn Trung Quốc.
+你有几个中国朋友？|Nǐ yǒu jǐ ge Zhōngguó péngyou?|Bạn có mấy người bạn Trung Quốc?
+他有几个越南朋友？|Tā yǒu jǐ ge Yuènán péngyou?|Anh ấy có mấy người bạn Việt Nam?
+他有几个日本朋友？|Tā yǒu jǐ ge Rìběn péngyou?|Anh ấy có mấy người bạn Nhật Bản?
+他只有一个弟弟。|Tā zhǐ yǒu yīgè dìdi.|Anh ấy chỉ có một em trai.
+我只有一个朋友。|Wǒ zhǐ yǒu yīgè péngyou.|Tôi chỉ có một người bạn.
+你有几个日本朋友？|Nǐ yǒu jǐ ge Rìběn péngyou?|Bạn có mấy người bạn Nhật Bản?
+我只有一本韩语书。|Wǒ zhǐ yǒu yī běn Hányǔ shū.|Tôi chỉ có một cuốn sách tiếng Hàn.
+他们都有一个儿子。|Tāmen dōu yǒu yīgè érzi.|Họ đều có một người con trai.
+你爸爸有什么爱好？|Nǐ bàba yǒu shénme àihào?|Bố bạn có sở thích gì?
+你妈妈有什么爱好？|Nǐ māma yǒu shénme àihào?|Mẹ bạn có sở thích gì?
+我爸爸喜欢看报纸。|Wǒ bàba xǐhuān kàn bàozhǐ.|Bố tôi thích đọc báo.
+你妹妹有什么爱好？|Nǐ mèimei yǒu shénme àihào?|Em gái bạn có sở thích gì?
+他姐姐有什么爱好？|Tā jiějie yǒu shénme àihào?|Chị gái anh ấy có sở thích gì?
+他姐姐喜欢听音乐。|Tā jiějie xǐhuān tīng yīnyuè.|Chị gái anh ấy thích nghe nhạc.
+我们都喜欢喝果汁。|Wǒmen dōu xǐhuān hē guǒzhī.|Chúng tôi đều thích uống nước ép trái cây.
+我妹妹今年三岁了。|Wǒ mèimei jīnnián sān suì le.|Em gái tôi năm nay ba tuổi rồi.
+我弟弟今年五岁了。|Wǒ dìdi jīnnián wǔ suì le.|Em trai tôi năm nay năm tuổi rồi.
+他妹妹今年八岁了。|Tā mèimei jīnnián bā suì le.|Em gái anh ấy năm nay tám tuổi rồi.
+你哥哥今年多大了？|Nǐ gēge jīnnián duō dà le?|Anh trai bạn năm nay bao nhiêu tuổi rồi?
+你姐姐今年多大了？|Nǐ jiějie jīnnián duō dà le?|Chị gái bạn năm nay bao nhiêu tuổi rồi?
+他哥哥今年多大了？|Tā gēge jīnnián duō dà le?|Anh trai anh ấy năm nay bao nhiêu tuổi rồi?
+你爸爸今年多大了？|Nǐ bàba jīnnián duō dà le?|Bố bạn năm nay bao nhiêu tuổi rồi?
+你爷爷今年多大了？|Nǐ yéye jīnnián duō dà le?|Ông nội bạn năm nay bao nhiêu tuổi rồi?
+你朋友有兄弟姐妹吗？|Nǐ péngyou yǒu xiōngdìjiěmèi ma?|Bạn của bạn có anh chị em không?
+你爸爸有兄弟姐妹吗？|Nǐ bàba yǒu xiōngdìjiěmèi ma?|Bố bạn có anh chị em không?
+他妈妈有兄弟姐妹吗？|Tā māma yǒu xiōngdìjiěmèi ma?|Mẹ anh ấy có anh chị em không?
+我有一个蓝色的书包。|Wǒ yǒu yīgè lánsè de shūbāo.|Tôi có một chiếc cặp sách màu xanh lam.
+我有两双黄色的拖鞋。|Wǒ yǒu liǎng shuāng huángsè de tuōxié.|Tôi có hai đôi dép lê màu vàng.
+我有一把蓝色的雨伞。|Wǒ yǒu yī bǎ lánsè de yǔsǎn.|Tôi có một cái ô màu xanh dương.
+我有两把黑色的雨伞。|Wǒ yǒu liǎng bǎ hēisè de yǔsǎn.|Tôi có hai cái ô màu đen.
+他有三把红色的雨伞。|Tā yǒu sān bǎ hóngsè de yǔsǎn.|Anh ấy có ba cái ô màu đỏ.
+我家有两只黑色的猫。|Wǒ jiā yǒu liǎng zhī hēisè de māo.|Nhà tôi có hai con mèo đen.
+他家有一只黄色的狗。|Tā jiā yǒu yī zhī huángsè de gǒu.|Nhà anh ấy có một con chó màu vàng.
+我们班有三十个学生。|Wǒmen bān yǒu sānshí gè xuésheng.|Lớp chúng tôi có 30 học sinh.
+他们班有十五个女生。|Tāmen bān yǒu shíwǔ gè nǚshēng.|Lớp họ có 15 nữ sinh.
+你的朋友家有几口人？|Nǐ de péngyǒu jiā yǒu jǐ kǒu rén?|Nhà bạn của bạn có mấy người?
+你们班有多少个学生？|Nǐmen bān yǒu duōshǎo gè xuésheng?|Lớp các bạn có bao nhiêu học sinh?
+我们班有三十个学生。|Wǒmen bān yǒu sānshí gè xuésheng.|Lớp chúng tôi có 30 học sinh.
+你们班有多少个男生？|Nǐmen bān yǒu duōshǎo gè nánshēng?|Lớp các bạn có bao nhiêu nam sinh?
+你妹妹今年几岁了？|Nǐ mèimei jīnnián jǐ suì le?|Em gái bạn năm nay mấy tuổi rồi?
+你弟弟今年几岁了？|Nǐ dìdi jīnnián jǐ suì le?|Em trai bạn năm nay mấy tuổi rồi?
+他妹妹今年几岁了？|Tā mèimei jīnnián jǐ suì le?|Em gái anh ấy năm nay mấy tuổi rồi?
+我爸爸今年四十岁了。|Wǒ bàba jīnnián sìshí suì le.|Bố tôi năm nay 40 tuổi rồi.
+我妹妹一个黄色的书包。|Wǒ mèimei yī gè huángsè de shūbāo.|Em gái tôi có một cái cặp sách màu vàng.
+我弟弟有一个泰国朋友。|Wǒ dìdi yǒu yī gè Tàiguó péngyǒu.|Em trai tôi có một người bạn Thái Lan.
+我爸爸有两个日本朋友。|Wǒ bàba yǒu liǎng gè Rìběn péngyǒu.|Bố tôi có hai người bạn Nhật Bản.
+他们班有十五个男生。|Tāmen bān yǒu shíwǔ gè nánshēng.|Lớp họ có 15 nam sinh.
+我们学校有三十位老师。|Wǒmen xuéxiào yǒu sānshí wèi lǎoshī.|Trường chúng tôi có 30 giáo viên.
+我的中国朋友喜欢做饭。|Wǒ de Zhōngguó péngyǒu xǐhuān zuò fàn.|Bạn người Trung Quốc của tôi thích nấu ăn.
+你们班有多少个女生？|Nǐmen bān yǒu duōshǎo gè nǚshēng?|Lớp các bạn có bao nhiêu nữ sinh?
+我哥哥今年二十一岁了。|Wǒ gēge jīnnián èrshíyī suì le.|Anh trai tôi năm nay 21 tuổi rồi.
+我姐姐今年二十一岁了。|Wǒ jiějie jīnnián èrshíyī suì le.|Chị gái tôi năm nay 21 tuổi rồi.
+他哥哥今年二十一岁了。|Tā gēge jīnnián èrshíyī suì le.|Anh trai anh ấy năm nay 21 tuổi rồi.
+我爷爷今年六十八岁了。|Wǒ yéye jīnnián liùshíbā suì le.|Ông nội tôi năm nay 68 tuổi rồi.
+我弟弟有一个绿色的书包。|Wǒ dìdi yǒu yīgè lǜsè de shūbāo.|Em trai tôi có một cái cặp màu xanh lá cây.
+我朋友有一把绿色的雨伞。|Wǒ péngyǒu yǒu yī bǎ lǜsè de yǔsǎn.|Bạn tôi có một cái ô màu xanh lá cây.
+我姐姐有两把紫色的雨伞。|Wǒ jiějie yǒu liǎng bǎ zǐsè de yǔsǎn.|Chị gái tôi có hai cái ô màu tím.
+我弟弟有一个红色的杯子。|Wǒ dìdi yǒu yīgè hóngsè de bēizi.|Em trai tôi có một cái cốc màu đỏ.
+我姐姐有两双黄色的拖鞋。|Wǒ jiějie yǒu liǎng shuāng huángsè de tuōxié.|Chị tôi có hai đôi dép lê màu vàng.
+我姐姐有两个紫色的杯子。|Wǒ jiějie yǒu liǎnggè zǐsè de bēizi.|Chị tôi có hai cái cốc màu tím.
+他们都有一个蓝色的书包。|Tāmen dōu yǒu yīgè lánsè de shūbāo.|Họ đều có một cái cặp sách màu xanh dương.
+我的中国朋友有两个弟弟。|Wǒ de Zhōngguó péngyǒu yǒu liǎnggè dìdi.|Bạn Trung Quốc của tôi có hai em trai.
+他的英国朋友有三个妹妹。|Tā de Yīngguó péngyǒu yǒu sāngè mèimei.|Bạn Anh của anh ấy có ba em gái.
+他的韩国朋友有一个姐姐。|Tā de Hánguó péngyǒu yǒu yīgè jiějie.|Bạn Hàn Quốc của anh ấy có một chị gái.
+我的汉语老师有两个孩子。|Wǒ de Hànyǔ lǎoshī yǒu liǎnggè háizi.|Giáo viên tiếng Hán của tôi có hai người con.
+他的法语老师有两个女儿。|Tā de Fǎyǔ lǎoshī yǒu liǎnggè nǚ'ér.|Giáo viên tiếng Pháp của anh ấy có hai con gái.
+他的德语老师有三个儿子。|Tā de Déyǔ lǎoshī yǒu sāngè érzi.|Giáo viên tiếng Đức của anh ấy có ba con trai.
+我们班只有十五个学生。|Wǒmen bān zhǐyǒu shíwǔ gè xuésheng.|Lớp chúng tôi chỉ có 15 học sinh.
+你的汉语老师有什么爱好？|Nǐ de Hànyǔ lǎoshī yǒu shénme àihào?|Giáo viên tiếng Hán của bạn có sở thích gì?
+你的中国朋友有什么爱好？|Nǐ de Zhōngguó péngyǒu yǒu shénme àihào?|Bạn Trung Quốc của bạn có sở thích gì?
+你的德国朋友有什么爱好？|Nǐ de Déguó péngyǒu yǒu shénme àihào?|Bạn Đức của bạn có sở thích gì?
+我的德国朋友喜欢喝啤酒。|Wǒ de Déguó péngyǒu xǐhuān hē píjiǔ.|Bạn Đức của tôi thích uống bia.
+你的泰国朋友家有几口人？|Nǐ de Tàiguó péngyǒu jiā yǒu jǐ kǒu rén?|Gia đình bạn Thái Lan của bạn có mấy người?
+你的中国朋友家有几口人？|Nǐ de Zhōngguó péngyǒu jiā yǒu jǐ kǒu rén?|Gia đình bạn Trung Quốc của bạn có mấy người?
+你的韩国朋友家有几口人？|Nǐ de Hánguó péngyǒu jiā yǒu jǐ kǒu rén?|Gia đình bạn Hàn Quốc của bạn có mấy người?
+你的汉语老师今年多大了？|Nǐ de Hànyǔ lǎoshī jīnnián duō dà le?|Giáo viên tiếng Hán của bạn năm nay bao nhiêu tuổi?
+你的英语老师今年多大了？|Nǐ de Yīngyǔ lǎoshī jīnnián duō dà le?|Giáo viên tiếng Anh của bạn năm nay bao nhiêu tuổi?
+你的越南朋友有兄弟姐妹吗？|Nǐ de Yuènán péngyǒu yǒu xiōngdì jiěmèi ma?|Bạn Việt Nam của bạn có anh chị em không?
+我的越南语老师有两个孩子。|Wǒ de Yuènányǔ lǎoshī yǒu liǎnggè háizi.|Giáo viên tiếng Việt của tôi có hai người con.
+我的汉语老师今年三十岁了。|Wǒ de Hànyǔ lǎoshī jīnnián sānshí suì le.|Giáo viên tiếng Hán của tôi năm nay 30 tuổi rồi.
+我没有妹妹，我只有一个姐姐。|Wǒ méiyǒu mèimei, wǒ zhǐ yǒu yīgè jiějie.|Tôi không có em gái, tôi chỉ có một chị gái.
+我没有兄弟姐妹，我是独生子。|Wǒ méiyǒu xiōngdì jiěmèi, wǒ shì dúshēngzǐ.|Tôi không có anh chị em, tôi là con một (trai).
+我的英语老师今年四十五岁了。|Wǒ de Yīngyǔ lǎoshī jīnnián sìshíwǔ suì le.|Giáo viên tiếng Anh của tôi năm nay 45 tuổi rồi.
+他有俩个孩子，一个儿子一个女儿。|Tā yǒu liǎ gè háizi, yīgè érzi yīgè nǚ'ér.|Anh ấy có hai đứa con, một con trai một con gái.
+他们没有儿子，他们只有一个女儿。|Tāmen méiyǒu érzi, tāmen zhǐ yǒu yīgè nǚ'ér.|Họ không có con trai, họ chỉ có một con gái.
+他们没有女儿，他们只有一个儿子。|Tāmen méiyǒu nǚ'ér, tāmen zhǐ yǒu yīgè érzi.|Họ không có con gái, họ chỉ có một con trai.
+我家没有汽车，我家只有一辆摩托车。|Wǒ jiā méiyǒu qìchē, wǒ jiā zhǐ yǒu yī liàng mótuōchē.|Nhà tôi không có ô tô, nhà tôi chỉ có một chiếc xe máy.

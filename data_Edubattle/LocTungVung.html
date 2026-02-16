@@ -3,261 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lọc & Tải Về Từ Vựng | Công Cụ Chuyên Nghiệp</title>
-    <!-- Tải Tailwind CSS CDN -->
+    <title>Công cụ Lọc Từ Vựng Đa Ngôn Ngữ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Thiết lập font Inter mặc định */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Style cho thanh cuộn tùy chỉnh (chuyên nghiệp hơn) */
-        #wordList {
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: #3b82f6 #f3f4f6; /* Thumb and track */
-        }
-        #wordList::-webkit-scrollbar {
-            width: 8px;
-        }
-        #wordList::-webkit-scrollbar-track {
-            background: #f3f4f6;
-            border-radius: 10px;
-        }
-        #wordList::-webkit-scrollbar-thumb {
-            background-color: #3b82f6;
-            border-radius: 10px;
-            border: 2px solid #f3f4f6;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-4 md:p-8 text-slate-800">
 
-    <div class="w-full max-w-xl bg-white shadow-2xl rounded-xl p-8 space-y-6">
-        <header class="text-center border-b pb-4">
-            <h1 class="text-3xl font-extrabold text-indigo-600">
-                Lọc Từ Vựng Chuyên Nghiệp
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-indigo-700 mb-2">
+                <i class="fa-solid fa-filter mr-2"></i>Bộ Lọc Dữ Liệu Ngôn Ngữ
             </h1>
-            <p class="text-gray-500 mt-1">Trích xuất từ vựng từ file TXT theo định dạng "Từ|Nghĩa".</p>
+            <p class="text-slate-500">Nhập văn bản dạng: Tiếng Trung | Pinyin | Tiếng Việt</p>
         </header>
 
-        <!-- KHU VỰC ĐIỀU KHIỂN & INPUT -->
-        <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
-            <!-- File Input -->
-            <label for="fileInput" class="flex-grow flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-500 rounded-lg shadow-md cursor-pointer hover:bg-gray-600 transition duration-150 ease-in-out">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                </svg>
-                Chọn File (.txt)
-                <input type="file" id="fileInput" accept=".txt" class="hidden">
-            </label>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- INPUT SECTION -->
+            <div class="flex flex-col h-full">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="font-semibold text-slate-700 flex items-center">
+                        <i class="fa-regular fa-file-lines mr-2 text-indigo-500"></i> Dữ liệu đầu vào
+                    </label>
+                    <button onclick="clearInput()" class="text-xs text-red-500 hover:text-red-700 font-medium">
+                        Xóa tất cả
+                    </button>
+                </div>
+                <textarea id="inputText" 
+                    class="glass-panel w-full h-[60vh] lg:h-[70vh] p-4 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all resize-none font-mono text-sm leading-relaxed"
+                    placeholder="Dán nội dung vào đây...
+Ví dụ:
+你有姐姐吗？|Nǐ yǒu jiějie ma?|Bạn có chị gái không?
+我没有姐姐。|Wǒ méiyǒu jiějie.|Tôi không có chị gái."></textarea>
+                
+                <div class="mt-3 flex gap-2">
+                    <button onclick="loadSample()" class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full hover:bg-indigo-200 transition">
+                        Dán dữ liệu mẫu
+                    </button>
+                </div>
+            </div>
 
-            <!-- Action Button -->
-            <button id="filterButton" onclick="handleFileProcessing()"
-                    class="w-full md:w-auto px-6 py-2 text-sm font-semibold rounded-lg shadow-md transition duration-150 ease-in-out
-                           bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
-                <span id="buttonText">Lọc Từ Vựng</span>
-            </button>
+            <!-- CONTROLS & OUTPUT SECTION -->
+            <div class="flex flex-col h-full">
+                
+                <!-- Controls -->
+                <div class="glass-panel p-4 rounded-xl mb-4">
+                    <h3 class="font-semibold text-slate-700 mb-3">Chọn nội dung hiển thị:</h3>
+                    <div class="flex flex-wrap gap-4 select-none">
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+                            <input type="checkbox" id="checkHanzi" checked onchange="processText()" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-slate-700 font-medium">Tiếng Trung (Cột 1)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+                            <input type="checkbox" id="checkPinyin" checked onchange="processText()" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-slate-700 font-medium">Pinyin (Cột 2)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm hover:border-indigo-300 transition">
+                            <input type="checkbox" id="checkViet" checked onchange="processText()" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="text-slate-700 font-medium">Tiếng Việt (Cột 3)</span>
+                        </label>
+                    </div>
+                </div>
 
-            <!-- Download Button -->
-            <button id="downloadButton" onclick="downloadFile()" style="display:none;"
-                    class="w-full md:w-auto px-6 py-2 text-sm font-semibold rounded-lg shadow-md transition duration-150 ease-in-out
-                           bg-green-500 text-white hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                Tải Về TXT (<span id="wordCountDownload">0</span> từ)
-            </button>
-        </div>
+                <!-- Output Header -->
+                <div class="flex justify-between items-center mb-2">
+                    <label class="font-semibold text-slate-700 flex items-center">
+                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-green-600"></i> Kết quả
+                    </label>
+                    <span id="lineCount" class="text-xs text-slate-400 bg-white px-2 py-1 rounded-md shadow-sm">0 dòng</span>
+                </div>
 
-        <!-- THÔNG BÁO TRẠNG THÁI -->
-        <div id="statusMessage" class="text-sm p-3 rounded-lg hidden bg-yellow-100 text-yellow-800">
-            Vui lòng chọn file và bấm Lọc.
-        </div>
+                <!-- Output Textarea -->
+                <textarea id="outputText" readonly
+                    class="glass-panel w-full flex-grow p-4 rounded-xl bg-slate-50 focus:outline-none font-mono text-sm leading-relaxed text-slate-700"
+                    placeholder="Kết quả sẽ hiện ở đây..."></textarea>
 
-        <!-- KHU VỰC KẾT QUẢ -->
-        <div>
-            <h2 class="text-lg font-bold text-gray-700 mb-2 flex justify-between items-center">
-                Danh Sách Từ Vựng Đã Lọc
-                <span id="resultCount" class="text-xs font-medium text-indigo-500 bg-indigo-100 px-2 py-0.5 rounded-full hidden">0 từ</span>
-            </h2>
-            <div id="wordList" class="border border-gray-200 bg-gray-50 max-h-64 h-64 overflow-y-auto p-3 rounded-lg text-sm text-gray-800">
-                <p class="text-center text-gray-400 mt-12">Kết quả sẽ hiển thị ở đây sau khi bạn lọc file.</p>
+                <!-- Action Buttons -->
+                <div class="mt-4 flex gap-3">
+                    <button onclick="copyToClipboard()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-indigo-200 transition-all transform active:scale-95 flex justify-center items-center">
+                        <i class="fa-regular fa-copy mr-2"></i> Sao chép kết quả
+                    </button>
+                    <button onclick="downloadText()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-3 px-6 rounded-xl shadow-sm transition-all">
+                        <i class="fa-solid fa-download"></i> Tải .txt
+                    </button>
+                </div>
             </div>
         </div>
+    </div>
 
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-6 py-3 rounded-lg shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center z-50">
+        <i class="fa-solid fa-circle-check text-green-400 mr-3"></i>
+        <span id="toastMsg">Đã sao chép!</span>
     </div>
 
     <script>
-        // Mảng chứa từ vựng và các tham chiếu DOM
-        let words = [];
-        const fileInput = document.getElementById('fileInput');
-        const wordListDiv = document.getElementById('wordList');
-        const filterButton = document.getElementById('filterButton');
-        const downloadButton = document.getElementById('downloadButton');
-        const statusMessage = document.getElementById('statusMessage');
-        const resultCountSpan = document.getElementById('resultCount');
-        const wordCountDownloadSpan = document.getElementById('wordCountDownload');
-        const buttonTextSpan = document.getElementById('buttonText');
+        const inputText = document.getElementById('inputText');
+        const outputText = document.getElementById('outputText');
+        const checkHanzi = document.getElementById('checkHanzi');
+        const checkPinyin = document.getElementById('checkPinyin');
+        const checkViet = document.getElementById('checkViet');
+        const lineCount = document.getElementById('lineCount');
 
-        /**
-         * Cập nhật trạng thái UI (loading, error, success)
-         * @param {string} type - "loading", "error", "success", "info"
-         * @param {string} message - Nội dung thông báo
-         */
-        function updateStatus(type, message = '') {
-            statusMessage.textContent = message;
-            statusMessage.className = 'text-sm p-3 rounded-lg';
+        // Sample data from user request
+        const sampleData = `你有姐姐吗？|Nǐ yǒu jiějie ma?|Bạn có chị gái không?
+我没有姐姐。|Wǒ méiyǒu jiějie.|Tôi không có chị gái.
+他没有妹妹。|Tā méiyǒu mèimei.|Anh ấy không có em gái.
+我家没有猫。|Wǒ jiā méiyǒu māo.|Nhà tôi không có mèo.
+他家没有狗。|Tā jiā méiyǒu gǒu.|Nhà anh ấy không có chó.
+他家没有猪。|Tā jiā méiyǒu zhū.|Nhà anh ấy không có lợn.`;
 
-            // Reset trạng thái nút
-            filterButton.disabled = false;
-            buttonTextSpan.textContent = 'Lọc Từ Vựng';
+        // Listen for input changes
+        inputText.addEventListener('input', processText);
 
-            switch (type) {
-                case 'loading':
-                    statusMessage.classList.add('bg-blue-100', 'text-blue-800');
-                    filterButton.disabled = true;
-                    buttonTextSpan.textContent = 'Đang Xử Lý...';
-                    break;
-                case 'error':
-                    statusMessage.classList.add('bg-red-100', 'text-red-800');
-                    break;
-                case 'success':
-                    statusMessage.classList.add('bg-green-100', 'text-green-800');
-                    break;
-                case 'info':
-                default:
-                    statusMessage.classList.add('bg-yellow-100', 'text-yellow-800');
-                    break;
-            }
-            statusMessage.style.display = 'block';
+        function loadSample() {
+            inputText.value = sampleData;
+            processText();
         }
 
-        /**
-         * Đọc nội dung file bằng async/await (cách hiện đại)
-         * @param {File} file - Đối tượng File
-         * @returns {Promise<string>} - Nội dung file dưới dạng chuỗi
-         */
-        function readSelectedFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (event) => resolve(event.target.result);
-                reader.onerror = (error) => reject('Lỗi khi đọc file: ' + error.target.error.name);
-                reader.readAsText(file);
-            });
+        function clearInput() {
+            if(confirm("Bạn có chắc muốn xóa hết dữ liệu nhập không?")) {
+                inputText.value = '';
+                processText();
+            }
         }
 
-        /**
-         * Hàm xử lý chính: Đọc file, lọc từ và cập nhật giao diện
-         */
-        async function handleFileProcessing() {
-            const file = fileInput.files[0];
-            words = []; // Reset mảng từ vựng
-            downloadButton.style.display = 'none';
-            wordListDiv.innerHTML = '';
-            resultCountSpan.style.display = 'none';
+        function processText() {
+            const raw = inputText.value;
+            const lines = raw.split('\n');
+            const showHanzi = checkHanzi.checked;
+            const showPinyin = checkPinyin.checked;
+            const showViet = checkViet.checked;
 
-            if (!file) {
-                updateStatus('error', 'Vui lòng chọn một file TXT trước khi lọc.');
-                return;
-            }
-            if (!file.name.endsWith('.txt')) {
-                updateStatus('error', 'Chỉ hỗ trợ file có định dạng TXT.');
-                return;
-            }
+            let resultLines = [];
+            let count = 0;
 
-            updateStatus('loading', `Đang đọc và xử lý file: ${file.name}...`);
-
-            try {
-                const content = await readSelectedFile(file);
-                
-                // Lọc và xử lý nội dung
-                const lines = content.split('\n');
-                let foundWords = 0;
-
-                const ul = document.createElement('ul');
-                ul.className = 'divide-y divide-gray-200';
-
-                lines.forEach(line => {
-                    // Cắt bỏ khoảng trắng ở đầu/cuối và lấy phần trước dấu "|"
-                    const trimmedLine = line.trim();
-                    const parts = trimmedLine.split('|');
-                    const word = parts[0].trim(); 
-                    
-                    // Chỉ thêm từ nếu không rỗng
-                    if (word.length > 0) {
-                        words.push(word); 
-                        foundWords++;
-                        
-                        const li = document.createElement('li');
-                        li.className = 'py-2 px-1 hover:bg-indigo-50 transition duration-100 ease-in-out cursor-default truncate';
-                        li.textContent = word;
-                        ul.appendChild(li);
-                    }
-                });
-                
-                wordListDiv.innerHTML = ''; // Xóa placeholder cũ
-                wordListDiv.appendChild(ul);
-
-                // Cập nhật trạng thái thành công
-                updateStatus('success', `Hoàn tất! Đã tìm thấy ${foundWords} từ vựng từ file "${file.name}".`);
-                
-                // Hiện nút tải về
-                if (foundWords > 0) {
-                    downloadButton.style.display = 'block';
-                    resultCountSpan.textContent = `${foundWords} từ`;
-                    wordCountDownloadSpan.textContent = foundWords;
-                    resultCountSpan.style.display = 'inline-block';
-                } else {
-                    wordListDiv.innerHTML = '<p class="text-center text-gray-400 mt-12">Không tìm thấy từ vựng hợp lệ nào.</p>';
+            lines.forEach(line => {
+                // Ignore completely empty lines
+                if (!line.trim()) {
+                    resultLines.push('');
+                    return;
                 }
 
-            } catch (error) {
-                updateStatus('error', `Lỗi xử lý: ${error}`);
-                console.error(error);
-                wordListDiv.innerHTML = '<p class="text-center text-red-400 mt-12">Có lỗi xảy ra trong quá trình đọc file.</p>';
-            }
+                // Split by |
+                const parts = line.split('|');
+                const hanzi = parts[0] ? parts[0].trim() : '';
+                const pinyin = parts[1] ? parts[1].trim() : '';
+                const viet = parts[2] ? parts[2].trim() : '';
+
+                let activeParts = [];
+                
+                if (showHanzi) activeParts.push(hanzi);
+                if (showPinyin) activeParts.push(pinyin);
+                if (showViet) activeParts.push(viet);
+
+                // Only add to result if we have selected something
+                if (activeParts.length > 0) {
+                    resultLines.push(activeParts.join('|'));
+                    count++;
+                } else if (line.trim() && !showHanzi && !showPinyin && !showViet) {
+                     // If nothing selected but line exists, create empty line or keep placeholder
+                     resultLines.push(''); 
+                }
+            });
+
+            outputText.value = resultLines.join('\n');
+            lineCount.innerText = `${count} dòng`;
         }
 
-        /**
-         * Tải về file TXT chứa danh sách từ vựng đã lọc
-         */
-        function downloadFile() {
-            if (words.length === 0) {
-                updateStatus('error', 'Không có từ vựng nào để tải về.');
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2000);
+        }
+
+        function copyToClipboard() {
+            if (!outputText.value) {
+                showToast('Không có nội dung để sao chép!');
                 return;
             }
-            
-            const content = words.join('\n');
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            
-            // Tạo link tải về
-            const url = URL.createObjectURL(blob);
+            outputText.select();
+            outputText.setSelectionRange(0, 99999); // Mobile compatibility
+            document.execCommand('copy');
+            // Deselect
+            window.getSelection().removeAllRanges();
+            showToast('Đã sao chép vào bộ nhớ tạm!');
+        }
+
+        function downloadText() {
+            if (!outputText.value) {
+                showToast('Không có nội dung để tải!');
+                return;
+            }
+            const blob = new Blob([outputText.value], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'tu_vung_da_loc.txt'; // Tên file tải về mới
-            
-            // Kích hoạt tải về
-            document.body.appendChild(a); 
-            a.click(); 
-            document.body.removeChild(a); 
-            URL.revokeObjectURL(url); // Giải phóng URL
-
-            updateStatus('info', `Đã tải về thành công ${words.length} từ vựng.`);
+            a.download = 'ket_qua_loc.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
         }
-        
-        // Thêm sự kiện để hiển thị trạng thái khi file được chọn
-        fileInput.addEventListener('change', () => {
-            const file = fileInput.files[0];
-            if (file) {
-                updateStatus('info', `Đã chọn file: ${file.name}. Bấm "Lọc Từ Vựng" để bắt đầu.`);
-                // Ẩn nút tải về cũ nếu có file mới
-                downloadButton.style.display = 'none';
-            } else {
-                updateStatus('info', 'Vui lòng chọn một file TXT.');
-            }
-        });
 
-        // Khởi tạo trạng thái ban đầu
-        updateStatus('info', 'Vui lòng chọn một file TXT.');
-
+        // Initialize on load
+        window.onload = function() {
+            // Optional: Auto focus input
+            inputText.focus();
+        }
     </script>
-
 </body>
 </html>
