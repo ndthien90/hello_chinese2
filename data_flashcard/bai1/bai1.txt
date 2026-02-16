@@ -16,6 +16,6 @@
 你好|nǐ hǎo|xin chào|你好，很高兴认识你。|Nǐ hǎo, hěn gāoxìng rènshì nǐ.|Xin chào, rất vui được làm quen với bạn.
 再见|zàijiàn|tạm biệt|再见，明天见。|Zàijiàn, míngtiān jiàn.|Tạm biệt, ngày mai gặp lại.
 对不起|Duìbùqǐ|Xin lỗi|对不起, 我来晚了。|Wǒ lái wǎnle, duìbùqǐ.|xin lỗi, tôi đã đến muộn, .
-没关系|Méiguānxi|Không sao|没关系，你坐吧。Méiguānxi, nǐ zuò ba.|Không sao, bạn ngồi đi.
+没关系|Méiguānxi|Không sao|没关系，你坐吧。|Méiguānxi, nǐ zuò ba.|Không sao, bạn ngồi đi.
 陈楠|Chén Nán|Trần Nam (tên riêng)|我是陈楠。|Wǒ shì Chén Nán.|Tôi là Trần Nam.
 国安|Guó'ān|Quốc An (tên riêng)|他是国安。|Tā shì Guó'ān.|Anh ấy là Quốc An.
