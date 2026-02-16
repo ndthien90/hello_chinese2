@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò chơi Ghép chữ Hán (Theo Màn)</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Kaiti';
+            src: url('https://ndthien90.github.io/hello_chinese2/fonts/Kaiti.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        /* Tải Font Mulish và Ma Shan Zheng */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Ma+Shan+Zheng&family=Mulish:ital,wght@0,200..900;1,200..900&display=swap');
+        
+        body {
+            font-family: 'Mulish', 'Inter', sans-serif; 
+            background-color: #faf8ef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        .hanzi-tile {
+            width: 100%;
+            padding-top: 100%; /* Tạo hình vuông */
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: none; 
+            border: none;
+            border-radius: 6px;
+            background-color: #cdc1b4;
+        }
+
+        #hanzi-grid {
+             background-color: #bbada0;
+             padding: 10px;
+             border-radius: 6px;
+             transition: all 0.3s ease;
+        }
+        
+        .hanzi-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Kaiti', 'SimSun', sans-serif; 
+            font-size: 1.5rem; 
+            font-weight: 580;
+            color: #776e65;
+            transition: transform 0.1s;
+        }
+
+        @media (min-width: 768px) {
+            .hanzi-content {
+                font-size: 2.5rem; 
+            }
+        }
+
+        #modal-hanzi {
+             font-family: 'Kaiti', 'SimSun', sans-serif; 
+             font-weight: 580;
+        }
+       #modal-pinyin{ font-size: 1.5rem; }
+       #modal-vn{ font-size: 1.2rem; }
+       #modal-example{ font-size: 1.2rem; }
+
+        .selected {
+            background-color: #3b82f6 !important; 
+            transform: scale(0.95);
+            color: #ffffff !important;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .selected .hanzi-content { color: #ffffff !important; }
+
+        .correct { animation: correct-fade 0.5s forwards; }
+        @keyframes correct-fade {
+            0% { background-color: #34d399; opacity: 1; transform: scale(1); } 
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        .wrong {
+            animation: wrong-shake 0.5s ease-in-out;
+            background-color: #f87171 !important;
+            color: #f9f6f2 !important; 
+        }
+        @keyframes wrong-shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .flying-score {
+            position: fixed;
+            z-index: 1000;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00FF00;
+            opacity: 1;
+            pointer-events: none;
+            transition: transform 0.8s ease-out, opacity 0.5s linear 0.5s;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            will-change: transform, opacity; 
+        }
+
+        .main-grid {
+            max-width: 500px;
+            width: 100%; 
+            margin: auto;
+        }
+        
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+        
+        /* Dark Mode */
+        .dark { background-color: #333; }
+        .dark body { background-color: #333; }
+        .dark #game-container { background-color: #555; }
+        .dark #hanzi-grid { background-color: #444; }
+        .dark .text-gray-700 { color: #d1d5db; } 
+        .dark .text-gray-500 { color: #9ca3af; } 
+        .dark .hanzi-tile { background-color: #666; }
+        .dark .hanzi-content { color: #f3f4f6; }
+        .dark #selection-display { background-color: #4f46e5; color: #e0e7ff; }
+        .dark #dictionary-modal div, .dark #gameover-modal div { background-color: #555; }
+        
+        /* CẬP NHẬT: Màu chữ trong Modal khi ở Dark Mode */
+        .dark #modal-hanzi { color: #ffffff !important; }
+        .dark #modal-vn { color: #e5e7eb !important; }
+        .dark #modal-example { color: #9ca3af !important; border-color: #4b5563 !important; }
+        .dark #dictionary-modal .text-gray-500 { color: #9ca3af; }
+        
+        /* CẬP NHẬT CSS CHO GỢI Ý (HINT) - ĐÃ BỎ SCALE */
+        .hanzi-tile.hint-pulse {
+             background-color: #eab308 !important; /* Màu Vàng/Cam (giống nút gợi ý) */
+             color: #ffffff !important;
+             box-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+             z-index: 10;
+        }
+        .hanzi-tile.hint-pulse .hanzi-content {
+             color: #ffffff !important;
+        }
+
+        .dark .hanzi-tile.hint-pulse {
+             background-color: #b45309 !important; /* Màu Cam Đậm cho Dark Mode */
+             color: #f3f4f6 !important;
+        }
+        .dark .hanzi-tile.hint-pulse .hanzi-content {
+             color: #f3f4f6 !important;
+        }
+
+        /* Animation khi chuyển màn */
+        .stage-transition {
+            animation: popIn 0.5s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    
+    <!-- Tải Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Bật chế độ Debug cho Firebase
+        // setLogLevel('Debug'); // Tắt debug để gọn console
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-hanzi-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null; 
+
+        let app, db, auth, userId = null;
+
+        if (firebaseConfig) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            window.db = db;
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    listenForBestScore();
+                } else {
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken); 
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Lỗi xác thực Firebase:", error);
+                    }
+                }
+            });
+        }
+
+        function listenForBestScore() {
+            if (!db) return;
+            const docRef = doc(db, "artifacts", appId, "public", "data", "hanzi_match_scores", "best_score");
+            onSnapshot(docRef, (doc) => {
+                if (doc.exists()) {
+                    window.updateBestScore(doc.data().score || 0);
+                }
+            });
+        }
+
+        window.saveBestScore = async (newScore) => {
+            if (!db || !userId) return;
+            const docRef = doc(db, "artifacts", appId, "public", "data", "hanzi_match_scores", "best_score");
+            try {
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists() || newScore > (docSnap.data().score || 0)) {
+                    await setDoc(docRef, { score: newScore, userId: userId, updated: new Date().toISOString() });
+                }
+            } catch (e) { console.error(e); }
+        };
+    </script>
+</head>
+<body class="bg-gray-50 antialiased">
+    <audio id="audio-player" style="display: none;"></audio>
+
+    <div id="game-container" class="main-grid bg-white px-4 py-6 rounded-none shadow-none md:p-4 md:rounded-xl md:shadow-xl transition-all duration-300 min-h-screen md:min-h-0">
+        
+        <!-- Thanh Thông Tin -->
+        <div class="flex justify-between items-center mb-2 text-gray-700">
+            <div>
+                <div class="text-xl font-black uppercase tracking-widest text-indigo-700 dark:text-indigo-400 mb-0.5">
+                    Ghép Hán tự
+                </div>
+                <button id="dark-mode-toggle" class="mt-1 flex items-center text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition duration-150">
+                    <span id="dark-mode-icon" class="mr-1">🌙</span> Chế độ
+                </button>
+            </div>
+            
+            <div class="text-sm font-semibold uppercase text-right">
+                <p>Điểm: <span id="current-score" class="text-blue-600 text-lg">0</span></p>
+                <p class="text-xs text-gray-500">Cao Nhất: <span id="best-score" class="text-green-600">0</span></p>
+            </div>
+        </div>
+        
+        <!-- Chọn Bài Học -->
+        <div class="mb-3">
+            <select id="lesson-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <option value="1">H1 Bài 1 老师您好！</option> 
+                <option value="2">H1 Bài 2 谢谢你！</option> 
+                <option value="3">H1 Bài 3 你叫什么名字?</option>
+                <option value="4">H1 Bài 4 她是我的汉语老师。</option>
+                <option value="5">H1 Bài 5 她女儿今年八岁。</option>
+                <option value="6">H1 Bài 6 我会说汉语。</option>
+            </select>
+        </div>
+
+        <!-- Thanh Trạng Thái Màn Chơi -->
+        <div class="flex justify-between items-center bg-indigo-100 dark:bg-gray-600 rounded-lg p-2 mb-4">
+            <div class="text-indigo-800 dark:text-white font-bold text-sm">
+                Màn: <span id="current-stage-display" class="text-lg text-pink-600">1</span> / <span id="total-stages-display">5</span>
+            </div>
+            <div class="text-xs text-gray-600 dark:text-gray-300 font-semibold">
+                Độ khó: <span id="tile-count-display" class="text-indigo-600 dark:text-indigo-300 font-bold">4</span> ô
+            </div>
+        </div>
+        
+        <!-- Khu vực hiển thị từ đang ghép -->
+        <div id="selection-display" class="min-h-[50px] mb-4 p-2 bg-indigo-50 rounded-lg shadow-inner flex items-center justify-center text-xl font-bold text-indigo-700 transition-all duration-300">
+            <!-- Chữ Hán đang ghép -->
+        </div>
+
+        <!-- Lưới Chơi (Grid) - Class grid-cols sẽ được JS chỉnh sửa -->
+        <div id="hanzi-grid" class="grid grid-cols-2 gap-2 stage-transition">
+            <!-- Các ô chữ Hán -->
+        </div>
+
+        <!-- Thông báo -->
+        <div id="message-area" class="h-6 mt-4 text-center font-bold text-lg text-yellow-600"></div>
+
+        <!-- Khu Điều Khiển -->
+        <div class="flex justify-between gap-2 mt-6"> 
+            <button id="restart-btn" class="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition uppercase text-sm">
+                <span class="text-lg">🔄</span> Chơi Lại
+            </button>
+            <button id="hint-btn" class="flex-1 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl transition uppercase text-sm disabled:opacity-50">
+                <span class="text-lg">💡</span> Gợi Ý (<span id="hint-count">5</span>)
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Từ Điển -->
+    <div id="dictionary-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transition-transform transform scale-95">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-3xl font-bold text-green-600">Chính xác</h3>
+                <button id="speaker-btn" class="text-2xl text-green-600 hover:text-green-700 transition disabled:opacity-50">🔊</button>
+            </div>
+            <p id="modal-hanzi" class="text-5xl font-extrabold text-center my-4 text-gray-800"></p>
+            <p id="modal-pinyin" class="text-2xl text-center font-mono text-green-600 mb-2"></p>
+            <p id="modal-vn" class="text-lg text-center text-gray-600 mb-4"></p>
+            <p id="modal-example" class="text-sm italic text-gray-500 border-t pt-2 mt-2">Ví dụ: <span id="modal-example-text"></span></p>
+        </div>
+    </div>
+    
+    <!-- Game Over / Victory Modal -->
+    <div id="gameover-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full text-center transition-transform transform scale-95">
+            <h3 id="gameover-title" class="text-4xl font-extrabold text-red-600 mb-3">HẾT GAME!</h3>
+            <p class="text-xl text-gray-700 mb-2">Tổng điểm:</p>
+            <p id="final-score" class="text-6xl font-black text-blue-600 mb-4">0</p>
+            <p id="best-score-update" class="text-md text-green-700 font-semibold mb-6"></p>
+            <button onclick="window.restartGame()" class="w-full py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition shadow-lg">Chơi Lại Từ Đầu</button>
+        </div>
+    </div>
+
+    <!-- Level Complete Toast (Thông báo nhỏ khi qua màn) -->
+    <div id="level-toast" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 hidden bg-indigo-600 text-white px-6 py-4 rounded-xl shadow-2xl text-center animate-bounce">
+        <h3 class="text-2xl font-bold">🎉 Hoàn Thành Màn!</h3>
+        <p>Chuẩn bị sang màn tiếp theo...</p>
+    </div>
+
+    <script>
+        // --- DỮ LIỆU ---
+        let WORD_LIST_RAW = [];         
+        let WORD_LIST_WITH_IDS = [];    
+        
+        // --- Cấu hình Màn Chơi ---
+        const STAGES = [4, 6, 8, 12, 16]; 
+        let currentStageIndex = 0;
+
+        // --- Trạng Thái Game ---
+        let gridState = [];             
+        let currentScore = 0;
+        let bestScore = 0;
+        let selectedTiles = [];
+        let comboCount = 0;
+        let hintCount = 5;               
+        let isProcessing = false;
+        let currentLesson = '1'; 
+
+        // Danh sách từ CỦA MÀN HIỆN TẠI
+        let CURRENT_STAGE_WORDS = []; 
+        let UNSOLVED_WORDS = [];        
+        let AVAILABLE_CHAR_POOL = [];   
+        let currentHanziToSpeak = ''; 
+
+        // --- DOM Elements ---
+        const gridElement = document.getElementById('hanzi-grid');
+        const scoreElement = document.getElementById('current-score');
+        const bestScoreElement = document.getElementById('best-score');
+        const selectionDisplay = document.getElementById('selection-display');
+        const messageArea = document.getElementById('message-area');
+        const hintCountElement = document.getElementById('hint-count');
+        const hintBtn = document.getElementById('hint-btn');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const darkModeIcon = document.getElementById('dark-mode-icon');
+        const speakerBtn = document.getElementById('speaker-btn');
+        const lessonSelect = document.getElementById('lesson-select');
+        const audioPlayer = document.getElementById('audio-player'); 
+        
+        const currentStageDisplay = document.getElementById('current-stage-display');
+        const totalStagesDisplay = document.getElementById('total-stages-display');
+        const tileCountDisplay = document.getElementById('tile-count-display');
+        const levelToast = document.getElementById('level-toast');
+
+        const BASE_PATH = 'data_flashcard/'; 
+        
+        const LIGHT_TILE_COLOR = { bg: '#f9f6f2', text: '#776e65', lightText: true }; 
+        const DARK_TILE_COLOR = { bg: '#a39b95', text: '#f9f4f6', lightText: false }; 
+        const EMPTY_TILE_COLOR = { bg: '#cdc1b4', text: '#776e65', lightText: true }; 
+        const LIGHT_MODE_HINT_COLOR = '#f2b179'; 
+        const LIGHT_MODE_HINT_TEXT_COLOR = '#f9f6f2'; 
+
+        // --- AUDIO FUNCTIONS ---
+        const playAudioFromLesson = (lessonNumber, hanziText) => {
+            if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+            audioPlayer.pause();
+            audioPlayer.removeAttribute('src'); 
+
+            const audioPath = `${BASE_PATH}bai${lessonNumber}/mp3/${hanziText}.mp3`;
+            speakerBtn.disabled = true;
+            speakerBtn.textContent = '...';
+
+            const playFallback = () => {
+                 speakerBtn.textContent = '🔊';
+                 speakHanzi(hanziText); 
+            };
+            
+            audioPlayer.onloadedmetadata = () => {
+                audioPlayer.currentTime = 0; 
+                audioPlayer.play().catch(e => playFallback());
+                speakerBtn.textContent = '▶️';
+            };
+            audioPlayer.onerror = playFallback;
+            audioPlayer.onended = () => {
+                speakerBtn.textContent = '🔊';
+                speakerBtn.disabled = false;
+            };
+
+            audioPlayer.src = audioPath;
+            audioPlayer.load();
+        };
+
+        const speakHanzi = (text) => {
+            if (!('speechSynthesis' in window)) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN'; 
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
+        };
+
+        const handleSpeakerClick = () => {
+            if (currentHanziToSpeak) playAudioFromLesson(currentLesson, currentHanziToSpeak);
+        };
+
+        // --- LOAD DATA ---
+        const loadAndParseLesson = async (lessonNumber) => {
+            currentLesson = lessonNumber; 
+            const filePath = `${BASE_PATH}bai${lessonNumber}/bai${lessonNumber}.txt`;
+            
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error("File not found");
+                const text = await response.text();
+                
+                const lines = text.trim().split('\n');
+                let newWordList = [];
+
+                lines.forEach((line, index) => {
+                    if (line.trim() === '' || line.startsWith('#') || line.startsWith('//')) return; 
+                    const parts = line.split('|').map(p => p.trim());
+                    if (parts.length >= 2) {
+                        const hanzi = parts[0];
+                        if (hanzi.length >= 2) { 
+                            newWordList.push({
+                                chars: hanzi.split(''), 
+                                length: hanzi.length, 
+                                pinyin: parts[1], 
+                                vn: parts[2] || '', 
+                                example: parts[3] || '', 
+                                id: `L${lessonNumber}_W${index}`
+                            });
+                        }
+                    }
+                });
+                
+                WORD_LIST_WITH_IDS = newWordList;
+                window.restartGame(); 
+                
+            } catch (error) {
+                console.error("Lỗi tải bài học:", error);
+                messageArea.textContent = `Không tìm thấy dữ liệu Bài ${lessonNumber}.`;
+            }
+        };
+
+        // --- CẢI TIẾN LOGIC CHỌN TỪ (BACKTRACKING + DUPLICATE FALLBACK) ---
+
+        // Helper: Thử tìm tập hợp con các từ có tổng độ dài đúng bằng target
+        const findExactSubset = (words, target) => {
+            const find = (index, currentSum, currentSubset) => {
+                if (currentSum === target) return currentSubset;
+                if (currentSum > target || index === words.length) return null;
+
+                // Thử chọn từ hiện tại
+                const withWord = find(index + 1, currentSum + words[index].length, [...currentSubset, words[index]]);
+                if (withWord) return withWord;
+
+                // Thử bỏ qua từ hiện tại
+                const withoutWord = find(index + 1, currentSum, currentSubset);
+                if (withoutWord) return withoutWord;
+
+                return null;
+            };
+            return find(0, 0, []);
+        };
+
+        const selectWordsForStage = (targetTileCount) => {
+            // Bước 1: Thử tìm tổ hợp KHÔNG trùng lặp (Ưu tiên)
+            let shuffledPool = [...WORD_LIST_WITH_IDS].sort(() => 0.5 - Math.random());
+            
+            // Cố gắng tìm tổ hợp chính xác nhiều lần với shuffle khác nhau để tăng tính ngẫu nhiên
+            for(let i = 0; i < 10; i++) {
+                 shuffledPool.sort(() => 0.5 - Math.random());
+                 const exactSet = findExactSubset(shuffledPool, targetTileCount);
+                 if (exactSet) return exactSet;
+            }
+
+            // Bước 2: Nếu không tìm thấy tổ hợp duy nhất, dùng cơ chế LẤP ĐẦY (cho phép trùng từ)
+            // Logic: Cứ thêm từ ngẫu nhiên vào cho đến khi đầy. Nếu từ cuối làm tràn, thử từ khác nhỏ hơn.
+            // Nếu vẫn không được (ví dụ còn 1 ô nhưng toàn từ 2 chữ), chấp nhận trùng lặp để tạo từ mới.
+            let selected = [];
+            let currentCount = 0;
+            let infinitePool = [...WORD_LIST_WITH_IDS]; // Pool gốc để lấy mẫu
+
+            // Giới hạn vòng lặp để tránh treo trình duyệt
+            let attempts = 0;
+            while (currentCount < targetTileCount && attempts < 200) {
+                attempts++;
+                // Lấy ngẫu nhiên 1 từ
+                const randomWord = infinitePool[Math.floor(Math.random() * infinitePool.length)];
+                
+                if (currentCount + randomWord.length <= targetTileCount) {
+                    // Clone từ này để tạo ID mới (tránh lỗi logic khi 1 từ xuất hiện 2 lần)
+                    const clonedWord = {
+                        ...randomWord,
+                        id: randomWord.id + '_dup_' + Math.random().toString(36).substr(2, 5) // Tạo ID duy nhất
+                    };
+                    selected.push(clonedWord);
+                    currentCount += randomWord.length;
+                }
+            }
+            
+            // Nếu vẫn không lấp đầy (ví dụ còn 1 ô, nhưng toàn từ 2 chữ trở lên)
+            // Đây là trường hợp hiếm nếu dữ liệu chuẩn. Nếu xảy ra, chấp nhận ô trống.
+            return selected;
+        };
+
+        const startStage = (stageIndex) => {
+            isProcessing = false;
+            currentStageIndex = stageIndex;
+            const targetTiles = STAGES[currentStageIndex];
+            
+            currentStageDisplay.textContent = currentStageIndex + 1;
+            totalStagesDisplay.textContent = STAGES.length;
+            tileCountDisplay.textContent = targetTiles;
+
+            // Sử dụng logic chọn từ mới
+            CURRENT_STAGE_WORDS = selectWordsForStage(targetTiles);
+            UNSOLVED_WORDS = [...CURRENT_STAGE_WORDS];
+            
+            gridElement.className = 'gap-2 stage-transition';
+            if (targetTiles === 4) {
+                gridElement.classList.add('grid', 'grid-cols-2');
+            } else if (targetTiles === 6) {
+                gridElement.classList.add('grid', 'grid-cols-3'); 
+            } else if (targetTiles === 8) {
+                gridElement.classList.add('grid', 'grid-cols-4'); 
+            } else if (targetTiles === 12) {
+                gridElement.classList.add('grid', 'grid-cols-4'); 
+            } else {
+                gridElement.classList.add('grid', 'grid-cols-4'); 
+            }
+            
+            fillNewGrid(targetTiles);
+            messageArea.textContent = `Bắt đầu màn ${stageIndex + 1}!`;
+        };
+
+        const fillNewGrid = (targetTiles) => {
+            gridState = [];
+            let allChars = UNSOLVED_WORDS.flatMap(word => word.chars);
+            allChars.sort(() => 0.5 - Math.random());
+            
+            for (let i = 0; i < targetTiles; i++) {
+                const char = allChars[i] || ''; 
+                gridState.push({ 
+                    char: char, 
+                    index: i, 
+                    id: Date.now() + i + Math.random(), 
+                    isEmpty: char === '' 
+                }); 
+            }
+            renderGrid();
+        };
+
+        window.restartGame = () => {
+            if (WORD_LIST_WITH_IDS.length === 0) return;
+            currentScore = 0;
+            scoreElement.textContent = currentScore;
+            selectedTiles = [];
+            hintCount = 5;
+            hintCountElement.textContent = hintCount;
+            hintBtn.disabled = false;
+            document.getElementById('gameover-modal').classList.add('hidden');
+            startStage(0);
+        };
+
+        const getTileColor = (char) => {
+            // Tìm trong danh sách chưa giải (UNSOLVED_WORDS)
+            let charIsActive = UNSOLVED_WORDS.some(word => word.chars.includes(char));
+            const isDarkMode = isDarkModeEnabled(); 
+            if (charIsActive) {
+                return isDarkMode ? DARK_TILE_COLOR : LIGHT_TILE_COLOR; 
+            }
+            return EMPTY_TILE_COLOR; 
+        };
+
+        const renderGrid = () => {
+            gridElement.innerHTML = '';
+            gridState.forEach((tile, index) => {
+                const isSelected = selectedTiles.includes(index);
+                const tileDiv = document.createElement('div');
+                const isTileEmpty = tile.isEmpty || !tile.char;
+                const colorScheme = isTileEmpty ? EMPTY_TILE_COLOR : getTileColor(tile.char);
+                
+                tileDiv.className = `hanzi-tile 
+                    ${isTileEmpty ? 'opacity-0 cursor-default pointer-events-none' : (isSelected ? 'selected' : '')}`;
+                
+                tileDiv.dataset.index = index;
+                tileDiv.onclick = isTileEmpty ? null : () => handleTileClick(index);
+                tileDiv.style.backgroundColor = isSelected ? '' : colorScheme.bg;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'hanzi-content';
+                contentDiv.textContent = tile.char;
+                contentDiv.style.color = isSelected ? '#ffffff' : colorScheme.text;
+
+                tileDiv.appendChild(contentDiv);
+                gridElement.appendChild(tileDiv);
+            });
+        };
+
+        const updateSelectionDisplay = () => {
+            const currentWord = selectedTiles.map(index => gridState[index].char).join('');
+            selectionDisplay.textContent = currentWord;
+        };
+
+        const handleTileClick = (index) => {
+            if (isProcessing) return;
+            const tile = gridState[index];
+            if (tile.isEmpty || !tile.char) return;
+
+            if (selectedTiles.includes(index)) {
+                selectedTiles = selectedTiles.filter(i => i !== index);
+            } else {
+                selectedTiles.push(index);
+            }
+
+            updateSelectionDisplay();
+            renderGrid();
+            
+            if (selectedTiles.length >= 2) checkMatch();
+        };
+
+        const checkMatch = () => {
+            if (isProcessing) return;
+            
+            const currentWordChars = selectedTiles.map(index => gridState[index].char);
+            const currentWordStr = currentWordChars.join('');
+            
+            // QUAN TRỌNG: Tìm từ TRONG UNSOLVED_WORDS để hỗ trợ các từ trùng lặp
+            // Nếu dùng find(), nó sẽ trả về từ đầu tiên tìm thấy. 
+            // Điều này ổn vì logic filter bên dưới sẽ xóa instance đó đi.
+            const matchedWord = UNSOLVED_WORDS.find(word => word.chars.join('') === currentWordStr);
+            
+            if (matchedWord) {
+                handleMatchCorrect(matchedWord);
+            } else if (selectedTiles.length >= 4) { 
+                handleMatchWrong();
+            } else {
+                // Prefix check: Kiểm tra xem có từ nào bắt đầu bằng chuỗi này không
+                const potential = UNSOLVED_WORDS.some(w => w.chars.join('').startsWith(currentWordStr));
+                if (!potential) handleMatchWrong();
+            }
+        };
+        
+        const handleMatchCorrect = (matchedWord) => {
+            isProcessing = true;
+            comboCount++;
+            
+            // CHỈ XÓA TỪ ĐƯỢC CHỌN (theo ID) KHỎI DANH SÁCH CHƯA GIẢI
+            // Điều này cho phép tồn tại 2 từ giống hệt nhau (khác ID) và giải quyết lần lượt
+            UNSOLVED_WORDS = UNSOLVED_WORDS.filter(w => w.id !== matchedWord.id);
+            
+            selectedTiles.forEach(index => {
+                const tile = gridElement.querySelector(`[data-index="${index}"]`);
+                if (tile) {
+                    tile.classList.remove('selected');
+                    tile.classList.add('correct');
+                    gridState[index].char = '';
+                    gridState[index].isEmpty = true;
+                }
+            });
+
+            const pointsGained = matchedWord.length * 10 * comboCount;
+            animateFlyingScore(pointsGained);
+            currentScore += pointsGained;
+            scoreElement.textContent = currentScore;
+            
+            if (currentScore > bestScore) {
+                bestScore = currentScore;
+                bestScoreElement.textContent = bestScore;
+                if (window.saveBestScore) window.saveBestScore(currentScore);
+            }
+            
+            showDictionaryModal(matchedWord);
+            selectedTiles = [];
+            selectionDisplay.textContent = '';
+            
+            setTimeout(() => {
+                renderGrid();
+                isProcessing = false;
+                if (UNSOLVED_WORDS.length === 0) handleStageComplete();
+            }, 500);
+        };
+
+        const handleStageComplete = () => {
+            isProcessing = true;
+            if (currentStageIndex < STAGES.length - 1) {
+                //levelToast.classList.remove('hidden');
+                setTimeout(() => {
+                    levelToast.classList.add('hidden');
+                    startStage(currentStageIndex + 1);
+                }, 1500);
+            } else {
+                showVictoryModal();
+            }
+        };
+
+        const handleMatchWrong = () => {
+            isProcessing = true;
+            comboCount = 0;
+            messageArea.textContent = 'Sai rồi!';
+            selectedTiles.forEach(index => {
+                const tile = gridElement.querySelector(`[data-index="${index}"]`);
+                if (tile) tile.classList.add('wrong');
+            });
+            setTimeout(() => {
+                selectedTiles = [];
+                selectionDisplay.textContent = '';
+                renderGrid(); 
+                isProcessing = false;
+                messageArea.textContent = '';
+            }, 600);
+        };
+        
+        const handleHint = () => {
+            if (hintCount <= 0 || isProcessing || UNSOLVED_WORDS.length === 0) return;
+            const hintWord = UNSOLVED_WORDS[0];
+            hintCount--;
+            hintCountElement.textContent = hintCount;
+            if (hintCount === 0) hintBtn.disabled = true;
+
+            let foundIndices = [];
+            let tempGrid = [...gridState]; 
+            
+            hintWord.chars.forEach(char => {
+                for (let i = 0; i < tempGrid.length; i++) {
+                    if (tempGrid[i].char === char && !tempGrid[i].isEmpty && !foundIndices.includes(i)) {
+                        foundIndices.push(i);
+                        break; 
+                    }
+                }
+            });
+
+            foundIndices.forEach(index => {
+                const tile = gridElement.querySelector(`[data-index="${index}"]`);
+                if (tile) {
+                    tile.classList.add('hint-pulse', 'animate-pulse');
+                    setTimeout(() => tile.classList.remove('hint-pulse', 'animate-pulse'), 1500);
+                }
+            });
+            messageArea.textContent = `Gợi ý: ${hintWord.chars.join('')}`;
+        };
+
+        const showDictionaryModal = (word) => {
+            const modal = document.getElementById('dictionary-modal');
+            document.getElementById('modal-hanzi').textContent = word.chars.join('');
+            document.getElementById('modal-pinyin').textContent = word.pinyin;
+            document.getElementById('modal-vn').textContent = word.vn;
+            document.getElementById('modal-example-text').textContent = word.example;
+            
+            currentHanziToSpeak = word.chars.join('');
+            speakerBtn.disabled = false;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            playAudioFromLesson(currentLesson, currentHanziToSpeak);
+            setTimeout(() => {
+                if (!modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            }, 2500);
+        };
+
+        const showVictoryModal = () => {
+            const modal = document.getElementById('gameover-modal');
+            document.getElementById('gameover-title').textContent = 'CHIẾN THẮNG!';
+            document.getElementById('gameover-title').className = 'text-4xl font-extrabold text-green-600 mb-3';
+            document.getElementById('final-score').textContent = currentScore;
+            document.getElementById('best-score-update').textContent = 'Bạn đã hoàn thành tất cả các màn chơi!';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            triggerConfetti();
+        };
+
+        const animateFlyingScore = (points) => {
+            if (selectedTiles.length === 0) return;
+            const tile = gridElement.querySelector(`[data-index="${selectedTiles[0]}"]`);
+            if (!tile) return;
+            
+            const rect = tile.getBoundingClientRect();
+            const flyEl = document.createElement('div');
+            flyEl.textContent = `+${points}`;
+            flyEl.className = 'flying-score';
+            flyEl.style.left = `${rect.left + rect.width/2}px`;
+            flyEl.style.top = `${rect.top}px`;
+            document.body.appendChild(flyEl);
+            
+            const target = scoreElement.getBoundingClientRect();
+            setTimeout(() => {
+                flyEl.style.transform = `translate(${target.left - rect.left}px, ${target.top - rect.top}px) scale(0.5)`;
+                flyEl.style.opacity = '0';
+            }, 50);
+            setTimeout(() => flyEl.remove(), 800);
+        };
+        
+        const triggerConfetti = () => {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        };
+
+        const isDarkModeEnabled = () => document.documentElement.classList.contains('dark');
+        const applyDarkMode = (isDark) => {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('game-container').classList.add('bg-gray-800', 'shadow-xl');
+                document.getElementById('game-container').classList.remove('bg-white');
+                darkModeIcon.textContent = '☀️';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('game-container').classList.remove('bg-gray-800', 'shadow-xl');
+                document.getElementById('game-container').classList.add('bg-white');
+                darkModeIcon.textContent = '🌙';
+            }
+            renderGrid();
+        };
+        
+        window.updateBestScore = (score) => {
+            bestScore = score;
+            bestScoreElement.textContent = score;
+        };
+
+        window.onload = function() {
+            document.getElementById('restart-btn').onclick = window.restartGame;
+            document.getElementById('hint-btn').onclick = handleHint; 
+            darkModeToggle.onclick = () => {
+                const isDark = !isDarkModeEnabled();
+                applyDarkMode(isDark);
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            };
+            speakerBtn.onclick = handleSpeakerClick; 
+            
+            lessonSelect.onchange = (e) => loadAndParseLesson(e.target.value);
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                applyDarkMode(true);
+            }
+            loadAndParseLesson(lessonSelect.value);
+        };
+    </script>
+</body>
+</html>
