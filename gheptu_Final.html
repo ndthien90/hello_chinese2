@@ -113,9 +113,10 @@
 
         .hanzi-tile.wrong {
             animation: wrong-shake 0.5s ease-in-out;
-            background-color: var(--error) !important;
+            background-color: var(--bg-card);
+            border-color: var(--error) !important;
         }
-        .hanzi-tile.wrong .hanzi-content { color: #ffffff !important; }
+        .hanzi-tile.wrong .hanzi-content { color: var(--text-main); }
 
         .hanzi-tile.hint-pulse {
             animation: pulse-orange 1.5s infinite;
