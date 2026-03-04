@@ -1,0 +1,6 @@
+你有兄弟姐妹吗？|nǐ yǒu xiōngdì jiěmèi ma?|Bạn có anh chị em không?
+我有一个弟弟。你呢？|wǒ yǒu yí gè dìdi. nǐ ne?|Tôi có một em trai. Còn bạn?
+我也有一个弟弟。|wǒ yě yǒu yí gè dìdi.|Tôi cũng có một em trai.
+你的弟弟会踢足球吗？|nǐ de dìdi huì tī zúqiú ma?|Em trai của bạn biết đá bóng không?
+不会，他只会打羽毛球。|bú huì, tā zhǐ huì dǎ yǔmáoqiú.|Không biết, anh ấy chỉ biết chơi cầu lông.
+我的弟弟也会打羽毛球。|wǒ de dìdi yě huì dǎ yǔmáoqiú.|Em trai của tôi cũng biết chơi cầu lông.
