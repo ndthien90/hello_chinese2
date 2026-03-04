@@ -89,11 +89,21 @@
         <div class="flex gap-2">
             <div class="relative flex-1">
                 <select id="lessonGroupSelect" class="custom-select w-full bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2.5 pl-3 pr-8 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer truncate">
-                    <option value="Bài 1">H1 Bài 1: 老师您好</option>
-                    <option value="Bài 2">H1 Bài 2: 谢谢你！</option>
-                    <option value="Bài 3">H1 Bài 3: 你叫什么名字？</option>
-                    <option value="Bài 4">H1 Bài 4: 她是我的汉语老师。</option>
-                   <option value="Bài 5">H1 Bài 5: 她女儿今年八岁。</option>
+                <option value="1">H1 Bài 1 老师您好！</option>
+                <option value="2">H1 Bài 2 谢谢你！</option>
+                <option value="3">H1 Bài 3 你叫什么名字？</option>
+                <option value="4">H1 Bài 4 她是我的汉语老师。</option>
+                <option value="5">H1 Bài 5 她女儿今年八岁。 </option>
+                <option value="6">H1 Bài 6 我会说汉语。 </option>
+                <option value="7">H1 Bài 7 今天几号？ </option>
+                <option value="8">H1 Bài 8 我想喝茶。 </option>
+                <option value="9">H1 Bài 9 你儿子在哪儿工作？</option>
+                <option value="10">H1 Bài 10 我能做这吗？</option>
+                <option value="11">H1 Bài 11 现在几点？</option>
+                <option value="12">H1 Bài 12 明天天气怎么样？</option>
+                <option value="13">H1 Bài 13 我在学做中国菜。</option>
+                <option value="14">H1 Bài 14 他买了不少衣服。</option>
+                <option value="15">H1 Bài 15 我是坐飞机来的</option>
                 </select>
             </div>
             <div class="relative w-28">
@@ -131,7 +141,7 @@
     </div>
 
     <!-- Player Controls (Floating above Bottom Bar) -->
-    <div class="fixed bottom-[70px] left-0 right-0 max-w-md mx-auto px-4 z-20">
+    <div class="fixed bottom-[0px] left-0 right-0 max-w-md mx-auto px-4 z-20">
         <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-3 flex items-center justify-between gap-4">
             
             <button id="prevBtn" onclick="previousConversation()" class="w-10 h-10 rounded-full bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed">
@@ -149,7 +159,7 @@
         </div>
     </div>
 
-    <!-- Bottom Tab Bar -->
+    <!-- Bottom Tab Bar 
     <div class="bg-white border-t border-gray-200 px-2 py-3 flex justify-around items-center sticky bottom-0 z-40 pb-6 md:pb-3">
         <a href="index.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-600 transition w-16 group">
             <i class="fas fa-home text-xl group-hover:scale-110 transition"></i>
@@ -168,7 +178,7 @@
             <span class="text-[10px] font-medium">Tôi</span>
         </a>
     </div>
-
+-->
     <script>
         let currentLessonGroup = 'Bài 1';
         let currentHT = 1;
@@ -180,7 +190,7 @@
         // Cấu hình số lượng hội thoại mỗi bài
         const lessonConfig = {
             'Bài 1': 2, 'Bài 2': 2, 'Bài 3': 3, 'Bài 4': 3,
-            'Bài 5': 10, 'Bài 6': 3, 'Bài 7': 3, 'Bài 8': 3, 'Bài 9': 3
+            'Bài 5': 10, 'Bài 6': 10, 'Bài 7': 10, 'Bài 8': 10, 'Bài 9': 10
         };
 
         // --- DOM Elements ---
@@ -201,7 +211,7 @@
             for (let i = 1; i <= count; i++) {
                 const option = document.createElement('option');
                 option.value = `HT${i}`;
-                option.textContent = `Hội thoại ${i}`;
+                option.textContent = `HT ${i}`;
                 conversationSelect.appendChild(option);
             }
         }
@@ -407,7 +417,7 @@
         // --- Event Listeners ---
 
         lessonGroupSelect.addEventListener('change', (e) => {
-            currentLessonGroup = e.target.value;
+            currentLessonGroup = "Bài "+e.target.value;
             updateConversationSelect(currentLessonGroup);
             currentHT = 1;
             stopCurrentAudio();

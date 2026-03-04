@@ -1,0 +1,6 @@
+你会说汉语吗？|nǐ huì shuō Hànyǔ ma?|Bạn biết nói tiếng Trung không?
+我不会说汉语。|wǒ bú huì shuō Hànyǔ.|Tôi không biết nói tiếng Trung.
+你会说英语吗？|nǐ huì shuō Yīngyǔ ma?|Bạn biết nói tiếng Anh không?
+我也不会说英语？|wǒ yě bú huì shuō Yīngyǔ?|Tôi cũng không biết nói tiếng Anh?
+你会说什么语言？|nǐ huì shuō shénme yǔyán?|Bạn biết nói ngôn ngữ gì?
+我只会说越南语。|wǒ zhǐ huì shuō Yuènányǔ.|Tôi chỉ biết nói tiếng Việt.

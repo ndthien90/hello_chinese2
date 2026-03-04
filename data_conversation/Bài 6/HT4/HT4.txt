@@ -1,0 +1,6 @@
+李月，你爸爸是哪国人？|Lǐ Yuè, nǐ bàba shì nǎ guórén?|Lý Nguyệt, bố bạn là người nước nào?
+我爸爸是越南人。|Wǒ bàba shì Yuènánrén.|Bố tôi là người Việt Nam.
+你爸爸会做越南菜吗？|Nǐ bàba huì zuò Yuènáncài ma?|Bố bạn biết làm món ăn Việt Nam không?
+他会做很多越南菜。|Tā huì zuò hěnduō Yuènáncài.|Anh ấy biết làm rất nhiều món ăn Việt Nam.
+他做的菜好吃吗？|Tā zuò de cài hǎochī ma?|Món ăn anh ấy làm có ngon không?
+他做的菜很好吃。|Tā zuò de cài hěn hǎochī.|Món ăn anh ấy làm rất ngon.

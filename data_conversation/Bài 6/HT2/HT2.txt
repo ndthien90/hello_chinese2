@@ -1,0 +1,6 @@
+陈月，那是谁？|Chén Yuè, nà shì shéi?|Trần Nguyệt, đó là ai?
+那是我的朋友。|Nà shì wǒ de péngyou.|Đó là bạn của tôi.
+他来自哪个国家？|Tā láizì nǎge guójiā?|Anh ấy đến từ quốc gia nào?
+他来自中国。|Tā láizì Zhōngguó.|Anh ấy đến từ Trung Quốc.
+他会做中国菜吗？|Tā huì zuò Zhōngguócài ma?|Anh ấy biết làm món ăn Trung Quốc không?
+他会做很多中国菜。|Tā huì zuò hěnduō Zhōngguócài.|Anh ấy biết làm rất nhiều món ăn Trung Quốc.

@@ -1,0 +1,6 @@
+那是谁的汉语老师？|Nà shì shéi de Hànyǔ lǎoshī?|Đó là giáo viên tiếng Hán của ai?
+那是我们的汉语老师？|Nà shì wǒmen de Hànyǔ lǎoshī?|Đó là giáo viên tiếng Hán của chúng tôi.
+他来自哪个国家？|Tā láizì nǎge guójiā?|Anh ấy đến từ quốc gia nào?
+他来自中国。|Tā láizì Zhōngguó.|Anh ấy đến từ Trung Quốc.
+他会写书法吗。|Tā huì xiě shūfǎ ma.|Anh ấy biết viết thư pháp không?
+他只会写汉字，不会写书法。|Tā zhǐ huì xiě Hànzì, bù huì xiě shūfǎ.|Anh ấy chỉ biết viết chữ Hán, không biết viết thư pháp.

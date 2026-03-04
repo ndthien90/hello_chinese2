@@ -1,0 +1,6 @@
+你家谁会做饭？|Nǐ jiā shéi huì zuòfàn?|Nhà bạn ai biết nấu cơm?
+我妈妈和姐姐都会做饭。|Wǒ māma hé jiějie dōu huì zuòfàn.|Mẹ và chị gái tôi đều biết nấu cơm.
+你不会做饭吗？|Nǐ bù huì zuòfàn ma?|Bạn không biết nấu cơm à?
+不会，我只会煮面条。|Bù huì, wǒ zhǐ huì zhǔ miàntiáo.|Không biết, tôi chỉ biết nấu mì.
+你爸爸也不会做饭吗？|Nǐ bàba yě bù huì zuòfàn ma?|Bố bạn cũng không biết nấu cơm à?
+是，我和爸爸都不会做。|Shì, wǒ hé bàba dōu bù huì zuò.|Đúng vậy, tôi và bố đều không biết làm.

@@ -1,0 +1,6 @@
+你家有汽车吗？|Nǐ jiā yǒu qìchē ma?|Nhà bạn có ô tô không?
+我家有一辆汽车。|Wǒ jiā yǒu yī liàng qìchē.|Nhà tôi có một chiếc ô tô.
+你会开车吗？|Nǐ huì kāichē ma?|Bạn biết lái xe không?
+我不会，我只会骑摩托车。|Wǒ bù huì, wǒ zhǐ huì qí mótuōchē.|Tôi không biết, tôi chỉ biết đi xe máy.
+你家谁会开车？|Nǐ jiā shéi huì kāichē?|Nhà bạn ai biết lái xe?
+我爸爸妈妈都会开。|Wǒ bàba māma dōu huì kāi.|Bố mẹ tôi đều biết lái.
