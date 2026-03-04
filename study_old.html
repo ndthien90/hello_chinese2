@@ -17,7 +17,6 @@
             --text-secondary: #666666;
             --border-color: #dddddd;
             --shadow-color: rgba(0, 0, 0, 0.2);
-            --hover-color: #e0e0e0;
         }
 
         [data-theme="dark"] {
@@ -27,7 +26,6 @@
             --text-secondary: #cccccc;
             --border-color: #404040;
             --shadow-color: rgba(0, 0, 0, 0.4);
-            --hover-color: #3d3d3d;
         }
 
         body {
@@ -60,13 +58,6 @@
             font-size: 30px;
         }
 
-        .header-buttons {
-            position: absolute;
-            right: 0;
-            display: flex;
-            gap: 10px;
-        }
-
         .controls {
             display: flex;
             justify-content: space-between;
@@ -90,21 +81,17 @@
             align-items: center;
         }
 
-        .btn-custom {
-            padding: 8px 12px;
+        .zoom-button, .theme-toggle {
+            padding: 5px 10px;
             cursor: pointer;
             background-color: var(--bg-secondary);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
             border-radius: 4px;
             transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
         }
 
-        .btn-custom:hover {
+        .zoom-button:hover, .theme-toggle:hover {
             background-color: var(--border-color);
         }
 
@@ -121,7 +108,6 @@
             background: var(--bg-primary);
             border-radius: 4px;
             overflow: hidden;
-            scroll-margin-top: 20px; /* Thêm margin khi scroll tới */
         }
 
         .pdf-page canvas {
@@ -154,123 +140,24 @@
             transition: width 0.3s ease;
         }
 
-        /* --- CSS CHO BOOKMARK PANEL --- */
-        .bookmark-panel {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Ẩn mặc định */
-            width: 280px;
-            height: 100vh;
-            background-color: var(--bg-primary);
-            border-right: 1px solid var(--border-color);
-            box-shadow: 2px 0 10px var(--shadow-color);
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
+        .theme-toggle {
             display: flex;
-            flex-direction: column;
-        }
-
-        .bookmark-panel.open {
-            left: 0;
-        }
-
-        .bookmark-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--bg-secondary);
+            gap: 5px;
         }
 
-        .bookmark-header h3 {
-            margin: 0;
+        .theme-icon {
             font-size: 18px;
-            color: var(--text-primary);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-primary);
-            padding: 0;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            color: #ff0000;
-        }
-
-        .bookmark-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .bookmark-item {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s;
-        }
-
-        .bookmark-item:hover {
-            background-color: var(--hover-color);
-        }
-
-        .bookmark-title {
-            font-size: 14px;
-            color: var(--text-primary);
-            flex: 1;
-            padding-right: 10px;
-        }
-
-        .bookmark-page {
-            font-size: 12px;
-            color: var(--text-secondary);
-            background-color: var(--bg-secondary);
-            padding: 3px 8px;
-            border-radius: 12px;
-        }
-        
-        .bookmark-empty {
-            padding: 20px;
-            text-align: center;
-            color: var(--text-secondary);
-            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <!-- Thanh Bookmark -->
-    <div id="bookmarkPanel" class="bookmark-panel">
-        <div class="bookmark-header">
-            <h3>📑 Mục lục</h3>
-            <button id="closeBookmarks" class="close-btn">&times;</button>
-        </div>
-        <ul id="bookmarkList" class="bookmark-list">
-            <!-- Dữ liệu bookmark sẽ được load vào đây -->
-        </ul>
-    </div>
-
     <div class="container">
         <div class="header">
             <h1>Vui học tiếng Trung</h1>
-            <div class="header-buttons">
-                <button class="btn-custom" id="toggleBookmarks">
-                    <span>📑 Mục lục</span>
-                </button>
-                <button class="btn-custom" id="themeToggle">
-                    <span class="theme-icon">🌓</span>
-                </button>
-            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-icon">🌓</span>
+            </button>
         </div>
 
         <div class="controls">
@@ -292,9 +179,9 @@
                 <option value="15">H1 Bài 15 我是坐飞机来的</option>
             </select>
             <div class="zoom-controls">
-                <button class="btn-custom" id="zoomOut">-</button>
+                <button class="zoom-button" id="zoomOut">-</button>
                 <span id="zoomLevel">200%</span>
-                <button class="btn-custom" id="zoomIn">+</button>
+                <button class="zoom-button" id="zoomIn">+</button>
             </div>
         </div>
 
@@ -328,103 +215,7 @@
 
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-        // --- CHỨC NĂNG BOOKMARK ---
-        const bookmarkPanel = document.getElementById('bookmarkPanel');
-        const toggleBtn = document.getElementById('toggleBookmarks');
-        const closeBtn = document.getElementById('closeBookmarks');
-
-        // Mở/đóng panel bookmark
-        function toggleBookmarkPanel(show) {
-            if (show === undefined) {
-                bookmarkPanel.classList.toggle('open');
-            } else if (show) {
-                bookmarkPanel.classList.add('open');
-            } else {
-                bookmarkPanel.classList.remove('open');
-            }
-        }
-
-        toggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Ngăn sự kiện click truyền ra ngoài body
-            toggleBookmarkPanel();
-        });
-
-        closeBtn.addEventListener('click', () => toggleBookmarkPanel(false));
-
-        // Tự động ẩn khi click ra ngoài panel
-        document.addEventListener('click', (e) => {
-            if (bookmarkPanel.classList.contains('open') && 
-                !bookmarkPanel.contains(e.target) && 
-                e.target !== toggleBtn) {
-                toggleBookmarkPanel(false);
-            }
-        });
-
-        // Tải dữ liệu Bookmark từ file txt
-        async function loadBookmarks(lessonNumber) {
-            const list = document.getElementById('bookmarkList');
-            list.innerHTML = ''; // Xóa dữ liệu cũ
-            
-            try {
-                // Đường dẫn tới file txt (ví dụ: data_study/bai1_bm.txt)
-                const response = await fetch(`data_study/bai${lessonNumber}_bm.txt`);
-                
-                if (!response.ok) throw new Error('Không tìm thấy file bookmark');
-                
-                const text = await response.text();
-                const lines = text.split('\n');
-                let hasBookmarks = false;
-
-                lines.forEach(line => {
-                    if (!line.trim()) return;
-                    
-                    // Regex: Lấy text trước và số trong ngoặc vuông (VD: "1. Khởi động [2]")
-                    const match = line.match(/^(.*?)\s*\[(\d+)\]\s*$/);
-                    
-                    if (match) {
-                        hasBookmarks = true;
-                        const title = match[1];
-                        const page = parseInt(match[2], 10);
-
-                        const li = document.createElement('li');
-                        li.className = 'bookmark-item';
-                        li.innerHTML = `
-                            <span class="bookmark-title">${title}</span> 
-                            <span class="bookmark-page">Tr ${page}</span>
-                        `;
-                        
-                        // Sự kiện click để cuộn tới trang
-                        li.onclick = () => {
-                            scrollToPage(page);
-                            toggleBookmarkPanel(false); // Ẩn panel đi sau khi chọn
-                        };
-                        list.appendChild(li);
-                    }
-                });
-
-                if (!hasBookmarks) throw new Error('File rỗng hoặc sai định dạng');
-
-            } catch (error) {
-                console.log('Lỗi tải Bookmark:', error);
-                list.innerHTML = `<li class="bookmark-empty">Chưa có dữ liệu mục lục cho bài này.</li>`;
-            }
-        }
-
-        // Cuộn tới trang được chọn
-        function scrollToPage(pageNum) {
-            const pageElement = document.getElementById(`pdf-page-${pageNum}`);
-            if (pageElement) {
-                pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                alert(`Trang ${pageNum} đang được tải hoặc không tồn tại.`);
-            }
-        }
-        // --------------------------
-
         async function loadPDF(lessonNumber) {
-            // Tải Bookmark cùng lúc với PDF
-            loadBookmarks(lessonNumber);
-
             const url = `data_study/Bài ${lessonNumber}.pdf`;
             const progressBar = document.getElementById('progressBar');
             const progressFill = document.getElementById('progressFill');
@@ -448,8 +239,6 @@
                 for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
                     const pageContainer = document.createElement('div');
                     pageContainer.className = 'pdf-page';
-                    // Gắn ID cho page để bookmark có thể cuộn tới
-                    pageContainer.id = `pdf-page-${pageNum}`;
                     container.appendChild(pageContainer);
 
                     const page = await pdf.getPage(pageNum);
@@ -468,7 +257,7 @@
                 }
             } catch (error) {
                 console.error('Error loading PDF:', error);
-                container.innerHTML = '<div class="loading">Lỗi khi tải PDF. Vui lòng kiểm tra lại đường dẫn file.</div>';
+                container.innerHTML = '<div class="loading">Lỗi khi tải PDF</div>';
             } finally {
                 progressBar.style.display = 'none';
             }
@@ -499,7 +288,7 @@
         });
 
         // Load initial PDF
-        loadPDF(2);
+        loadPDF(1);
     </script>
 </body>
 </html>
