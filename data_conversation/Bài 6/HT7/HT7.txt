@@ -1,6 +1,6 @@
-你喜欢吃法国菜吗？|Nǐ xǐhuan chī Fǎguócài ma?|Bạn thích ăn món Pháp không?
-我很喜欢吃法国菜？|Wǒ hěn xǐhuan chī Fǎguócài?|Tôi rất thích ăn món Pháp?
-法国菜好吃吗？|Fǎguócài hǎochī ma?|Món Pháp có ngon không?
-法国菜很好吃。|Fǎguócài hěn hǎochī.|Món Pháp rất ngon.
-你会做法国菜？|Nǐ huì zuò Fǎguócài?|Bạn biết làm món Pháp không?
-我不会做法国菜。|Wǒ bù huì zuò Fǎguócài.|Tôi không biết làm món Pháp.
+你喜欢吃法国菜吗？|Nǐ xǐhuān chī Fǎguó cài ma?|Bạn có thích ăn món Pháp không?
+我很喜欢吃法国菜？|Wǒ hěn xǐhuān chī Fǎguó cài?|Tôi rất thích ăn món Pháp?
+法国菜好吃吗？|Fǎguó cài hǎochī ma?|Món Pháp có ngon không?
+法国菜很好吃。|Fǎguó cài hěn hǎochī.|Món Pháp rất ngon.
+你会做法国菜吗？|Nǐ huì zuò Fǎguó cài ma?|Bạn biết nấu món Pháp không?
+我不会做法国菜。|Wǒ bù huì zuò Fǎguó cài.|Tôi không biết nấu món Pháp.

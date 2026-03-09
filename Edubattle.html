@@ -1437,7 +1437,7 @@ const renderAuthScreen = () => {
                         </form>
 
                         <div class="mt-6 pt-4 border-t text-center text-sm">
-                            <button onclick="setAuthMode('${isRegister ? 'login' : 'register'}')" class="font-bold text-blue-600 hover:text-blue-700 transition">
+                            <button disabled onclick="setAuthMode('${isRegister ? 'login' : 'register'}')" class="font-bold text-blue-600 hover:text-blue-700 transition">
                                 ${isRegister ? 'Đã có tài khoản? Đăng nhập' : 'Chưa có tài khoản? Đăng ký ngay'}
                             </button>
                         </div>
@@ -4174,7 +4174,14 @@ if (isTeacher) {
 };
         // RANKING (Cập nhật Responsive)
         const renderRanking = () => {
-            const sorted = [...state.data.users].sort((a,b) => (b.points||0) - (a.points||0));
+
+          // BƯỚC 1: Sắp xếp danh sách toàn bộ học sinh theo điểm (từ cao xuống thấp)
+            let sorted = [...state.data.users].sort((a,b) => (b.points||0) - (a.points||0));
+            
+            // BƯỚC 2: Kiểm tra vai trò. Nếu KHÔNG phải giáo viên (tức là học sinh), chỉ cắt lấy 10 người.
+            if (state.profile.role !== 'teacher') {
+                sorted = sorted.slice(0, 10);
+            }
             
             // Helper để render huy hiệu
             const renderMedal = (rank) => {
@@ -8814,6 +8821,9 @@ window.initDoChallenge = (id) => {
         const WHEEL_DATA = [
             { label: "10 🏆",  value: 10,  type: "point",  color: "#EF4444", text: "#FFFFFF" }, // Đỏ
             { label: "20 🏆",  value: 20,  type: "point",  color: "#F59E0B", text: "#FFFFFF" }, // Cam
+            { label: "30 🏆",  value: 30,  type: "point",  color: "#34eb52", text: "#FFFFFF" }, // Cam
+            { label: "50 🏆",  value: 50,  type: "point",  color: "#eb34e2", text: "#FFFFFF" }, // Cam
+            { label: "100 🏆",  value: 100,  type: "point",  color: "#34ebd6", text: "#FFFFFF" }, // Cam
             { label: "200 🏆", value: 200, type: "point",  color: "#10B981", text: "#FFFFFF" }, // Xanh lá
             { label: "Mất lượt", value: 0,   type: "point",  color: "#3B82F6", text: "#FFFFFF" }, // Xanh dương
             { label: "1 Vé🎟️",  value: 1,   type: "ticket", color: "#8B5CF6", text: "#FFFFFF" }  // Tím
