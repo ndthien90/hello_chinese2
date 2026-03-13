@@ -1,0 +1,55 @@
+今天|jīntiān|hôm nay|今天天气很好。|Jīntiān tiānqì hěn hǎo.|Hôm nay thời tiết rất tốt.
+明天|míngtiān|ngày mai|明天见。|Míngtiān jiàn.|Hẹn gặp lại vào ngày mai.
+昨天|zuótiān|hôm qua|昨天是星期日。|Zuótiān shì xīngqīrì.|Hôm qua là chủ nhật.
+前天|qiántiān|hôm kia|前天我没去上课。|Qiántiān wǒ méi qù shàngkè.|Hôm kia tôi không đi lên lớp.
+后天|hòutiān|ngày kia|后天你有空吗？|Hòutiān nǐ yǒu kòng ma?|Ngày kia bạn có rảnh không?
+月|yuè|tháng|现在是八月。|Xiànzài shì bāyuè.|Bây giờ là tháng tám.
+日|rì|ngày|十月一日是国庆节。|Shíyuè yī rì shì Guóqìngjié.|Ngày một tháng mười là ngày quốc khánh.
+号|hào|ngày (số)|今天是五号。|Jīntiān shì wǔ hào.|Hôm nay là ngày mùng năm.
+天|tiān|ngày/trời|我去北京三天。|Wǒ qù Běijīng sān tiān.|Tôi đi Bắc Kinh ba ngày.
+明年|míngnián|sang năm|明年我去中国旅游。|Míngnián wǒ qù Zhōngguó lǚyóu.|Sang năm tôi đi Trung Quốc du lịch.
+去年|qùnián|năm ngoái|去年他在那里工作。|Qùnián tā zài nàlǐ gōngzuò.|Năm ngoái anh ấy làm việc ở đó.
+前年|qiánnián|năm kia|前年我毕业了。|Qiánnián wǒ bìyè le.|Tôi đã tốt nghiệp vào năm kia.
+后年|hòunián|năm sau nữa|后年我就三十岁了。|Hòunián wǒ jiù sānshí suì le.|Năm sau nữa là tôi tròn ba mươi tuổi rồi.
+星期|xīngqī|tuần/thứ|今天是星期几？|Jīntiān shì xīngqī jǐ?|Hôm nay là thứ mấy?
+周|zhōu|tuần|下周一见。|Xià zhōu yī jiàn.|Hẹn gặp lại vào thứ hai tuần sau.
+礼拜|lǐbài|tuần/thứ|礼拜天你做什么？|Lǐbàitiān nǐ zuò shénme?|Chủ nhật bạn làm gì?
+周末|zhōumò|cuối tuần|周末愉快！|Zhōumò yúkuài!|Cuối tuần vui vẻ!
+上|shàng|trên/trước|他在桌子上。|Tā zài zhuōzi shàng.|Anh ấy ở trên bàn.
+下|xià|dưới/sau|下个月我就回国了。|Xià gè yuè wǒ jiù huíguó le.|
+前|qián|trước|饭前要洗手。|Fàn qián yào xǐshǒu.|Trước khi ăn phải rửa tay.
+后|hòu|sau|十分钟后出发。|Shí fēnzhōng hòu chūfā.|Mười phút sau sẽ xuất phát.
+去|qù|đi|我去商场买东西。|Wǒ qù shāngchǎng mǎi dōngxi.|Tôi đi trung tâm thương mại mua đồ.
+买|mǎi|mua|我想买一本书。|Wǒ xiǎng mǎi yī běn shū.|Tôi muốn mua một cuốn sách.
+借|jiè|mượn/vay|我可以借你的笔吗？|Wǒ kěyǐ jiè nǐ de bǐ ma?|Tôi có thể mượn bút của bạn không?
+店|diàn|cửa hàng/tiệm|这家店很出名。|Zhè jiā diàn hěn chūmíng.|Cửa tiệm này rất nổi tiếng.
+馆|guǎn|tòa nhà/tiệm (dịch vụ)|图书馆就在对面。|Túshūguǎn jiù zài duìmiàn.|Thư viện ở ngay phía đối diện.
+商店|shāngdiàn|cửa hàng|商店八点开门。|Shāngdiàn bā diǎn kāimén.|Cửa hàng mở cửa lúc tám giờ.
+饭店|fàndiàn|Tiệm cơm, quán cơm|我们在饭店吃晚饭。|Wǒmen zài fàndiàn chī wǎnfàn.|Chúng tôi ăn tối ở quán cơm.
+图书馆|túshūguǎn|thư viện|图书馆里很安静。|Túshūguǎn lǐ hěn ānjìng.|Trong thư viện rất yên tĩnh.
+医院|yīyuàn|bệnh viện|他在医院工作。|Tā zài yīyuàn gōngzuò.|Anh ấy làm việc ở bệnh viện.
+东西|dōngxi|đồ đạc/thứ|你买了什么东西？|Nǐ mǎile shénme dōngxi?|Bạn đã mua đồ gì vậy?
+公园|gōngyuán|công viên|公园里有很多花。|Gōngyuán lǐ yǒu hěnduō huā.|Trong công viên có rất nhiều hoa.
+早上|zǎoshang|sáng sớm|早上好！|Zǎoshang hǎo!|Chào buổi sáng!
+上午|shàngwǔ|buổi sáng|我上午有汉语课。|Wǒ shàngwǔ yǒu Hànyǔ kè.|Buổi sáng tôi có tiết tiếng Hán.
+中午|zhōngwǔ|buổi trưa|中午我们一起吃饭吧。|Zhōngwǔ wǒmen yīqǐ chīfàn ba.|Buổi trưa chúng ta cùng nhau đi ăn đi.
+下午|xiàwǔ|buổi chiều|下午三点开会。|Xiàwǔ sān diǎn kāihuì.|Ba giờ chiều họp.
+晚上|wǎnshang|buổi tối|晚上我常看电影。|Wǎnshang wǒ cháng kàn diànyǐng.|Buổi tối tôi thường xem phim.
+看病|kànbìng|khám bệnh|你不舒服，去医院看病吧。|Nǐ bù shūfu, qù yīyuàn kànbìng ba.|Bạn không khỏe, đi bệnh viện khám bệnh đi.
+跑步|pǎobù|chạy bộ|他每天早上都跑步。|Tā měitiān zǎoshang dōu pǎobù.|Anh ấy chạy bộ mỗi sáng.
+散步|sànbù|đi dạo|晚饭后我们去散步吧。|Wǎnfàn hòu wǒmen qù sànbù ba.|Sau bữa tối chúng ta đi dạo nhé.
+节|jié|tết/tiết|春节是中国最重要的节。|Chūnjié shì Zhōngguó zuì zhòngyào de jié.|Tết Nguyên Đán là tết quan trọng nhất của Trung Quốc.
+节日|jiérì|ngày lễ/tết|祝你节日快乐！|Zhù nǐ jiérì kuàilè!|Chúc bạn ngày lễ vui vẻ!
+元旦|yuándàn|Tết Dương lịch|元旦放假三天。|Yuándàn fàngjià sān tiān.|Tết Dương lịch nghỉ ba ngày.
+国际|guójì|quốc tế|这是一个国际比赛。|Zhè shì yī gè guójì bǐsài.|Đây là một cuộc thi quốc tế.
+情人节|qíngrénjié|Lễ Tình nhân|情人节是二月十四号。|Qíngrénjié shì èryuè shí sì hào.|Lễ Tình nhân là ngày 14 tháng 2.
+儿童节|értóngjié|Ngày Thiếu nhi|儿童节快乐！|Értóngjié kuàilè!|Chúc mừng ngày Thiếu nhi!
+妇女节|fùnǚjié|Ngày Phụ nữ|三八妇女节。|Sānbā fùnǚjié.|Ngày quốc tế phụ nữ 8/3.
+愚人节|yúrénjié|Ngày Cá tháng Tư|愚人节那天他骗了我。|Yúrénjié nàtiān tā piànle wǒ.|Anh ấy đã lừa tôi vào ngày Cá tháng Tư.
+劳动节|láodòngjié|Ngày Quốc tế Lao động|五月一号是劳动节。|Wǔyuè yī hào shì láodòngjié.|Ngày một tháng năm là ngày lao động.
+国庆节|guóqìngjié|Ngày Quốc khánh|国庆节放假吗？|Guóqìngjié fàngjià ma?|Ngày Quốc khánh có được nghỉ không?
+中秋节|zhōngqiūjié|Tết Trung thu|中秋节吃月饼。|Zhōngqiūjié chī yuèbǐng.|Tết Trung thu ăn bánh nướng bánh dẻo.
+解放日|jiěfàngrì|Ngày Giải phóng|四月三十号是越南解放日。|Sìyuè sānshí hào shì Yuènán jiěfàngrì.|Ngày 30 tháng 4 là ngày Giải phóng miền Nam Việt Nam.
+教师节|jiàoshījié|Ngày Nhà giáo|教师节老师辛苦了。|Jiàoshījié lǎoshī xīnkǔ le.|Ngày Nhà giáo thầy cô đã vất vả rồi.
+万圣节|wànshèngjié|Lễ Halloween|万圣节有很多南瓜。|Wànshèngjié yǒu hěnduō nánguā.|Lễ Halloween có rất nhiều bí ngô.
+圣诞节|shèngdànjié|Lễ Giáng sinh|圣诞节快乐！|Shèngdànjié kuàilè!|Giáng sinh vui vẻ!

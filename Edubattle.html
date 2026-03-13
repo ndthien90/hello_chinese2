@@ -8824,9 +8824,9 @@ window.initDoChallenge = (id) => {
             { label: "30 🏆",  value: 30,  type: "point",  color: "#34eb52", text: "#FFFFFF" }, // Cam
             { label: "50 🏆",  value: 50,  type: "point",  color: "#eb34e2", text: "#FFFFFF" }, // Cam
             { label: "100 🏆",  value: 100,  type: "point",  color: "#34ebd6", text: "#FFFFFF" }, // Cam
-            { label: "200 🏆", value: 200, type: "point",  color: "#10B981", text: "#FFFFFF" }, // Xanh lá
+            { label: "300 🏆", value: 300, type: "point",  color: "#10B981", text: "#FFFFFF" }, // Xanh lá
             { label: "Mất lượt", value: 0,   type: "point",  color: "#3B82F6", text: "#FFFFFF" }, // Xanh dương
-            { label: "1 Vé🎟️",  value: 1,   type: "ticket", color: "#8B5CF6", text: "#FFFFFF" }  // Tím
+            { label: "2 Vé🎟️",  value: 2,   type: "ticket", color: "#8B5CF6", text: "#FFFFFF" }  // Tím
         ];
 
         // Biến toàn cục cho vòng quay
@@ -8914,7 +8914,9 @@ const drawSector = (sector, i) => {
             document.getElementById('spin-btn').classList.add('scale-90', 'opacity-80', 'cursor-not-allowed');
 
             // A. CHỐT KẾT QUẢ (Weighted Random)
-            const weights = [40, 30, 5, 15, 10]; 
+            //const weights = [40, 30, 5, 15, 10]; 
+             const weights = [25, 25, 15, 10, 3, 2, 10, 10]; 
+            //const weights = [0, 0, 0, 0, 0, 0, 0, 100]; 
             let random = Math.floor(Math.random() * 100);
             let winIndex = 0;
             for (let i = 0; i < weights.length; i++) {
@@ -9009,7 +9011,7 @@ const drawSector = (sector, i) => {
                 if (result.type === 'point') {
                     updatePayload.points = increment(result.value);
                 } else if (result.type === 'ticket') {
-                    updatePayload.luckyTickets = increment(0); // Trả lại vé
+                    updatePayload.luckyTickets = increment(result.value); // Trả lại vé
                 }
 
                 await updateDoc(doc(db, getPath('users'), state.user.uid), updatePayload);
